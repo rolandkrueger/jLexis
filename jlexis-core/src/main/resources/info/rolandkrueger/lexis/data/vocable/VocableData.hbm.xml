@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="info.rolandkrueger.lexis.data.vocable.VocableData" table="VocableData">
+        <id name="id">
+            <generator class="native" />
+        </id>
+
+        <property name="wordTypeIdentifier" />
+        
+        <many-to-one name="language" column="language" fetch="join" cascade="merge,save-update,refresh"/>
+        <many-to-one name="databaseObject" column="data" fetch="join" cascade="persist,merge,save-update,refresh"/>
+
+    </class>
+</hibernate-mapping>

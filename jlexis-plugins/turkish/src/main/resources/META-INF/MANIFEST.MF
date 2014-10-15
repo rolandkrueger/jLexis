@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+
+Name: TurkishLanguagePlugin
+PluginMainClass: info.rolandkrueger.lexis.plugin.turkish.TurkishLanguagePlugin
+Version: 1.0
+PluginName: Turkish language plugin
+Description: The Turkish language plugin.
+PluginIdentifier: LexisTurkish8734750872946598273L

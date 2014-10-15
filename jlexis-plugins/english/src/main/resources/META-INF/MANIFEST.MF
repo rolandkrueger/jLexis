@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+
+Name: EnglishLanguagePlugin
+PluginMainClass: info.rolandkrueger.lexis.plugin.english.EnglishLanguagePlugin
+Version: 1.0
+PluginName: English language plugin
+Description: The English language plugin.
+PluginIdentifier: LexisEnglish6996342921609576684L

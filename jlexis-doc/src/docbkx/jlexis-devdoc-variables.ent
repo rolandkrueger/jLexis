@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!ENTITY projecthomepage "http://www.rolandkrueger.info/jlexis/">
+<!ENTITY jlexis "<application>jLexis</application>" >
+<!ENTITY classname_vocable_full "<classname>info.rolandkrueger.jlexis.data.vocable.Vocable</classname>">
+<!ENTITY classname_vocable "<classname>Vocable</classname>">
+<!ENTITY classname_language_full "<classname>info.rolandkrueger.jlexis.data.languages.Language</classname>">
+<!ENTITY classname_language "<classname>Language</classname>">
+<!ENTITY classname_vocabledata_full "<classname>info.rolandkrueger.jlexis.data.vocable.VocableData</classname>">
+<!ENTITY classname_vocabledata "<classname>VocableData</classname>">
+<!ENTITY classname_abstractwordtype_full "<classname>info.rolandkrueger.jlexis.data.vocable.AbstractWordType</classname>">
+<!ENTITY classname_abstractwordtype "<classname>AbstractWordType</classname>">
+<!ENTITY classname_abstractuserinput_full "<classname>info.rolandkrueger.jlexis.data.vocable.AbstractUserInput</classname>">
+<!ENTITY classname_abstractuserinput "<classname>AbstractUserInput</classname>">
+<!ENTITY classname_dbo_abstractuserinput_full "<classname>info.rolandkrueger.jlexis.data.vocable.DBO_AbstractUserInput</classname>">
+<!ENTITY classname_dbo_abstractuserinput "<classname>DBO_AbstractUserInput</classname>">
+<!ENTITY classname_wordtypeenum_full "<classname>info.rolandkrueger.jlexis.data.vocable.WordTypeEnum</classname>">
+<!ENTITY classname_wordtypeenum "<classname>WordTypeEnum</classname>">
+<!ENTITY classname_abstracttermdata_full "<classname>info.rolandkrueger.jlexis.data.vocable.terms.AbstractTermData</classname>">
+<!ENTITY classname_abstracttermdata "<classname>AbstractTermData</classname>">
+<!ENTITY classname_registeredvocabledatakey_full "<classname>info.rolandkrueger.jlexis.data.vocable.RegisteredVocableDataKey</classname>">
+<!ENTITY classname_registeredvocabledatakey "<classname>RegisteredVocableDataKey</classname>">

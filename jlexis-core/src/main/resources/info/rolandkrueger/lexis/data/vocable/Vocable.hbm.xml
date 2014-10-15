@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="info.rolandkrueger.lexis.data.vocable.Vocable" table="Vocabulary">
+        <id name="id">
+            <generator class="native" />
+        </id>
+
+        <map name="vocableData" table="Vocable_VocableData" 
+              cascade="all"
+              fetch="join">
+            <key column="mapid" />
+            <map-key-many-to-many class="info.rolandkrueger.lexis.data.languages.Language" />
+            <many-to-many column="VocableData_id" class="info.rolandkrueger.lexis.data.vocable.VocableData"/>
+        </map>
+
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
+<!ENTITY % variables SYSTEM "jlexis-devdoc-variables.ent">
+%variables;
+]>
+
+<chapter id="introduction">
+  <title>Introduction</title>
+
+  <para>This developer documentation describes the concepts behind the
+  &jlexis; Vocabulary Trainer's source code and
+  details the different aspects of the software design. The document's
+  intended audience are developers who want to contribute to the core system
+  of &jlexis;. Plugin developers who want to write
+  language plugins for &jlexis; are encouraged to
+  consult the extra document especially available for this topic.</para>
+</chapter>

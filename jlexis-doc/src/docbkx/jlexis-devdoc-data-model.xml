@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
+<!ENTITY % variables SYSTEM "jlexis-devdoc-variables.ent">
+%variables;
+]>
+<chapter id="introduction">
+  <title>The jLexis Data Model</title>
+
+  <para>q1qThis chapter details the data model for &jlexis;. Understanding
+  this data model is crucial if you wish to develop language plug-ins or
+  intend to contribute to the core code. The flexibility of &jlexis; is
+  largely based on its design of the data model and how this data is
+  processed.</para>
+
+  <para>One of the main ideas behind &jlexis; is to provide a base application
+  which is completely language-independent. As such, it serves as a foundation
+  for add-ons which can build on the provided general functionality. Plug-ins
+  only have to provide those distinctive features which are needed for
+  studying some particular foreign language. This allows for keeping all
+  language-specific data and data processing facilities separate from the main
+  application. With this, the applicability of &jlexis; is not limited to only
+  a handful of standard foreign languages.</para>
+
+  <para>In order to achieve that separation of concerns, the base application
+  has to provide generic data storing and data processing facilities which are
+  general enough to be suitable for every conceivable natural or artificial
+  language.</para>
+
+  <para>The following sections comprehensively explain how the data model of
+  &jlexis; is designed and how this design enables language plug-ins to store
+  their language-specific data in a language-independent environment provided
+  by the &jlexis; main application.</para>
+
+  <section id="vocabulary_data">
+    <title>Vocabulary Data</title>
+
+    <para>At the heart of the data model for a vocabulary trainer lies the
+    vocabulary data itself. This comprises all the data a learner needs for
+    studying a foreign language. This can be, for example, verbs, nouns, and
+    adjectives, example sentences, commentary data or phonetic transcriptions.
+    It is easy to see that while being the most important data for learning
+    languages, it is also the most language-specific. For example, some
+    languages have more genders and different gender inflections than others.
+    Or, similarly, the declension of verbs is formed differently in every
+    language which also varies with the availability of grammatical cases.
+    Considering these facts, every foreign language has its own demands for
+    handling vocabulary data. For languages with a more complex grammar, it is
+    necessary to memorize more vocabulary data, while languages with a simpler
+    grammar do not demand especially sophisticated vocabulary data.</para>
+
+    <para>The core class for working with vocabulary data is
+    &classname_vocable_full;. This class represents one atomic unit of
+    vocabulary data. More specifically, a &classname_vocable; contains all
+    data which is relevant for learning one particular word or phrase in some
+    foreign language. This comprises the term in the learner's native language
+    and its translation for a foreign language. This data may also be
+    accompanied by exemplifications or commentaries or any arbitrary data
+    which may be relevant to this term. Due to the fact that &jlexis; does not
+    restrict the number of foreign languages you can learn with it
+    simultaneously, a &classname_vocable; may contain translations for more
+    than one foreign languages.</para>
+
+    <example>
+      <title id="example_vocable">Example for a vocable</title>
+
+      <para>The following example is a typical multi-language vocable which
+      could be used by a learner whose native language is German and who is
+      learning English and Swedish as foreign languages. All the data shown
+      below is stored in a single &classname_vocable; object. The same data
+      could originate e.g. from a set of flash cards with vocabulary
+      data.</para>
+
+      <informaltable>
+        <tgroup cols="3">
+          <thead>
+            <row>
+              <entry>German</entry>
+
+              <entry>English</entry>
+
+              <entry>Swedish</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><para>verdienen</para><emphasis
+              role="bold">Example</emphasis>: seinen Lebensunterhalt
+              verdienen, er verdient 6000 Kronen im Monat</entry>
+
+              <entry>(to) earn [ɜːn]<para><emphasis
+              role="bold">Example</emphasis>: he ~ed a lot of
+              money</para><para><emphasis role="bold">Comment</emphasis>: (of
+              a person) obtain (income) in the form of money in return for
+              labor or services</para></entry>
+
+              <entry><para>förtjäna, ~r, ~ade [fœ(r)'çɛːna]</para><emphasis
+              role="bold">Example</emphasis>: förtjäna sitt levebröd, han
+              förtjänar sex tusen kronor i månaden<para><emphasis
+              role="bold">Comment</emphasis>: förvärva som lön eller
+              vinst</para></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </example>
+
+    <para>Lets have a look at how a &classname_vocable; object is composed.
+    For a schematic depiction of a &classname_vocable; object see <xref
+    linkend="VocableComposition" xrefstyle="select: label" />. Such an object
+    basically consists of a single hash map containing a mapping of
+    &classname_language_full; objects on corresponding instances of class
+    &classname_vocabledata_full;. A &classname_language; represents either the
+    user's native language or the foreign languages she's learning. The
+    &classname_vocabledata; objects hold the respective vocabulary data for
+    each language. Hence, the languages appearing in a vocable are linked with
+    data objects holding the corresponding data.<figure
+        id="VocableComposition">
+        <title>Composition of a &classname_vocable; object</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="resources/images/VocableComposition.png" />
+          </imageobject>
+        </mediaobject>
+      </figure></para>
+
+    <para>Now let's take a closer look at the &classname_vocabledata; class.
+    Objects of this type hold all relevant data for one specific language and
+    one particular vocabulary term. In the example above, this may be the data
+    for the English verb <emphasis>to earn</emphasis>. Every
+    &classname_vocabledata; object is constituted of three objects holding the
+    vocabulary data itself together with a specification of the data. These
+    objects are of the following types:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>&classname_abstractwordtype_full;</para>
+      </listitem>
+
+      <listitem>
+        <para>&classname_abstractuserinput_full;</para>
+      </listitem>
+
+      <listitem>
+        <para>&classname_dbo_abstractuserinput_full;</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>We will discuss these classes in more depth shortly. Let's first try
+    to get a general understanding for the intent of these classes. An
+    &classname_abstractwordtype; gives a specification of the
+    &classname_vocabledata;. That is, it defines to which grammatical type
+    this data belongs. Subclasses of &classname_abstractwordtype; may
+    represent verbs, nouns, adjectives, or phrasal verbs of a particular
+    language.</para>
+
+    <para>Since every word class (in a grammatical sense) has its own demands
+    for storing and handling lexical data, subclasses of
+    &classname_abstractwordtype; can implement this specific behavior. All
+    organizational work regarding a lexical word class is done with
+    &classname_abstractwordtype;s. An object of this class serves as a factory
+    for &classname_abstractuserinput; objects (see below), keeps an identifier
+    for the lexical class it represents, and provides appropriate user input
+    panels for its vocabulary data.</para>
+
+    <para>While an &classname_abstractwordtype; specifies the specific part of
+    speech to which some &classname_vocable; object belongs, subclasses of
+    &classname_abstractuserinput; are responsible for handling the data
+    itself. Due to the fact that each particular word class has its own
+    requirements for what data has to be stored and how, subclasses need to be
+    derived from &classname_abstractuserinput; which parallel the class
+    structure of &classname_abstractwordtype;'s subclasses. For example, if
+    there is a class <classname>SwedishNounWordType</classname> specifying the
+    lexical category of Swedish nouns, a corresponding class
+    <classname>SwedishNounUserInput</classname> should exist accommodating the
+    different inflections of some Swedish noun.</para>
+
+    <para>The last remaining element contained in a &classname_vocabledata;
+    object is class &classname_dbo_abstractuserinput;. This is merely a data
+    container holding the concrete vocabulary data for an
+    &classname_abstractuserinput;. It is used as a data transfer object for
+    storing the data in a database and retrieving it from there. The
+    abbreviation <abbrev>DBO</abbrev> stands for Database Object. This class
+    does not offer any particular business functionality.</para>
+
+    <para>Let us now study these three classes in more detail.</para>
+
+    <section>
+      <title>Specifying The Lexical Class With
+      &classname_abstractwordtype;</title>
+
+      <para>Each foreign language is constructed by different parts of speech.
+      A part of speech is defined by Wikipedia as follows:</para>
+
+      <blockquote>
+        <attribution>Wikipedia, <ulink
+        url="http://en.wikipedia.org/wiki/Part_of_speech">Part of
+        speech</ulink></attribution>
+
+        <para>In grammar, a part of speech (also a word class, a lexical
+        class, or a lexical category) is a linguistic category of words (or
+        more precisely lexical items), which is generally defined by the
+        syntactic or morphological behaviour of the lexical item in
+        question.</para>
+      </blockquote>
+
+      <para>When learning a foreign language, you have to memorize vocabulary
+      consisting of instances of these different lexical items. This may be
+      verbs, nouns, adjectives and the like. Every lexical class has its own
+      demands when it comes to data processing and data layout. For example,
+      when learning an inflected language such as French or German, you have
+      to memorize conjugations of each verb, while for nouns you need to learn
+      the gender forms and their correct inflections (e. g. plural
+      forms).</para>
+
+      <para>Subclasses of &classname_abstractwordtype; are designed to provide
+      all necessary logic for one particular lexical class of some foreign
+      language. They may represent German adjectives, Swedish verbs, or even
+      Klingon nouns if you like. Figure <xref
+      linkend="AbstractWordType_ClassDiagram" xrefstyle="select: label" />
+      shows the methods of &classname_abstractwordtype; together with an
+      exemplary class structure of derived subclasses. We will discuss the
+      intention of each element of this class.</para>
+
+      <figure id="AbstractWordType_ClassDiagram">
+        <title>Class diagram for &classname_abstractwordtype;s</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="resources/images/AbstractWordType_ClassDiagram.png" />
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>Let's first have a look at the name and identifier fields which
+      can be queried with <methodname>getName()</methodname> and
+      <methodname>getIdentifier()</methodname>, respectively. The name of an
+      &classname_abstractwordtype; is simply a translation key for the
+      descriptive name of the word type which will be used as a label on the
+      user interface. For an <classname>EnglishAdjectiveWordType</classname>
+      this may be the translation key for the term
+      <guilabel>Adjective</guilabel>.</para>
+
+      <para>The identifier is needed to uniquely identify one particular word
+      type subclass. This identifier can be an arbitrary string. It must be
+      ensured, however, that this string is not used for any other word type
+      in the same language plug-in. The identifer string is used as a key in a
+      hash map to refer to the available word types of a language.</para>
+
+      <para>One important task for &classname_abstractwordtype;s is to
+      function as factory for objects of subclasses of
+      &classname_abstractuserinput;. Method
+      <methodname>createNewUserInputObject()</methodname> is a factory method
+      creating new user input objects. These objects are initially empty. This
+      is needed when you enter new vocabulary. Each time you add a new
+      vocabulary term, new user input objects for the word types of each
+      relevant language have to be created of the correct type to accommodate
+      the new data. In order for the abstract superclass
+      &classname_abstractwordtype; to create the correct subclass object of
+      &classname_abstractuserinput; in
+      <methodname>createNewUserInputObject()</methodname>, subclasses have to
+      pass a concrete object instance of the corresponding subclass to the
+      constructor of &classname_abstractwordtype;. This object serves as a
+      prototype for creating new instances of &classname_abstractuserinput;.
+      Method <methodname>getUserInputIdentifier()</methodname> is simply a
+      delegate method for the equally named method of class
+      &classname_abstractuserinput;. See <xref
+      linkend="storing_the_data_with_abstractuserinput" /> for a detailed
+      description of this class.</para>
+
+      <para>Every single lexical item has its own demands for an interface
+      which allows the user to provide all data required for this item.
+      Usually, these interfaces differ quite a lot.
+      &classname_abstractwordtype; objects therefore provide a concrete
+      instance of this user interface through the factory method
+      <methodname>getInputPanel()</methodname>. While, for instance, an
+      <classname>EnglishNounWordType</classname> may provide a user interface
+      containing text fields for entering the singular and plural form of a
+      noun, a <classname>FrenchVerbWordType</classname> will most likely
+      provide input fields for entering the conjugations of a French
+      verb.</para>
+
+      <para>It was mentioned before that you can learn more than one foreign
+      language at the same time with &jlexis;. This poses an special problem
+      when it comes to selecting the word type for a new vocabulary item. Say,
+      you're learning Swedish and Norwegian in parallel as foreign languages
+      and you want to add a Swedish noun as a new vocabulary term. The
+      corresponding word type for this is
+      <classname>SwedishNounWordType</classname>. When you choose to add a
+      Swedish noun in &jlexis; the program has to display an input panel not
+      only for Swedish nouns but also correspondingly for Norwegian nouns so
+      that you can enter them at the same time for the same
+      &classname_vocable; object. &jlexis; thus has to be able to select the
+      corresponding word type for any given lexical class of some language.
+      That is, it must be able to differentiate between the individual word
+      types and know which lexical categories in the different languages
+      match. In the example, it has to select the
+      <classname>NorwegianNounWordType</classname> to accompany the
+      <classname>SwedishNounWordType.</classname> This is achieved by
+      assigning each subclass of &classname_abstractwordtype; an
+      <type>enum</type> identifier of type &classname_wordtypeenum_full; which
+      uniquely identifies the lexical category of the word type. A
+      &classname_wordtypeenum; defines a limited set of general lexical
+      classes, such as <constant>ADJECTIVE</constant>,
+      <constant>PHRASAL_VERB</constant>, <constant>NOUN</constant>,
+      <constant>COLLOCATION</constant>, or the like. The
+      &classname_wordtypeenum; of an &classname_abstractwordtype; can be
+      queried with method <methodname>getWordTypeEnum()</methodname>. Since
+      the number of available lexical classes is finite and well-defined, by
+      using this information for each given subclass of
+      &classname_abstractwordtype; of a particular language a corresponding
+      matching word type can be found for all other languages. How exactly
+      this is done will be described in <xref
+      linkend="language_plugins" />.</para>
+    </section>
+
+    <section id="storing_the_data_with_abstractuserinput">
+      <title>Storing The Data With &classname_abstractuserinput;</title>
+
+      <para>This section will describe how vocabulary data is organized in
+      &classname_abstractuserinput; objects. This class offers quite a rich
+      interface for handling vocabulary data. We will not discuss this feature
+      set in its entirety. Please refer to the JavaDocs of &jlexis; to get
+      more detailed information about the capabilities of this class. In this
+      section, we'll concentrate on how the data is maintained in
+      &classname_abstractuserinput; objects.</para>
+
+      <para>Vocabulary data belonging to one particular part of speech is
+      usually not atomic. This means that a vocabulary term for one language
+      consists of more than one data item. For example, the data for a German
+      noun can be assembled by both the singular and plural form of the noun
+      plus information about the noun's gender, i.e. whether it belongs to the
+      masculine, the feminine, or the neuter. Additionally, information about
+      whether the noun is regular or irregular should also be stored along
+      with a German noun's vocabulary data. To sum up this example, vocabulary
+      data for German nouns should contain the following data items:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>a String containing the noun's singular form</para>
+        </listitem>
+
+        <listitem>
+          <para>a String containing the noun's plural form</para>
+        </listitem>
+
+        <listitem>
+          <para>an enumeration specifying whether the noun is
+          <constant>MASCULINE</constant>, <constant>FEMININE</constant>, or
+          <constant>NEUTER</constant></para>
+        </listitem>
+
+        <listitem>
+          <para>a boolean value indicating whether the noun is irregular or
+          not.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>For the sake of simplicity, we'll ignore the fact that each
+      &classname_abstractuserinput; may be accompanied by an example, a
+      comment, and corresponding phonetics.</para>
+
+      <section>
+        <title>User Input Fragments</title>
+
+        <para>An &classname_abstractuserinput; object stores these individual
+        data items in a dictionary implemented with a
+        <classname>java.util.Map</classname>. Each data fragment, such as e.
+        g. the singular form of a noun, is referenced by an object of class
+        &classname_registeredvocabledatakey_full;. The data fragment itself is
+        an object of a subclass of &classname_abstracttermdata_full;. Let's
+        see what the intention of these two classes is.</para>
+
+        <figure id="class_hierarchy_for_abstracttermdata">
+          <title>Class hierarchy for &classname_abstracttermdata;</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="resources/images/AbstractTermData_ClassDiagram.png" />
+            </imageobject>
+          </mediaobject>
+        </figure>
+      </section>
+
+      <section>
+        <title>Defining Inflected Term Data</title>
+
+        <para></para>
+      </section>
+    </section>
+
+    <section>
+      <title>Pool The Data in a &classname_dbo_abstractuserinput;</title>
+
+      <para></para>
+
+      <para></para>
+
+      <para></para>
+
+      <para></para>
+    </section>
+  </section>
+</chapter>

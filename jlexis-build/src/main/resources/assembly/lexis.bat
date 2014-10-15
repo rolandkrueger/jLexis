@@ -1,0 +1,1 @@
+call java -jar lexis-core-1.0-SNAPSHOT.jar %1 %2 %3 %4

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class name="info.rolandkrueger.lexis.data.userprofile.VocableQuizStatistics">
+    <id name="id">
+      <generator class="native" />
+    </id>
+
+    <property name="correctlyAnswered" />
+    <property name="incorrectlyAnswered" />
+    <many-to-one name="vocable" fetch="join" />
+    <many-to-one name="forUser" fetch="join" />
+    
+  </class>
+</hibernate-mapping>

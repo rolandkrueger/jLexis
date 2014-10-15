@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="info.rolandkrueger.lexis.data.vocable.DBO_AbstractUserInput"
+        table="AbstractUserInput">
+        <id name="id">
+            <generator class="native" />
+        </id>
+
+        <property name="inputType" />
+        
+        <map name="data" table="AbstractUserInput_Data">
+            <key column="mapid" />
+            <map-key-many-to-many class="info.rolandkrueger.lexis.data.vocable.RegisteredVocableDataKey"/>
+            
+            <composite-element class="info.rolandkrueger.lexis.data.vocable.terms.RegularTerm" >
+              <property name="normalizedTerm" column="term"/>
+            </composite-element>
+        </map>
+
+    </class>
+</hibernate-mapping>

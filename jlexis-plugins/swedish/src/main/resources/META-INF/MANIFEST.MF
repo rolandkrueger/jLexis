@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+
+Name: SwedishLanguagePlugin
+PluginMainClass: info.rolandkrueger.lexis.plugin.swedish.SwedishLanguagePlugin
+Version: 1.0
+PluginName: Swedish language plugin
+Description: The Swedish language plugin.
+PluginIdentifier: LexisSwedish4790229380754166679L

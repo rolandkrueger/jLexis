@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="info.rolandkrueger.lexis.data.units.LearningUnit"
+        table="LearningUnits">
+        <id name="id">
+            <generator class="native" />
+        </id>
+
+        <property name="name" unique="true" not-null="true"/>
+        <property name="description" />
+        <many-to-one name="nativeLanguage" cascade="save-update"/>
+        <property name="creationDate" type="timestamp" />
+        <property name="size" />
+
+        <list name="languages" table="LearningUnitLanguages" fetch="join" cascade="save-update">
+            <key column="id" />
+            <list-index column="listIndex"/>
+            <many-to-many column="language_id" class="info.rolandkrueger.lexis.data.languages.Language" />
+        </list>
+        
+        <list name="vocables" table="LearningUnit_Vocables" fetch="join" cascade="all">
+            <key column="LearningUnit_id" />
+            <list-index column="list_index" />
+            <many-to-many column="Vocable_id" class="info.rolandkrueger.lexis.data.vocable.Vocable" fetch="join"/>
+        </list>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+
+Name: DefaultLanguagePlugin
+PluginMainClass: info.rolandkrueger.lexis.plugin.defaultplugin.DefaultLanguagePlugin
+Version: 1.0
+PluginName: Default
+Description: The default language plugin.
+PluginIdentifier: LexisDefault3040456690949066114L

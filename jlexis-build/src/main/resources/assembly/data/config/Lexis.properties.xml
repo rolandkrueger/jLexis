@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workspace id="root">
+  <float id="ApplicationFontSize"><![CDATA[13.0]]></float>
+  <integer id="MaxUndos"><![CDATA[50]]></integer>
+  <RootMarker id="RootMarker"><![CDATA[|]]></RootMarker>
+  <RootReplacement id="RootReplacement"><![CDATA[--]]></RootReplacement>
+  <java.io.File id="PluginDirectory"><![CDATA[plugins]]></java.io.File>
+  <java.awt.Component id="MainWindow">
+    <java.awt.Rectangle id="bounds">
+      <integer id="x"><![CDATA[-4]]></integer>
+      <integer id="y"><![CDATA[-4]]></integer>
+      <java.awt.Dimension id="dimension">
+        <integer id="width"><![CDATA[1608]]></integer>
+        <integer id="height"><![CDATA[1155]]></integer>
+      </java.awt.Dimension>
+    </java.awt.Rectangle>
+    <boolean id="visible"><![CDATA[true]]></boolean>
+  </java.awt.Component>
+  <OpenVocabularyFiles id="OpenVocabularyFiles" />
+  <java.awt.Component id="FileChooserConfig">
+    <java.awt.Rectangle id="bounds">
+      <integer id="x"><![CDATA[0]]></integer>
+      <integer id="y"><![CDATA[0]]></integer>
+      <java.awt.Dimension id="dimension">
+        <integer id="width"><![CDATA[0]]></integer>
+        <integer id="height"><![CDATA[0]]></integer>
+      </java.awt.Dimension>
+    </java.awt.Rectangle>
+    <boolean id="visible"><![CDATA[false]]></boolean>
+  </java.awt.Component>
+  <Filechoosers id="Filechoosers" />
+  <NativeLanguage id="NativeLanguage"><![CDATA[Deutsch]]></NativeLanguage>
+  <java.io.File id="DatabaseFile"><![CDATA[database\defaultDB]]></java.io.File>
+</workspace>

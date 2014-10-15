@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
+<!ENTITY % variables SYSTEM "jlexis-devdoc-variables.ent">
+%variables;
+]>
+<chapter id="language_plugins">
+  <title>Language Plugins</title>
+
+  <para>Language plugins are the core concept behind the flexibility of
+  &jlexis; to enable studying a particular foreign language with &jlexis; as a
+  language-independent program. These plugins add all the specifics which make
+  each language unique to the vocabulary trainer. While the &jlexis; main
+  program can manage vocabulary data at the most general level, a language
+  plugin gives &jlexis; all hints and functions necessary for working with one
+  particular foreign language.</para>
+</chapter>
