@@ -23,25 +23,24 @@
 package org.jlexis.quiz.data;
 
 import com.google.common.base.Preconditions;
-import info.rolandkrueger.jlexis.data.languages.Language;
-import info.rolandkrueger.jlexis.data.units.UnmodifiableLearningUnit;
-import info.rolandkrueger.roklib.util.data.ManagedData;
-import info.rolandkrueger.roklib.util.helper.CheckForNull;
+import org.jlexis.data.languages.Language;
+import org.jlexis.data.units.UnmodifiableLearningUnit;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Roland Krueger
  * @version $Id: AbstractQuizTypeConfiguration.java 197 2009-12-14 07:27:08Z roland $
  */
 public abstract class AbstractQuizTypeConfiguration {
-    private ManagedData<Language> mLanguage;
+    private Optional<Language> mLanguage;
     private List<AbstractQuizQuestion> mQuizQuestions;
     private AbstractQuizType mQuizType;
 
     protected AbstractQuizTypeConfiguration(AbstractQuizType type) {
-        mLanguage = new ManagedData<Language>();
+        mLanguage = Optional.empty();
         mQuizType = Preconditions.checkNotNull(type);
     }
 
@@ -62,7 +61,7 @@ public abstract class AbstractQuizTypeConfiguration {
 
     public final void setCorrespondingLanguage(Language lang) {
         if (lang == null) return;
-        mLanguage.setValue(lang);
+        mLanguage = Optional.of(lang);
     }
 
     public final List<AbstractQuizQuestion> getQuizQuestions() {
@@ -70,7 +69,7 @@ public abstract class AbstractQuizTypeConfiguration {
         return mQuizQuestions;
     }
 
-    public final ManagedData<Language> getCorrespondingLanguage() {
+    public final Optional<Language> getCorrespondingLanguage() {
         return mLanguage;
     }
 }

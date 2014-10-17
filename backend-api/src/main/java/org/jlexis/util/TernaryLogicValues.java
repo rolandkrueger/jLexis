@@ -1,8 +1,7 @@
 /*
- * $Id: WordTypeEnum.java 190 2009-12-06 16:01:09Z roland $
- * Created on 07.03.2009
+ * Created on 01.06.2009.
  * 
- * Copyright 2007 Roland Krueger (www.rolandkrueger.info)
+ * Copyright 2007-2009 Roland Krueger (www.rolandkrueger.info)
  * 
  * This file is part of jLexis.
  *
@@ -21,28 +20,14 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jlexis.data.vocable;
+package org.jlexis.util;
 
-public enum WordTypeEnum {
-    ADJECTIVE,
-    ADPOSITION,
-    ADVERB,
-    CARDINAL_NUMBER,
-    CLITIC,
-    COLLOCATION,
-    CONJUNCTION,
-    CONTRACTION,
-    COVERB,
-    DETERMINER,
-    IDIOM,
-    INTERJECTION,
-    MEASURE_WORD,
-    NOUN,
-    PARTICLE,
-    PHRASAL_VERB,
-    PREVERB,
-    PRONOUN,
-    VERB,
-    DEFAULT,
-    EXTRA
+/**
+ * @author Roland Krueger
+ * @version $Id: TernaryLogicValues.java 127 2009-06-02 12:01:53Z roland $
+ */
+public enum TernaryLogicValues {
+    TRUE,
+    FALSE,
+    UNKNOWN
 }

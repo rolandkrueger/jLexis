@@ -25,7 +25,6 @@ package org.jlexis.data.vocable;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
-import info.rolandkrueger.jlexis.gui.containers.AbstractVocableInputPanel;
 
 public abstract class AbstractWordType {
     private String name;
@@ -42,7 +41,8 @@ public abstract class AbstractWordType {
         userInputPrototype = Preconditions.checkNotNull(userInputForThisWordType);
     }
 
-    public abstract AbstractVocableInputPanel getInputPanel();
+//    TODO: fix me
+//    public abstract AbstractVocableInputPanel getInputPanel();
 
     public abstract WordTypeEnum getWordTypeEnum();
 

@@ -27,16 +27,15 @@ import javax.swing.*;
 /**
  * @author Roland Krueger
  */
-public abstract class AbstractQuizType
-{
-  public abstract String getName               ();
-  public abstract JPanel getConfigurationPanel ();
-  
-  public abstract AbstractQuizTypeConfiguration getQuizTypeConfiguration ();
-  
-  @Override
-  public final String toString ()
-  {
-    return getName ();   
-  }
+public abstract class AbstractQuizType {
+    public abstract String getName();
+
+    public abstract JPanel getConfigurationPanel();
+
+    public abstract AbstractQuizTypeConfiguration getQuizTypeConfiguration();
+
+    @Override
+    public final String toString() {
+        return getName();
+    }
 }
