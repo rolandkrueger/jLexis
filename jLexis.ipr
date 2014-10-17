@@ -355,6 +355,17 @@
         <root url="jar://$M2_REPO$/com/vaadin/vaadin-themes/7.3.3/vaadin-themes-7.3.3-sources.jar!/" />
       </SOURCES>
     </library>
+    <library name="Maven: commons-lang:commons-lang:2.5">
+      <CLASSES>
+        <root url="jar://$M2_REPO$/commons-lang/commons-lang/2.5/commons-lang-2.5.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$M2_REPO$/commons-lang/commons-lang/2.5/commons-lang-2.5-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$M2_REPO$/commons-lang/commons-lang/2.5/commons-lang-2.5-sources.jar!/" />
+      </SOURCES>
+    </library>
     <library name="Maven: javax.validation:validation-api:1.0.0.GA">
       <CLASSES>
         <root url="jar://$M2_REPO$/javax/validation/validation-api/1.0.0.GA/validation-api-1.0.0.GA.jar!/" />
