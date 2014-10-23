@@ -25,6 +25,7 @@
 package org.jlexis.managers;
 
 import org.jlexis.data.configuration.JLexisWorkspace;
+import org.jlexis.to_be_refactored.AbstractKeyAction;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -33,6 +34,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Observable;
 
 public class ConfigurationManager extends Observable {
@@ -69,8 +71,7 @@ public class ConfigurationManager extends Observable {
     }
 
     public void setDatabaseFile(File databaseFile) {
-        CheckForNull.check(databaseFile);
-        mWorkspace.setDatabaseFile(databaseFile);
+        mWorkspace.setDatabaseFile(Objects.requireNonNull(databaseFile));
     }
 
     @Deprecated
@@ -79,17 +80,18 @@ public class ConfigurationManager extends Observable {
     }
 
     public Font getApplicationFont() {
-        try {
-            return Font.createFont(Font.TRUETYPE_FONT,
-                    JLexisResourceManager.getInstance().getFontInputStream()).deriveFont(
-                    mWorkspace.getApplicationFontSize());
-        } catch (FontFormatException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+//        TODO: fix me
+//        try {
+//            return Font.createFont(Font.TRUETYPE_FONT,
+//                    JLexisResourceManager.getInstance().getFontInputStream()).deriveFont(
+//                    mWorkspace.getApplicationFontSize());
+//        } catch (FontFormatException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
         return null;
     }
 
@@ -164,8 +166,8 @@ public class ConfigurationManager extends Observable {
             TransformerException {
         if (!CONFIG_DIRECTORY.exists()) {
             // TODO: i18n + show this error message in a some window
-            JLexisMain.getInstance().addLogMessage("Konfiguration kann nicht gespeichert werden. " +
-                    "Konfigurationsverzeichnis " + CONFIG_DIRECTORY.getAbsolutePath() + " existiert nicht.");
+//            JLexisMain.getInstance().addLogMessage("Konfiguration kann nicht gespeichert werden. " +
+//                    "Konfigurationsverzeichnis " + CONFIG_DIRECTORY.getAbsolutePath() + " existiert nicht.");
             return;
         }
 //    mWorkspace.setTarget (new FileWriter (mPropertiesFile));

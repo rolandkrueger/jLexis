@@ -25,6 +25,7 @@
 package org.jlexis.data;
 
 import org.jlexis.data.vocable.AbstractWordType;
+import org.jlexis.data.vocable.DefaultUserInput;
 import org.jlexis.data.vocable.WordTypeEnum;
 
 public class DefaultWordType extends AbstractWordType {
@@ -32,10 +33,11 @@ public class DefaultWordType extends AbstractWordType {
         super(mName, "default", new DefaultUserInput());
     }
 
-    @Override
-    public AbstractVocableInputPanel getInputPanel() {
-        return new DefaultVocableInputPanel();
-    }
+    //        TODO: fix me
+//    @Override
+//    public AbstractVocableInputPanel getInputPanel() {
+//        return new DefaultVocableInputPanel();
+//    }
 
     @Override
     public WordTypeEnum getWordTypeEnum() {

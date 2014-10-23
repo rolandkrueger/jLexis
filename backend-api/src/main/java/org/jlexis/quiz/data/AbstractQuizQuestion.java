@@ -28,9 +28,7 @@ import org.jlexis.data.vocable.terms.TermDataInterface;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
 import org.jlexis.data.vocable.verification.VocableVerificationResult;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Roland Krueger
@@ -53,8 +51,9 @@ public abstract class AbstractQuizQuestion {
         IMPLEMENTATION_NOT_NEEDED
     }
 
-    private static AnswerPanelHandle sTextualAnswerPanelHandle;
-    private static Map<Integer, AnswerPanelHandle> sMultipleChoiceAnswerPanelHandles;
+    //        TODO: fix me
+//    private static AnswerPanelHandle sTextualAnswerPanelHandle;
+//    private static Map<Integer, AnswerPanelHandle> sMultipleChoiceAnswerPanelHandles;
 
     private Vocable mVocable;
     private QuizAnswerType mType = QuizAnswerType.TEXT;
@@ -66,12 +65,14 @@ public abstract class AbstractQuizQuestion {
     private VocableVerificationData mExpectedAnswer;
     private int mIncorrectlyAnsweredCount;
     private int mNumberOfTimesQuestionWasPosed;
-    private AnswerPanelHandle mAnswerPanelHandle;
+    //        TODO: fix me
+//    private AnswerPanelHandle mAnswerPanelHandle;
 
     static {
         // register the standard answer panels provided by this class
-        sTextualAnswerPanelHandle = AnswerPanelManager.getInstance().registerAnswerPanel(new TextualAnswerPanel());
-        sMultipleChoiceAnswerPanelHandles = new HashMap<Integer, AnswerPanelHandle>();
+//        TODO: fix me
+//        sTextualAnswerPanelHandle = AnswerPanelManager.getInstance().registerAnswerPanel(new TextualAnswerPanel());
+//        sMultipleChoiceAnswerPanelHandles = new HashMap<Integer, AnswerPanelHandle>();
     }
 
     public AbstractQuizQuestion(Vocable forVocable, Language forLanguage) {
@@ -119,8 +120,9 @@ public abstract class AbstractQuizQuestion {
     public AnswerCorrectness checkUserAnswer() {
         if (mType == QuizAnswerType.TEXT && mExpectedAnswer != null) {
             VocableVerificationData givenAnswer = new VocableVerificationData();
-            givenAnswer.tokenizeAndAddString(((TextualAnswerPanel) AnswerPanelManager.getInstance().
-                    getAnswerPanelFor(sTextualAnswerPanelHandle)).getAnswerText());
+            //        TODO: fix me
+//            givenAnswer.tokenizeAndAddString(((TextualAnswerPanel) AnswerPanelManager.getInstance().
+//                    getAnswerPanelFor(sTextualAnswerPanelHandle)).getAnswerText());
             VocableVerificationResult result = mExpectedAnswer.verify(givenAnswer, mQueriedLanguage);
 
             if (result.isCorrect())
@@ -131,10 +133,12 @@ public abstract class AbstractQuizQuestion {
     }
 
     public String getGivenAnswer() {
-        if (mType == QuizAnswerType.TEXT && mExpectedAnswer != null) {
-            return ((TextualAnswerPanel) AnswerPanelManager.getInstance().
-                    getAnswerPanelFor(sTextualAnswerPanelHandle)).getAnswerText();
-        } else return getGivenAnswerImpl();
+        //        TODO: fix me
+//        if (mType == QuizAnswerType.TEXT && mExpectedAnswer != null) {
+//            return ((TextualAnswerPanel) AnswerPanelManager.getInstance().
+//                    getAnswerPanelFor(sTextualAnswerPanelHandle)).getAnswerText();
+//        } else return getGivenAnswerImpl();
+        return null;
     }
 
     protected abstract String getGivenAnswerImpl();
@@ -215,12 +219,13 @@ public abstract class AbstractQuizQuestion {
         if (mType == null)
             mType = QuizAnswerType.MULTIPLE_CHOICE_SINGLE_SELECTION;
 
-        mAnswerPanelHandle = sMultipleChoiceAnswerPanelHandles.get(optionLabels.size());
-        if (mAnswerPanelHandle == null) {
-            MultipleChoiceAnswerPanel panel = new MultipleChoiceAnswerPanel(optionLabels.size());
-            mAnswerPanelHandle = AnswerPanelManager.getInstance().registerAnswerPanel(panel);
-            sMultipleChoiceAnswerPanelHandles.put(optionLabels.size(), mAnswerPanelHandle);
-        }
+        //        TODO: fix me
+//        mAnswerPanelHandle = sMultipleChoiceAnswerPanelHandles.get(optionLabels.size());
+//        if (mAnswerPanelHandle == null) {
+//            MultipleChoiceAnswerPanel panel = new MultipleChoiceAnswerPanel(optionLabels.size());
+//            mAnswerPanelHandle = AnswerPanelManager.getInstance().registerAnswerPanel(panel);
+//            sMultipleChoiceAnswerPanelHandles.put(optionLabels.size(), mAnswerPanelHandle);
+//        }
 
         mOptionLabels = optionLabels;
     }
@@ -229,50 +234,57 @@ public abstract class AbstractQuizQuestion {
         if (mType != QuizAnswerType.MULTIPLE_CHOICE_MULTIPLE_SELECTION &&
                 mType != QuizAnswerType.MULTIPLE_CHOICE_SINGLE_SELECTION)
             throw new IllegalStateException("This quiz question is not a multiple choice question.");
-        if (mAnswerPanelHandle == null)
-            throw new IllegalStateException("This quiz question hasn't been posed yet.");
-
-        return ((MultipleChoiceAnswerPanel) AnswerPanelManager.getInstance().
-                getAnswerPanelFor(mAnswerPanelHandle)).getSelectedIndices();
+        //        TODO: fix me
+//        if (mAnswerPanelHandle == null)
+//            throw new IllegalStateException("This quiz question hasn't been posed yet.");
+//
+//        return ((MultipleChoiceAnswerPanel) AnswerPanelManager.getInstance().
+//                getAnswerPanelFor(mAnswerPanelHandle)).getSelectedIndices();
+        return null;
     }
 
     public String getAnswerText() {
         if (mType != QuizAnswerType.TEXT)
             throw new IllegalStateException("This quiz question is not of type TEXT.");
-        if (mAnswerPanelHandle == null)
-            throw new IllegalStateException("This quiz question hasn't been posed yet.");
-
-        return ((TextualAnswerPanel) AnswerPanelManager.getInstance().
-                getAnswerPanelFor(sTextualAnswerPanelHandle)).getAnswerText();
+        //        TODO: fix me
+//        if (mAnswerPanelHandle == null)
+//            throw new IllegalStateException("This quiz question hasn't been posed yet.");
+//
+//        return ((TextualAnswerPanel) AnswerPanelManager.getInstance().
+//                getAnswerPanelFor(sTextualAnswerPanelHandle)).getAnswerText();
+        return null;
     }
 
-    public void setAnswerPanelHandle(AnswerPanelHandle answerPanelHandle) {
-        if (answerPanelHandle == null)
-            throw new NullPointerException("Panel is null.");
+    //        TODO: fix me
+//    public void setAnswerPanelHandle(AnswerPanelHandle answerPanelHandle) {
+//        if (answerPanelHandle == null)
+//            throw new NullPointerException("Panel is null.");
+//
+//        if (mType != QuizAnswerType.PROVIDED)
+//            throw new IllegalStateException("Quiz answer type is not set to PROVIDED.");
+//
+//        mAnswerPanelHandle = answerPanelHandle;
+//    }
 
-        if (mType != QuizAnswerType.PROVIDED)
-            throw new IllegalStateException("Quiz answer type is not set to PROVIDED.");
+    //        TODO: fix me
+//    public AnswerPanelHandle getAnswerPanelHandle() {
+//        if (mAnswerPanelHandle == null) {
+//            if (mType == QuizAnswerType.TEXT) {
+//                mAnswerPanelHandle = sTextualAnswerPanelHandle;
+//            } else {
+//                throw new IllegalStateException("No answer panel handle has been provided for this quiz question.");
+//            }
+//        }
+//        if (mType == QuizAnswerType.MULTIPLE_CHOICE_MULTIPLE_SELECTION ||
+//                mType == QuizAnswerType.MULTIPLE_CHOICE_SINGLE_SELECTION) {
+//            ((MultipleChoiceAnswerPanel) AnswerPanelManager.getInstance().
+//                    getAnswerPanelFor(mAnswerPanelHandle)).setChoices(mOptionLabels, mType);
+//        }
+//        return mAnswerPanelHandle;
+//    }
 
-        mAnswerPanelHandle = answerPanelHandle;
-    }
-
-    public AnswerPanelHandle getAnswerPanelHandle() {
-        if (mAnswerPanelHandle == null) {
-            if (mType == QuizAnswerType.TEXT) {
-                mAnswerPanelHandle = sTextualAnswerPanelHandle;
-            } else {
-                throw new IllegalStateException("No answer panel handle has been provided for this quiz question.");
-            }
-        }
-        if (mType == QuizAnswerType.MULTIPLE_CHOICE_MULTIPLE_SELECTION ||
-                mType == QuizAnswerType.MULTIPLE_CHOICE_SINGLE_SELECTION) {
-            ((MultipleChoiceAnswerPanel) AnswerPanelManager.getInstance().
-                    getAnswerPanelFor(mAnswerPanelHandle)).setChoices(mOptionLabels, mType);
-        }
-        return mAnswerPanelHandle;
-    }
-
-    public AbstractAnswerPanel getAnswerPanel() {
-        return AnswerPanelManager.getInstance().getAnswerPanelFor(getAnswerPanelHandle());
-    }
+    //        TODO: fix me
+//    public AbstractAnswerPanel getAnswerPanel() {
+//        return AnswerPanelManager.getInstance().getAnswerPanelFor(getAnswerPanelHandle());
+//    }
 }

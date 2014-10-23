@@ -24,12 +24,8 @@
 package org.jlexis.data.units;
 
 
-import org.hibernate.Query;
-import org.hibernate.Session;
 import org.jlexis.data.languages.Language;
-import org.jlexis.data.languages.LanguageFactory;
 import org.jlexis.data.vocable.Vocable;
-import org.jlexis.plugin.LanguagePlugin;
 
 import java.util.*;
 
@@ -42,7 +38,7 @@ public class LearningUnit extends Observable implements Iterable<Vocable> {
     private Date mCreationDate;
     private List<Vocable> mVocables;
     private boolean mOpenForEditing;
-    private EditLearningUnitInternalFrame mEditFrame;
+//    private EditLearningUnitInternalFrame mEditFrame;
     private String mLanguagesString;
 
     public LearningUnit() {
@@ -84,22 +80,22 @@ public class LearningUnit extends Observable implements Iterable<Vocable> {
     }
 
     public void setNativeLanguageName(String nativeLanguageName) {
-        //TODO: rework this
-        LanguagePlugin nativeLanguagePlugin = JLexisMain.getInstance().getPluginManager().getNativeLanguagePlugin();
-        Session session = JLexisPersistenceManager.getInstance().getSession();
-        Query q = session.createQuery("from Language l where l.languageName=:name and " +
-                "l.pluginIdentifier=:identifier and l.pluginVersion=:version")
-                .setParameter("name", nativeLanguageName)
-                .setParameter("identifier", nativeLanguagePlugin.getIdentifier())
-                .setParameter("version", nativeLanguagePlugin.getVersionNumber());
-        Object result = q.uniqueResult();
-
-        if (result == null) {
-            mNativeLanguage = LanguageFactory.getInstance().getLanguageFor(nativeLanguagePlugin);
-            mNativeLanguage.setLanguageName(nativeLanguageName);
-        } else {
-            mNativeLanguage = (Language) result;
-        }
+        //TODO: fix me
+//        LanguagePlugin nativeLanguagePlugin = JLexisMain.getInstance().getPluginManager().getNativeLanguagePlugin();
+//        Session session = JLexisPersistenceManager.getInstance().getSession();
+//        Query q = session.createQuery("from Language l where l.languageName=:name and " +
+//                "l.pluginIdentifier=:identifier and l.pluginVersion=:version")
+//                .setParameter("name", nativeLanguageName)
+//                .setParameter("identifier", nativeLanguagePlugin.getIdentifier())
+//                .setParameter("version", nativeLanguagePlugin.getVersionNumber());
+//        Object result = q.uniqueResult();
+//
+//        if (result == null) {
+//            mNativeLanguage = LanguageFactory.getInstance().getLanguageFor(nativeLanguagePlugin);
+//            mNativeLanguage.setLanguageName(nativeLanguageName);
+//        } else {
+//            mNativeLanguage = (Language) result;
+//        }
     }
 
     /**
@@ -158,22 +154,24 @@ public class LearningUnit extends Observable implements Iterable<Vocable> {
     }
 
     public void addVocable(Vocable vocable) {
-        mVocables.add(vocable);
-        JLexisPersistenceManager.getInstance().flushSession();
-        setChanged();
-        notifyObservers();
+//        TODO: fix me
+//        mVocables.add(vocable);
+//        JLexisPersistenceManager.getInstance().flushSession();
+//        setChanged();
+//        notifyObservers();
     }
 
     public void insertVocable(Vocable vocable, int index) {
-        if (index < 0 || index > mVocables.size() - 1) {
-            addVocable(vocable);
-        } else {
-            mVocables.add(index, vocable);
-        }
-
-        JLexisPersistenceManager.getInstance().getSession().flush();
-        setChanged();
-        notifyObservers();
+        //        TODO: fix me
+//        if (index < 0 || index > mVocables.size() - 1) {
+//            addVocable(vocable);
+//        } else {
+//            mVocables.add(index, vocable);
+//        }
+//
+//        JLexisPersistenceManager.getInstance().getSession().flush();
+//        setChanged();
+//        notifyObservers();
     }
 
     /**
@@ -204,38 +202,42 @@ public class LearningUnit extends Observable implements Iterable<Vocable> {
     }
 
     public void replaceVocable(Vocable voc, int index) {
-        getVocableAt(index).replace(voc);
-        JLexisPersistenceManager.getInstance().flushSession();
-        setChanged();
-        notifyObservers();
+        //        TODO: fix me
+//        getVocableAt(index).replace(voc);
+//        JLexisPersistenceManager.getInstance().flushSession();
+//        setChanged();
+//        notifyObservers();
     }
 
-    public void openForEditing(EditLearningUnitInternalFrame frame) {
-        assert !mOpenForEditing;
-        if (frame == null)
-            throw new NullPointerException("Edit frame is null.");
-        mOpenForEditing = true;
-        mEditFrame = frame;
-        // get the language plugins for the languages used by this unit
-        for (Language language : getLanguages()) {
-            LanguagePlugin plugin = JLexisMain.getInstance().getPluginManager().getPluginFor(language);
-            if (plugin == null) {
-                //TODO: handle this case in a user-friendly way
-                throw new NullPointerException("No plugin found for language " + language);
-            }
-            language.setLanguagePlugin(plugin);
-        }
-    }
+    //        TODO: fix me
+//    public void openForEditing(EditLearningUnitInternalFrame frame) {
+//        assert !mOpenForEditing;
+//        if (frame == null)
+//            throw new NullPointerException("Edit frame is null.");
+//        mOpenForEditing = true;
+//        mEditFrame = frame;
+//        // get the language plugins for the languages used by this unit
+//        for (Language language : getLanguages()) {
+//            LanguagePlugin plugin = JLexisMain.getInstance().getPluginManager().getPluginFor(language);
+//            if (plugin == null) {
+//                //TODO: handle this case in a user-friendly way
+//                throw new NullPointerException("No plugin found for language " + language);
+//            }
+//            language.setLanguagePlugin(plugin);
+//        }
+//    }
 
-    public EditLearningUnitInternalFrame getEditFrame() {
-        return mEditFrame;
-    }
+    //        TODO: fix me
+//    public EditLearningUnitInternalFrame getEditFrame() {
+//        return mEditFrame;
+//    }
 
     public void closeForEditing() {
-        assert mOpenForEditing;
-        mEditFrame.saveChanges();
-        mOpenForEditing = false;
-        mEditFrame = null;
+        //        TODO: fix me
+//        assert mOpenForEditing;
+//        mEditFrame.saveChanges();
+//        mOpenForEditing = false;
+//        mEditFrame = null;
     }
 
     public boolean isOpenForEditing() {
@@ -246,8 +248,9 @@ public class LearningUnit extends Observable implements Iterable<Vocable> {
      * Deletes this {@link LearningUnit}.
      */
     public void delete() {
-        JLexisPersistenceManager.getInstance().deleteObject(this);
-        LearningUnitManager.getInstance().removeLearningUnit(this);
+        //        TODO: fix me
+//        JLexisPersistenceManager.getInstance().deleteObject(this);
+//        LearningUnitManager.getInstance().removeLearningUnit(this);
     }
 
     @Override
