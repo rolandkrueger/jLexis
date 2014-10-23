@@ -24,7 +24,9 @@
 package org.jlexis.data.languages;
 
 import org.jlexis.plugin.LanguagePlugin;
+import org.jlexis.plugin.PluginIdentifier;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -52,108 +54,62 @@ import java.util.Optional;
  */
 public class Language {
     /**
-     * The corresponding {@link LanguagePlugin} for this {@link Language} object. This object remains
-     * <code>null</code> directly after loading the {@link Language} object from the database.
-     */
-    private Optional<LanguagePlugin> plugin;
-    /**
      * The name of the language. Is usually defined by the {@link LanguagePlugin}, except for default
      * plugins. When a default language plugin is chosen for a language the user has to provide the name of the language.
      */
-    private Optional<String> languageName;
+    private String languageName;
+
     /**
      * The identifier of the corresponding {@link LanguagePlugin} as provided by
      * {@link LanguagePlugin#getIdentifier()}. This value is set after loading the {@link Language}
      * object from the database and will be used to find a matching {@link LanguagePlugin} object from
-     * the set of available {@link LanguagePlugin}s. Not that this set can differ from the set that
+     * the set of available {@link LanguagePlugin}s. Note that this set can differ from the set that
      * was available when saving the {@link Language} object to the database. This may be the case
      * when plugins are deleted or a newer version of a plugin is installed.
      */
-    private Optional<String> pluginIdentifier;
-    /**
-     * The version of the corresponding {@link LanguagePlugin} as provided by
-     * {@link LanguagePlugin#getVersionNumber()}. The same information applies for the plugin version as
-     * described under {@link Language#pluginIdentifier}.
-     */
-    private Optional<Integer> pluginVersion;
+    private PluginIdentifier sourcePlugin;
 
-    private long mID;
-
-    protected Language() {
-        plugin = Optional.empty();
-        languageName = Optional.empty();
-        pluginIdentifier = Optional.empty();
-        pluginVersion = Optional.empty();
-    }
+    private long id;
 
     /**
      * Creates a new {@link Language} object for the given {@link LanguagePlugin}. The name for the new
      * {@link Language} object is defined by the plugin.
      *
-     * @param pluginForThisLanguage the plugin that corresponds to this {@link Language}.
+     * @param sourcePluginIdentifier identifier for the plugin that provides this {@link Language}.
      */
-    protected Language(LanguagePlugin pluginForThisLanguage) {
-        this();
-        if (pluginForThisLanguage == null) throw new NullPointerException("LanguagePlugin object is null!");
+    protected Language(PluginIdentifier sourcePluginIdentifier, String languageName) {
+        Objects.requireNonNull(sourcePluginIdentifier);
 
-        setLanguagePlugin(pluginForThisLanguage);
-        setLanguageName(pluginForThisLanguage.getLanguageName());
+        this.sourcePlugin = sourcePluginIdentifier;
+        this.languageName = languageName;
     }
 
     public String getName() {
-        return languageName.get();
+        return languageName;
     }
 
     public void setLanguageName(String languageName) {
-        if (languageName == null)
-            throw new IllegalArgumentException("Language name is null.");
-        this.languageName = Optional.of(languageName);
+        this.languageName = Objects.requireNonNull(languageName);
     }
 
+    @Deprecated
     public Optional<LanguagePlugin> getLanguagePlugin() {
-        if (!plugin.isPresent()) {
-//        TODO: fix me
-            // a plugin instance has not yet been set for this language. Try to fetch one.
-//      LanguagePlugin result = JLexisMain.getInstance ().getPluginManager ().getPluginFor (this);
-//      if (result != null)
-//        plugin.setValue (result);
-//      else
-//        throw new RuntimeException("Unable to find a matching plugin for language " + toString ());
-        }
-        return plugin;
+        // TODO delete me
+        throw new UnsupportedOperationException();
     }
 
-    public void setLanguagePlugin(LanguagePlugin plugin) {
-        this.plugin = Optional.of(plugin);
-        setPluginIdentifier(plugin.getIdentifier());
-        setPluginVersion(plugin.getVersionNumber());
-    }
-
-    public String getPluginIdentifier() {
-        return pluginIdentifier.get();
-    }
-
-    public void setPluginIdentifier(String pluginIdentifier) {
-        this.pluginIdentifier = Optional.of(pluginIdentifier);
-    }
-
-    public Integer getPluginVersion() {
-        return pluginVersion.get();
-    }
-
-    public void setPluginVersion(int pluginVersion) {
-        this.pluginVersion = Optional.of(pluginVersion);
+    public PluginIdentifier getPluginIdentifier() {
+        return sourcePlugin;
     }
 
     @Override
     public String toString() {
-        if (!languageName.isPresent()) return "?";
-        return languageName.toString();
+        return com.google.common.base.Objects.toStringHelper(this).add("name", languageName).toString();
     }
 
     @Override
     public int hashCode() {
-        return getName().hashCode();
+        return languageName.hashCode();
     }
 
     @Override
@@ -170,11 +126,11 @@ public class Language {
 
     @SuppressWarnings("unused")
     private long getId() {
-        return mID;
+        return id;
     }
 
     @SuppressWarnings("unused")
     private void setId(long id) {
-        mID = id;
+        this.id = id;
     }
 }
