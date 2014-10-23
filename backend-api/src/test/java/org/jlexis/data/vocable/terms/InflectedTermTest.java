@@ -23,7 +23,7 @@
  */
 package org.jlexis.data.vocable.terms;
 
-import info.rolandkrueger.jlexis.data.vocable.verification.VocableVerificationData;
+import org.jlexis.data.vocable.verification.VocableVerificationData;
 import org.junit.Test;
 
 import java.util.HashSet;
