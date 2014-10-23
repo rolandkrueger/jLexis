@@ -24,4 +24,19 @@ public class PluginIdentifier {
     public String getIdentifier() {
         return identifier;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PluginIdentifier that = (PluginIdentifier) o;
+
+        return Objects.equals(identifier, that.identifier);
+    }
+
+    @Override
+    public int hashCode() {
+        return identifier.hashCode();
+    }
 }
