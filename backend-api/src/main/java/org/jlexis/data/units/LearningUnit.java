@@ -278,7 +278,7 @@ public class LearningUnit extends Observable implements Iterable<Vocable> {
         if (mLanguagesString == null) {
             StringBuilder buf = new StringBuilder();
             for (Language lang : getLanguages()) {
-                buf.append(lang.getLanguageName());
+                buf.append(lang.getName());
                 buf.append(", ");
             }
             buf.setLength(buf.length() - 2);

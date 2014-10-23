@@ -132,8 +132,8 @@ public class GeneralQuizType extends AbstractQuizType {
                 VocableVerificationData vocableVerificationData = forVocable.getVariantInput(forLanguage).getQuizVerificationData();
                 String additionalQuestionText = vocableVerificationData.getAdditonalQuestionText();
                 // TODO: I18N
-//        String questionText = String.format ("\u00DCbersetze nach %s! ", forLanguage.getLanguageName ().toLowerCase ());
-                String questionText = String.format("Translate into %s! ", forLanguage.getLanguageName());
+//        String questionText = String.format ("\u00DCbersetze nach %s! ", forLanguage.getName ().toLowerCase ());
+                String questionText = String.format("Translate into %s! ", forLanguage.getName());
                 if (additionalQuestionText != null) {
                     questionText += additionalQuestionText;
                 }

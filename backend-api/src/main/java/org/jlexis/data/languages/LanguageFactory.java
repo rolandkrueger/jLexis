@@ -43,7 +43,7 @@ public class LanguageFactory {
 //      for (Object obj : result)
 //      {
 //        Language lang = (Language) obj;
-//        sInstance.mAvailableLanguages.put (lang.getLanguageName (), lang);
+//        sInstance.mAvailableLanguages.put (lang.getName (), lang);
 //      }
         }
 

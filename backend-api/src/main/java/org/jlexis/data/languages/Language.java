@@ -100,7 +100,7 @@ public class Language {
         setLanguageName(pluginForThisLanguage.getLanguageName());
     }
 
-    public String getLanguageName() {
+    public String getName() {
         return languageName.get();
     }
 
@@ -153,7 +153,7 @@ public class Language {
 
     @Override
     public int hashCode() {
-        return getLanguageName().hashCode();
+        return getName().hashCode();
     }
 
     @Override
@@ -162,7 +162,7 @@ public class Language {
         if (obj == this) return true;
         if (obj instanceof Language) {
             Language other = (Language) obj;
-            if (other.getLanguageName().equals(getLanguageName())) return true;
+            if (other.getName().equals(getName())) return true;
         }
 
         return false;

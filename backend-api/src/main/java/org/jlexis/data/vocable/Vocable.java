@@ -79,7 +79,7 @@ public class Vocable implements Serializable {
     public AbstractWordType getVariantWordType(Language forLanguage) {
         if (!mData.containsKey(forLanguage))
             throw new IllegalArgumentException(String.format("Language %s is not defined for this Vocable object.",
-                    forLanguage.getLanguageName()));
+                    forLanguage.getName()));
 
         return mData.get(forLanguage).getWordType();
     }
