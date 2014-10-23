@@ -29,14 +29,14 @@ import java.util.Optional;
 
 /**
  * <p>
- * A {@link Language} object represents a single language that can be learned by the user. When
+ * This class represents a single language that can be learned by the user. When
  * creating a new {@link org.jlexis.data.units.LearningUnit} the user typically selects one or more foreign languages she
  * wants to learn with this unit. Each of these languages are represented by a {@link Language}
  * object.
  * </p>
  * <p>
- * A {@link Language} object is defined by the name of the language and a correponding
- * {@link LanguagePlugin} object. The language name is usually predefined by a language plugin, i.e.
+ * A {@link Language} is defined by the name of the language and a reference to the
+ * {@link LanguagePlugin} from which the language was created. The language name is usually predefined by a language plugin, i.e.
  * if the user selects a language specific {@link LanguagePlugin}, she simultaneously selects the
  * corresponding {@link Language} object.
  * <p>
@@ -55,12 +55,12 @@ public class Language {
      * The corresponding {@link LanguagePlugin} for this {@link Language} object. This object remains
      * <code>null</code> directly after loading the {@link Language} object from the database.
      */
-    private Optional<LanguagePlugin> mPlugin;
+    private Optional<LanguagePlugin> plugin;
     /**
      * The name of the language. Is usually defined by the {@link LanguagePlugin}, except for default
-     * plugins.
+     * plugins. When a default language plugin is chosen for a language the user has to provide the name of the language.
      */
-    private Optional<String> mLanguageName;
+    private Optional<String> languageName;
     /**
      * The identifier of the corresponding {@link LanguagePlugin} as provided by
      * {@link LanguagePlugin#getIdentifier()}. This value is set after loading the {@link Language}
@@ -69,24 +69,21 @@ public class Language {
      * was available when saving the {@link Language} object to the database. This may be the case
      * when plugins are deleted or a newer version of a plugin is installed.
      */
-    private Optional<String> mPluginIdentifier;
+    private Optional<String> pluginIdentifier;
     /**
      * The version of the corresponding {@link LanguagePlugin} as provided by
      * {@link LanguagePlugin#getVersionNumber()}. The same information applies for the plugin version as
-     * described under {@link Language#mPluginIdentifier}.
+     * described under {@link Language#pluginIdentifier}.
      */
-    private Optional<Integer> mPluginVersion;
+    private Optional<Integer> pluginVersion;
 
     private long mID;
 
-    /**
-     * Default constructor.
-     */
     protected Language() {
-        mPlugin = Optional.empty();
-        mLanguageName = Optional.empty();
-        mPluginIdentifier = Optional.empty();
-        mPluginVersion = Optional.empty();
+        plugin = Optional.empty();
+        languageName = Optional.empty();
+        pluginIdentifier = Optional.empty();
+        pluginVersion = Optional.empty();
     }
 
     /**
@@ -104,54 +101,54 @@ public class Language {
     }
 
     public String getLanguageName() {
-        return mLanguageName.get();
+        return languageName.get();
     }
 
     public void setLanguageName(String languageName) {
         if (languageName == null)
             throw new IllegalArgumentException("Language name is null.");
-        mLanguageName = Optional.of(languageName);
-    }
-
-    public void setLanguagePlugin(LanguagePlugin plugin) {
-        mPlugin = Optional.of(plugin);
-        setPluginIdentifier(plugin.getIdentifier());
-        setPluginVersion(plugin.getVersionNumber());
+        this.languageName = Optional.of(languageName);
     }
 
     public Optional<LanguagePlugin> getLanguagePlugin() {
-        if (!mPlugin.isPresent()) {
+        if (!plugin.isPresent()) {
 //        TODO: fix me
             // a plugin instance has not yet been set for this language. Try to fetch one.
 //      LanguagePlugin result = JLexisMain.getInstance ().getPluginManager ().getPluginFor (this);
 //      if (result != null)
-//        mPlugin.setValue (result);
+//        plugin.setValue (result);
 //      else
 //        throw new RuntimeException("Unable to find a matching plugin for language " + toString ());
         }
-        return mPlugin;
+        return plugin;
+    }
+
+    public void setLanguagePlugin(LanguagePlugin plugin) {
+        this.plugin = Optional.of(plugin);
+        setPluginIdentifier(plugin.getIdentifier());
+        setPluginVersion(plugin.getVersionNumber());
     }
 
     public String getPluginIdentifier() {
-        return mPluginIdentifier.get();
+        return pluginIdentifier.get();
     }
 
     public void setPluginIdentifier(String pluginIdentifier) {
-        mPluginIdentifier = Optional.of(pluginIdentifier);
+        this.pluginIdentifier = Optional.of(pluginIdentifier);
     }
 
     public Integer getPluginVersion() {
-        return mPluginVersion.get();
+        return pluginVersion.get();
     }
 
     public void setPluginVersion(int pluginVersion) {
-        mPluginVersion = Optional.of(pluginVersion);
+        this.pluginVersion = Optional.of(pluginVersion);
     }
 
     @Override
     public String toString() {
-        if (!mLanguageName.isPresent()) return "?";
-        return mLanguageName.toString();
+        if (!languageName.isPresent()) return "?";
+        return languageName.toString();
     }
 
     @Override

@@ -47,9 +47,6 @@ public class Vocable implements Serializable {
     protected Map<Language, VocableData> mData;
     private long mId;
 
-    /**
-     * Default constructor.
-     */
     public Vocable() {
         mData = new Hashtable<Language, VocableData>();
     }
@@ -127,10 +124,6 @@ public class Vocable implements Serializable {
         return mData;
     }
 
-    public Collection<Language> getLanguages() {
-        return Collections.unmodifiableCollection(mData.keySet());
-    }
-
     /**
      * Setter method for the vocable data. This method is used by Hibernate when loading a
      * {@link Vocable} object from the database.
@@ -144,11 +137,15 @@ public class Vocable implements Serializable {
         mData.putAll(data);
     }
 
-    protected void setId(long id) {
-        mId = id;
+    public Collection<Language> getLanguages() {
+        return Collections.unmodifiableCollection(mData.keySet());
     }
 
     protected long getId() {
         return mId;
+    }
+
+    protected void setId(long id) {
+        mId = id;
     }
 }
