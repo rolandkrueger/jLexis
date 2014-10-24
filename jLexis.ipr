@@ -76,6 +76,9 @@
       <option name="myName" value="jlexis" />
       <option name="myLocal" value="true" />
     </copyright>
+    <LanguageOptions name="JAVA">
+      <option name="fileTypeOverride" value="3" />
+    </LanguageOptions>
   </component>
   <component name="DependencyValidationManager">
     <option name="SKIP_IMPORT_STATEMENTS" value="false" />
@@ -397,6 +400,17 @@
       </JAVADOC>
       <SOURCES>
         <root url="jar://$M2_REPO$/junit/junit/4.11/junit-4.11-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.codehaus.groovy:groovy-all:2.3.7">
+      <CLASSES>
+        <root url="jar://$M2_REPO$/org/codehaus/groovy/groovy-all/2.3.7/groovy-all-2.3.7.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$M2_REPO$/org/codehaus/groovy/groovy-all/2.3.7/groovy-all-2.3.7-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$M2_REPO$/org/codehaus/groovy/groovy-all/2.3.7/groovy-all-2.3.7-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="Maven: org.hamcrest:hamcrest-all:1.3">
