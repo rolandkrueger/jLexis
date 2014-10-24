@@ -22,8 +22,10 @@
  */
 package org.jlexis.data.vocable.verification;
 
+import org.jlexis.data.languages.Language;
 import org.jlexis.data.vocable.terms.RegularTerm;
 import org.jlexis.managers.ConfigurationManager;
+import org.jlexis.plugin.PluginIdentifier;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -345,11 +347,11 @@ public class VocableVerificationDataTest
   public void testNormalizeAbbreviations ()
   {
     mTestObj.tokenizeAndAddString ("zzz il   y  \t a zzz; xxx iya xxx, yyy i.y.a. yyy, xxxiyaxxx; ooo .i.y.a. ooo");
-    mTestObj.normalizeAbbreviations (new LanguageTestImplementation ());
+    mTestObj.normalizeAbbreviations (new Language(new PluginIdentifier("english-plugin", "1.0"), "English"));
     
     VocableVerificationData compareObj = new VocableVerificationData ();
     compareObj.tokenizeAndAddString ("zzz  .i.y.a. zzz; xxx i.y.a. xxx, yyy   iya yyy, xxxiyaxxx; ooo il \t y  a  ooo");
-    compareObj.normalizeAbbreviations (new LanguageTestImplementation ());
+    compareObj.normalizeAbbreviations (new Language(new PluginIdentifier("english-plugin", "1.0"), "English"));
     
     VocableVerificationResult result = mTestObj.verify (compareObj);
     assertEquals (VocableVerificationResultEnum.CORRECT, result.getResult ());

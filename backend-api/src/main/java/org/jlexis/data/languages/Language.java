@@ -77,7 +77,7 @@ public class Language {
      *
      * @param sourcePluginIdentifier identifier for the plugin that provides this {@link Language}.
      */
-    protected Language(PluginIdentifier sourcePluginIdentifier, String languageName) {
+    public Language(PluginIdentifier sourcePluginIdentifier, String languageName) {
         Objects.requireNonNull(sourcePluginIdentifier);
 
         this.sourcePlugin = sourcePluginIdentifier;

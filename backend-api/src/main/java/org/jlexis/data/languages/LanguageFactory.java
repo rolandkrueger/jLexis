@@ -55,13 +55,15 @@ public class LanguageFactory {
     }
 
     public Language getLanguageFor(LanguagePlugin plugin) {
-        for (Language language : mAvailableLanguages.values()) {
-            if (language.getPluginIdentifier().equals(plugin.getIdentifier()) &&
-                    language.getPluginVersion().equals(plugin.getVersionNumber())) {
-                return language;
-            }
-        }
-
-        return new Language(plugin);
+//        TODO fix me
+//        for (Language language : mAvailableLanguages.values()) {
+//            if (language.getPluginIdentifier().equals(plugin.getIdentifier()) &&
+//                    language.getPluginVersion().equals(plugin.getVersionNumber())) {
+//                return language;
+//            }
+//        }
+//
+//        return new Language(plugin);
+        return null;
     }
 }
