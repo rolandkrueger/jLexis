@@ -5,7 +5,7 @@ import org.jlexis.tests.JLexisTestBase
 class PluginIdentifierTest extends JLexisTestBase {
 
     void testConstructor() {
-        requireAllParametersNonNull(["key", "version"]) { key, version ->
+        requireParametersNonNull(["key", "version"]) { key, version ->
             new PluginIdentifier(key, version)
         }
     }
