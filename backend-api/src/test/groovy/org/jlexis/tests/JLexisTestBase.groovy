@@ -1,6 +1,6 @@
 package org.jlexis.tests
 
-class JLexisTestBase extends GroovyTestCase {
+abstract class JLexisTestBase extends GroovyTestCase {
 
     /**
      * <p>Tests the precondition for a method that requires certain method parameters to be non-null. It is expected that

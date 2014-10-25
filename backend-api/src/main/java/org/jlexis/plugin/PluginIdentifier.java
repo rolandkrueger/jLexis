@@ -39,4 +39,6 @@ public class PluginIdentifier {
     public int hashCode() {
         return identifier.hashCode();
     }
+
+
 }
