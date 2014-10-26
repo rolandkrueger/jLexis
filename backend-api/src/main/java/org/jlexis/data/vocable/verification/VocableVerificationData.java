@@ -25,6 +25,9 @@ package org.jlexis.data.vocable.verification;
 
 import org.apache.commons.lang.math.IntRange;
 import org.jlexis.data.languages.Language;
+import org.jlexis.data.vocable.terms.AbstractTermData;
+import org.jlexis.data.vocable.terms.InflectedTerm;
+import org.jlexis.data.vocable.terms.RegularTerm;
 import org.jlexis.data.vocable.terms.TermDataInterface;
 import org.jlexis.managers.ConfigurationManager;
 import org.jlexis.util.StringUtils;
@@ -35,22 +38,48 @@ import java.util.regex.Pattern;
 
 /**
  * @author Roland Krueger
- * @version $Id: VocableVerificationData.java 197 2009-12-14 07:27:08Z roland $
  */
 public class VocableVerificationData {
     private static Pattern sPattern1 = Pattern.compile("\\w+(\\w*\\W*)*\\w*\\W");
     private static Pattern sPattern2 = Pattern.compile("\\W\\w*(\\w*\\W*)*\\w+");
     private static Pattern sPattern3 = Pattern.compile("\\W(\\w*\\W*)*\\w*\\W");
 
-    protected Set<Set<String>> mData;
-    protected boolean mAllIsOptional = false;
-    protected List<VocableVerificationData> mAlternatives;
-    protected VocableVerificationData mOptionalValues;
-    protected String mAdditonalQuestionText;
+    protected Set<Set<String>> data;
+    protected boolean allIsOptional = false;
+    protected List<VocableVerificationData> alternatives;
+    protected VocableVerificationData optionalValues;
+    protected String additonalQuestionText;
 
     public VocableVerificationData() {
-        mData = new HashSet<Set<String>>();
-        mAlternatives = new LinkedList<VocableVerificationData>();
+        data = new HashSet<>();
+        alternatives = new LinkedList<>();
+    }
+
+    public VocableVerificationData(AbstractTermData termData) {
+        this();
+        VocableVerificationData tmp = new VocableVerificationData();
+
+        tmp.tokenizeAndAddString(termData.getNormalizedTerm());
+        for (Set<String> mandatorySetWithNormalizedTerms : tmp.getMandatoryValuesWithOptions()) {
+            Set<String> mandatorySet = new HashSet<>();
+            for (String value : mandatorySetWithNormalizedTerms) {
+                // For every token which the user has entered, add its resolved form to the
+                // verification data, so that the resolved term is also a valid answer
+                AbstractTermData term;
+                if (termData.isInflected()) {
+                    term = new InflectedTerm(termData.getWordStemObject());
+                } else {
+                    term = new RegularTerm();
+                }
+                term.setNormalizedTerm(value);
+                mandatorySet.add(term.getPurgedTerm());
+
+                RegularTerm regularTerm = new RegularTerm();
+                regularTerm.setUserEnteredTerm(term.getResolvedTerm());
+                mandatorySet.add(regularTerm.getPurgedTerm());
+            }
+            addMandatoryValueWithOptions(mandatorySet);
+        }
     }
 
     /**
@@ -60,27 +89,27 @@ public class VocableVerificationData {
      */
     private VocableVerificationData(VocableVerificationData other) {
         this();
-        mAllIsOptional = other.mAllIsOptional;
+        allIsOptional = other.allIsOptional;
 
-        mData.addAll(other.mData);
+        data.addAll(other.data);
         addOptionalValues(other.getOptionalValues());
 
         // copy the alternatives
-        for (VocableVerificationData data : other.mAlternatives) {
-            mAlternatives.add(new VocableVerificationData(data));
+        for (VocableVerificationData data : other.alternatives) {
+            alternatives.add(new VocableVerificationData(data));
         }
     }
 
     public String getAdditonalQuestionText() {
-        return mAdditonalQuestionText;
+        return additonalQuestionText;
     }
 
-    public void setAdditonalQuestionText(String mAdditonalQuestionText) {
-        this.mAdditonalQuestionText = mAdditonalQuestionText;
+    public void setAdditonalQuestionText(String additonalQuestionText) {
+        this.additonalQuestionText = additonalQuestionText;
     }
 
     private void resolveAllParentheses() {
-        for (Set<String> set : mData) {
+        for (Set<String> set : data) {
             for (String string : set) {
                 set.addAll(resolveParentheses(string));
             }
@@ -108,9 +137,9 @@ public class VocableVerificationData {
         Set<String> inputSet = new VerificationHashSet(comparisonValue.getAllTokens());
 
         resolveAllParentheses();
-        if (mOptionalValues != null) mOptionalValues.resolveAllParentheses();
+        if (optionalValues != null) optionalValues.resolveAllParentheses();
 
-        for (VocableVerificationData alternative : mAlternatives) {
+        for (VocableVerificationData alternative : alternatives) {
             VocableVerificationResult alternativeResult = alternative.verify(comparisonValue, forLanguage, normalizeAbbreviations);
             if (alternativeResult.getResult() == VocableVerificationResultEnum.CORRECT)
                 return alternativeResult;
@@ -123,13 +152,13 @@ public class VocableVerificationData {
         // Create a copy of this object. The data of this copy will be removed as needed.
         VocableVerificationData compareData = new VocableVerificationData(this);
 
-        for (String value : new HashSet<String>(inputSet)) {
+        for (String value : new HashSet<>(inputSet)) {
             Set<String> thisMandatory = getAlternativesForMandatoryValue(value);
             if (thisMandatory != null) {
                 // if one of the mandatory answers is contained in the comparison verification data object
                 // remove the respective set of alternative values for this mandatory answer from the
                 // result object
-                compareData.mData.remove(thisMandatory);
+                compareData.data.remove(thisMandatory);
                 inputSet.removeAll(thisMandatory);
             } else if (compareData.getOptionalValues().contains(value)) {
                 compareData.removeOptionalValue(value);
@@ -153,16 +182,16 @@ public class VocableVerificationData {
     }
 
     public List<VocableVerificationData> getAlternatives() {
-        return Collections.unmodifiableList(mAlternatives);
+        return Collections.unmodifiableList(alternatives);
     }
 
     public void addOptionalValues(VocableVerificationData optionalValues) {
-        if (mOptionalValues == null) {
-            mOptionalValues = new VocableVerificationData();
-            mOptionalValues.makeAllOptional();
+        if (this.optionalValues == null) {
+            this.optionalValues = new VocableVerificationData();
+            this.optionalValues.makeAllOptional();
         }
 
-        mOptionalValues.addOptions(optionalValues.getAllTokens());
+        this.optionalValues.addOptions(optionalValues.getAllTokens());
     }
 
     public void addOptionalTerm(TermDataInterface term) {
@@ -170,22 +199,22 @@ public class VocableVerificationData {
     }
 
     private void removeOptionalValue(String value) {
-        assert mOptionalValues.mAllIsOptional;
+        assert optionalValues.allIsOptional;
 
-        if (mOptionalValues.mData.size() > 0)
-            mOptionalValues.mData.iterator().next().remove(value);
+        if (optionalValues.data.size() > 0)
+            optionalValues.data.iterator().next().remove(value);
     }
 
     public VocableVerificationData getOptionalValues() {
-        if (mOptionalValues == null) return new VocableVerificationData();
-        return mOptionalValues;
+        if (optionalValues == null) return new VocableVerificationData();
+        return optionalValues;
     }
 
     public void addAlternative(VocableVerificationData alternative) {
         if (alternative == null)
             throw new NullPointerException("Alternative is null.");
 
-        mAlternatives.add(alternative);
+        alternatives.add(alternative);
     }
 
     public void addAlternativeTerm(TermDataInterface alternativeTermData) {
@@ -200,34 +229,34 @@ public class VocableVerificationData {
 
     public void makeAllOptional() {
         Set<String> allTokens = getAllTokensInternal();
-        mData.clear();
+        data.clear();
         if (allTokens.size() > 0)
-            mData.add(allTokens);
-        mAllIsOptional = true;
+            data.add(allTokens);
+        allIsOptional = true;
     }
 
     public boolean isEmpty() {
-        if (mData.size() == 0) return true;
+        if (data.size() == 0) return true;
 
-        for (Set<String> set : mData) {
+        for (Set<String> set : data) {
             if (!set.isEmpty()) return false;
         }
         return true;
     }
 
     public void addOption(String option) {
-        if (!mAllIsOptional)
+        if (!allIsOptional)
             throw new IllegalStateException("This verification data is not all optional. Set this state with " +
                     "makeAllOptional() first.");
         if (option == null)
             throw new NullPointerException("Argument is null.");
 
         Set<String> set;
-        if (mData.size() > 0) {
-            set = mData.iterator().next();
+        if (data.size() > 0) {
+            set = data.iterator().next();
         } else {
             set = new VerificationHashSet();
-            mData.add(set);
+            data.add(set);
         }
 
 //    set.addAll (resolveParentheses (option));
@@ -238,13 +267,11 @@ public class VocableVerificationData {
         if (options == null)
             throw new NullPointerException("Argument is null.");
 
-        for (String option : options) {
-            addOption(option);
-        }
+        options.forEach(this::addOption);
     }
 
     public void addMandatoryValue(String mandatoryValue) {
-        if (mAllIsOptional)
+        if (allIsOptional)
             throw new IllegalStateException("Cannot add mandatory values. This verification data is all optional. " +
                     " Use addOption() instead.");
         if (mandatoryValue == null)
@@ -258,11 +285,11 @@ public class VocableVerificationData {
         set.add(mandatoryValue);
 
         if (set.size() > 0)
-            mData.add(set);
+            data.add(set);
     }
 
     public void addMandatoryValueWithOptions(String mandatoryValue, String[] options) {
-        if (mAllIsOptional)
+        if (allIsOptional)
             throw new IllegalStateException("Cannot add mandatory values. This verification data is all optional. " +
                     " Use addOption() instead.");
 
@@ -270,7 +297,7 @@ public class VocableVerificationData {
     }
 
     public void addMandatoryValueWithOptions(Collection<String> options) {
-        if (mAllIsOptional)
+        if (allIsOptional)
             throw new IllegalStateException("Cannot add mandatory values. This verification data is all optional. " +
                     " Use addOption() instead.");
         if (options == null)
@@ -282,11 +309,11 @@ public class VocableVerificationData {
             newSet.add(option);
         }
         if (newSet.size() > 0)
-            mData.add(newSet);
+            data.add(newSet);
     }
 
     public void addMandatoryValueWithOptions(String mandatoryValue, Collection<String> options) {
-        if (mAllIsOptional)
+        if (allIsOptional)
             throw new IllegalStateException("Cannot add mandatory values. This verification data is all optional. " +
                     " Use addOption() instead.");
         if (mandatoryValue == null || options == null)
@@ -303,7 +330,7 @@ public class VocableVerificationData {
             newSet.add(mandatoryValue);
 
             if (newSet.size() > 0)
-                mData.add(newSet);
+                data.add(newSet);
         } else {
             for (String option : options)
 //        set.addAll (resolveParentheses (option));
@@ -343,13 +370,13 @@ public class VocableVerificationData {
         Set<String> result = new VerificationHashSet();
         result.add(value);
 
-        int start = -1;
-        int end = -1;
+        int start;
+        int end;
 
-        int i = 0;
+        int i;
         boolean moreToDo = true;
         boolean done;
-        Set<IntRange> alreadyDoneParenthesesPairs = new HashSet<IntRange>();
+        Set<IntRange> alreadyDoneParenthesesPairs = new HashSet<>();
         moreToDo:
         while (moreToDo) {
             start = -1;
@@ -412,7 +439,7 @@ public class VocableVerificationData {
     }
 
     public boolean contains(String token) {
-        for (Set<String> set : mData) {
+        for (Set<String> set : data) {
             if (set.contains(token))
                 return true;
         }
@@ -426,27 +453,27 @@ public class VocableVerificationData {
     private Set<String> getAllTokensInternal() {
         Set<String> result = new VerificationHashSet();
 
-        for (Set<String> set : mData) {
+        for (Set<String> set : data) {
             result.addAll(set);
         }
 
-        if (mOptionalValues != null)
-            result.addAll(mOptionalValues.getAllTokens());
-        for (VocableVerificationData data : mAlternatives)
+        if (optionalValues != null)
+            result.addAll(optionalValues.getAllTokens());
+        for (VocableVerificationData data : alternatives)
             result.addAll(data.getAllTokens());
 
         return result;
     }
 
     public Set<String> getAlternativesForMandatoryValue(String mandatoryValue) {
-        for (Set<String> set : mData) {
+        for (Set<String> set : data) {
             if (set.contains(mandatoryValue)) return set;
         }
         return null;
     }
 
     public Set<Set<String>> getMandatoryValuesWithOptions() {
-        return Collections.unmodifiableSet(mData);
+        return Collections.unmodifiableSet(data);
     }
 
     public void normalizeAbbreviations(Language forLanguage) {
@@ -455,13 +482,13 @@ public class VocableVerificationData {
                 forLanguage.getLanguagePlugin().get().getAbbreviationAlternatives();
 
         String abbreviation;
-        for (Set<String> set : mData) {
-            Set<String> copySet = new HashSet<String>(set);
+        for (Set<String> set : data) {
+            Set<String> copySet = new HashSet<>(set);
             for (String userAnswer : copySet) {
-                Set<IntRange> excludedRanges = new HashSet<IntRange>();
+                Set<IntRange> excludedRanges = new HashSet<>();
                 set.remove(userAnswer);
                 for (Set<String> abbreviationSet : abbreviationAlternatives) {
-                    Set<String> copyAbbreviationSet = new HashSet<String>(abbreviationSet);
+                    Set<String> copyAbbreviationSet = new HashSet<>(abbreviationSet);
                     if (abbreviationSet.isEmpty()) continue;
                     String abbreviationMaster = abbreviationSet.iterator().next();
 
@@ -513,7 +540,7 @@ public class VocableVerificationData {
 
     @Override
     public int hashCode() {
-        return mData.hashCode();
+        return data.hashCode();
     }
 
     @Override
@@ -524,27 +551,27 @@ public class VocableVerificationData {
             return false;
 
         VocableVerificationData other = (VocableVerificationData) obj;
-        return mData.equals(other.mData);
+        return data.equals(other.data);
     }
 
     @Override
     public String toString() {
-        return mData.toString();
+        return data.toString();
     }
 
     public final static class UnmodifiableVocableVerificationData extends VocableVerificationData {
 
         public UnmodifiableVocableVerificationData(VocableVerificationData data) {
 //      CheckForNull.check (data);
-            mData = data.mData;
-            mAdditonalQuestionText = data.mAdditonalQuestionText;
-            mAllIsOptional = data.mAllIsOptional;
-            mAlternatives = data.mAlternatives;
-            mOptionalValues = data.mOptionalValues;
+            this.data = data.data;
+            additonalQuestionText = data.additonalQuestionText;
+            allIsOptional = data.allIsOptional;
+            alternatives = data.alternatives;
+            optionalValues = data.optionalValues;
         }
 
         @Override
-        public void setAdditonalQuestionText(String mAdditonalQuestionText) {
+        public void setAdditonalQuestionText(String additonalQuestionText) {
             throw new UnsupportedOperationException("This object cannot be modified.");
         }
 

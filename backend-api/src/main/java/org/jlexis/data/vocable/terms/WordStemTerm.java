@@ -30,14 +30,14 @@ public class WordStemTerm extends AbstractTermData {
 
     @Override
     public String getWordStem() {
-        if (mNormalizedTerm.indexOf(WORD_STEM_MARKER) > 0) {
-            return mNormalizedTerm.substring(0, mNormalizedTerm.indexOf(WORD_STEM_MARKER));
-        } else if (mNormalizedTerm.indexOf(WORD_STEM_BEGIN_MARKER) > 0 &&
-                mNormalizedTerm.indexOf(WORD_STEM_END_MARKER) > 0) {
-            return mNormalizedTerm.substring(mNormalizedTerm.indexOf(WORD_STEM_BEGIN_MARKER) + WORD_STEM_BEGIN_MARKER.length(),
-                    mNormalizedTerm.indexOf(WORD_STEM_END_MARKER));
+        if (normalizedTerm.indexOf(WORD_STEM_MARKER) > 0) {
+            return normalizedTerm.substring(0, normalizedTerm.indexOf(WORD_STEM_MARKER));
+        } else if (normalizedTerm.indexOf(WORD_STEM_BEGIN_MARKER) > 0 &&
+                normalizedTerm.indexOf(WORD_STEM_END_MARKER) > 0) {
+            return normalizedTerm.substring(normalizedTerm.indexOf(WORD_STEM_BEGIN_MARKER) + WORD_STEM_BEGIN_MARKER.length(),
+                    normalizedTerm.indexOf(WORD_STEM_END_MARKER));
         }
-        return mNormalizedTerm;
+        return normalizedTerm;
     }
 
     @Override
@@ -46,12 +46,12 @@ public class WordStemTerm extends AbstractTermData {
     }
 
     @Override
-    protected boolean isInflected() {
+    public boolean isInflected() {
         return false;
     }
 
     @Override
-    protected AbstractTermData getWordStemObject() {
+    public AbstractTermData getWordStemObject() {
         throw new UnsupportedOperationException("This object is not an inflected term.");
     }
 

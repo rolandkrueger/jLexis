@@ -11,8 +11,6 @@
 package org.jlexis.data.vocable.terms;
 
 
-import org.jlexis.data.vocable.verification.VocableVerificationData;
-
 /*
  * @author Roland Krueger
  * @version $Id: TermDataInterface.java 113 2009-05-20 18:19:32Z roland $
@@ -37,6 +35,4 @@ public interface TermDataInterface {
     public abstract String getWordStem();
 
     public abstract boolean isWordStem();
-
-    public VocableVerificationData getVerificationData();
 }

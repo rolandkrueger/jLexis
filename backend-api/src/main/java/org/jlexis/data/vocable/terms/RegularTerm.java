@@ -58,12 +58,12 @@ public class RegularTerm extends AbstractTermData {
     }
 
     @Override
-    protected boolean isInflected() {
+    public boolean isInflected() {
         return false;
     }
 
     @Override
-    protected AbstractTermData getWordStemObject() {
+    public AbstractTermData getWordStemObject() {
         throw new UnsupportedOperationException("This object is not an inflected term.");
     }
 

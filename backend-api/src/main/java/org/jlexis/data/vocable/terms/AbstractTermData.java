@@ -23,11 +23,10 @@
  */
 package org.jlexis.data.vocable.terms;
 
-import org.jlexis.data.vocable.verification.VocableVerificationData;
+import com.google.common.base.MoreObjects;
 import org.jlexis.managers.ConfigurationManager;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Objects;
 
 public abstract class AbstractTermData implements TermDataInterface {
     protected final static String WORD_STEM_MARKER = "${|}";
@@ -36,22 +35,19 @@ public abstract class AbstractTermData implements TermDataInterface {
     protected final static String WORD_STEM_PLACEHOLDER = "${-}";
     protected final static String SPECIAL_CHAR_PLACEHOLDER = "${$}";
 
-    protected String mNormalizedTerm = "";
+    protected String normalizedTerm = "";
 
     public String getNormalizedTerm() {
-        return mNormalizedTerm;
+        return normalizedTerm;
     }
 
     public void setNormalizedTerm(String normalizedTerm) {
-        if (normalizedTerm == null)
-            throw new NullPointerException("Normalized term is null.");
-
-        mNormalizedTerm = normalizedTerm.trim();
+        this.normalizedTerm = Objects.requireNonNull(normalizedTerm).trim();
     }
 
     public String getUserEnteredTerm() {
         ConfigurationManager config = ConfigurationManager.getInstance();
-        String result = mNormalizedTerm.replace(WORD_STEM_MARKER, config.getWordStemMarker());
+        String result = normalizedTerm.replace(WORD_STEM_MARKER, config.getWordStemMarker());
         result = result.replace(WORD_STEM_BEGIN_MARKER, config.getWordStemBeginMarker());
         result = result.replace(WORD_STEM_END_MARKER, config.getWordStemEndMarker());
         result = result.replace(WORD_STEM_PLACEHOLDER, config.getWordStemPlaceholder());
@@ -60,8 +56,7 @@ public abstract class AbstractTermData implements TermDataInterface {
     }
 
     public void setUserEnteredTerm(String term) {
-        if (term == null)
-            throw new NullPointerException("Term is null.");
+        Objects.requireNonNull(term);
 
         ConfigurationManager config = ConfigurationManager.getInstance();
         String result = term.replace("$", SPECIAL_CHAR_PLACEHOLDER);
@@ -84,7 +79,7 @@ public abstract class AbstractTermData implements TermDataInterface {
     }
 
     public String getPurgedTerm() {
-        return purge(mNormalizedTerm);
+        return purge(normalizedTerm);
     }
 
     protected String purge(String string) {
@@ -98,42 +93,44 @@ public abstract class AbstractTermData implements TermDataInterface {
     }
 
     public boolean isEmpty() {
-        return getNormalizedTerm().equals("");
+        return "".equals(getNormalizedTerm());
     }
 
     @Override
     public String toString() {
-        return getUserEnteredTerm();
+        return MoreObjects.toStringHelper(this)
+                .add("user entered term", getUserEnteredTerm())
+                .toString();
     }
 
-    public VocableVerificationData getVerificationData() {
-        VocableVerificationData result = new VocableVerificationData();
-        VocableVerificationData tmp = new VocableVerificationData();
-
-        tmp.tokenizeAndAddString(getNormalizedTerm());
-        for (Set<String> mandatorySetWithNormalizedTerms : tmp.getMandatoryValuesWithOptions()) {
-            Set<String> mandatorySet = new HashSet<String>();
-            for (String value : mandatorySetWithNormalizedTerms) {
-                // For every token which the user has entered, add its resolved form to the
-                // verification data, so that the resolved term is also a valid answer
-                AbstractTermData term;
-                if (isInflected()) {
-                    term = new InflectedTerm(getWordStemObject());
-                } else {
-                    term = new RegularTerm();
-                }
-                term.setNormalizedTerm(value);
-                mandatorySet.add(term.getPurgedTerm());
-
-                RegularTerm regularTerm = new RegularTerm();
-                regularTerm.setUserEnteredTerm(term.getResolvedTerm());
-                mandatorySet.add(regularTerm.getPurgedTerm());
-            }
-            result.addMandatoryValueWithOptions(mandatorySet);
-        }
-
-        return result;
-    }
+//    public VocableVerificationData getVerificationData() {
+//        VocableVerificationData result = new VocableVerificationData();
+//        VocableVerificationData tmp = new VocableVerificationData();
+//
+//        tmp.tokenizeAndAddString(getNormalizedTerm());
+//        for (Set<String> mandatorySetWithNormalizedTerms : tmp.getMandatoryValuesWithOptions()) {
+//            Set<String> mandatorySet = new HashSet<String>();
+//            for (String value : mandatorySetWithNormalizedTerms) {
+//                // For every token which the user has entered, add its resolved form to the
+//                // verification data, so that the resolved term is also a valid answer
+//                AbstractTermData term;
+//                if (isInflected()) {
+//                    term = new InflectedTerm(getWordStemObject());
+//                } else {
+//                    term = new RegularTerm();
+//                }
+//                term.setNormalizedTerm(value);
+//                mandatorySet.add(term.getPurgedTerm());
+//
+//                RegularTerm regularTerm = new RegularTerm();
+//                regularTerm.setUserEnteredTerm(term.getResolvedTerm());
+//                mandatorySet.add(regularTerm.getPurgedTerm());
+//            }
+//            result.addMandatoryValueWithOptions(mandatorySet);
+//        }
+//
+//        return result;
+//    }
 
     public abstract String getResolvedTerm();
 
@@ -141,7 +138,7 @@ public abstract class AbstractTermData implements TermDataInterface {
 
     public abstract boolean isWordStem();
 
-    protected abstract boolean isInflected();
+    public abstract boolean isInflected();
 
-    protected abstract AbstractTermData getWordStemObject();
+    public abstract AbstractTermData getWordStemObject();
 }

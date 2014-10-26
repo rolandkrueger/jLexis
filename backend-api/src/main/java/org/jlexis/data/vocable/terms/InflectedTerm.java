@@ -39,7 +39,7 @@ public class InflectedTerm extends AbstractTermData {
     public String getResolvedTerm() {
         if (mWordStem == null) return getUserEnteredTerm();
 
-        String result = mNormalizedTerm.replace(WORD_STEM_PLACEHOLDER, mWordStem.getWordStem());
+        String result = normalizedTerm.replace(WORD_STEM_PLACEHOLDER, mWordStem.getWordStem());
         result = removeMarkerStrings(result);
         return result;
     }
@@ -49,7 +49,7 @@ public class InflectedTerm extends AbstractTermData {
         throw new UnsupportedOperationException("This is not a word stem.");
     }
 
-    protected AbstractTermData getWordStemObject() {
+    public AbstractTermData getWordStemObject() {
         return mWordStem;
     }
 
@@ -59,7 +59,7 @@ public class InflectedTerm extends AbstractTermData {
     }
 
     @Override
-    protected boolean isInflected() {
+    public boolean isInflected() {
         return true;
     }
 
