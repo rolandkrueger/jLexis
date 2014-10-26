@@ -208,7 +208,7 @@ public class EnglishVerbUserInput extends AbstractEnglishPluginUserInput {
             }
         }
 
-        result.setAdditonalQuestionText(additionalQuestionText);
+        result.setAdditionalQuestionText(additionalQuestionText);
         return result;
     }
 

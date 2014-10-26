@@ -48,7 +48,7 @@ public class VocableVerificationData {
     protected boolean allIsOptional = false;
     protected List<VocableVerificationData> alternatives;
     protected VocableVerificationData optionalValues;
-    protected String additonalQuestionText;
+    protected String additionalQuestionText;
 
     public VocableVerificationData() {
         data = new HashSet<>();
@@ -100,12 +100,12 @@ public class VocableVerificationData {
         }
     }
 
-    public String getAdditonalQuestionText() {
-        return additonalQuestionText;
+    public String getAdditionalQuestionText() {
+        return additionalQuestionText;
     }
 
-    public void setAdditonalQuestionText(String additonalQuestionText) {
-        this.additonalQuestionText = additonalQuestionText;
+    public void setAdditionalQuestionText(String additionalQuestionText) {
+        this.additionalQuestionText = additionalQuestionText;
     }
 
     private void resolveAllParentheses() {
@@ -564,14 +564,14 @@ public class VocableVerificationData {
         public UnmodifiableVocableVerificationData(VocableVerificationData data) {
 //      CheckForNull.check (data);
             this.data = data.data;
-            additonalQuestionText = data.additonalQuestionText;
+            additionalQuestionText = data.additionalQuestionText;
             allIsOptional = data.allIsOptional;
             alternatives = data.alternatives;
             optionalValues = data.optionalValues;
         }
 
         @Override
-        public void setAdditonalQuestionText(String additonalQuestionText) {
+        public void setAdditionalQuestionText(String additonalQuestionText) {
             throw new UnsupportedOperationException("This object cannot be modified.");
         }
 

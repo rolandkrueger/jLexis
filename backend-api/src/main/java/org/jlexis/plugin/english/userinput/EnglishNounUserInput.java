@@ -386,7 +386,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
             }
         }
 
-        result.setAdditonalQuestionText(additionalQuestionText);
+        result.setAdditionalQuestionText(additionalQuestionText);
         return result;
     }
 
