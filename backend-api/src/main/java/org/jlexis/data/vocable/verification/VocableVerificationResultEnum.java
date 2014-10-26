@@ -23,14 +23,23 @@
 package org.jlexis.data.vocable.verification;
 
 /**
- * Defines the outcome of the evaluation of a quiz question. If a quiz question was answered correctly, the
- * result of the vocable verification is {@link VocableVerificationResultEnum#CORRECT}.
+ * Defines the outcome of the evaluation of a quiz question. If a quiz question was answered correctly, the result of
+ * the vocable verification is {@link VocableVerificationResultEnum#CORRECT}.
  *
  * @author Roland Krueger
  */
 public enum VocableVerificationResultEnum {
+    /**
+     * Given answer was correct
+     */
     CORRECT,
+    /**
+     * Value for an incorrect answer: all required variants were given, but in addition one or more incorrect surplus
+     * variants were given as well.
+     */
     TOO_MANY_VALUES,
-    NOT_ENOUGH_VALUES,
-    UNDEFINED
+    /**
+     * Value for an incorrect answer: not all required variants were given.
+     */
+    NOT_ENOUGH_VALUES
 }
