@@ -204,7 +204,7 @@ public abstract class AbstractUserInput implements UserInput {
         return inputType.equals(other.getUserInputIdentifier());
     }
 
-    public TermDataInterface getUserData(String identifier) {
+    public TermData getUserData(String identifier) {
         if (!isKeyRegistered(identifier))
             throw new IllegalStateException(String.format("Given identifier '%s' has not been provided " +
                     "by AbstractUserInput.getUserInputIdentifiers().", identifier));

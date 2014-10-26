@@ -28,7 +28,7 @@ import org.jlexis.data.languages.Language;
 import org.jlexis.data.vocable.terms.AbstractTermData;
 import org.jlexis.data.vocable.terms.InflectedTerm;
 import org.jlexis.data.vocable.terms.RegularTerm;
-import org.jlexis.data.vocable.terms.TermDataInterface;
+import org.jlexis.data.vocable.terms.TermData;
 import org.jlexis.managers.ConfigurationManager;
 import org.jlexis.util.StringUtils;
 
@@ -55,7 +55,7 @@ public class VocableVerificationData {
         alternatives = new LinkedList<>();
     }
 
-    public VocableVerificationData(TermDataInterface termData) {
+    public VocableVerificationData(TermData termData) {
         this();
         VocableVerificationData tmp = new VocableVerificationData();
 
@@ -192,7 +192,7 @@ public class VocableVerificationData {
         this.optionalValues.addOptions(optionalValues.getAllTokens());
     }
 
-    public void addOptionalTerm(TermDataInterface term) {
+    public void addOptionalTerm(TermData term) {
         addOptionalValues(new VocableVerificationData().tokenizeAndAddString(term.getResolvedAndPurgedTerm()));
     }
 
@@ -215,13 +215,13 @@ public class VocableVerificationData {
         alternatives.add(alternative);
     }
 
-    public void addAlternativeTerm(TermDataInterface alternativeTermData) {
+    public void addAlternativeTerm(TermData alternativeTermData) {
         VocableVerificationData alternative = new VocableVerificationData();
         alternative.tokenizeAndAddString(alternativeTermData.getResolvedAndPurgedTerm());
         addAlternative(alternative);
     }
 
-    public void addMandatoryTerm(TermDataInterface mandatoryTermData) {
+    public void addMandatoryTerm(TermData mandatoryTermData) {
         tokenizeAndAddString(mandatoryTermData.getResolvedAndPurgedTerm());
     }
 
@@ -574,7 +574,7 @@ public class VocableVerificationData {
         }
 
         @Override
-        public void addMandatoryTerm(TermDataInterface mandatoryTermData) {
+        public void addMandatoryTerm(TermData mandatoryTermData) {
             throw new UnsupportedOperationException("This object cannot be modified.");
         }
 
@@ -585,7 +585,7 @@ public class VocableVerificationData {
         }
 
         @Override
-        public void addAlternativeTerm(TermDataInterface alternativeTermData) {
+        public void addAlternativeTerm(TermData alternativeTermData) {
             throw new UnsupportedOperationException("This object cannot be modified.");
         }
 
@@ -630,7 +630,7 @@ public class VocableVerificationData {
         }
 
         @Override
-        public void addOptionalTerm(TermDataInterface term) {
+        public void addOptionalTerm(TermData term) {
             throw new UnsupportedOperationException("This object cannot be modified.");
         }
 

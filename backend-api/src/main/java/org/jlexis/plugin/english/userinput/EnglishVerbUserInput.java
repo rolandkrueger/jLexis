@@ -24,7 +24,7 @@
 package org.jlexis.plugin.english.userinput;
 
 import org.jlexis.data.vocable.AbstractUserInput;
-import org.jlexis.data.vocable.terms.TermDataInterface;
+import org.jlexis.data.vocable.terms.TermData;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
 import org.jlexis.roklib.HTMLTextFormatter;
 import org.jlexis.roklib.TextFormatter;
@@ -136,7 +136,7 @@ public class EnglishVerbUserInput extends AbstractEnglishPluginUserInput {
         VocableVerificationData result = new VocableVerificationData();
         // TODO: i18n
         String additionalQuestionText = "Bitte auch die Zeitform%s %s%s angeben. ";
-        List<TermDataInterface> beValues = new LinkedList<>();
+        List<TermData> beValues = new LinkedList<>();
         if (isDataDefinedFor(INFINITIVE_BE_KEY))
             beValues.add(getUserData(INFINITIVE_BE_KEY));
         if (isIrregularBE() && isDataDefinedFor(PAST_TENSE_BE_KEY))
@@ -144,7 +144,7 @@ public class EnglishVerbUserInput extends AbstractEnglishPluginUserInput {
         if (isIrregularBE() && isDataDefinedFor(PAST_PARTICIPLE_BE_KEY))
             beValues.add(getUserData(PAST_PARTICIPLE_BE_KEY));
 
-        List<TermDataInterface> aeValues = new LinkedList<>();
+        List<TermData> aeValues = new LinkedList<>();
         if (isDataDefinedFor(INFINITIVE_AE_KEY))
             aeValues.add(getUserData(INFINITIVE_AE_KEY));
         if (isIrregularAE() && isDataDefinedFor(PAST_TENSE_AE_KEY))

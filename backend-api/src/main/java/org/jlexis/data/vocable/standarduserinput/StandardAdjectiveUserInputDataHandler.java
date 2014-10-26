@@ -25,7 +25,7 @@
 package org.jlexis.data.vocable.standarduserinput;
 
 import org.jlexis.data.vocable.AbstractUserInput;
-import org.jlexis.data.vocable.terms.TermDataInterface;
+import org.jlexis.data.vocable.terms.TermData;
 import org.jlexis.roklib.TextFormatter;
 
 import java.util.LinkedList;
@@ -61,9 +61,9 @@ public class StandardAdjectiveUserInputDataHandler extends AbstractStandardUserI
         this(parent, null);
     }
 
-    public List<TermDataInterface> getTermData() {
+    public List<TermData> getTermData() {
         AbstractUserInput parent = getParent();
-        List<TermDataInterface> result = new LinkedList<TermDataInterface>();
+        List<TermData> result = new LinkedList<TermData>();
         if (parent.isDataDefinedFor(mPositiveKey))
             result.add(parent.getUserData(mPositiveKey));
         if (parent.isDataDefinedFor(mComparativeKey))

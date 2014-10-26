@@ -25,7 +25,7 @@ package org.jlexis.plugin.english.userinput;
 
 import org.jlexis.data.vocable.AbstractUserInput;
 import org.jlexis.data.vocable.standarduserinput.StandardAdjectiveUserInputDataHandler;
-import org.jlexis.data.vocable.terms.TermDataInterface;
+import org.jlexis.data.vocable.terms.TermData;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
 import org.jlexis.roklib.HTMLTextFormatter;
 import org.jlexis.roklib.TextFormatter;
@@ -114,9 +114,9 @@ public class EnglishAdjectiveUserInput extends AbstractEnglishPluginUserInput {
         VocableVerificationData result = new VocableVerificationData();
         // TODO: i18n
         String additionalQuestionText = "Bitte auch %s%s eingeben. ";
-        List<TermDataInterface> beValues = new LinkedList<>();
+        List<TermData> beValues = new LinkedList<>();
         beValues.addAll(mAdjectiveStandardInputBE.getTermData());
-        List<TermDataInterface> aeValues = new LinkedList<>();
+        List<TermData> aeValues = new LinkedList<>();
         aeValues.addAll(mAdjectiveStandardInputAE.getTermData());
 
         if (!beValues.isEmpty()) {

@@ -14,7 +14,7 @@ package org.jlexis.data.vocable.terms;
 /*
  * @author Roland Krueger
  */
-public interface TermDataInterface {
+public interface TermData {
     public abstract String getNormalizedTerm();
 
     public abstract void setNormalizedTerm(String normalizedTerm);
@@ -37,5 +37,5 @@ public interface TermDataInterface {
 
     public abstract boolean isInflected();
 
-    public abstract TermDataInterface getWordStemObject();
+    public abstract TermData getWordStemObject();
 }

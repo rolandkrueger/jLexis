@@ -28,7 +28,7 @@ import org.jlexis.managers.ConfigurationManager;
 
 import java.util.Objects;
 
-public abstract class AbstractTermData implements TermDataInterface {
+public abstract class AbstractTermData implements TermData {
     protected final static String WORD_STEM_MARKER = "${|}";
     protected final static String WORD_STEM_BEGIN_MARKER = "${<}";
     protected final static String WORD_STEM_END_MARKER = "${>}";
