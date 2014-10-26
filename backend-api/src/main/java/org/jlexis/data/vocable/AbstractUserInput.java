@@ -112,6 +112,7 @@ public abstract class AbstractUserInput implements UserInput {
 //    IS_SYNCHRONIZED_WITH_DATABASE = true;
     }
 
+    @Deprecated
     public DBO_AbstractUserInput getDatabaseObject() {
         if (mDatabaseObject == null)
             mDatabaseObject = new DBO_AbstractUserInput();
@@ -127,6 +128,7 @@ public abstract class AbstractUserInput implements UserInput {
         return mDatabaseObject;
     }
 
+    @Deprecated
     protected void setDatabaseObject(DBO_AbstractUserInput databaseObj) {
         if (databaseObj == null)
             throw new NullPointerException("Argument is null.");
