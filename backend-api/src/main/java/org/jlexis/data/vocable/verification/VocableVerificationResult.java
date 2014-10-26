@@ -22,63 +22,55 @@
  */
 package org.jlexis.data.vocable.verification;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Roland Krueger
- * @version $Id: VocableVerificationResult.java 111 2009-05-19 19:11:31Z roland $
  */
 public class VocableVerificationResult {
-    private VocableVerificationResultEnum mResultType;
-    private Set<String> mRedundantValues;
-    private Set<String> mMissingValues;
+    private VocableVerificationResultEnum result;
+    private Set<String> redundantValues;
+    private Set<String> missingValues;
 
-    public VocableVerificationResult() {
-        mResultType = VocableVerificationResultEnum.UNDEFINED;
+    public VocableVerificationResult(VocableVerificationResultEnum result) {
+        this.result = Objects.requireNonNull(result);
     }
 
     public boolean isCorrect() {
-        return mResultType == VocableVerificationResultEnum.CORRECT;
+        return result == VocableVerificationResultEnum.CORRECT;
     }
 
     public void addRedundantValues(Collection<String> redundantValues) {
         if (redundantValues == null)
             redundantValues = Collections.emptyList();
-        if (mRedundantValues == null)
-            mRedundantValues = new HashSet<String>();
-        mRedundantValues.addAll(redundantValues);
+        if (this.redundantValues == null)
+            this.redundantValues = new HashSet<String>();
+        this.redundantValues.addAll(redundantValues);
     }
 
     public void addMissingValues(Collection<String> missingValues) {
         if (missingValues == null)
             missingValues = Collections.emptyList();
-        if (mMissingValues == null)
-            mMissingValues = new HashSet<String>();
-        mMissingValues.addAll(missingValues);
+        if (this.missingValues == null)
+            this.missingValues = new HashSet<String>();
+        this.missingValues.addAll(missingValues);
     }
 
     public VocableVerificationResultEnum getResult() {
-        return mResultType;
-    }
-
-    public void setResult(VocableVerificationResultEnum result) {
-        mResultType = result;
+        return result;
     }
 
     public Set<String> getMissingValues() {
-        if (mMissingValues == null)
+        if (missingValues == null)
             return Collections.emptySet();
 
-        return mMissingValues;
+        return missingValues;
     }
 
     public Set<String> getRedundantValues() {
-        if (mRedundantValues == null)
+        if (redundantValues == null)
             return Collections.emptySet();
 
-        return mRedundantValues;
+        return redundantValues;
     }
 }

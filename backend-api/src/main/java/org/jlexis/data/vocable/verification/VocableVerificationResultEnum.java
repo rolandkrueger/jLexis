@@ -23,8 +23,10 @@
 package org.jlexis.data.vocable.verification;
 
 /**
+ * Defines the outcome of the evaluation of a quiz question. If a quiz question was answered correctly, the
+ * result of the vocable verification is {@link VocableVerificationResultEnum#CORRECT}.
+ *
  * @author Roland Krueger
- * @version $Id: VocableVerificationResultEnum.java 111 2009-05-19 19:11:31Z roland $
  */
 public enum VocableVerificationResultEnum {
     CORRECT,

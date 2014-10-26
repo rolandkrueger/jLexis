@@ -132,8 +132,6 @@ public class VocableVerificationData {
             normalizeAbbreviations(forLanguage);
             comparisonValue.normalizeAbbreviations(forLanguage);
         }
-
-        VocableVerificationResult result = new VocableVerificationResult();
         Set<String> inputSet = new VerificationHashSet(comparisonValue.getAllTokens());
 
         resolveAllParentheses();
@@ -167,18 +165,18 @@ public class VocableVerificationData {
         }
 
         if (compareData.isEmpty()) {
-            if (inputSet.isEmpty())
-                result.setResult(VocableVerificationResultEnum.CORRECT);
-            else {
+            if (inputSet.isEmpty()) {
+                return new VocableVerificationResult(VocableVerificationResultEnum.CORRECT);
+            } else {
+                VocableVerificationResult result = new VocableVerificationResult(VocableVerificationResultEnum.TOO_MANY_VALUES);
                 result.addRedundantValues(inputSet);
-                result.setResult(VocableVerificationResultEnum.TOO_MANY_VALUES);
+                return result;
             }
         } else {
-            result.setResult(VocableVerificationResultEnum.NOT_ENOUGH_VALUES);
+            VocableVerificationResult result = new VocableVerificationResult(VocableVerificationResultEnum.NOT_ENOUGH_VALUES);
             result.addMissingValues(compareData.getAllTokens());
+            return result;
         }
-
-        return result;
     }
 
     public List<VocableVerificationData> getAlternatives() {
