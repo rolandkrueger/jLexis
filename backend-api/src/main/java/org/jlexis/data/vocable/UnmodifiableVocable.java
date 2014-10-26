@@ -47,7 +47,7 @@ public final class UnmodifiableVocable extends Vocable {
     }
 
     @Override
-    public final UserInputInterface getVariantInput(Language forLanguage) {
+    public final UserInput getVariantInput(Language forLanguage) {
         return new UnmodifiableUserInput(super.getVariantInput(forLanguage));
     }
 
@@ -56,10 +56,10 @@ public final class UnmodifiableVocable extends Vocable {
         throw new UnsupportedOperationException("This object cannot be modified.");
     }
 
-    private final class UnmodifiableUserInput implements UserInputInterface {
-        private UserInputInterface mData;
+    private final class UnmodifiableUserInput implements UserInput {
+        private UserInput mData;
 
-        public UnmodifiableUserInput(UserInputInterface data) {
+        public UnmodifiableUserInput(UserInput data) {
             if (data == null) throw new NullPointerException("Argument is null.");
             mData = data;
         }
@@ -101,7 +101,7 @@ public final class UnmodifiableVocable extends Vocable {
             return mData.isEmpty();
         }
 
-        public final boolean isTypeCorrect(UserInputInterface other) {
+        public final boolean isTypeCorrect(UserInput other) {
             return mData.isTypeCorrect(other);
         }
 

@@ -66,7 +66,7 @@ public class Vocable implements Serializable {
         mData.put(forLanguage, new VocableData(forLanguage, wordType, data));
     }
 
-    public UserInputInterface getVariantInput(Language forLanguage) {
+    public UserInput getVariantInput(Language forLanguage) {
         if (!mData.containsKey(forLanguage)) {
             throw new IllegalArgumentException(String.format("Language %s is not defined for this Vocable object.",
                     forLanguage));

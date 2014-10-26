@@ -26,7 +26,7 @@ package org.jlexis.plugin.english.inputpanels;
 import org.jlexis.data.vocable.AbstractUserInput;
 import org.jlexis.data.vocable.AbstractWordType;
 import org.jlexis.data.vocable.DefaultUserInput;
-import org.jlexis.data.vocable.UserInputInterface;
+import org.jlexis.data.vocable.UserInput;
 import org.jlexis.plugin.english.EnglishLanguagePlugin;
 import org.jlexis.plugin.english.userinput.EnglishVerbUserInput;
 
@@ -114,7 +114,7 @@ public class EnglishVerbInputPanel extends AbstractVocableInputPanel
   }
 
   @Override
-  public void setUserInput (UserInputInterface input)
+  public void setUserInput (UserInput input)
   {
     CheckForNull.check (input);
     if ( ! sExpectedInput.isTypeCorrect (input))

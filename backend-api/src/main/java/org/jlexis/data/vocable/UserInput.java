@@ -17,9 +17,8 @@ import org.w3c.dom.Element;
 
 /*
  * @author Roland Krueger
- * @version $Id: UserInputInterface.java 177 2009-11-16 18:48:11Z roland $
  */
-public interface UserInputInterface {
+public interface UserInput {
     public abstract DBO_AbstractUserInput getDatabaseObject();
 
     public abstract void init();
@@ -60,9 +59,6 @@ public interface UserInputInterface {
 
     public abstract String getExample();
 
-    @Deprecated
-    public abstract void appendXMLData(Document document, Element root);
-
     /**
      * <p>
      * Adds a piece of user entered data. This might be the translation of a word, the grammatical
@@ -85,7 +81,7 @@ public interface UserInputInterface {
      */
     public abstract void addUserData(String identifier, String data);
 
-    public abstract boolean isTypeCorrect(UserInputInterface other);
+    public abstract boolean isTypeCorrect(UserInput other);
 
     public abstract TermDataInterface getUserData(String identifier);
 
