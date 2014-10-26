@@ -29,7 +29,6 @@ import org.jlexis.data.vocable.terms.*;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
 
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
 
 /**
@@ -65,13 +64,6 @@ public abstract class AbstractUserInput implements UserInput {
     private String inputType;
     private Map<String, WordStemTerm> wordStems;
     private Map<String, InflectedTerm> inflectedTerms;
-
-    /**
-     * Cache that holds the formatted texts for the data of this {@link AbstractUserInput}. This data consists of the
-     * short version as obtained by {@link AbstractUserInput#getShortVersion()}, the HTML-version as obtained by {@link
-     * AbstractUserInput#getHTMLVersion()} etc. The cache is cleared each time that the data of this object is changed.
-     */
-    private Map<DataType, String> dataCache;
 
     static {
         REGISTERED_KEYS = new HashMap<>();
@@ -139,7 +131,6 @@ public abstract class AbstractUserInput implements UserInput {
         if (databaseObj == null)
             throw new NullPointerException("Argument is null.");
 
-        clearCache(); // clear cache when data changes
         data.clear();
         Map<RegisteredVocableDataKey, RegularTerm> dboMap = databaseObj.getData();
         for (RegisteredVocableDataKey key : dboMap.keySet()) {
@@ -153,22 +144,22 @@ public abstract class AbstractUserInput implements UserInput {
 
     @Override
     public final String getShortVersion() {
-        return getDataFromCache(DataType.SHORT_VERSION);
+        return getShortVersionImpl();
     }
 
     @Override
     public final String getHTMLVersion() {
-        return getDataFromCache(DataType.HTML_VERSION);
+        return getHTMLVersionImpl();
     }
 
     @Override
     public final String getComment() {
-        return getDataFromCache(DataType.COMMENT);
+        return getCommentImpl();
     }
 
     @Override
     public final String getExample() {
-        return getDataFromCache(DataType.EXAMPLE);
+        return getExampleImpl();
     }
 
     protected abstract String getShortVersionImpl();
@@ -197,7 +188,6 @@ public abstract class AbstractUserInput implements UserInput {
         if (data == null)
             throw new NullPointerException("User data object is null.");
 
-        clearCache(); // clear the cache when data changes
         AbstractTermData term = getRegisteredTermTypeForKey(identifier);
         term.setUserEnteredTerm(data);
         this.data.put(REGISTERED_KEYS.get(identifier), term);
@@ -261,7 +251,6 @@ public abstract class AbstractUserInput implements UserInput {
     }
 
     public void replace(AbstractUserInput userInput) {
-        clearCache(); // clear the cache when data changes
         data.clear();
         for (RegisteredVocableDataKey key : userInput.data.keySet()) {
             data.put(key, userInput.data.get(key));
@@ -291,39 +280,6 @@ public abstract class AbstractUserInput implements UserInput {
         inflectedTerms.put(inflectedTermKey, new InflectedTerm(wordStems.get(governingWordStemKey)));
     }
 
-    private void clearCache() {
-        if (dataCache == null) return;
-        dataCache.clear();
-        dataCache = null;
-    }
-
-    private String getDataFromCache(DataType type) {
-        if (dataCache == null) {
-            dataCache = new Hashtable<DataType, String>(4);
-        }
-        if (!dataCache.containsKey(type)) {
-            String data = null;
-            switch (type) {
-                case COMMENT:
-                    data = getCommentImpl();
-                    break;
-                case EXAMPLE:
-                    data = getExampleImpl();
-                    break;
-                case HTML_VERSION:
-                    data = getHTMLVersionImpl();
-                    break;
-                case SHORT_VERSION:
-                    data = getShortVersionImpl();
-            }
-            if (data == null) data = "";
-            dataCache.put(type, data);
-            return data;
-        }
-
-        return dataCache.get(type);
-    }
-
     @Override
     public abstract VocableVerificationData getQuizVerificationData();
 
@@ -342,6 +298,4 @@ public abstract class AbstractUserInput implements UserInput {
     public String getResolvedAndPurgedUserData(String identifier) {
         return getUserData(identifier).getResolvedAndPurgedTerm();
     }
-
-    private enum DataType {COMMENT, EXAMPLE, SHORT_VERSION, HTML_VERSION}
 }
