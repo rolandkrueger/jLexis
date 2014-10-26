@@ -18,7 +18,7 @@ class PluginIdentifierTest extends JLexisTestBase {
 
     void testEquals() {
         EqualsTester tester = new EqualsTester()
-            .addEqualityGroup(new PluginIdentifier("key", "version"), new PluginIdentifier("key", "version"))
-            .testEquals()
+                .addEqualityGroup(new PluginIdentifier("key", "version"), new PluginIdentifier("key", "version"))
+                .testEquals()
     }
 }

@@ -1,5 +1,7 @@
 package org.jlexis.plugin;
 
+import com.google.common.base.MoreObjects;
+
 import java.util.Objects;
 
 public class PluginIdentifier {
@@ -40,5 +42,11 @@ public class PluginIdentifier {
         return identifier.hashCode();
     }
 
-
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("key", getKey())
+                .add("version", getVersion())
+                .toString();
+    }
 }

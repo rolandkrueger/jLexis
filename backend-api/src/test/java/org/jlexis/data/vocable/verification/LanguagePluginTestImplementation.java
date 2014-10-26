@@ -25,6 +25,7 @@ package org.jlexis.data.vocable.verification;
 
 import org.jlexis.data.vocable.AbstractWordType;
 import org.jlexis.plugin.LanguagePlugin;
+import org.jlexis.plugin.PluginIdentifier;
 import org.jlexis.quiz.data.AbstractQuizType;
 
 import java.util.*;
@@ -33,49 +34,37 @@ import java.util.*;
  * @author Roland Krueger
  * @version $Id: LanguagePluginTestImplementation.java 138 2009-10-16 06:45:04Z roland $
  */
-public class LanguagePluginTestImplementation extends LanguagePlugin
-{
-  private List<Set<String>> abbreviationAlternatives;
-  private String[] alternatives = {"il y a", "iya", "i.y.a.", ".i.y.a."};
-  
-  public LanguagePluginTestImplementation ()
-  {
-    abbreviationAlternatives = new ArrayList<Set<String>>();
-    Set<String> set = new HashSet<String>();
-    set.addAll (Arrays.asList(alternatives));
-    abbreviationAlternatives.add (set);
-    setIdentifier ("");
-  }
-  
-  @Override
-  public List<Set<String>> getAbbreviationAlternatives ()
-  {
-    return abbreviationAlternatives;
-  }
+public class LanguagePluginTestImplementation extends LanguagePlugin {
+    private List<Set<String>> abbreviationAlternatives;
+    private String[] alternatives = {"il y a", "iya", "i.y.a.", ".i.y.a."};
 
-  @Override
-  protected AbstractWordType getCorrespondingWordTypeForImpl (AbstractWordType wordType)
-  {
-    return null;
-  }
+    public LanguagePluginTestImplementation() {
+        super(new PluginIdentifier("test", "1.0"));
+        abbreviationAlternatives = new ArrayList<Set<String>>();
+        Set<String> set = new HashSet<String>();
+        set.addAll(Arrays.asList(alternatives));
+        abbreviationAlternatives.add(set);
+    }
 
-  @Override
-  public AbstractWordType getDefaultWordType ()
-  {
-    return null;
-  }
+    @Override
+    public List<Set<String>> getAbbreviationAlternatives() {
+        return abbreviationAlternatives;
+    }
 
-//  @Override
-//  public Icon getIcon ()
-//  {
-//    return null;
-//  }
+    @Override
+    protected AbstractWordType getCorrespondingWordTypeForImpl(AbstractWordType wordType) {
+        return null;
+    }
 
-  @Override
-  public String getLanguageName ()
-  {
-    return "";
-  }
+    @Override
+    public AbstractWordType getDefaultWordType() {
+        return null;
+    }
+
+    @Override
+    public String getLanguageNameKey() {
+        return "";
+    }
 
     @Override
     public String getIconId() {
@@ -83,14 +72,12 @@ public class LanguagePluginTestImplementation extends LanguagePlugin
     }
 
     @Override
-  public List<AbstractQuizType> getQuizTypes ()
-  {
-    return null;
-  }
+    public List<AbstractQuizType> getQuizTypes() {
+        return null;
+    }
 
-  @Override
-  public boolean isDefaultPlugin ()
-  {
-    return false;
-  }
+    @Override
+    public boolean isDefaultPlugin() {
+        return false;
+    }
 }

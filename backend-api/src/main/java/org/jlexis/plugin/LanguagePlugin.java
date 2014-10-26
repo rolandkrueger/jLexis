@@ -24,6 +24,7 @@
  */
 package org.jlexis.plugin;
 
+import com.google.common.base.MoreObjects;
 import org.jlexis.data.DefaultWordType;
 import org.jlexis.data.vocable.AbstractWordType;
 import org.jlexis.quiz.data.AbstractQuizType;
@@ -31,21 +32,21 @@ import org.jlexis.quiz.data.AbstractQuizType;
 import java.util.*;
 
 public abstract class LanguagePlugin {
-    private Map<String, AbstractWordType> wordTypes;
     protected Locale locale;
-    private String pluginName;
-    private String versionString;
-    private int versionNumber;
+    private Map<String, AbstractWordType> wordTypes;
+    private String name;
     private String description;
-    private String identifier;
-    private String providerURL;
-    private Integer hashCode;
+    private PluginIdentifier identifier;
 
-    public LanguagePlugin() {
-        providerURL = "";
+    public LanguagePlugin(PluginIdentifier identifier) {
+        this.identifier = Objects.requireNonNull(identifier);
+        wordTypes = new HashMap<>();
     }
 
-    public abstract String getLanguageName();
+    /**
+     * @return i18n key for the translation of the plugin's target language
+     */
+    public abstract String getLanguageNameKey();
 
     public abstract String getIconId();
 
@@ -58,11 +59,10 @@ public abstract class LanguagePlugin {
     public abstract List<Set<String>> getAbbreviationAlternatives();
 
     /**
-     * A default language plugin can be used for every language. It has no language specific features
-     * and is thus less flexible when it comes to handling the characteristics of a language. Since a
-     * default language plugin is independent of a specific language, no language name can be assigned
-     * to the plugin. Therefore, if the default plugin is used by the user, the desired language name
-     * is queried from her by jLexis.
+     * A default language plugin can be used for every language. It has no language specific features and is thus less
+     * flexible when it comes to handling the characteristics of a language. Since a default language plugin is
+     * independent of a specific language, no language name can be assigned to the plugin. Therefore, if the default
+     * plugin is used by the user, the desired language name is queried from her by jLexis.
      *
      * @return <code>true</code> if this plugin is a default plugin
      */
@@ -73,10 +73,6 @@ public abstract class LanguagePlugin {
     }
 
     protected void registerWordType(AbstractWordType wordType) {
-        // lazy instantiation of the word types list
-        if (wordTypes == null) {
-            wordTypes = new HashMap<String, AbstractWordType>();
-        }
         AbstractWordType testIfAlreadyRegistered = wordTypes.get(wordType.getIdentifier());
         if (testIfAlreadyRegistered != null)
             throw new IllegalArgumentException("This word type has already been registered.");
@@ -85,20 +81,15 @@ public abstract class LanguagePlugin {
     }
 
     public void registerUserInputIdentifiers() {
-        if (wordTypes == null) return;
         for (AbstractWordType wordType : wordTypes.values()) {
             wordType.registerUserInputIdentifiers();
         }
     }
 
     public Collection<AbstractWordType> getWordTypes() {
-        // if no word types have been registered for this plugin by a subclass, add at least
-        // the default word type
-        if (wordTypes == null || wordTypes.size() == 0) {
-            wordTypes = new HashMap<String, AbstractWordType>();
+        if (wordTypes.isEmpty()) {
             // TODO: I18N
-            AbstractWordType defaultWordType = new DefaultWordType("allg. Wort");
-            wordTypes.put(defaultWordType.getIdentifier(), defaultWordType);
+            return Collections.singleton(new DefaultWordType("allg. Wort"));
         }
         return wordTypes.values();
     }
@@ -115,26 +106,12 @@ public abstract class LanguagePlugin {
         this.description = description;
     }
 
-    public String getPluginName() {
-        return pluginName;
+    public String getName() {
+        return name;
     }
 
-    public void setPluginName(String pluginName) {
-        this.pluginName = pluginName;
-    }
-
-    public String getVersionString() {
-        if (versionString == null || versionString.equals(""))
-            return String.valueOf(versionNumber);
-        return versionString;
-    }
-
-    public void setVersionString(String version) {
-        versionString = version;
-    }
-
-    public String toString() {
-        return getLanguageName();
+    protected void setName(String name) {
+        this.name = name;
     }
 
     public AbstractWordType getCorrespondingWordTypeFor(AbstractWordType wordType) {
@@ -145,63 +122,32 @@ public abstract class LanguagePlugin {
         return result;
     }
 
-    public String getIdentifier() {
-        if (identifier == null)
-            throw new IllegalStateException("Identifier for LanguagePlugin hasn't been set yet.");
+    public PluginIdentifier getIdentifier() {
         return identifier;
     }
 
-    public void setIdentifier(String identifier) {
-        hashCode = null;
+    public void setIdentifier(PluginIdentifier identifier) {
         this.identifier = identifier;
-    }
-
-    public int getVersionNumber() {
-        hashCode = null;
-        return versionNumber;
-    }
-
-    public void setVersionNumber(int versionNumber) {
-        this.versionNumber = versionNumber;
-    }
-
-    /**
-     * Returns the URL of the plugin's provider. This is the person or organization that maintains and
-     * releases the language plugin.
-     *
-     * @return The URL of the plugins originator.
-     */
-    public String getProviderURL() {
-        return providerURL;
-    }
-
-    /**
-     * Sets the URL of the plugin's provider.
-     *
-     * @param providerURL a URL string
-     */
-    public void setProviderURL(String providerURL) {
-        if (providerURL == null) throw new NullPointerException("Provider URL is null.");
-        this.providerURL = providerURL;
     }
 
     @Override
     public final int hashCode() {
-        if (hashCode == null) {
-            hashCode = new String(getIdentifier() + getVersionNumber()).hashCode();
-        }
-        return hashCode;
+        return identifier.hashCode();
     }
 
     @Override
-    public final boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (!(obj instanceof LanguagePlugin))
-            return false;
-        LanguagePlugin other = (LanguagePlugin) obj;
-        if (other.identifier.equals(identifier) && other.versionNumber == versionNumber)
-            return true;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-        return false;
+        LanguagePlugin that = (LanguagePlugin) o;
+        return Objects.equals(identifier, that.identifier);
+    }
+
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("name", getName())
+                .add("id", identifier)
+                .omitNullValues().toString();
     }
 }
