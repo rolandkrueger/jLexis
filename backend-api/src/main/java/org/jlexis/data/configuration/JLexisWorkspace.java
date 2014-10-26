@@ -68,17 +68,17 @@ public class JLexisWorkspace {
         return mRootReplacement;
     }
 
+    public void setRootReplacement(String rootReplacement) {
+//    CheckForNull.check (rootReplacement);
+        mRootReplacement = rootReplacement;
+    }
+
     public File getDatabaseFile() {
         return mDatabaseFile;
     }
 
     public void setDatabaseFile(File databaseFile) {
 //    CheckForNull.check (databaseFile);
-    }
-
-    public void setRootReplacement(String rootReplacement) {
-//    CheckForNull.check (rootReplacement);
-        mRootReplacement = rootReplacement;
     }
 
     public String getRootMarker() {
@@ -90,13 +90,17 @@ public class JLexisWorkspace {
         mRootMarker = rootMarker;
     }
 
+    public int getMaxUndos() {
+        return mMaxUndos;
+    }
+
     public void setMaxUndos(int maxUndos) {
         if (maxUndos < 0) throw new IllegalArgumentException("must not be < 0");
         mMaxUndos = maxUndos;
     }
 
-    public int getMaxUndos() {
-        return mMaxUndos;
+    public float getApplicationFontSize() {
+        return mApplicationFontSize;
     }
 
     public void setApplicationFontSize(float size) {
@@ -104,17 +108,13 @@ public class JLexisWorkspace {
         mApplicationFontSize = size;
     }
 
-    public float getApplicationFontSize() {
-        return mApplicationFontSize;
+    public JFrame getMainWindow() {
+        return mMainWindow;
     }
 
     public void setMainWindow(JFrame mainWindow) {
 //    CheckForNull.check (mainWindow);
         mMainWindow = mainWindow;
-    }
-
-    public JFrame getMainWindow() {
-        return mMainWindow;
     }
 
     public void configureMainWindow(Component mainWindow) {

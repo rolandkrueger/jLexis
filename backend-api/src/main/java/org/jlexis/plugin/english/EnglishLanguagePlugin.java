@@ -82,10 +82,6 @@ public class EnglishLanguagePlugin extends LanguagePlugin {
         addAbbreviationAlternativeSet("I am", "I'm");
     }
 
-    private static void addAbbreviationAlternativeSet(String... alternatives) {
-        ABBREVIATION_ALTERNATIVES.add(new HashSet<>(Arrays.asList(alternatives)));
-    }
-
     public EnglishLanguagePlugin() {
         super(new PluginIdentifier(PLUGIN_KEY, PLUGIN_VERSION));
 //        try {
@@ -105,6 +101,10 @@ public class EnglishLanguagePlugin extends LanguagePlugin {
         registerWordType(noun);
         registerWordType(adjective);
         registerWordType(verb);
+    }
+
+    private static void addAbbreviationAlternativeSet(String... alternatives) {
+        ABBREVIATION_ALTERNATIVES.add(new HashSet<>(Arrays.asList(alternatives)));
     }
 
     @Override

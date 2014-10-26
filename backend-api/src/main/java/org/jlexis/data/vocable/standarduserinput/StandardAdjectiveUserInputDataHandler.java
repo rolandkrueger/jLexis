@@ -106,28 +106,12 @@ public class StandardAdjectiveUserInputDataHandler extends AbstractStandardUserI
                 parent.getUserData(mSuperlativeKey).isEmpty();
     }
 
-    public void setPositive(String positive) {
-        getParent().addUserData(mPositiveKey, positive);
-    }
-
-    public void setComparative(String comparative) {
-        getParent().addUserData(mComparativeKey, comparative);
-    }
-
-    public void setSuperlative(String superlative) {
-        getParent().addUserData(mSuperlativeKey, superlative);
-    }
-
-    public void setNotComparable(boolean isNotComparable) {
-        getParent().addUserData(mIsNotComparableKey, isNotComparable ? "1" : "0");
-    }
-
-    public void setIrregular(boolean isIrregular) {
-        getParent().addUserData(mIsIrregularKey, isIrregular ? "1" : "0");
-    }
-
     public String getPositive() {
         return getParent().getUserEnteredTerm(mPositiveKey);
+    }
+
+    public void setPositive(String positive) {
+        getParent().addUserData(mPositiveKey, positive);
     }
 
     public String getPositiveResolvedAndPurged() {
@@ -138,12 +122,20 @@ public class StandardAdjectiveUserInputDataHandler extends AbstractStandardUserI
         return getParent().getUserEnteredTerm(mComparativeKey);
     }
 
+    public void setComparative(String comparative) {
+        getParent().addUserData(mComparativeKey, comparative);
+    }
+
     public String getComparativeResolvedAndPurged() {
         return getParent().getResolvedAndPurgedUserData(mComparativeKey);
     }
 
     public String getSuperlative() {
         return getParent().getUserEnteredTerm(mSuperlativeKey);
+    }
+
+    public void setSuperlative(String superlative) {
+        getParent().addUserData(mSuperlativeKey, superlative);
     }
 
     public String getSuperlativeResolvedAndPurged() {
@@ -154,8 +146,16 @@ public class StandardAdjectiveUserInputDataHandler extends AbstractStandardUserI
         return getParent().getUserEnteredTerm(mIsNotComparableKey).equals("1");
     }
 
+    public void setNotComparable(boolean isNotComparable) {
+        getParent().addUserData(mIsNotComparableKey, isNotComparable ? "1" : "0");
+    }
+
     public boolean isIrregular() {
         return getParent().getUserEnteredTerm(mIsIrregularKey).equals("1");
+    }
+
+    public void setIrregular(boolean isIrregular) {
+        getParent().addUserData(mIsIrregularKey, isIrregular ? "1" : "0");
     }
 
     public boolean isPositiveDataDefined() {

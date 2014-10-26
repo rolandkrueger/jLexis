@@ -40,10 +40,6 @@ public class VocableVerificationResult {
         mResultType = VocableVerificationResultEnum.UNDEFINED;
     }
 
-    public void setResult(VocableVerificationResultEnum result) {
-        mResultType = result;
-    }
-
     public boolean isCorrect() {
         return mResultType == VocableVerificationResultEnum.CORRECT;
     }
@@ -66,6 +62,10 @@ public class VocableVerificationResult {
 
     public VocableVerificationResultEnum getResult() {
         return mResultType;
+    }
+
+    public void setResult(VocableVerificationResultEnum result) {
+        mResultType = result;
     }
 
     public Set<String> getMissingValues() {

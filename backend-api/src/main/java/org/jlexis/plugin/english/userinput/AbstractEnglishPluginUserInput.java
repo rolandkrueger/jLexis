@@ -31,94 +31,83 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class AbstractEnglishPluginUserInput extends AbstractUserInput
-{
-  private StandardUserInputDataHandler mStandardInputBE;
-  private StandardUserInputDataHandler mStandardInputAE;
-  
-  protected AbstractEnglishPluginUserInput (String inputType)
-  {
-    super (inputType);
-    mStandardInputBE = new StandardUserInputDataHandler (this, "BE");
-    mStandardInputAE = new StandardUserInputDataHandler (this, "AE");
-  }
-  
-  protected abstract String[] getUserInputIdentifiersImpl ();
-  protected abstract boolean isEmptyImpl ();
-  
-  @Override
-  public boolean isEmpty ()
-  {
-    return mStandardInputBE.isEmpty () &&
-           mStandardInputAE.isEmpty () &&
-           isEmptyImpl ();
-  }
-  
-  @Override
-  public String[] getUserInputIdentifiers ()
-  {
-    List<String> userInputIDs = new ArrayList<String> (10);
-    userInputIDs.addAll (Arrays.asList (mStandardInputBE.getUserInputIdentifiers ()));
-    userInputIDs.addAll (Arrays.asList (mStandardInputAE.getUserInputIdentifiers ()));
-    userInputIDs.addAll (Arrays.asList (getUserInputIdentifiersImpl ()));
-    return userInputIDs.toArray (new String[] {});
-  }
+public abstract class AbstractEnglishPluginUserInput extends AbstractUserInput {
+    private StandardUserInputDataHandler mStandardInputBE;
+    private StandardUserInputDataHandler mStandardInputAE;
 
-  protected StandardUserInputDataHandler getStandardInputBE ()
-  {
-    return mStandardInputBE;
-  }
-  
-  protected StandardUserInputDataHandler getStandardInputAE ()
-  {
-    return mStandardInputAE;
-  }
-  
-  public DefaultUserInput getBritishStandardValues ()
-  {
-    DefaultUserInput result = new DefaultUserInput ();
-    result.setComment (mStandardInputBE.getComment ());
-    result.setExample (mStandardInputBE.getExample ());
-    result.setPhonetics (mStandardInputBE.getPhonetics ());
-    result.setPronunciation (mStandardInputBE.getPronunciation ());
-    return result;
-  }
-  
-  public void setBritishStandardValues (DefaultUserInput defaultBritishEnglish)
-  {
-    mStandardInputBE.setComment (defaultBritishEnglish.getComment ());
-    mStandardInputBE.setExample (defaultBritishEnglish.getExample ());
-    mStandardInputBE.setPhonetics (defaultBritishEnglish.getPhonetics ());
-    mStandardInputBE.setPronunciation (defaultBritishEnglish.getPronunciation ());
-  }
-  
-  public DefaultUserInput getAmericanStandardValues ()
-  {
-    DefaultUserInput result = new DefaultUserInput ();
-    result.setComment (mStandardInputAE.getComment ());
-    result.setExample (mStandardInputAE.getExample ());
-    result.setPhonetics (mStandardInputAE.getPhonetics ());
-    result.setPronunciation (mStandardInputAE.getPronunciation ());
-    return result;
-  }
-  
-  public void setAmericanStandardValues (DefaultUserInput defaultAmericanEnglish)
-  {
-    mStandardInputAE.setComment (defaultAmericanEnglish.getComment ());
-    mStandardInputAE.setExample (defaultAmericanEnglish.getExample ());
-    mStandardInputAE.setPhonetics (defaultAmericanEnglish.getPhonetics ());
-    mStandardInputAE.setPronunciation (defaultAmericanEnglish.getPronunciation ());
-  }
-  
-  @Override
-  public String getComment ()
-  {
-    return mStandardInputBE.getComment ();
-  }
+    protected AbstractEnglishPluginUserInput(String inputType) {
+        super(inputType);
+        mStandardInputBE = new StandardUserInputDataHandler(this, "BE");
+        mStandardInputAE = new StandardUserInputDataHandler(this, "AE");
+    }
 
-  @Override
-  public String getExample ()
-  {
-    return mStandardInputBE.getExample ();
-  }
+    protected abstract String[] getUserInputIdentifiersImpl();
+
+    protected abstract boolean isEmptyImpl();
+
+    @Override
+    public boolean isEmpty() {
+        return mStandardInputBE.isEmpty() &&
+                mStandardInputAE.isEmpty() &&
+                isEmptyImpl();
+    }
+
+    @Override
+    public String[] getUserInputIdentifiers() {
+        List<String> userInputIDs = new ArrayList<String>(10);
+        userInputIDs.addAll(Arrays.asList(mStandardInputBE.getUserInputIdentifiers()));
+        userInputIDs.addAll(Arrays.asList(mStandardInputAE.getUserInputIdentifiers()));
+        userInputIDs.addAll(Arrays.asList(getUserInputIdentifiersImpl()));
+        return userInputIDs.toArray(new String[]{});
+    }
+
+    protected StandardUserInputDataHandler getStandardInputBE() {
+        return mStandardInputBE;
+    }
+
+    protected StandardUserInputDataHandler getStandardInputAE() {
+        return mStandardInputAE;
+    }
+
+    public DefaultUserInput getBritishStandardValues() {
+        DefaultUserInput result = new DefaultUserInput();
+        result.setComment(mStandardInputBE.getComment());
+        result.setExample(mStandardInputBE.getExample());
+        result.setPhonetics(mStandardInputBE.getPhonetics());
+        result.setPronunciation(mStandardInputBE.getPronunciation());
+        return result;
+    }
+
+    public void setBritishStandardValues(DefaultUserInput defaultBritishEnglish) {
+        mStandardInputBE.setComment(defaultBritishEnglish.getComment());
+        mStandardInputBE.setExample(defaultBritishEnglish.getExample());
+        mStandardInputBE.setPhonetics(defaultBritishEnglish.getPhonetics());
+        mStandardInputBE.setPronunciation(defaultBritishEnglish.getPronunciation());
+    }
+
+    public DefaultUserInput getAmericanStandardValues() {
+        DefaultUserInput result = new DefaultUserInput();
+        result.setComment(mStandardInputAE.getComment());
+        result.setExample(mStandardInputAE.getExample());
+        result.setPhonetics(mStandardInputAE.getPhonetics());
+        result.setPronunciation(mStandardInputAE.getPronunciation());
+        return result;
+    }
+
+    public void setAmericanStandardValues(DefaultUserInput defaultAmericanEnglish) {
+        mStandardInputAE.setComment(defaultAmericanEnglish.getComment());
+        mStandardInputAE.setExample(defaultAmericanEnglish.getExample());
+        mStandardInputAE.setPhonetics(defaultAmericanEnglish.getPhonetics());
+        mStandardInputAE.setPronunciation(defaultAmericanEnglish.getPronunciation());
+    }
+
+    @Override
+    public String getComment() {
+        return mStandardInputBE.getComment();
+    }
+
+    @Override
+    public String getExample() {
+        return mStandardInputBE.getExample();
+    }
 }

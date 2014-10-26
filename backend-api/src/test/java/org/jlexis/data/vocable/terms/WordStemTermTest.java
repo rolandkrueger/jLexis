@@ -32,79 +32,70 @@ import java.util.Set;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 
-public class WordStemTermTest extends AbstractTermDataTest
-{
-  @Override
-  public AbstractTermData getTestObject ()
-  {
-    return new WordStemTerm ();
-  }
-
-  @Override
-  @Test
-  public void testGetResolvedTerm ()
-  {
-    for (String data : mUserTestStrings)
-    {
-      mTestObj.setUserEnteredTerm (data);
-      assertEquals (data, mTestObj.getResolvedTerm ());
-    }    
-    for (String data : mNormalizedTestStrings)
-    {
-      mTestObj.setUserEnteredTerm (data);
-      assertEquals (data, mTestObj.getResolvedTerm ());
-    }    
-  }
-
-  @Override
-  @Test
-  public void testGetWordStem ()
-  {
-    String[] words     = new String[] {"abcd", "xxxx|yyy", "(aa) <zzzz>ooo"};
-    String[] wordStems = new String[] {"abcd", "xxxx",     "zzzz"};
-    
-    for (int i = 0; i < words.length; ++i)
-    {
-      mTestObj.setUserEnteredTerm (words[i]);
-      assertEquals (wordStems[i], mTestObj.getWordStem ());
+public class WordStemTermTest extends AbstractTermDataTest {
+    @Override
+    public AbstractTermData getTestObject() {
+        return new WordStemTerm();
     }
-  }
 
-  @Override
-  @Test
-  public void testIsWordStem ()
-  {
-    assertTrue (mTestObj.isWordStem ());
-  }
+    @Override
+    @Test
+    public void testGetResolvedTerm() {
+        for (String data : mUserTestStrings) {
+            mTestObj.setUserEnteredTerm(data);
+            assertEquals(data, mTestObj.getResolvedTerm());
+        }
+        for (String data : mNormalizedTestStrings) {
+            mTestObj.setUserEnteredTerm(data);
+            assertEquals(data, mTestObj.getResolvedTerm());
+        }
+    }
 
-  @Override
-  @Test
-  public void testGetVerificationData ()
-  {
-    String testData = "test|term; 1, 2, 3;";
-    mTestObj.setUserEnteredTerm (testData);
-    VocableVerificationData verificationData = mTestObj.getVerificationData ();
-    assertEquals (2, verificationData.getMandatoryValuesWithOptions ().size ());
-    assertEquals (4, verificationData.getAllTokens ().size ());
-    Set<String> set1 = new HashSet<String>();
-    set1.add ("testterm");
-    Set<String> set2 = new HashSet<String>();
-    set2.add ("1");
-    set2.add ("2");
-    set2.add ("3");
-    VocableVerificationData comparisonObject = new VocableVerificationData ();
-    comparisonObject.addMandatoryValueWithOptions (set1);
-    comparisonObject.addMandatoryValueWithOptions (set2);
-    assertEquals (comparisonObject, verificationData);
-    
-    testData = "this is <the> testdata";
-    mTestObj.setUserEnteredTerm (testData);
-    verificationData = mTestObj.getVerificationData ();
-    assertEquals (1, verificationData.getMandatoryValuesWithOptions ().size ());
-    set1.clear ();
-    set1.add ("this is the testdata");
-    comparisonObject = new VocableVerificationData ();
-    comparisonObject.addMandatoryValueWithOptions (set1);
-    assertEquals (comparisonObject, verificationData);
-  }
+    @Override
+    @Test
+    public void testGetWordStem() {
+        String[] words = new String[]{"abcd", "xxxx|yyy", "(aa) <zzzz>ooo"};
+        String[] wordStems = new String[]{"abcd", "xxxx", "zzzz"};
+
+        for (int i = 0; i < words.length; ++i) {
+            mTestObj.setUserEnteredTerm(words[i]);
+            assertEquals(wordStems[i], mTestObj.getWordStem());
+        }
+    }
+
+    @Override
+    @Test
+    public void testIsWordStem() {
+        assertTrue(mTestObj.isWordStem());
+    }
+
+    @Override
+    @Test
+    public void testGetVerificationData() {
+        String testData = "test|term; 1, 2, 3;";
+        mTestObj.setUserEnteredTerm(testData);
+        VocableVerificationData verificationData = mTestObj.getVerificationData();
+        assertEquals(2, verificationData.getMandatoryValuesWithOptions().size());
+        assertEquals(4, verificationData.getAllTokens().size());
+        Set<String> set1 = new HashSet<String>();
+        set1.add("testterm");
+        Set<String> set2 = new HashSet<String>();
+        set2.add("1");
+        set2.add("2");
+        set2.add("3");
+        VocableVerificationData comparisonObject = new VocableVerificationData();
+        comparisonObject.addMandatoryValueWithOptions(set1);
+        comparisonObject.addMandatoryValueWithOptions(set2);
+        assertEquals(comparisonObject, verificationData);
+
+        testData = "this is <the> testdata";
+        mTestObj.setUserEnteredTerm(testData);
+        verificationData = mTestObj.getVerificationData();
+        assertEquals(1, verificationData.getMandatoryValuesWithOptions().size());
+        set1.clear();
+        set1.add("this is the testdata");
+        comparisonObject = new VocableVerificationData();
+        comparisonObject.addMandatoryValueWithOptions(set1);
+        assertEquals(comparisonObject, verificationData);
+    }
 }

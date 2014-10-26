@@ -38,7 +38,7 @@ public class LearningUnit extends Observable implements Iterable<Vocable> {
     private Date mCreationDate;
     private List<Vocable> mVocables;
     private boolean mOpenForEditing;
-//    private EditLearningUnitInternalFrame mEditFrame;
+    //    private EditLearningUnitInternalFrame mEditFrame;
     private String mLanguagesString;
 
     public LearningUnit() {
@@ -98,21 +98,21 @@ public class LearningUnit extends Observable implements Iterable<Vocable> {
 //        }
     }
 
-    /**
-     * Sets the languages that are defined for this {@link LearningUnit}. For every language which is
-     * defined for a {@link LearningUnit} the user can add vocabulary data.
-     *
-     * @param languages a list of languages that can be learning with this {@link LearningUnit}
-     */
-    public void setLanguages(List<Language> languages) {
-        mLanguages = new ArrayList<Language>(languages);
-    }
-
     public List<Language> getLanguages() {
         if (mLanguages == null)
             mLanguages = new ArrayList<Language>();
 
         return mLanguages;
+    }
+
+    /**
+     * Sets the languages that are defined for this {@link LearningUnit}. For every language which is defined for a
+     * {@link LearningUnit} the user can add vocabulary data.
+     *
+     * @param languages a list of languages that can be learning with this {@link LearningUnit}
+     */
+    public void setLanguages(List<Language> languages) {
+        mLanguages = new ArrayList<Language>(languages);
     }
 
     /**
@@ -122,6 +122,15 @@ public class LearningUnit extends Observable implements Iterable<Vocable> {
      */
     public Date getCreationDate() {
         return mCreationDate;
+    }
+
+    /**
+     * Sets the creation date for this {@link LearningUnit}.
+     *
+     * @param creationDate the {@link LearningUnit}'s creation date.
+     */
+    public void setCreationDate(Date creationDate) {
+        mCreationDate = creationDate;
     }
 
     /**
@@ -142,15 +151,6 @@ public class LearningUnit extends Observable implements Iterable<Vocable> {
     @SuppressWarnings("unused")
     private void setVocables(List<Vocable> vocables) {
         mVocables = vocables;
-    }
-
-    /**
-     * Sets the creation date for this {@link LearningUnit}.
-     *
-     * @param creationDate the {@link LearningUnit}'s creation date.
-     */
-    public void setCreationDate(Date creationDate) {
-        mCreationDate = creationDate;
     }
 
     public void addVocable(Vocable vocable) {

@@ -26,18 +26,15 @@ package org.jlexis.plugin.english.wordtypes;
 import org.jlexis.data.DefaultWordType;
 import org.jlexis.plugin.english.inputpanels.EnglishIPATextfield;
 
-public class EnglishDefaultWordType extends DefaultWordType
-{
-  public EnglishDefaultWordType ()
-  {
-    // TODO I18N
+public class EnglishDefaultWordType extends DefaultWordType {
+    public EnglishDefaultWordType() {
+        // TODO I18N
 //    super ("Sonstiges");
-    super ("Noun");
-  }
+        super("Noun");
+    }
 
-  @Override
-  public AbstractVocableInputPanel getInputPanel ()
-  {
-    return new DefaultVocableInputPanel (new EnglishIPATextfield(), this);
-  }
+    @Override
+    public AbstractVocableInputPanel getInputPanel() {
+        return new DefaultVocableInputPanel(new EnglishIPATextfield(), this);
+    }
 }

@@ -30,41 +30,33 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * <p>
- * This class represents a single language that can be learned by the user. When
- * creating a new {@link org.jlexis.data.units.LearningUnit} the user typically selects one or more foreign languages she
- * wants to learn with this unit. Each of these languages are represented by a {@link Language}
- * object.
- * </p>
- * <p>
- * A {@link Language} is defined by the name of the language and a reference to the
- * {@link LanguagePlugin} from which the language was created. The language name is usually predefined by a language plugin, i.e.
- * if the user selects a language specific {@link LanguagePlugin}, she simultaneously selects the
- * corresponding {@link Language} object.
- * <p>
- * This is different with default language plugins. Such plugins don't have a corresponding
- * {@link Language} object. This is because a default language plugin can handle every language. If
- * the user selects a default language plugin for her new {@link org.jlexis.data.units.LearningUnit}, she is asked to
- * provide the name of the language she wants to handle with this plugin. With this more languages
- * can be learned than language plugins are available. Each {@link org.jlexis.data.units.LearningUnit} can manage an own set
- * of {@link Language} objects which are independent of other {@link org.jlexis.data.units.LearningUnit}s.
- * </p>
+ * <p> This class represents a single language that can be learned by the user. When creating a new {@link
+ * org.jlexis.data.units.LearningUnit} the user typically selects one or more foreign languages she wants to learn with
+ * this unit. Each of these languages are represented by a {@link Language} object. </p> <p> A {@link Language} is
+ * defined by the name of the language and a reference to the {@link LanguagePlugin} from which the language was
+ * created. The language name is usually predefined by a language plugin, i.e. if the user selects a language specific
+ * {@link LanguagePlugin}, she simultaneously selects the corresponding {@link Language} object. <p> This is different
+ * with default language plugins. Such plugins don't have a corresponding {@link Language} object. This is because a
+ * default language plugin can handle every language. If the user selects a default language plugin for her new {@link
+ * org.jlexis.data.units.LearningUnit}, she is asked to provide the name of the language she wants to handle with this
+ * plugin. With this more languages can be learned than language plugins are available. Each {@link
+ * org.jlexis.data.units.LearningUnit} can manage an own set of {@link Language} objects which are independent of other
+ * {@link org.jlexis.data.units.LearningUnit}s. </p>
  *
  * @author Roland Krueger
  */
 public class Language {
     /**
-     * The name of the language. Is usually defined by the {@link LanguagePlugin}, except for default
-     * plugins. When a default language plugin is chosen for a language the user has to provide the name of the language.
+     * The name of the language. Is usually defined by the {@link LanguagePlugin}, except for default plugins. When a
+     * default language plugin is chosen for a language the user has to provide the name of the language.
      */
     private String languageName;
 
     /**
-     * The identifier of the corresponding {@link LanguagePlugin} as provided by
-     * {@link LanguagePlugin#getIdentifier()}. This value is set after loading the {@link Language}
-     * object from the database and will be used to find a matching {@link LanguagePlugin} object from
-     * the set of available {@link LanguagePlugin}s. Note that this set can differ from the set that
-     * was available when saving the {@link Language} object to the database. This may be the case
+     * The identifier of the corresponding {@link LanguagePlugin} as provided by {@link LanguagePlugin#getIdentifier()}.
+     * This value is set after loading the {@link Language} object from the database and will be used to find a matching
+     * {@link LanguagePlugin} object from the set of available {@link LanguagePlugin}s. Note that this set can differ
+     * from the set that was available when saving the {@link Language} object to the database. This may be the case
      * when plugins are deleted or a newer version of a plugin is installed.
      */
     private PluginIdentifier sourcePlugin;
@@ -72,8 +64,8 @@ public class Language {
     private long id;
 
     /**
-     * Creates a new {@link Language} object for the given {@link LanguagePlugin}. The name for the new
-     * {@link Language} object is defined by the plugin.
+     * Creates a new {@link Language} object for the given {@link LanguagePlugin}. The name for the new {@link Language}
+     * object is defined by the plugin.
      *
      * @param sourcePluginIdentifier identifier for the plugin that provides this {@link Language}.
      */

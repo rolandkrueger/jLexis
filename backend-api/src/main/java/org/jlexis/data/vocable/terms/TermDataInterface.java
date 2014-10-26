@@ -18,13 +18,13 @@ import org.jlexis.data.vocable.verification.VocableVerificationData;
  * @version $Id: TermDataInterface.java 113 2009-05-20 18:19:32Z roland $
  */
 public interface TermDataInterface {
-    public abstract void setNormalizedTerm(String normalizedTerm);
-
     public abstract String getNormalizedTerm();
 
-    public abstract void setUserEnteredTerm(String term);
+    public abstract void setNormalizedTerm(String normalizedTerm);
 
     public abstract String getUserEnteredTerm();
+
+    public abstract void setUserEnteredTerm(String term);
 
     public abstract String getPurgedTerm();
 

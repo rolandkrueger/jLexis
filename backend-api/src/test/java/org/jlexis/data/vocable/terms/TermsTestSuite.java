@@ -28,9 +28,10 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses
-({
-  RegularTermTest.class,
-  WordStemTermTest.class,
-  InflectedTermTest.class
-})
-public class TermsTestSuite {}
+        ({
+                RegularTermTest.class,
+                WordStemTermTest.class,
+                InflectedTermTest.class
+        })
+public class TermsTestSuite {
+}

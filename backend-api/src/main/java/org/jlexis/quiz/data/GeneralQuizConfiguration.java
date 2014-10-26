@@ -33,36 +33,24 @@ import java.util.List;
  * @version $Id: GeneralQuizConfiguration.java 134 2009-07-06 19:33:01Z roland $
  */
 public class GeneralQuizConfiguration {
-    public enum QuestionOrderEnum {CORRECT_ORDER, RANDOM}
-
-    ;
-
-    public enum QuestionRepetitionEnum {FIXED, ONCE, ENDLESS}
-
-    ;
-
-    public enum IncorrectAnswerRepetitionEnum {FIXED, ONCE, NONE}
-
-    ;
-
-    public enum WhenToRepeatIncorrectAnswer {IMMEDIATELY, LATER}
-
-    ;
-
-    public enum ShowCorrectAnswer {ALWAYS, ONLY_WHEN_INCORRECT}
-
-    ;
-
-    public enum QuestionStrictness {ALL, SOME}
-
-    ;
-
     private QuestionOrderEnum mOrder;
+
+    ;
     private int mRepeatQuestionsCount;
+
+    ;
     private QuestionRepetitionEnum mQuestionRepetition;
+
+    ;
     private IncorrectAnswerRepetitionEnum mIncorrectAnswerRepetition;
+
+    ;
     private int mRepeatIncorrectAnswerCount;
+
+    ;
     private WhenToRepeatIncorrectAnswer mWhenToRepeat;
+
+    ;
     private boolean mDoMixinUnits;
     private int mMixinPercentage;
     private boolean mMixinAllUnits;
@@ -71,7 +59,6 @@ public class GeneralQuizConfiguration {
     private boolean mShowComments;
     private boolean mShowExample;
     private QuestionStrictness mQuestionStrictness;
-
     public GeneralQuizConfiguration() {
         mOrder = QuestionOrderEnum.CORRECT_ORDER;
         mRepeatQuestionsCount = 1;
@@ -205,4 +192,16 @@ public class GeneralQuizConfiguration {
     public void setQuestionStrictness(QuestionStrictness questionStrictness) {
         mQuestionStrictness = questionStrictness;
     }
+
+    public enum QuestionOrderEnum {CORRECT_ORDER, RANDOM}
+
+    public enum QuestionRepetitionEnum {FIXED, ONCE, ENDLESS}
+
+    public enum IncorrectAnswerRepetitionEnum {FIXED, ONCE, NONE}
+
+    public enum WhenToRepeatIncorrectAnswer {IMMEDIATELY, LATER}
+
+    public enum ShowCorrectAnswer {ALWAYS, ONLY_WHEN_INCORRECT}
+
+    public enum QuestionStrictness {ALL, SOME}
 }

@@ -28,8 +28,9 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses
-({
-  VocableVerificationDataTest.class,
-  VerificationHashSetTest.class
-})
-public class VerificationTestSuite {}
+        ({
+                VocableVerificationDataTest.class,
+                VerificationHashSetTest.class
+        })
+public class VerificationTestSuite {
+}

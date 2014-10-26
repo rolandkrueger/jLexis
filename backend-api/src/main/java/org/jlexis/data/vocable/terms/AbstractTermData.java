@@ -38,6 +38,10 @@ public abstract class AbstractTermData implements TermDataInterface {
 
     protected String mNormalizedTerm = "";
 
+    public String getNormalizedTerm() {
+        return mNormalizedTerm;
+    }
+
     public void setNormalizedTerm(String normalizedTerm) {
         if (normalizedTerm == null)
             throw new NullPointerException("Normalized term is null.");
@@ -45,8 +49,14 @@ public abstract class AbstractTermData implements TermDataInterface {
         mNormalizedTerm = normalizedTerm.trim();
     }
 
-    public String getNormalizedTerm() {
-        return mNormalizedTerm;
+    public String getUserEnteredTerm() {
+        ConfigurationManager config = ConfigurationManager.getInstance();
+        String result = mNormalizedTerm.replace(WORD_STEM_MARKER, config.getWordStemMarker());
+        result = result.replace(WORD_STEM_BEGIN_MARKER, config.getWordStemBeginMarker());
+        result = result.replace(WORD_STEM_END_MARKER, config.getWordStemEndMarker());
+        result = result.replace(WORD_STEM_PLACEHOLDER, config.getWordStemPlaceholder());
+        result = result.replace(SPECIAL_CHAR_PLACEHOLDER, "$");
+        return result;
     }
 
     public void setUserEnteredTerm(String term) {
@@ -61,16 +71,6 @@ public abstract class AbstractTermData implements TermDataInterface {
         result = result.replace(config.getWordStemPlaceholder(), WORD_STEM_PLACEHOLDER);
 
         setNormalizedTerm(result);
-    }
-
-    public String getUserEnteredTerm() {
-        ConfigurationManager config = ConfigurationManager.getInstance();
-        String result = mNormalizedTerm.replace(WORD_STEM_MARKER, config.getWordStemMarker());
-        result = result.replace(WORD_STEM_BEGIN_MARKER, config.getWordStemBeginMarker());
-        result = result.replace(WORD_STEM_END_MARKER, config.getWordStemEndMarker());
-        result = result.replace(WORD_STEM_PLACEHOLDER, config.getWordStemPlaceholder());
-        result = result.replace(SPECIAL_CHAR_PLACEHOLDER, "$");
-        return result;
     }
 
     protected String removeMarkerStrings(String string) {

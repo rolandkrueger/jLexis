@@ -28,54 +28,50 @@ package org.jlexis.plugin.english.inputpanels;
  * @author Roland Krueger
  * @version $Id: EnglishIPATextfield.java 160 2009-10-26 18:09:58Z roland $
  */
-public class EnglishIPATextfield extends JLexisIPATextField
-{
-  private static final long serialVersionUID = -5792671852378010987L;
+public class EnglishIPATextfield extends JLexisIPATextField {
+    private static final long serialVersionUID = -5792671852378010987L;
 
-  public EnglishIPATextfield ()
-  {
-    setCharacterMapping (new EnglishIPAKeyMapping ());
-  }
-  
-  private class EnglishIPAKeyMapping extends AugmentedTypingKeyMapping
-  {
-    // a  
-    Character[] aChars = {'\u0251', '\u00E6', '\u0251', '\u0252', '\u028C'};
-    // c  
-    Character[] cChars = {'\u0254'};
-    // e  
-    Character[] eChars = {'\u0259', '\u025C'};
-    // i  
-    Character[] iChars = {'\u026a'};
-    // n  
-    Character[] nChars = {'\u014B'};
-    // o
-    Character[] oChars = {'\u0254'};
-    // s  
-    Character[] sChars = {'\u0283', '\u0292'};
-    // t  
-    Character[] tChars = {'\u03B8', '\u00F0'};
-    // u  
-    Character[] uChars = {'\u028a'};
-    // z  
-    Character[] zChars = {'\u0292'};
-    
-    // :
-    Character[] colonChars = {'\u02D0'};
-    
-    public EnglishIPAKeyMapping ()
-    {
-      addMapping ('a', aChars);
-      addMapping ('c', cChars);
-      addMapping ('e', eChars);
-      addMapping ('i', iChars);
-      addMapping ('n', nChars);
-      addMapping ('o', oChars);
-      addMapping ('s', sChars);
-      addMapping ('t', tChars);
-      addMapping ('u', uChars);
-      addMapping ('z', zChars);
-      addMapping (':', colonChars);
+    public EnglishIPATextfield() {
+        setCharacterMapping(new EnglishIPAKeyMapping());
     }
-  }
+
+    private class EnglishIPAKeyMapping extends AugmentedTypingKeyMapping {
+        // a
+        Character[] aChars = {'\u0251', '\u00E6', '\u0251', '\u0252', '\u028C'};
+        // c
+        Character[] cChars = {'\u0254'};
+        // e
+        Character[] eChars = {'\u0259', '\u025C'};
+        // i
+        Character[] iChars = {'\u026a'};
+        // n
+        Character[] nChars = {'\u014B'};
+        // o
+        Character[] oChars = {'\u0254'};
+        // s
+        Character[] sChars = {'\u0283', '\u0292'};
+        // t
+        Character[] tChars = {'\u03B8', '\u00F0'};
+        // u
+        Character[] uChars = {'\u028a'};
+        // z
+        Character[] zChars = {'\u0292'};
+
+        // :
+        Character[] colonChars = {'\u02D0'};
+
+        public EnglishIPAKeyMapping() {
+            addMapping('a', aChars);
+            addMapping('c', cChars);
+            addMapping('e', eChars);
+            addMapping('i', iChars);
+            addMapping('n', nChars);
+            addMapping('o', oChars);
+            addMapping('s', sChars);
+            addMapping('t', tChars);
+            addMapping('u', uChars);
+            addMapping('z', zChars);
+            addMapping(':', colonChars);
+        }
+    }
 }

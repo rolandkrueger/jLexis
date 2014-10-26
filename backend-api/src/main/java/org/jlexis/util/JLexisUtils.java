@@ -33,8 +33,6 @@ public final class JLexisUtils {
 
     /**
      * Locates the application base directory.
-     *
-     * @return
      */
     public final static File getAppBaseDir() {
         // Note: the following code smells bad and should be improved

@@ -87,28 +87,28 @@ public class StandardUserInputDataHandler extends AbstractStandardUserInputDataH
         return getParent().getUserData(mCommentKey).getUserEnteredTerm();
     }
 
-    public final String getExample() {
-        return getParent().getUserData(mExampleKey).getUserEnteredTerm();
-    }
-
-    public final String getPhonetics() {
-        return getParent().getUserData(mPhoneticsKey).getUserEnteredTerm();
-    }
-
-    public final String getPronunciation() {
-        return getParent().getUserData(mPronunciationKey).getUserEnteredTerm();
-    }
-
     public final void setComment(String comment) {
         getParent().addUserData(mCommentKey, comment);
+    }
+
+    public final String getExample() {
+        return getParent().getUserData(mExampleKey).getUserEnteredTerm();
     }
 
     public final void setExample(String example) {
         getParent().addUserData(mExampleKey, example);
     }
 
+    public final String getPhonetics() {
+        return getParent().getUserData(mPhoneticsKey).getUserEnteredTerm();
+    }
+
     public final void setPhonetics(String phonetics) {
         getParent().addUserData(mPhoneticsKey, phonetics);
+    }
+
+    public final String getPronunciation() {
+        return getParent().getUserData(mPronunciationKey).getUserEnteredTerm();
     }
 
     public final void setPronunciation(String pronunciation) {

@@ -35,28 +35,14 @@ import java.util.List;
  * @version $Id: AbstractQuizQuestion.java 136 2009-10-02 18:20:53Z roland $
  */
 public abstract class AbstractQuizQuestion {
-    public enum QuizAnswerType {
-        TEXT,
-        MULTIPLE_CHOICE_SINGLE_SELECTION,
-        MULTIPLE_CHOICE_MULTIPLE_SELECTION,
-        PROVIDED
-    }
+    private Vocable mVocable;
 
     ;
-
-    public enum AnswerCorrectness {
-        CORRECT,
-        INCORRECT,
-        CORRECT_BUT_WAS_NOT_ASKED,
-        IMPLEMENTATION_NOT_NEEDED
-    }
+    private QuizAnswerType mType = QuizAnswerType.TEXT;
 
     //        TODO: fix me
 //    private static AnswerPanelHandle sTextualAnswerPanelHandle;
 //    private static Map<Integer, AnswerPanelHandle> sMultipleChoiceAnswerPanelHandles;
-
-    private Vocable mVocable;
-    private QuizAnswerType mType = QuizAnswerType.TEXT;
     private List<String> mOptionLabels;
     private boolean mUseStandardQuestion = false;
     private String mQuestionText;
@@ -65,16 +51,12 @@ public abstract class AbstractQuizQuestion {
     private VocableVerificationData mExpectedAnswer;
     private int mIncorrectlyAnsweredCount;
     private int mNumberOfTimesQuestionWasPosed;
-    //        TODO: fix me
-//    private AnswerPanelHandle mAnswerPanelHandle;
-
     static {
         // register the standard answer panels provided by this class
 //        TODO: fix me
 //        sTextualAnswerPanelHandle = AnswerPanelManager.getInstance().registerAnswerPanel(new TextualAnswerPanel());
 //        sMultipleChoiceAnswerPanelHandles = new HashMap<Integer, AnswerPanelHandle>();
     }
-
     public AbstractQuizQuestion(Vocable forVocable, Language forLanguage) {
         if (forVocable == null || forLanguage == null)
             throw new NullPointerException("One of the arguments is null.");
@@ -84,16 +66,18 @@ public abstract class AbstractQuizQuestion {
         mIncorrectlyAnsweredCount = 0;
         mNumberOfTimesQuestionWasPosed = 0;
     }
+    //        TODO: fix me
+//    private AnswerPanelHandle mAnswerPanelHandle;
 
     protected abstract void setSourceLanguageImpl(Language sourceLanguage);
+
+    public abstract Language getSourceLanguage();
 
     public void setSourceLanguage(Language sourceLanguage) {
         if (sourceLanguage == null)
             throw new NullPointerException("Source language is null.");
         setSourceLanguageImpl(sourceLanguage);
     }
-
-    public abstract Language getSourceLanguage();
 
     protected abstract AnswerCorrectness checkUserAnswerImpl();
 
@@ -151,8 +135,22 @@ public abstract class AbstractQuizQuestion {
         return mQuestionText;
     }
 
+    public void setQuestionText(String text) {
+        if (text == null)
+            throw new NullPointerException("Question text is null.");
+
+        mQuestionText = text;
+    }
+
     public String getTextToTranslate() {
         return mTextToTranslate;
+    }
+
+    public void setTextToTranslate(String textToTranslate) {
+        if (textToTranslate == null)
+            throw new NullPointerException("Text to translate is null.");
+
+        mTextToTranslate = textToTranslate;
     }
 
     public boolean isStandardQuestionUsed() {
@@ -163,22 +161,8 @@ public abstract class AbstractQuizQuestion {
         return mQueriedLanguage;
     }
 
-    public void setQuestionText(String text) {
-        if (text == null)
-            throw new NullPointerException("Question text is null.");
-
-        mQuestionText = text;
-    }
-
     public void useStandardQuestion() {
         mUseStandardQuestion = true;
-    }
-
-    public void setTextToTranslate(String textToTranslate) {
-        if (textToTranslate == null)
-            throw new NullPointerException("Text to translate is null.");
-
-        mTextToTranslate = textToTranslate;
     }
 
     public void setQuizAnswerType(QuizAnswerType type) {
@@ -253,6 +237,20 @@ public abstract class AbstractQuizQuestion {
 //        return ((TextualAnswerPanel) AnswerPanelManager.getInstance().
 //                getAnswerPanelFor(sTextualAnswerPanelHandle)).getAnswerText();
         return null;
+    }
+
+    public enum QuizAnswerType {
+        TEXT,
+        MULTIPLE_CHOICE_SINGLE_SELECTION,
+        MULTIPLE_CHOICE_MULTIPLE_SELECTION,
+        PROVIDED
+    }
+
+    public enum AnswerCorrectness {
+        CORRECT,
+        INCORRECT,
+        CORRECT_BUT_WAS_NOT_ASKED,
+        IMPLEMENTATION_NOT_NEEDED
     }
 
     //        TODO: fix me

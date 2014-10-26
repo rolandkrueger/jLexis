@@ -33,10 +33,9 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses
-({
-  TermsTestSuite.class,
-  VerificationTestSuite.class
-})
-public class JLexisTestSuite
-{
+        ({
+                TermsTestSuite.class,
+                VerificationTestSuite.class
+        })
+public class JLexisTestSuite {
 }

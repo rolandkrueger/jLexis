@@ -34,9 +34,8 @@ import java.util.Hashtable;
 import java.util.Map;
 
 /**
- * Data object representing exactly one vocable. This class is simply a container holding a list of
- * {@link VocableData} objects. Each {@link VocableData} represents the language specific part of
- * the vocable.
+ * Data object representing exactly one vocable. This class is simply a container holding a list of {@link VocableData}
+ * objects. Each {@link VocableData} represents the language specific part of the vocable.
  *
  * @author Roland Krueger
  * @see VocableData
@@ -52,10 +51,10 @@ public class Vocable implements Serializable {
     }
 
     /**
-     * Adds one language specific part of a vocable to this object. Such a fragment consists of three
-     * parts. The first argument provides the {@link Language} that was used by the user to add
-     * the language specific data to the vocable. The second argument defines the word type (such as
-     * noun, verb, etc.) of the current vocable. The third argument is the data itself.
+     * Adds one language specific part of a vocable to this object. Such a fragment consists of three parts. The first
+     * argument provides the {@link Language} that was used by the user to add the language specific data to the
+     * vocable. The second argument defines the word type (such as noun, verb, etc.) of the current vocable. The third
+     * argument is the data itself.
      *
      * @param forLanguage the {@link Language
      * @param wordType    the current word type (verb, noun, etc.)
@@ -89,8 +88,8 @@ public class Vocable implements Serializable {
     }
 
     /**
-     * Removes all data previously added to this {@link Vocable} and replaces it with the data of the
-     * provided {@link Vocable} object.
+     * Removes all data previously added to this {@link Vocable} and replaces it with the data of the provided {@link
+     * Vocable} object.
      *
      * @param voc a {@link Vocable} object the data of which is to be copied into this object
      */
@@ -108,8 +107,8 @@ public class Vocable implements Serializable {
     }
 
     /**
-     * Determines whether the user data contained in this {@link Vocable} object is empty, i. e.
-     * whether no data whatsoever is held by the {@link VocableData} elements.
+     * Determines whether the user data contained in this {@link Vocable} object is empty, i. e. whether no data
+     * whatsoever is held by the {@link VocableData} elements.
      *
      * @return <code>true</code> if this vocable doesn't contain any user-provided data
      */
@@ -125,8 +124,8 @@ public class Vocable implements Serializable {
     }
 
     /**
-     * Setter method for the vocable data. This method is used by Hibernate when loading a
-     * {@link Vocable} object from the database.
+     * Setter method for the vocable data. This method is used by Hibernate when loading a {@link Vocable} object from
+     * the database.
      *
      * @param data the vocable data
      */

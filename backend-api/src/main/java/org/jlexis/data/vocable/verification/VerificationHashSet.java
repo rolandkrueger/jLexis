@@ -32,9 +32,8 @@ import java.util.regex.Pattern;
 /**
  * TODO: update documentation
  * <p/>
- * Subclass of {@link java.util.HashSet} which will not accept the empty string as input value. If the
- * empty string is tried to be added, method {@link VerificationHashSet#add(String)} simply returns
- * false and skips adding this value.
+ * Subclass of {@link java.util.HashSet} which will not accept the empty string as input value. If the empty string is
+ * tried to be added, method {@link VerificationHashSet#add(String)} simply returns false and skips adding this value.
  *
  * @author Roland Krueger
  * @version $Id: VerificationHashSet.java 136 2009-10-02 18:20:53Z roland $

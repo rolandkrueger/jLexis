@@ -59,11 +59,6 @@ public abstract class AbstractQuizTypeConfiguration {
         mQuizQuestions = createQuizQuestionsForImpl(units, forLanguage);
     }
 
-    public final void setCorrespondingLanguage(Language lang) {
-        if (lang == null) return;
-        mLanguage = Optional.of(lang);
-    }
-
     public final List<AbstractQuizQuestion> getQuizQuestions() {
         if (mQuizQuestions == null) return Collections.emptyList();
         return mQuizQuestions;
@@ -71,5 +66,10 @@ public abstract class AbstractQuizTypeConfiguration {
 
     public final Optional<Language> getCorrespondingLanguage() {
         return mLanguage;
+    }
+
+    public final void setCorrespondingLanguage(Language lang) {
+        if (lang == null) return;
+        mLanguage = Optional.of(lang);
     }
 }

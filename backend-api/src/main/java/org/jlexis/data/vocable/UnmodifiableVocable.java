@@ -142,6 +142,10 @@ public final class UnmodifiableVocable extends Vocable {
             return mData.getNormalizedTerm();
         }
 
+        public final void setNormalizedTerm(String normalizedTerm) {
+            throw new UnsupportedOperationException("This object cannot be modified.");
+        }
+
         public final String getPurgedTerm() {
             return mData.getPurgedTerm();
         }
@@ -154,6 +158,10 @@ public final class UnmodifiableVocable extends Vocable {
             return mData.getUserEnteredTerm();
         }
 
+        public final void setUserEnteredTerm(String term) {
+            throw new UnsupportedOperationException("This object cannot be modified.");
+        }
+
         public final String getWordStem() {
             return mData.getWordStem();
         }
@@ -164,14 +172,6 @@ public final class UnmodifiableVocable extends Vocable {
 
         public final boolean isWordStem() {
             return mData.isWordStem();
-        }
-
-        public final void setNormalizedTerm(String normalizedTerm) {
-            throw new UnsupportedOperationException("This object cannot be modified.");
-        }
-
-        public final void setUserEnteredTerm(String term) {
-            throw new UnsupportedOperationException("This object cannot be modified.");
         }
 
         @Override

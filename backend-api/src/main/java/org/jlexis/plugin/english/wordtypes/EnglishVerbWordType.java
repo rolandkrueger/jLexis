@@ -29,28 +29,24 @@ import org.jlexis.plugin.english.EnglishLanguagePlugin;
 import org.jlexis.plugin.english.inputpanels.EnglishVerbInputPanel;
 import org.jlexis.plugin.english.userinput.EnglishVerbUserInput;
 
-public class EnglishVerbWordType extends AbstractWordType
-{
-  private EnglishLanguagePlugin mPlugin;
-  
-  public EnglishVerbWordType (EnglishLanguagePlugin plugin)
-  {
-    //TODO I18N
-    super ("Verb", "EnglishVerb", new EnglishVerbUserInput());
-    mPlugin = plugin;
-  }
+public class EnglishVerbWordType extends AbstractWordType {
+    private EnglishLanguagePlugin mPlugin;
 
-  @Override
-  public AbstractVocableInputPanel getInputPanel ()
-  {
-    EnglishVerbInputPanel inputPanel = new EnglishVerbInputPanel (this);
-    inputPanel.setPlugin (mPlugin);
-    return inputPanel;
-  }
+    public EnglishVerbWordType(EnglishLanguagePlugin plugin) {
+        //TODO I18N
+        super("Verb", "EnglishVerb", new EnglishVerbUserInput());
+        mPlugin = plugin;
+    }
 
-  @Override
-  public WordTypeEnum getWordTypeEnum ()
-  {
-    return WordTypeEnum.VERB;
-  }
+    @Override
+    public AbstractVocableInputPanel getInputPanel() {
+        EnglishVerbInputPanel inputPanel = new EnglishVerbInputPanel(this);
+        inputPanel.setPlugin(mPlugin);
+        return inputPanel;
+    }
+
+    @Override
+    public WordTypeEnum getWordTypeEnum() {
+        return WordTypeEnum.VERB;
+    }
 }

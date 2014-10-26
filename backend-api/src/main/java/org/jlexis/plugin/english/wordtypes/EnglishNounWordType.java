@@ -33,29 +33,25 @@ import org.jlexis.plugin.english.userinput.EnglishNounUserInput;
  * @author Roland Krueger
  * @version $Id: EnglishNounWordType.java 184 2009-11-20 15:38:45Z roland $
  */
-public class EnglishNounWordType extends AbstractWordType
-{
-  private EnglishLanguagePlugin mPlugin;
-  
-  public EnglishNounWordType (EnglishLanguagePlugin plugin)
-  {
-    //TODO I18N
+public class EnglishNounWordType extends AbstractWordType {
+    private EnglishLanguagePlugin mPlugin;
+
+    public EnglishNounWordType(EnglishLanguagePlugin plugin) {
+        //TODO I18N
 //    super ("Substantiv", "EnglishNoun", new EnglishNounUserInput ());
-    super ("Noun", "EnglishNoun", new EnglishNounUserInput());
-    mPlugin = plugin;
-  }
+        super("Noun", "EnglishNoun", new EnglishNounUserInput());
+        mPlugin = plugin;
+    }
 
-  @Override
-  public AbstractVocableInputPanel getInputPanel ()
-  {
-    EnglishNounInputPanel panel = new EnglishNounInputPanel (this);
-    panel.setPlugin (mPlugin);
-    return panel;
-  }
+    @Override
+    public AbstractVocableInputPanel getInputPanel() {
+        EnglishNounInputPanel panel = new EnglishNounInputPanel(this);
+        panel.setPlugin(mPlugin);
+        return panel;
+    }
 
-  @Override
-  public WordTypeEnum getWordTypeEnum ()
-  {
-    return WordTypeEnum.NOUN;
-  }
+    @Override
+    public WordTypeEnum getWordTypeEnum() {
+        return WordTypeEnum.NOUN;
+    }
 }

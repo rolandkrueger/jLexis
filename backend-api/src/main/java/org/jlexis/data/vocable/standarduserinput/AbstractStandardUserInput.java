@@ -69,13 +69,13 @@ public abstract class AbstractStandardUserInput extends AbstractUserInput {
         return mStandardUserInputDataHandler.getPhonetics();
     }
 
+    public final void setPhonetics(String phonetics) {
+        mStandardUserInputDataHandler.setPhonetics(phonetics);
+    }
+
     public String getPhoneticsString() {
         if (!isPhoneticsDefined()) return "";
         return "[" + getPhonetics() + "]";
-    }
-
-    public final void setPhonetics(String phonetics) {
-        mStandardUserInputDataHandler.setPhonetics(phonetics);
     }
 
     public final String getPronunciation() {

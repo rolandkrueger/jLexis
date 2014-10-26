@@ -31,78 +31,68 @@ import org.jlexis.data.vocable.verification.VocableVerificationData;
  * @author Roland Krueger
  * @version $Id: $
  */
-public class AbstractUserInputTestObject extends AbstractUserInput
-{
-  public int getCommentCalled = 0;
-  public int getExampleCalled = 0;
-  public int getShortVersionCalled = 0;
-  public int getHTMLVersionCalled  = 0;  
-  
-  public AbstractUserInputTestObject()
-  {
-    super ("TEST");
-  }
+public class AbstractUserInputTestObject extends AbstractUserInput {
+    public int getCommentCalled = 0;
+    public int getExampleCalled = 0;
+    public int getShortVersionCalled = 0;
+    public int getHTMLVersionCalled = 0;
 
-  public void reset ()
-  {
-    getCommentCalled = 0;
-    getExampleCalled = 0;
-    getShortVersionCalled = 0;
-    getHTMLVersionCalled  = 0;
-  }
-  
-  @Override
-  protected AbstractUserInput createNewUserInputObject ()
-  {
-    return new AbstractUserInputTestObject ();
-  }
+    public AbstractUserInputTestObject() {
+        super("TEST");
+    }
 
-  @Override
-  protected String getCommentImpl ()
-  {
-    getCommentCalled++;
-    return "comment";
-  }
+    public void reset() {
+        getCommentCalled = 0;
+        getExampleCalled = 0;
+        getShortVersionCalled = 0;
+        getHTMLVersionCalled = 0;
+    }
 
-  @Override
-  protected String getExampleImpl ()
-  {
-    getExampleCalled++;
-    return "example";
-  }
+    @Override
+    protected AbstractUserInput createNewUserInputObject() {
+        return new AbstractUserInputTestObject();
+    }
 
-  @Override
-  protected String getHTMLVersionImpl ()
-  {
-    getHTMLVersionCalled++;
-    return "HTML";
-  }
+    @Override
+    protected String getCommentImpl() {
+        getCommentCalled++;
+        return "comment";
+    }
 
-  @Override
-  public VocableVerificationData getQuizVerificationData ()
-  {
-    return null;
-  }
+    @Override
+    protected String getExampleImpl() {
+        getExampleCalled++;
+        return "example";
+    }
 
-  @Override
-  protected String getShortVersionImpl ()
-  {
-    getShortVersionCalled++;
-    return "short version";
-  }
+    @Override
+    protected String getHTMLVersionImpl() {
+        getHTMLVersionCalled++;
+        return "HTML";
+    }
 
-  @Override
-  protected String[] getUserInputIdentifiers ()
-  {
-    return new String[] {"IDENTIFIER"};
-  }
+    @Override
+    public VocableVerificationData getQuizVerificationData() {
+        return null;
+    }
 
-  @Override
-  public boolean isEmpty ()
-  {
-    return false;
-  }
+    @Override
+    protected String getShortVersionImpl() {
+        getShortVersionCalled++;
+        return "short version";
+    }
 
-  @Override
-  public void init () {}
+    @Override
+    protected String[] getUserInputIdentifiers() {
+        return new String[]{"IDENTIFIER"};
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return false;
+    }
+
+    @Override
+    public void init() {
+    }
 }

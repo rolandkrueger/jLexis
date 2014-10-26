@@ -29,29 +29,25 @@ import org.jlexis.plugin.english.EnglishLanguagePlugin;
 import org.jlexis.plugin.english.inputpanels.EnglishAdjectiveInputPanel;
 import org.jlexis.plugin.english.userinput.EnglishAdjectiveUserInput;
 
-public class EnglishAdjectiveWordType extends AbstractWordType
-{
-  private EnglishLanguagePlugin mPlugin;
-  
-  public EnglishAdjectiveWordType (EnglishLanguagePlugin plugin)
-  {
-    //TODO I18N
-//    super ("Adjektiv", "EnglishAdjective", new EnglishAdjectiveUserInput ());
-    super ("Adjective", "EnglishAdjective", new EnglishAdjectiveUserInput());
-    mPlugin = plugin;
-  }
-  
-  @Override
-  public AbstractVocableInputPanel getInputPanel ()
-  {
-    EnglishAdjectiveInputPanel panel = new EnglishAdjectiveInputPanel (this);
-    panel.setPlugin (mPlugin);
-    return panel;
-  }
+public class EnglishAdjectiveWordType extends AbstractWordType {
+    private EnglishLanguagePlugin mPlugin;
 
-  @Override
-  public WordTypeEnum getWordTypeEnum ()
-  {
-    return WordTypeEnum.ADJECTIVE;
-  }
+    public EnglishAdjectiveWordType(EnglishLanguagePlugin plugin) {
+        //TODO I18N
+//    super ("Adjektiv", "EnglishAdjective", new EnglishAdjectiveUserInput ());
+        super("Adjective", "EnglishAdjective", new EnglishAdjectiveUserInput());
+        mPlugin = plugin;
+    }
+
+    @Override
+    public AbstractVocableInputPanel getInputPanel() {
+        EnglishAdjectiveInputPanel panel = new EnglishAdjectiveInputPanel(this);
+        panel.setPlugin(mPlugin);
+        return panel;
+    }
+
+    @Override
+    public WordTypeEnum getWordTypeEnum() {
+        return WordTypeEnum.ADJECTIVE;
+    }
 }

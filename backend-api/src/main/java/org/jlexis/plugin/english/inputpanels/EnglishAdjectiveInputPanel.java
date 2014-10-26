@@ -35,159 +35,143 @@ import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
-public class EnglishAdjectiveInputPanel extends AbstractVocableInputPanel
-{
-  private static final long serialVersionUID = 7578296197126978999L;
-  private static final EnglishAdjectiveUserInput sExpectedInput = new EnglishAdjectiveUserInput ();  //  @jve:decl-index=0:
-  
-  private JTabbedPane beaeTabbedPane = null;
-  private AdjectiveInputPanel beAdjectiveInputPanel = null;
-  private AdjectiveInputPanel aeAdjectiveInputPanel = null;
-  private EnglishLanguagePlugin mPlugin;
-  
-  public EnglishAdjectiveInputPanel (AbstractWordType correspondingWordType)
-  {
-    super (correspondingWordType);
-		initialize();
-  }
+public class EnglishAdjectiveInputPanel extends AbstractVocableInputPanel {
+    private static final long serialVersionUID = 7578296197126978999L;
+    private static final EnglishAdjectiveUserInput sExpectedInput = new EnglishAdjectiveUserInput();  //  @jve:decl-index=0:
 
-  public void setPlugin (EnglishLanguagePlugin plugin)
-  {
-    CheckForNull.check (plugin);
-    mPlugin = plugin;
-    getBeaeTabbedPane ().setIconAt (0, mPlugin.getIcon ());
-    getBeaeTabbedPane ().setIconAt (1, mPlugin.getUSAFlagIcon ());
-  }
-  
-  @Override
-  public List<Component> getComponentsInFocusTraversalOrder ()
-  {
-    List<Component> result = new LinkedList<Component> ();
-    result.addAll (beAdjectiveInputPanel.getComponentsInFocusTraversalOrder ());
-    result.addAll (aeAdjectiveInputPanel.getComponentsInFocusTraversalOrder ());
-    return result;
-  }
-    
-  /**
-   * This method initializes this
-   * 
-   */
-  private void initialize()
-  {
-    this.setLayout(new BorderLayout());
-    this.setSize(new Dimension(477, 309));
-    this.add(getBeaeTabbedPane(), BorderLayout.CENTER);
-  }
+    private JTabbedPane beaeTabbedPane = null;
+    private AdjectiveInputPanel beAdjectiveInputPanel = null;
+    private AdjectiveInputPanel aeAdjectiveInputPanel = null;
+    private EnglishLanguagePlugin mPlugin;
 
-  @Override
-  public void clearInput ()
-  {
-    getBeAdjectiveInputPanel ().clearInput ();
-    getAeAdjectiveInputPanel ().clearInput ();
-  }
-
-  @Override
-  public AbstractUserInput getCurrentUserInput ()
-  {
-    EnglishAdjectiveUserInput result = new EnglishAdjectiveUserInput ();
-    DefaultUserInput defaultUserInput = new DefaultUserInput ();
-    getBeAdjectiveInputPanel ().getStandardInputFieldsPanel ().getCurrentUserInput (defaultUserInput);
-    result.setBritishStandardValues (defaultUserInput);
-    getAeAdjectiveInputPanel ().getStandardInputFieldsPanel ().getCurrentUserInput (defaultUserInput);
-    result.setAmericanStandardValues (defaultUserInput);
-    StandardAdjectiveInputPanel adjPanelBE = getBeAdjectiveInputPanel ().getStandardAdjectiveInputPanel ();
-    StandardAdjectiveInputPanel adjPanelAE = getAeAdjectiveInputPanel ().getStandardAdjectiveInputPanel ();
-    result.setPositiveBE (adjPanelBE.getPositive ());
-    result.setPositiveAE (adjPanelAE.getPositive ());
-    result.setComparativeBE (adjPanelBE.getComparative ());
-    result.setComparativeAE (adjPanelAE.getComparative ());
-    result.setSuperlativeBE (adjPanelBE.getSuperlative ());
-    result.setSuperlativeAE (adjPanelAE.getSuperlative ());
-    result.setIrregularBE (adjPanelBE.isIrregular ());
-    result.setIrregularAE (adjPanelAE.isIrregular ());
-    result.setNotComparableBE (adjPanelBE.isNotComparable ());
-    result.setNotComparableAE (adjPanelAE.isNotComparable ());
-    result.setAdjectiveUsageBE (getBeAdjectiveInputPanel ().getAdjectiveUsage ());
-    result.setAdjectiveUsageAE (getAeAdjectiveInputPanel ().getAdjectiveUsage ());
-    return result;
-  }
-
-  @Override
-  public boolean isUserInputEmpty ()
-  {
-    return getBeAdjectiveInputPanel ().isUserInputEmpty () &&
-      getAeAdjectiveInputPanel ().isUserInputEmpty ();
-  }
-
-  @Override
-  public void setUserInput (UserInput input)
-  {
-    CheckForNull.check (input);
-    if ( ! sExpectedInput.isTypeCorrect (input))
-      throw new IllegalStateException ("Passed wrong user input object. Expected " + EnglishAdjectiveUserInput.class.getName ()
-          + " but was " + input.getClass ().getName ());
-    EnglishAdjectiveUserInput englishInput = (EnglishAdjectiveUserInput) input;
-    
-    StandardAdjectiveInputPanel adjPanelBE = getBeAdjectiveInputPanel ().getStandardAdjectiveInputPanel ();
-    StandardAdjectiveInputPanel adjPanelAE = getAeAdjectiveInputPanel ().getStandardAdjectiveInputPanel ();
-    adjPanelBE.setPositive (englishInput.getPositiveBE ());
-    adjPanelAE.setPositive (englishInput.getPositiveAE ());
-    adjPanelBE.setComparative (englishInput.getComparativeBE ());
-    adjPanelAE.setComparative (englishInput.getComparativeAE ());
-    adjPanelBE.setSuperlative (englishInput.getSuperlativeBE ());
-    adjPanelAE.setSuperlative (englishInput.getSuperlativeAE ());
-    adjPanelBE.setIrregular (englishInput.isIrregularBE ());
-    adjPanelAE.setIrregular (englishInput.isIrregularAE ());
-    adjPanelBE.setNotComparable (englishInput.isNotComparableBE ());
-    adjPanelAE.setNotComparable (englishInput.isNotComparableAE ());
-    beAdjectiveInputPanel.setAdjectiveUsage (englishInput.getAdjectiveUsageBE ());
-    aeAdjectiveInputPanel.setAdjectiveUsage (englishInput.getAdjectiveUsageAE ());
-    beAdjectiveInputPanel.getStandardInputFieldsPanel ().setUserInput (englishInput.getBritishStandardValues ());
-    aeAdjectiveInputPanel.getStandardInputFieldsPanel ().setUserInput (englishInput.getAmericanStandardValues ());    
-  }
-
-  /**
-   * This method initializes beaeTabbedPane	
-   * 	
-   * @return javax.swing.JTabbedPane	
-   */
-  private JTabbedPane getBeaeTabbedPane ()
-  {
-    if (beaeTabbedPane == null)
-    {
-      beaeTabbedPane = new JTabbedPane ();
-      beaeTabbedPane.addTab("British English", null, getBeAdjectiveInputPanel(), null);
-      beaeTabbedPane.addTab("American English", null, getAeAdjectiveInputPanel(), null);
+    public EnglishAdjectiveInputPanel(AbstractWordType correspondingWordType) {
+        super(correspondingWordType);
+        initialize();
     }
-    return beaeTabbedPane;
-  }
 
-  /**
-   * This method initializes beAdjectiveInputPanel	
-   * 	
-   * @return info.rolandkrueger.lexis.plugin.english.inputpanels.AdjectiveInputPanel	
-   */
-  private AdjectiveInputPanel getBeAdjectiveInputPanel ()
-  {
-    if (beAdjectiveInputPanel == null)
-    {
-      beAdjectiveInputPanel = new AdjectiveInputPanel ();
+    public void setPlugin(EnglishLanguagePlugin plugin) {
+        CheckForNull.check(plugin);
+        mPlugin = plugin;
+        getBeaeTabbedPane().setIconAt(0, mPlugin.getIcon());
+        getBeaeTabbedPane().setIconAt(1, mPlugin.getUSAFlagIcon());
     }
-    return beAdjectiveInputPanel;
-  }
 
-  /**
-   * This method initializes aeAdjectiveInputPanel	
-   * 	
-   * @return info.rolandkrueger.lexis.plugin.english.inputpanels.AdjectiveInputPanel	
-   */
-  private AdjectiveInputPanel getAeAdjectiveInputPanel ()
-  {
-    if (aeAdjectiveInputPanel == null)
-    {
-      aeAdjectiveInputPanel = new AdjectiveInputPanel ();
+    @Override
+    public List<Component> getComponentsInFocusTraversalOrder() {
+        List<Component> result = new LinkedList<Component>();
+        result.addAll(beAdjectiveInputPanel.getComponentsInFocusTraversalOrder());
+        result.addAll(aeAdjectiveInputPanel.getComponentsInFocusTraversalOrder());
+        return result;
     }
-    return aeAdjectiveInputPanel;
-  }
+
+    /**
+     * This method initializes this
+     */
+    private void initialize() {
+        this.setLayout(new BorderLayout());
+        this.setSize(new Dimension(477, 309));
+        this.add(getBeaeTabbedPane(), BorderLayout.CENTER);
+    }
+
+    @Override
+    public void clearInput() {
+        getBeAdjectiveInputPanel().clearInput();
+        getAeAdjectiveInputPanel().clearInput();
+    }
+
+    @Override
+    public AbstractUserInput getCurrentUserInput() {
+        EnglishAdjectiveUserInput result = new EnglishAdjectiveUserInput();
+        DefaultUserInput defaultUserInput = new DefaultUserInput();
+        getBeAdjectiveInputPanel().getStandardInputFieldsPanel().getCurrentUserInput(defaultUserInput);
+        result.setBritishStandardValues(defaultUserInput);
+        getAeAdjectiveInputPanel().getStandardInputFieldsPanel().getCurrentUserInput(defaultUserInput);
+        result.setAmericanStandardValues(defaultUserInput);
+        StandardAdjectiveInputPanel adjPanelBE = getBeAdjectiveInputPanel().getStandardAdjectiveInputPanel();
+        StandardAdjectiveInputPanel adjPanelAE = getAeAdjectiveInputPanel().getStandardAdjectiveInputPanel();
+        result.setPositiveBE(adjPanelBE.getPositive());
+        result.setPositiveAE(adjPanelAE.getPositive());
+        result.setComparativeBE(adjPanelBE.getComparative());
+        result.setComparativeAE(adjPanelAE.getComparative());
+        result.setSuperlativeBE(adjPanelBE.getSuperlative());
+        result.setSuperlativeAE(adjPanelAE.getSuperlative());
+        result.setIrregularBE(adjPanelBE.isIrregular());
+        result.setIrregularAE(adjPanelAE.isIrregular());
+        result.setNotComparableBE(adjPanelBE.isNotComparable());
+        result.setNotComparableAE(adjPanelAE.isNotComparable());
+        result.setAdjectiveUsageBE(getBeAdjectiveInputPanel().getAdjectiveUsage());
+        result.setAdjectiveUsageAE(getAeAdjectiveInputPanel().getAdjectiveUsage());
+        return result;
+    }
+
+    @Override
+    public boolean isUserInputEmpty() {
+        return getBeAdjectiveInputPanel().isUserInputEmpty() &&
+                getAeAdjectiveInputPanel().isUserInputEmpty();
+    }
+
+    @Override
+    public void setUserInput(UserInput input) {
+        CheckForNull.check(input);
+        if (!sExpectedInput.isTypeCorrect(input))
+            throw new IllegalStateException("Passed wrong user input object. Expected " + EnglishAdjectiveUserInput.class.getName()
+                    + " but was " + input.getClass().getName());
+        EnglishAdjectiveUserInput englishInput = (EnglishAdjectiveUserInput) input;
+
+        StandardAdjectiveInputPanel adjPanelBE = getBeAdjectiveInputPanel().getStandardAdjectiveInputPanel();
+        StandardAdjectiveInputPanel adjPanelAE = getAeAdjectiveInputPanel().getStandardAdjectiveInputPanel();
+        adjPanelBE.setPositive(englishInput.getPositiveBE());
+        adjPanelAE.setPositive(englishInput.getPositiveAE());
+        adjPanelBE.setComparative(englishInput.getComparativeBE());
+        adjPanelAE.setComparative(englishInput.getComparativeAE());
+        adjPanelBE.setSuperlative(englishInput.getSuperlativeBE());
+        adjPanelAE.setSuperlative(englishInput.getSuperlativeAE());
+        adjPanelBE.setIrregular(englishInput.isIrregularBE());
+        adjPanelAE.setIrregular(englishInput.isIrregularAE());
+        adjPanelBE.setNotComparable(englishInput.isNotComparableBE());
+        adjPanelAE.setNotComparable(englishInput.isNotComparableAE());
+        beAdjectiveInputPanel.setAdjectiveUsage(englishInput.getAdjectiveUsageBE());
+        aeAdjectiveInputPanel.setAdjectiveUsage(englishInput.getAdjectiveUsageAE());
+        beAdjectiveInputPanel.getStandardInputFieldsPanel().setUserInput(englishInput.getBritishStandardValues());
+        aeAdjectiveInputPanel.getStandardInputFieldsPanel().setUserInput(englishInput.getAmericanStandardValues());
+    }
+
+    /**
+     * This method initializes beaeTabbedPane
+     *
+     * @return javax.swing.JTabbedPane
+     */
+    private JTabbedPane getBeaeTabbedPane() {
+        if (beaeTabbedPane == null) {
+            beaeTabbedPane = new JTabbedPane();
+            beaeTabbedPane.addTab("British English", null, getBeAdjectiveInputPanel(), null);
+            beaeTabbedPane.addTab("American English", null, getAeAdjectiveInputPanel(), null);
+        }
+        return beaeTabbedPane;
+    }
+
+    /**
+     * This method initializes beAdjectiveInputPanel
+     *
+     * @return info.rolandkrueger.lexis.plugin.english.inputpanels.AdjectiveInputPanel
+     */
+    private AdjectiveInputPanel getBeAdjectiveInputPanel() {
+        if (beAdjectiveInputPanel == null) {
+            beAdjectiveInputPanel = new AdjectiveInputPanel();
+        }
+        return beAdjectiveInputPanel;
+    }
+
+    /**
+     * This method initializes aeAdjectiveInputPanel
+     *
+     * @return info.rolandkrueger.lexis.plugin.english.inputpanels.AdjectiveInputPanel
+     */
+    private AdjectiveInputPanel getAeAdjectiveInputPanel() {
+        if (aeAdjectiveInputPanel == null) {
+            aeAdjectiveInputPanel = new AdjectiveInputPanel();
+        }
+        return aeAdjectiveInputPanel;
+    }
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"

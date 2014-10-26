@@ -33,108 +33,98 @@ import static junit.framework.Assert.*;
  * @author Roland Krueger
  * @version $Id: VerificationHashSetTest.java 204 2009-12-17 15:20:16Z roland $
  */
-public class VerificationHashSetTest
-{
-  private VerificationHashSet mTestObj;
-  
-  @Before
-  public void setUp ()
-  {
-    mTestObj = new VerificationHashSet ();
-  }
-  
-  @Test
-  public void testSuffixTolerance ()
-  {
-    char[] chars = new char[] {'#', '+', '[', '*', '.', ']', '?'};
-    mTestObj = new VerificationHashSet (chars);
-    mTestObj.addAll (new ArrayList<String>(Arrays.asList (new String[]{
-            "test", "data", "string?"
-    })));
-    
-    assertTrue (mTestObj.contains ("test"));
-    assertTrue (mTestObj.contains ("data#"));
-    assertTrue (mTestObj.contains ("test]"));
-    assertTrue (mTestObj.contains ("test?"));
+public class VerificationHashSetTest {
+    private VerificationHashSet mTestObj;
 
-    assertFalse (mTestObj.contains ("*test"));
-    assertFalse (mTestObj.contains ("test'"));
-    assertFalse (mTestObj.contains ("test-"));
-  }
-  
-  @Test
-  public void testContains ()
-  {
-    mTestObj.addAll (new ArrayList<String>(Arrays.asList (new String[]{
-            "xxx.yyy", "wo? hier !", "string?"
-    })));
-    assertTrue (mTestObj.contains ("xxx.yyy"));
-    assertTrue (mTestObj.contains ("xxx .  yyy"));
-    assertTrue (mTestObj.contains ("xxx\t.\tyyy"));
-    assertTrue (mTestObj.contains ("wo   ?hier!"));
-    assertTrue (mTestObj.contains ("wo?hier!"));
-    assertTrue (mTestObj.contains ("wo\t?   hier  ! \t"));
-    assertTrue (mTestObj.contains ("string        ?            "));
-  }
-  
-  @Test
-  public void testRemove ()
-  {
-    mTestObj.addAll (new ArrayList<String>(Arrays.asList (new String[]{
-            "xxx.yyy", "wo? hier !", "string?", "test"
-    })));
-    
-    assertEquals (4, mTestObj.size ());
-    mTestObj.remove ("test     ");
-    mTestObj.remove ("xxx .   \t yyy ");
-    mTestObj.remove ("     wo ?hier!  \t");
-    mTestObj.remove ("string  ?");    
-    assertTrue (mTestObj.isEmpty ());
-  }
-  
-  @Test
-  public void testIterator ()
-  {
-    List<String> list = new ArrayList<String>(Arrays.asList (new String[]{
-            "_test_", "da.ta", "string?"
-    })); 
-    mTestObj.addAll (list);
-    Set<String> compare = new HashSet<String>();
-    for (String s : mTestObj)
-    {
-      compare.add (s);
+    @Before
+    public void setUp() {
+        mTestObj = new VerificationHashSet();
     }
-    assertTrue (compare.containsAll (list));
-    assertTrue (list.containsAll (compare));    
-  }
-  
-  @Test
-  public void testAdd ()
-  {
-    mTestObj.add ("test ? data string.");
-    assertTrue (mTestObj.contains ("test ? data string."));
-  }
-  
-  @Test
-  public void testAddAll ()
-  {
-    List<String> setToAdd = new ArrayList<String>(Arrays.asList (new String[]{
-            "test", "data", "string?"
-    }));
-    mTestObj.addAll (setToAdd);
-    assertTrue (mTestObj.contains ("data"));
-    assertTrue (mTestObj.contains ("string?"));
-    assertTrue (mTestObj.contains ("test"));
-  }
-  
-  @Test
-  public void testClear ()
-  {
-    mTestObj.addAll (new ArrayList<String>(Arrays.asList (new String[]{
-            "test", "data", "string?"
-    })));
-    assertEquals (3, mTestObj.size ());
-    mTestObj.clear ();
-    assertEquals (0, mTestObj.size ());
-  }
+
+    @Test
+    public void testSuffixTolerance() {
+        char[] chars = new char[]{'#', '+', '[', '*', '.', ']', '?'};
+        mTestObj = new VerificationHashSet(chars);
+        mTestObj.addAll(new ArrayList<String>(Arrays.asList(new String[]{
+                "test", "data", "string?"
+        })));
+
+        assertTrue(mTestObj.contains("test"));
+        assertTrue(mTestObj.contains("data#"));
+        assertTrue(mTestObj.contains("test]"));
+        assertTrue(mTestObj.contains("test?"));
+
+        assertFalse(mTestObj.contains("*test"));
+        assertFalse(mTestObj.contains("test'"));
+        assertFalse(mTestObj.contains("test-"));
+    }
+
+    @Test
+    public void testContains() {
+        mTestObj.addAll(new ArrayList<String>(Arrays.asList(new String[]{
+                "xxx.yyy", "wo? hier !", "string?"
+        })));
+        assertTrue(mTestObj.contains("xxx.yyy"));
+        assertTrue(mTestObj.contains("xxx .  yyy"));
+        assertTrue(mTestObj.contains("xxx\t.\tyyy"));
+        assertTrue(mTestObj.contains("wo   ?hier!"));
+        assertTrue(mTestObj.contains("wo?hier!"));
+        assertTrue(mTestObj.contains("wo\t?   hier  ! \t"));
+        assertTrue(mTestObj.contains("string        ?            "));
+    }
+
+    @Test
+    public void testRemove() {
+        mTestObj.addAll(new ArrayList<String>(Arrays.asList(new String[]{
+                "xxx.yyy", "wo? hier !", "string?", "test"
+        })));
+
+        assertEquals(4, mTestObj.size());
+        mTestObj.remove("test     ");
+        mTestObj.remove("xxx .   \t yyy ");
+        mTestObj.remove("     wo ?hier!  \t");
+        mTestObj.remove("string  ?");
+        assertTrue(mTestObj.isEmpty());
+    }
+
+    @Test
+    public void testIterator() {
+        List<String> list = new ArrayList<String>(Arrays.asList(new String[]{
+                "_test_", "da.ta", "string?"
+        }));
+        mTestObj.addAll(list);
+        Set<String> compare = new HashSet<String>();
+        for (String s : mTestObj) {
+            compare.add(s);
+        }
+        assertTrue(compare.containsAll(list));
+        assertTrue(list.containsAll(compare));
+    }
+
+    @Test
+    public void testAdd() {
+        mTestObj.add("test ? data string.");
+        assertTrue(mTestObj.contains("test ? data string."));
+    }
+
+    @Test
+    public void testAddAll() {
+        List<String> setToAdd = new ArrayList<String>(Arrays.asList(new String[]{
+                "test", "data", "string?"
+        }));
+        mTestObj.addAll(setToAdd);
+        assertTrue(mTestObj.contains("data"));
+        assertTrue(mTestObj.contains("string?"));
+        assertTrue(mTestObj.contains("test"));
+    }
+
+    @Test
+    public void testClear() {
+        mTestObj.addAll(new ArrayList<String>(Arrays.asList(new String[]{
+                "test", "data", "string?"
+        })));
+        assertEquals(3, mTestObj.size());
+        mTestObj.clear();
+        assertEquals(0, mTestObj.size());
+    }
 }

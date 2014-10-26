@@ -32,66 +32,59 @@ import java.util.Set;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 
-public class InflectedTermTest extends AbstractTermDataTest
-{
-  private WordStemTerm mStem;
-  
-  @Override
-  public AbstractTermData getTestObject ()
-  {
-    mStem = new WordStemTerm ();
-    return new InflectedTerm (mStem);
-  }
+public class InflectedTermTest extends AbstractTermDataTest {
+    private WordStemTerm mStem;
 
-  @Override
-  @Test
-  public void testGetResolvedTerm ()
-  {
-    String[] words     = new String[] {"abcd", "xxxx|yyy", "(aa) <zzzz>ooo"};
-    String[] inflected = new String[] {"--xyz", "--ooo $", "vvv--vvv"};
-    String[] resolved  = new String[] {"abcdxyz", "xxxxooo $", "vvvzzzzvvv"};
-    
-    for (int i = 0; i < words.length; ++i)
-    {
-      mStem.setUserEnteredTerm (words[i]);
-      mTestObj.setUserEnteredTerm (inflected[i]);
-      assertEquals (resolved[i], mTestObj.getResolvedTerm ());
+    @Override
+    public AbstractTermData getTestObject() {
+        mStem = new WordStemTerm();
+        return new InflectedTerm(mStem);
     }
-  }
 
-  @Override
-  @Test(expected=UnsupportedOperationException.class)
-  public void testGetWordStem ()
-  {
-    mTestObj.getWordStem ();
-  }
+    @Override
+    @Test
+    public void testGetResolvedTerm() {
+        String[] words = new String[]{"abcd", "xxxx|yyy", "(aa) <zzzz>ooo"};
+        String[] inflected = new String[]{"--xyz", "--ooo $", "vvv--vvv"};
+        String[] resolved = new String[]{"abcdxyz", "xxxxooo $", "vvvzzzzvvv"};
 
-  @Override
-  @Test
-  public void testIsWordStem ()
-  {
-    assertFalse (mTestObj.isWordStem ());
-  }
+        for (int i = 0; i < words.length; ++i) {
+            mStem.setUserEnteredTerm(words[i]);
+            mTestObj.setUserEnteredTerm(inflected[i]);
+            assertEquals(resolved[i], mTestObj.getResolvedTerm());
+        }
+    }
 
-  @Override
-  @Test
-  public void testGetVerificationData ()
-  {
-    mStem.setUserEnteredTerm ("test|term");
-    mTestObj.setUserEnteredTerm ("--value; --vocable, word");
-    VocableVerificationData verificationData = mTestObj.getVerificationData ();
-    assertEquals (2, verificationData.getMandatoryValuesWithOptions ().size ());
-    assertEquals (5, verificationData.getAllTokens ().size ());
-    Set<String> set1 = new HashSet<String>();
-    set1.add ("testvalue");
-    set1.add ("-value");
-    Set<String> set2 = new HashSet<String>();
-    set2.add ("testvocable");
-    set2.add ("word");
-    set2.add ("-vocable");
-    VocableVerificationData comparisonObject = new VocableVerificationData ();
-    comparisonObject.addMandatoryValueWithOptions (set1);
-    comparisonObject.addMandatoryValueWithOptions (set2);
-    assertEquals (comparisonObject, verificationData);
-  }
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void testGetWordStem() {
+        mTestObj.getWordStem();
+    }
+
+    @Override
+    @Test
+    public void testIsWordStem() {
+        assertFalse(mTestObj.isWordStem());
+    }
+
+    @Override
+    @Test
+    public void testGetVerificationData() {
+        mStem.setUserEnteredTerm("test|term");
+        mTestObj.setUserEnteredTerm("--value; --vocable, word");
+        VocableVerificationData verificationData = mTestObj.getVerificationData();
+        assertEquals(2, verificationData.getMandatoryValuesWithOptions().size());
+        assertEquals(5, verificationData.getAllTokens().size());
+        Set<String> set1 = new HashSet<String>();
+        set1.add("testvalue");
+        set1.add("-value");
+        Set<String> set2 = new HashSet<String>();
+        set2.add("testvocable");
+        set2.add("word");
+        set2.add("-vocable");
+        VocableVerificationData comparisonObject = new VocableVerificationData();
+        comparisonObject.addMandatoryValueWithOptions(set1);
+        comparisonObject.addMandatoryValueWithOptions(set2);
+        assertEquals(comparisonObject, verificationData);
+    }
 }

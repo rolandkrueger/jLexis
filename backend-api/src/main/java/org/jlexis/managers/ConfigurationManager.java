@@ -48,17 +48,17 @@ public class ConfigurationManager extends Observable {
     private File mPropertiesFile;
     private JLexisWorkspace mWorkspace;
 
+    private ConfigurationManager() {
+        mWorkspace = new JLexisWorkspace();
+        mKeyActions = new ArrayList<AbstractKeyAction>();
+        mPropertiesFile = new File(CONFIG_DIRECTORY, USER_PROPS_FILENAME);
+    }
+
     public static ConfigurationManager getInstance() {
         if (sInstance == null) {
             sInstance = new ConfigurationManager();
         }
         return sInstance;
-    }
-
-    private ConfigurationManager() {
-        mWorkspace = new JLexisWorkspace();
-        mKeyActions = new ArrayList<AbstractKeyAction>();
-        mPropertiesFile = new File(CONFIG_DIRECTORY, USER_PROPS_FILENAME);
     }
 
     public String getDatabaseURL() {

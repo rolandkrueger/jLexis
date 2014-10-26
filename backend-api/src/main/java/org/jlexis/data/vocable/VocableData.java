@@ -29,9 +29,9 @@ import org.jlexis.data.languages.Language;
 import java.util.Optional;
 
 /**
- * This class represents the language specific part of a {@link Vocable} object. An object of type
- * {@link VocableData} is bound to exactly one {@link org.jlexis.plugin.LanguagePlugin}. It contains all data for one
- * language (represented by the {@link Language}) in one {@link Vocable}.
+ * This class represents the language specific part of a {@link Vocable} object. An object of type {@link VocableData}
+ * is bound to exactly one {@link org.jlexis.plugin.LanguagePlugin}. It contains all data for one language (represented
+ * by the {@link Language}) in one {@link Vocable}.
  *
  * @author Roland Krueger
  */
@@ -54,9 +54,7 @@ public class VocableData {
     /**
      * Constructs a {@link VocableData} object from user entered data.
      *
-     * @param forPlugin
-     * @param wordType
-     * @param data      the data entered by the user
+     * @param data the data entered by the user
      */
     public VocableData(Language forLanguage, AbstractWordType wordType, AbstractUserInput data) {
         this();
@@ -100,11 +98,6 @@ public class VocableData {
     }
 
     @SuppressWarnings("unused")
-    private void setDatabaseObject(DBO_AbstractUserInput userInputFromDatabase) {
-        mUserInputFromDatabase = userInputFromDatabase;
-    }
-
-    @SuppressWarnings("unused")
     private DBO_AbstractUserInput getDatabaseObject() {
         if (getUserInput() == null) {
             throw new IllegalStateException("AbstractUserInput object not available.");
@@ -117,6 +110,11 @@ public class VocableData {
             mUserInputFromDatabase = dbo;
         }
         return mUserInputFromDatabase;
+    }
+
+    @SuppressWarnings("unused")
+    private void setDatabaseObject(DBO_AbstractUserInput userInputFromDatabase) {
+        mUserInputFromDatabase = userInputFromDatabase;
     }
 
     public boolean isEmpty() {
