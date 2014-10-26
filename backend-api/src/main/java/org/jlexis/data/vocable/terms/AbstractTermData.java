@@ -28,7 +28,7 @@ import org.jlexis.managers.ConfigurationManager;
 
 import java.util.Objects;
 
-public abstract class AbstractTermData implements TermData {
+public abstract class AbstractTermData {
     protected final static String WORD_STEM_MARKER = "${|}";
     protected final static String WORD_STEM_BEGIN_MARKER = "${<}";
     protected final static String WORD_STEM_END_MARKER = "${>}";
@@ -102,4 +102,16 @@ public abstract class AbstractTermData implements TermData {
                 .add("user entered term", getUserEnteredTerm())
                 .toString();
     }
+
+    public abstract boolean isWordStem();
+
+    public abstract boolean isInflected();
+
+    public abstract AbstractTermData getWordStemObject();
+
+    public abstract String getResolvedAndPurgedTerm();
+
+    public abstract String getWordStem();
+
+    public abstract String getResolvedTerm();
 }

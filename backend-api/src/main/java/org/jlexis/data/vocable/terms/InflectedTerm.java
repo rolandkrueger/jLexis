@@ -50,7 +50,7 @@ public class InflectedTerm extends AbstractTermData {
     }
 
     @Override
-    public TermData getWordStemObject() {
+    public AbstractTermData getWordStemObject() {
         return wordStem;
     }
 
