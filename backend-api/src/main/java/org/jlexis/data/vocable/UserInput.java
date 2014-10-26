@@ -10,7 +10,7 @@
  */
 package org.jlexis.data.vocable;
 
-import org.jlexis.data.vocable.terms.TermData;
+import org.jlexis.data.vocable.terms.AbstractTermData;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
 
 /*
@@ -72,7 +72,7 @@ public interface UserInput {
 
     public abstract boolean isTypeCorrect(UserInput other);
 
-    public abstract TermData getUserData(String identifier);
+    public abstract AbstractTermData getUserData(String identifier);
 
     public abstract boolean isDataDefinedFor(String identifier);
 

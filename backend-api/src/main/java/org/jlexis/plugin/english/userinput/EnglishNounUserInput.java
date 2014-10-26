@@ -24,7 +24,7 @@
 package org.jlexis.plugin.english.userinput;
 
 import org.jlexis.data.vocable.AbstractUserInput;
-import org.jlexis.data.vocable.terms.TermData;
+import org.jlexis.data.vocable.terms.AbstractTermData;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
 import org.jlexis.roklib.HTMLTextFormatter;
 import org.jlexis.roklib.TextFormatter;
@@ -337,12 +337,12 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
         // TODO: I18N
 //    String additionalQuestionText = "Bitte auch die Pluralform eingeben. ";
         String additionalQuestionText = "Please also provide the plural form. ";
-        List<TermData> beValues = new LinkedList<TermData>();
+        List<AbstractTermData> beValues = new LinkedList<>();
         if (isDataDefinedFor(NOUN_SINGULAR_TERM_KEY_BE))
             beValues.add(getUserData(NOUN_SINGULAR_TERM_KEY_BE));
         if (isDataDefinedFor(NOUN_PLURAL_TERM_KEY_BE))
             beValues.add(getUserData(NOUN_PLURAL_TERM_KEY_BE));
-        List<TermData> aeValues = new LinkedList<TermData>();
+        List<AbstractTermData> aeValues = new LinkedList<>();
         if (isDataDefinedFor(NOUN_SINGULAR_TERM_KEY_AE))
             aeValues.add(getUserData(NOUN_SINGULAR_TERM_KEY_AE));
         if (isDataDefinedFor(NOUN_PLURAL_TERM_KEY_AE))

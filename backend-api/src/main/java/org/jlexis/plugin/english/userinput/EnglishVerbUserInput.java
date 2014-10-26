@@ -24,7 +24,6 @@
 package org.jlexis.plugin.english.userinput;
 
 import org.jlexis.data.vocable.AbstractUserInput;
-import org.jlexis.data.vocable.terms.TermData;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
 import org.jlexis.roklib.HTMLTextFormatter;
 import org.jlexis.roklib.TextFormatter;

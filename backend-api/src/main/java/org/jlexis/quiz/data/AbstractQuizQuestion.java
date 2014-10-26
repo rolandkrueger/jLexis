@@ -24,7 +24,7 @@ package org.jlexis.quiz.data;
 
 import org.jlexis.data.languages.Language;
 import org.jlexis.data.vocable.Vocable;
-import org.jlexis.data.vocable.terms.TermData;
+import org.jlexis.data.vocable.terms.AbstractTermData;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
 import org.jlexis.data.vocable.verification.VocableVerificationResult;
 
@@ -188,7 +188,7 @@ public abstract class AbstractQuizQuestion {
         mExpectedAnswer = expectedAnswer;
     }
 
-    public void setExpectedAnswer(TermData expectedAnswer) {
+    public void setExpectedAnswer(AbstractTermData expectedAnswer) {
         if (expectedAnswer == null)
             throw new NullPointerException("Expected answer is null.");
         VocableVerificationData data = new VocableVerificationData();
