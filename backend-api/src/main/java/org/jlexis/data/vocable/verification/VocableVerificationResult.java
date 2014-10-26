@@ -34,6 +34,8 @@ public class VocableVerificationResult {
 
     public VocableVerificationResult(VocableVerificationResultEnum result) {
         this.result = Objects.requireNonNull(result);
+        redundantValues = new HashSet<>();
+        missingValues = new HashSet<>();
     }
 
     public boolean isCorrect() {
@@ -41,18 +43,10 @@ public class VocableVerificationResult {
     }
 
     public void addRedundantValues(Collection<String> redundantValues) {
-        if (redundantValues == null)
-            redundantValues = Collections.emptyList();
-        if (this.redundantValues == null)
-            this.redundantValues = new HashSet<String>();
         this.redundantValues.addAll(redundantValues);
     }
 
     public void addMissingValues(Collection<String> missingValues) {
-        if (missingValues == null)
-            missingValues = Collections.emptyList();
-        if (this.missingValues == null)
-            this.missingValues = new HashSet<String>();
         this.missingValues.addAll(missingValues);
     }
 
@@ -61,16 +55,10 @@ public class VocableVerificationResult {
     }
 
     public Set<String> getMissingValues() {
-        if (missingValues == null)
-            return Collections.emptySet();
-
         return missingValues;
     }
 
     public Set<String> getRedundantValues() {
-        if (redundantValues == null)
-            return Collections.emptySet();
-
         return redundantValues;
     }
 }
