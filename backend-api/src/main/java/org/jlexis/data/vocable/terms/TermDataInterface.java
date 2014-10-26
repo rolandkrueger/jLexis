@@ -13,7 +13,6 @@ package org.jlexis.data.vocable.terms;
 
 /*
  * @author Roland Krueger
- * @version $Id: TermDataInterface.java 113 2009-05-20 18:19:32Z roland $
  */
 public interface TermDataInterface {
     public abstract String getNormalizedTerm();
@@ -35,4 +34,8 @@ public interface TermDataInterface {
     public abstract String getWordStem();
 
     public abstract boolean isWordStem();
+
+    public abstract boolean isInflected();
+
+    public abstract TermDataInterface getWordStemObject();
 }

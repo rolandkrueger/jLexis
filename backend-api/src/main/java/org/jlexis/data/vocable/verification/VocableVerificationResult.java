@@ -25,6 +25,8 @@ package org.jlexis.data.vocable.verification;
 import java.util.*;
 
 /**
+ * Represents the result of the evaluation for a given quiz answer.
+ *
  * @author Roland Krueger
  */
 public class VocableVerificationResult {

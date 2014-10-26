@@ -28,6 +28,8 @@ import org.jlexis.data.vocable.verification.VocableVerificationData;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import java.util.Objects;
+
 /**
  * @author Roland Krueger
  * @version $Id: UnmodifiableVocable.java 197 2009-12-14 07:27:08Z roland $
@@ -57,15 +59,15 @@ public final class UnmodifiableVocable extends Vocable {
     }
 
     private final class UnmodifiableUserInput implements UserInput {
-        private UserInput mData;
+        private UserInput data;
 
         public UnmodifiableUserInput(UserInput data) {
             if (data == null) throw new NullPointerException("Argument is null.");
-            mData = data;
+            this.data = data;
         }
 
         public final void addUserData(String identifier, String data) {
-            mData.addUserData(identifier, data);
+            this.data.addUserData(identifier, data);
         }
 
         @Deprecated
@@ -78,31 +80,31 @@ public final class UnmodifiableVocable extends Vocable {
         }
 
         public final String getHTMLVersion() {
-            return mData.getHTMLVersion();
+            return data.getHTMLVersion();
         }
 
         public final String getShortVersion() {
-            return mData.getShortVersion();
+            return data.getShortVersion();
         }
 
         public final TermDataInterface getUserData(String identifier) {
-            return new UnmodifiableTermData(mData.getUserData(identifier));
+            return new UnmodifiableTermData(data.getUserData(identifier));
         }
 
         public final String getUserInputIdentifier() {
-            return mData.getUserInputIdentifier();
+            return data.getUserInputIdentifier();
         }
 
         public final boolean isDataDefinedFor(String identifier) {
-            return mData.isDataDefinedFor(identifier);
+            return data.isDataDefinedFor(identifier);
         }
 
         public final boolean isEmpty() {
-            return mData.isEmpty();
+            return data.isEmpty();
         }
 
         public final boolean isTypeCorrect(UserInput other) {
-            return mData.isTypeCorrect(other);
+            return data.isTypeCorrect(other);
         }
 
         public final void replace(AbstractUserInput userInput) {
@@ -111,35 +113,34 @@ public final class UnmodifiableVocable extends Vocable {
 
         @Override
         public VocableVerificationData getQuizVerificationData() {
-            return new VocableVerificationData.UnmodifiableVocableVerificationData(mData.getQuizVerificationData());
+            return new VocableVerificationData.UnmodifiableVocableVerificationData(data.getQuizVerificationData());
         }
 
         @Override
         public String getComment() {
-            return mData.getComment();
+            return data.getComment();
         }
 
         @Override
         public String getExample() {
-            return mData.getExample();
+            return data.getExample();
         }
 
         @Override
         public void init() {
-            mData.init();
+            data.init();
         }
     }
 
-    private final class UnmodifiableTermData implements TermDataInterface {
-        private TermDataInterface mData;
+    private final static class UnmodifiableTermData implements TermDataInterface {
+        private TermDataInterface data;
 
         public UnmodifiableTermData(TermDataInterface data) {
-            if (data == null) throw new NullPointerException("Argument is null.");
-            mData = data;
+            this.data = Objects.requireNonNull(data);
         }
 
         public final String getNormalizedTerm() {
-            return mData.getNormalizedTerm();
+            return data.getNormalizedTerm();
         }
 
         public final void setNormalizedTerm(String normalizedTerm) {
@@ -147,15 +148,15 @@ public final class UnmodifiableVocable extends Vocable {
         }
 
         public final String getPurgedTerm() {
-            return mData.getPurgedTerm();
+            return data.getPurgedTerm();
         }
 
         public final String getResolvedTerm() {
-            return mData.getResolvedTerm();
+            return data.getResolvedTerm();
         }
 
         public final String getUserEnteredTerm() {
-            return mData.getUserEnteredTerm();
+            return data.getUserEnteredTerm();
         }
 
         public final void setUserEnteredTerm(String term) {
@@ -163,30 +164,35 @@ public final class UnmodifiableVocable extends Vocable {
         }
 
         public final String getWordStem() {
-            return mData.getWordStem();
+            return data.getWordStem();
         }
 
         public final boolean isEmpty() {
-            return mData.isEmpty();
+            return data.isEmpty();
         }
 
         public final boolean isWordStem() {
-            return mData.isWordStem();
+            return data.isWordStem();
+        }
+
+        @Override
+        public boolean isInflected() {
+            return data.isInflected();
+        }
+
+        @Override
+        public TermDataInterface getWordStemObject() {
+            return data.getWordStemObject();
         }
 
         @Override
         public final String toString() {
-            return mData.toString();
-        }
-
-        @Override
-        public VocableVerificationData getVerificationData() {
-            return mData.getVerificationData();
+            return data.toString();
         }
 
         @Override
         public String getResolvedAndPurgedTerm() {
-            return mData.getResolvedAndPurgedTerm();
+            return data.getResolvedAndPurgedTerm();
         }
     }
 }

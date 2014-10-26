@@ -24,7 +24,7 @@
 package org.jlexis.data.vocable.terms;
 
 public class InflectedTerm extends AbstractTermData {
-    private AbstractTermData mWordStem;
+    private AbstractTermData wordStem;
 
     public InflectedTerm(AbstractTermData stem) {
         if (stem == null)
@@ -32,14 +32,14 @@ public class InflectedTerm extends AbstractTermData {
         if (!stem.isWordStem())
             throw new IllegalArgumentException("Given argument is not a word stem.");
 
-        mWordStem = stem;
+        wordStem = stem;
     }
 
     @Override
     public String getResolvedTerm() {
-        if (mWordStem == null) return getUserEnteredTerm();
+        if (wordStem == null) return getUserEnteredTerm();
 
-        String result = normalizedTerm.replace(WORD_STEM_PLACEHOLDER, mWordStem.getWordStem());
+        String result = normalizedTerm.replace(WORD_STEM_PLACEHOLDER, wordStem.getWordStem());
         result = removeMarkerStrings(result);
         return result;
     }
@@ -49,8 +49,9 @@ public class InflectedTerm extends AbstractTermData {
         throw new UnsupportedOperationException("This is not a word stem.");
     }
 
-    public AbstractTermData getWordStemObject() {
-        return mWordStem;
+    @Override
+    public TermDataInterface getWordStemObject() {
+        return wordStem;
     }
 
     @Override

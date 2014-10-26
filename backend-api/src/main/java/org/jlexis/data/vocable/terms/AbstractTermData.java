@@ -102,43 +102,4 @@ public abstract class AbstractTermData implements TermDataInterface {
                 .add("user entered term", getUserEnteredTerm())
                 .toString();
     }
-
-//    public VocableVerificationData getVerificationData() {
-//        VocableVerificationData result = new VocableVerificationData();
-//        VocableVerificationData tmp = new VocableVerificationData();
-//
-//        tmp.tokenizeAndAddString(getNormalizedTerm());
-//        for (Set<String> mandatorySetWithNormalizedTerms : tmp.getMandatoryValuesWithOptions()) {
-//            Set<String> mandatorySet = new HashSet<String>();
-//            for (String value : mandatorySetWithNormalizedTerms) {
-//                // For every token which the user has entered, add its resolved form to the
-//                // verification data, so that the resolved term is also a valid answer
-//                AbstractTermData term;
-//                if (isInflected()) {
-//                    term = new InflectedTerm(getWordStemObject());
-//                } else {
-//                    term = new RegularTerm();
-//                }
-//                term.setNormalizedTerm(value);
-//                mandatorySet.add(term.getPurgedTerm());
-//
-//                RegularTerm regularTerm = new RegularTerm();
-//                regularTerm.setUserEnteredTerm(term.getResolvedTerm());
-//                mandatorySet.add(regularTerm.getPurgedTerm());
-//            }
-//            result.addMandatoryValueWithOptions(mandatorySet);
-//        }
-//
-//        return result;
-//    }
-
-    public abstract String getResolvedTerm();
-
-    public abstract String getWordStem();
-
-    public abstract boolean isWordStem();
-
-    public abstract boolean isInflected();
-
-    public abstract AbstractTermData getWordStemObject();
 }

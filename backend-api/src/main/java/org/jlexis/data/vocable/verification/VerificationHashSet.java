@@ -36,15 +36,14 @@ import java.util.regex.Pattern;
  * tried to be added, method {@link VerificationHashSet#add(String)} simply returns false and skips adding this value.
  *
  * @author Roland Krueger
- * @version $Id: VerificationHashSet.java 136 2009-10-02 18:20:53Z roland $
  */
 public class VerificationHashSet implements Set<String> {
-    private Map<String, Pattern> mData;
-    private String mSuffixToleranceChars;
+    private Map<String, Pattern> data;
+    private String suffixToleranceChars;
 
     public VerificationHashSet() {
-        mData = new HashMap<String, Pattern>();
-        mSuffixToleranceChars = "";
+        data = new HashMap<String, Pattern>();
+        suffixToleranceChars = "";
     }
 
     public VerificationHashSet(Collection<String> c) {
@@ -69,7 +68,7 @@ public class VerificationHashSet implements Set<String> {
         }
         buf.append("]?");
 
-        mSuffixToleranceChars = buf.toString();
+        this.suffixToleranceChars = buf.toString();
     }
 
     @Override
@@ -80,16 +79,16 @@ public class VerificationHashSet implements Set<String> {
         if (value.equals("")) return false;
         value = value.replaceAll("\\s*(\\W)\\s*", "\\\\s*$1\\\\s*");
         value = StringUtils.escapeRegexSpecialChars(value);
-        value = String.format("%s%s", value.replace("\\s\\*", "\\s*"), mSuffixToleranceChars);
+        value = String.format("%s%s", value.replace("\\s\\*", "\\s*"), suffixToleranceChars);
 
-        mData.put(original, Pattern.compile(value));
+        data.put(original, Pattern.compile(value));
         return true;
     }
 
     private String getKeyForValue(String value) {
         value = value.trim();
-        for (String s : mData.keySet()) {
-            Matcher matcher = mData.get(s).matcher(value);
+        for (String s : data.keySet()) {
+            Matcher matcher = data.get(s).matcher(value);
             if (matcher.matches()) return s;
         }
         return null;
@@ -105,7 +104,7 @@ public class VerificationHashSet implements Set<String> {
 
     @Override
     public void clear() {
-        mData.clear();
+        data.clear();
     }
 
     @Override
@@ -124,19 +123,19 @@ public class VerificationHashSet implements Set<String> {
 
     @Override
     public boolean isEmpty() {
-        return mData.isEmpty();
+        return data.isEmpty();
     }
 
     @Override
     public Iterator<String> iterator() {
-        return mData.keySet().iterator();
+        return data.keySet().iterator();
     }
 
     @Override
     public boolean remove(Object o) {
         String key = getKeyForValue(o.toString());
         if (key == null) return false;
-        mData.remove(key);
+        data.remove(key);
         return true;
     }
 
@@ -156,31 +155,31 @@ public class VerificationHashSet implements Set<String> {
 
     @Override
     public int size() {
-        return mData.size();
+        return data.size();
     }
 
     @Override
     public Object[] toArray() {
-        return mData.keySet().toArray();
+        return data.keySet().toArray();
     }
 
     @Override
     public <T> T[] toArray(T[] a) {
-        return mData.keySet().toArray(a);
+        return data.keySet().toArray(a);
     }
 
     @Override
     public String toString() {
-        return mData.keySet().toString();
+        return data.keySet().toString();
     }
 
     @Override
     public boolean equals(Object o) {
-        return mData.keySet().equals(o);
+        return data.keySet().equals(o);
     }
 
     @Override
     public int hashCode() {
-        return mData.keySet().hashCode();
+        return data.keySet().hashCode();
     }
 }

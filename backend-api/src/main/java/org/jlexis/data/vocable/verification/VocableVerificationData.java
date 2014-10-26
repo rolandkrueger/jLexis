@@ -55,7 +55,7 @@ public class VocableVerificationData {
         alternatives = new LinkedList<>();
     }
 
-    public VocableVerificationData(AbstractTermData termData) {
+    public VocableVerificationData(TermDataInterface termData) {
         this();
         VocableVerificationData tmp = new VocableVerificationData();
 
