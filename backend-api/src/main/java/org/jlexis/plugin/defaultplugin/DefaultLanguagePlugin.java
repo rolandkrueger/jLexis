@@ -43,7 +43,7 @@ public class DefaultLanguagePlugin extends LanguagePlugin {
     public AbstractWordType getDefaultWordType() {
         assert getWordTypes().size() > 0;
         // return the word type that is added to the set of registered word types by default when no
-        // other word types have explicitely been registered
+        // other word types have explicitly been registered
         return getWordTypes().iterator().next();
     }
 

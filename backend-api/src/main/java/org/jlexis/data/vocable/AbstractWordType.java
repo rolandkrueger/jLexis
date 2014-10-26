@@ -26,6 +26,8 @@ package org.jlexis.data.vocable;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 
+import java.util.Objects;
+
 public abstract class AbstractWordType {
     private String name;
     private String identifier;
@@ -36,7 +38,7 @@ public abstract class AbstractWordType {
             throw new IllegalArgumentException("Identifier must not be null or the empty string.");
         }
 
-        this.name = Preconditions.checkNotNull(name);
+        this.name = Objects.requireNonNull(name);
         this.identifier = identifier;
         userInputPrototype = Preconditions.checkNotNull(userInputForThisWordType);
     }
