@@ -89,7 +89,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput
   }
 
   @Override
-  protected String getHTMLVersionImpl ()
+  public String getHTMLVersion ()
   {
     TextFormatter formatter = new TextFormatter (new HTMLTextFormatter());
     if (isDataDefinedFor (NOUN_SINGULAR_TERM_KEY_BE))
@@ -176,7 +176,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput
   }
 
   @Override
-  protected String getShortVersionImpl ()
+  public String getShortVersion ()
   {
     StringBuilder buf = new StringBuilder ();
     buf.append (getPurgedUserData (NOUN_SINGULAR_TERM_KEY_BE));

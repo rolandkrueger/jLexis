@@ -48,7 +48,7 @@ public abstract class AbstractStandardUserInput extends AbstractUserInput {
     }
 
     @Override
-    protected final String getCommentImpl() {
+    public final String getComment() {
         return mStandardUserInputDataHandler.getComment();
     }
 
@@ -57,7 +57,7 @@ public abstract class AbstractStandardUserInput extends AbstractUserInput {
     }
 
     @Override
-    protected final String getExampleImpl() {
+    public final String getExample() {
         return mStandardUserInputDataHandler.getExample();
     }
 

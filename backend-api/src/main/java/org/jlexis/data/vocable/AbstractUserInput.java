@@ -143,34 +143,6 @@ public abstract class AbstractUserInput implements UserInput {
     }
 
     @Override
-    public final String getShortVersion() {
-        return getShortVersionImpl();
-    }
-
-    @Override
-    public final String getHTMLVersion() {
-        return getHTMLVersionImpl();
-    }
-
-    @Override
-    public final String getComment() {
-        return getCommentImpl();
-    }
-
-    @Override
-    public final String getExample() {
-        return getExampleImpl();
-    }
-
-    protected abstract String getShortVersionImpl();
-
-    protected abstract String getHTMLVersionImpl();
-
-    protected abstract String getCommentImpl();
-
-    protected abstract String getExampleImpl();
-
-    @Override
     public abstract boolean isEmpty();
 
     @Override

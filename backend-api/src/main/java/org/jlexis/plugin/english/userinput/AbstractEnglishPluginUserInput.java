@@ -111,13 +111,13 @@ public abstract class AbstractEnglishPluginUserInput extends AbstractUserInput
   }
   
   @Override
-  protected String getCommentImpl ()
+  public String getComment ()
   {
     return mStandardInputBE.getComment ();
   }
 
   @Override
-  protected String getExampleImpl ()
+  public String getExample ()
   {
     return mStandardInputBE.getExample ();
   }
