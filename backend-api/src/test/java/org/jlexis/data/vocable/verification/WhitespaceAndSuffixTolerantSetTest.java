@@ -33,57 +33,57 @@ import static junit.framework.Assert.*;
  * @author Roland Krueger
  */
 public class WhitespaceAndSuffixTolerantSetTest {
-    private WhitespaceAndSuffixTolerantSet mTestObj;
+    private WhitespaceAndSuffixTolerantSet tolerantSet;
 
     @Before
     public void setUp() {
-        mTestObj = new WhitespaceAndSuffixTolerantSet();
+        tolerantSet = new WhitespaceAndSuffixTolerantSet();
     }
 
     @Test
     public void testSuffixTolerance() {
         char[] chars = new char[]{'#', '+', '[', '*', '.', ']', '?'};
-        mTestObj = new WhitespaceAndSuffixTolerantSet(chars);
-        mTestObj.addAll(new ArrayList<String>(Arrays.asList(new String[]{
+        tolerantSet = new WhitespaceAndSuffixTolerantSet(chars);
+        tolerantSet.addAll(new ArrayList<String>(Arrays.asList(new String[]{
                 "test", "data", "string?"
         })));
 
-        assertTrue(mTestObj.contains("test"));
-        assertTrue(mTestObj.contains("data#"));
-        assertTrue(mTestObj.contains("test]"));
-        assertTrue(mTestObj.contains("test?"));
+        assertTrue(tolerantSet.contains("test"));
+        assertTrue(tolerantSet.contains("data#"));
+        assertTrue(tolerantSet.contains("test]"));
+        assertTrue(tolerantSet.contains("test?"));
 
-        assertFalse(mTestObj.contains("*test"));
-        assertFalse(mTestObj.contains("test'"));
-        assertFalse(mTestObj.contains("test-"));
+        assertFalse(tolerantSet.contains("*test"));
+        assertFalse(tolerantSet.contains("test'"));
+        assertFalse(tolerantSet.contains("test-"));
     }
 
     @Test
     public void testContains() {
-        mTestObj.addAll(new ArrayList<String>(Arrays.asList(new String[]{
+        tolerantSet.addAll(new ArrayList<String>(Arrays.asList(new String[]{
                 "xxx.yyy", "wo? hier !", "string?"
         })));
-        assertTrue(mTestObj.contains("xxx.yyy"));
-        assertTrue(mTestObj.contains("xxx .  yyy"));
-        assertTrue(mTestObj.contains("xxx\t.\tyyy"));
-        assertTrue(mTestObj.contains("wo   ?hier!"));
-        assertTrue(mTestObj.contains("wo?hier!"));
-        assertTrue(mTestObj.contains("wo\t?   hier  ! \t"));
-        assertTrue(mTestObj.contains("string        ?            "));
+        assertTrue(tolerantSet.contains("xxx.yyy"));
+        assertTrue(tolerantSet.contains("xxx .  yyy"));
+        assertTrue(tolerantSet.contains("xxx\t.\tyyy"));
+        assertTrue(tolerantSet.contains("wo   ?hier!"));
+        assertTrue(tolerantSet.contains("wo?hier!"));
+        assertTrue(tolerantSet.contains("wo\t?   hier  ! \t"));
+        assertTrue(tolerantSet.contains("string        ?            "));
     }
 
     @Test
     public void testRemove() {
-        mTestObj.addAll(new ArrayList<String>(Arrays.asList(new String[]{
+        tolerantSet.addAll(new ArrayList<String>(Arrays.asList(new String[]{
                 "xxx.yyy", "wo? hier !", "string?", "test"
         })));
 
-        assertEquals(4, mTestObj.size());
-        mTestObj.remove("test     ");
-        mTestObj.remove("xxx .   \t yyy ");
-        mTestObj.remove("     wo ?hier!  \t");
-        mTestObj.remove("string  ?");
-        assertTrue(mTestObj.isEmpty());
+        assertEquals(4, tolerantSet.size());
+        tolerantSet.remove("test     ");
+        tolerantSet.remove("xxx .   \t yyy ");
+        tolerantSet.remove("     wo ?hier!  \t");
+        tolerantSet.remove("string  ?");
+        assertTrue(tolerantSet.isEmpty());
     }
 
     @Test
@@ -91,9 +91,9 @@ public class WhitespaceAndSuffixTolerantSetTest {
         List<String> list = new ArrayList<String>(Arrays.asList(new String[]{
                 "_test_", "da.ta", "string?"
         }));
-        mTestObj.addAll(list);
+        tolerantSet.addAll(list);
         Set<String> compare = new HashSet<String>();
-        for (String s : mTestObj) {
+        for (String s : tolerantSet) {
             compare.add(s);
         }
         assertTrue(compare.containsAll(list));
@@ -102,8 +102,8 @@ public class WhitespaceAndSuffixTolerantSetTest {
 
     @Test
     public void testAdd() {
-        mTestObj.add("test ? data string.");
-        assertTrue(mTestObj.contains("test ? data string."));
+        tolerantSet.add("test ? data string.");
+        assertTrue(tolerantSet.contains("test ? data string."));
     }
 
     @Test
@@ -111,19 +111,19 @@ public class WhitespaceAndSuffixTolerantSetTest {
         List<String> setToAdd = new ArrayList<String>(Arrays.asList(new String[]{
                 "test", "data", "string?"
         }));
-        mTestObj.addAll(setToAdd);
-        assertTrue(mTestObj.contains("data"));
-        assertTrue(mTestObj.contains("string?"));
-        assertTrue(mTestObj.contains("test"));
+        tolerantSet.addAll(setToAdd);
+        assertTrue(tolerantSet.contains("data"));
+        assertTrue(tolerantSet.contains("string?"));
+        assertTrue(tolerantSet.contains("test"));
     }
 
     @Test
     public void testClear() {
-        mTestObj.addAll(new ArrayList<String>(Arrays.asList(new String[]{
+        tolerantSet.addAll(new ArrayList<String>(Arrays.asList(new String[]{
                 "test", "data", "string?"
         })));
-        assertEquals(3, mTestObj.size());
-        mTestObj.clear();
-        assertEquals(0, mTestObj.size());
+        assertEquals(3, tolerantSet.size());
+        tolerantSet.clear();
+        assertEquals(0, tolerantSet.size());
     }
 }
