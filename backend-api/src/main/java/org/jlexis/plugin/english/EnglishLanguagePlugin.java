@@ -28,10 +28,6 @@ import org.jlexis.data.vocable.AbstractWordType;
 import org.jlexis.data.vocable.WordTypeEnum;
 import org.jlexis.plugin.LanguagePlugin;
 import org.jlexis.plugin.PluginIdentifier;
-import org.jlexis.plugin.english.wordtypes.EnglishAdjectiveWordType;
-import org.jlexis.plugin.english.wordtypes.EnglishDefaultWordType;
-import org.jlexis.plugin.english.wordtypes.EnglishNounWordType;
-import org.jlexis.plugin.english.wordtypes.EnglishVerbWordType;
 import org.jlexis.quiz.data.AbstractQuizType;
 
 import java.util.*;
@@ -93,10 +89,10 @@ public class EnglishLanguagePlugin extends LanguagePlugin {
 //            // TODO: error handling
 //            e.printStackTrace();
 //        }
-        noun = new EnglishNounWordType(this);
-        adjective = new EnglishAdjectiveWordType(this);
-        verb = new EnglishVerbWordType(this);
-        defaultWordType = new EnglishDefaultWordType();
+//        noun = new EnglishNounWordType(this);
+//        adjective = new EnglishAdjectiveWordType(this);
+//        verb = new EnglishVerbWordType(this);
+//        defaultWordType = new EnglishDefaultWordType();
         registerWordType(defaultWordType);
         registerWordType(noun);
         registerWordType(adjective);

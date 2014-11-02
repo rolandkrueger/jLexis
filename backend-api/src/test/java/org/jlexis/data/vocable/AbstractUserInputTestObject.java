@@ -29,7 +29,6 @@ import org.jlexis.data.vocable.verification.VocableVerificationData;
 
 /**
  * @author Roland Krueger
- * @version $Id: $
  */
 public class AbstractUserInputTestObject extends AbstractUserInput {
     public int getCommentCalled = 0;
@@ -54,19 +53,19 @@ public class AbstractUserInputTestObject extends AbstractUserInput {
     }
 
     @Override
-    protected String getCommentImpl() {
+    public String getComment() {
         getCommentCalled++;
         return "comment";
     }
 
     @Override
-    protected String getExampleImpl() {
+    public String getExample() {
         getExampleCalled++;
         return "example";
     }
 
     @Override
-    protected String getHTMLVersionImpl() {
+    public String getHTMLVersion() {
         getHTMLVersionCalled++;
         return "HTML";
     }
@@ -77,7 +76,7 @@ public class AbstractUserInputTestObject extends AbstractUserInput {
     }
 
     @Override
-    protected String getShortVersionImpl() {
+    public String getShortVersion() {
         getShortVersionCalled++;
         return "short version";
     }

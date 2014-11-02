@@ -75,7 +75,7 @@ public class RegularTermTest extends AbstractTermDataTest {
     public void testGetVerificationData() {
         String testData = "a, b; 1, 2, 3;";
         mTestObj.setUserEnteredTerm(testData);
-        VocableVerificationData verificationData = mTestObj.getVerificationData();
+        VocableVerificationData verificationData = new VocableVerificationData(mTestObj);
         assertEquals(2, verificationData.getMandatoryValuesWithOptions().size());
         assertEquals(5, verificationData.getAllTokens().size());
         Set<String> set1 = new HashSet<String>();

@@ -74,7 +74,7 @@ public class WordStemTermTest extends AbstractTermDataTest {
     public void testGetVerificationData() {
         String testData = "test|term; 1, 2, 3;";
         mTestObj.setUserEnteredTerm(testData);
-        VocableVerificationData verificationData = mTestObj.getVerificationData();
+        VocableVerificationData verificationData = new VocableVerificationData(mTestObj);
         assertEquals(2, verificationData.getMandatoryValuesWithOptions().size());
         assertEquals(4, verificationData.getAllTokens().size());
         Set<String> set1 = new HashSet<String>();
@@ -90,7 +90,7 @@ public class WordStemTermTest extends AbstractTermDataTest {
 
         testData = "this is <the> testdata";
         mTestObj.setUserEnteredTerm(testData);
-        verificationData = mTestObj.getVerificationData();
+        verificationData = new VocableVerificationData(mTestObj);
         assertEquals(1, verificationData.getMandatoryValuesWithOptions().size());
         set1.clear();
         set1.add("this is the testdata");

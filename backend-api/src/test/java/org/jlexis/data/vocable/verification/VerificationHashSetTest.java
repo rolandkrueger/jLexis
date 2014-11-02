@@ -31,7 +31,6 @@ import static junit.framework.Assert.*;
 
 /**
  * @author Roland Krueger
- * @version $Id: VerificationHashSetTest.java 204 2009-12-17 15:20:16Z roland $
  */
 public class VerificationHashSetTest {
     private VerificationHashSet mTestObj;

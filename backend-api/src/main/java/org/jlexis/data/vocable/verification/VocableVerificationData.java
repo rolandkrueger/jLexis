@@ -261,18 +261,16 @@ public class VocableVerificationData {
     }
 
     public void addOptions(Collection<String> options) {
-        if (options == null)
-            throw new NullPointerException("Argument is null.");
-
+        Objects.requireNonNull(options, "options collection to be added is null");
         options.forEach(this::addOption);
     }
 
     public void addMandatoryValue(String mandatoryValue) {
-        if (allIsOptional)
+        if (allIsOptional) {
             throw new IllegalStateException("Cannot add mandatory values. This verification data is all optional. " +
                     " Use addOption() instead.");
-        if (mandatoryValue == null)
-            throw new NullPointerException("Argument is null.");
+        }
+        Objects.requireNonNull(mandatoryValue, "given mandatory value is null");
 
         if (contains(mandatoryValue))
             return;
@@ -286,9 +284,10 @@ public class VocableVerificationData {
     }
 
     public void addMandatoryValueWithOptions(String mandatoryValue, String[] options) {
-        if (allIsOptional)
+        if (allIsOptional) {
             throw new IllegalStateException("Cannot add mandatory values. This verification data is all optional. " +
                     " Use addOption() instead.");
+        }
 
         addMandatoryValueWithOptions(mandatoryValue, Arrays.asList(options));
     }
