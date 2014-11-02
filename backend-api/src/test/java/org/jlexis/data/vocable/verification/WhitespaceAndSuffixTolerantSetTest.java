@@ -32,18 +32,18 @@ import static junit.framework.Assert.*;
 /**
  * @author Roland Krueger
  */
-public class VerificationHashSetTest {
-    private VerificationHashSet mTestObj;
+public class WhitespaceAndSuffixTolerantSetTest {
+    private WhitespaceAndSuffixTolerantSet mTestObj;
 
     @Before
     public void setUp() {
-        mTestObj = new VerificationHashSet();
+        mTestObj = new WhitespaceAndSuffixTolerantSet();
     }
 
     @Test
     public void testSuffixTolerance() {
         char[] chars = new char[]{'#', '+', '[', '*', '.', ']', '?'};
-        mTestObj = new VerificationHashSet(chars);
+        mTestObj = new WhitespaceAndSuffixTolerantSet(chars);
         mTestObj.addAll(new ArrayList<String>(Arrays.asList(new String[]{
                 "test", "data", "string?"
         })));

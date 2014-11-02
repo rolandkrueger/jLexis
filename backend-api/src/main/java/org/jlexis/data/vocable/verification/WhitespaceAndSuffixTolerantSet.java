@@ -32,26 +32,26 @@ import java.util.regex.Pattern;
  * TODO: documentation
  * @author Roland Krueger
  */
-public class VerificationHashSet implements Set<String> {
+public class WhitespaceAndSuffixTolerantSet implements Set<String> {
     private Map<String, Pattern> data;
     private String suffixToleranceChars;
 
-    public VerificationHashSet() {
+    public WhitespaceAndSuffixTolerantSet() {
         data = new HashMap<String, Pattern>();
         suffixToleranceChars = "";
     }
 
-    public VerificationHashSet(Collection<String> c) {
+    public WhitespaceAndSuffixTolerantSet(Collection<String> c) {
         this();
         addAll(c);
     }
 
-    public VerificationHashSet(Collection<String> c, char[] suffixToleranceChars) {
+    public WhitespaceAndSuffixTolerantSet(Collection<String> c, char[] suffixToleranceChars) {
         this(suffixToleranceChars);
         addAll(c);
     }
 
-    public VerificationHashSet(char[] suffixToleranceChars) {
+    public WhitespaceAndSuffixTolerantSet(char[] suffixToleranceChars) {
         this();
 
         StringBuilder buf = new StringBuilder();

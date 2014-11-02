@@ -131,7 +131,7 @@ public class VocableVerificationData {
             normalizeAbbreviations(forLanguage);
             comparisonValue.normalizeAbbreviations(forLanguage);
         }
-        Set<String> inputSet = new VerificationHashSet(comparisonValue.getAllTokens());
+        Set<String> inputSet = new WhitespaceAndSuffixTolerantSet(comparisonValue.getAllTokens());
 
         resolveAllParentheses();
         if (optionalValues != null) optionalValues.resolveAllParentheses();
@@ -252,7 +252,7 @@ public class VocableVerificationData {
         if (data.size() > 0) {
             set = data.iterator().next();
         } else {
-            set = new VerificationHashSet();
+            set = new WhitespaceAndSuffixTolerantSet();
             data.add(set);
         }
 
@@ -275,7 +275,7 @@ public class VocableVerificationData {
         if (contains(mandatoryValue))
             return;
 
-        Set<String> set = new VerificationHashSet();
+        Set<String> set = new WhitespaceAndSuffixTolerantSet();
 //    set.addAll (resolveParentheses (mandatoryValue));
         set.add(mandatoryValue);
 
@@ -299,7 +299,7 @@ public class VocableVerificationData {
         if (options == null)
             throw new NullPointerException("Argument is null.");
 
-        Set<String> newSet = new VerificationHashSet();
+        Set<String> newSet = new WhitespaceAndSuffixTolerantSet();
         for (String option : options) {
 //      newSet.addAll (resolveParentheses (option));
             newSet.add(option);
@@ -317,7 +317,7 @@ public class VocableVerificationData {
 
         Set<String> set = getAlternativesForMandatoryValue(mandatoryValue);
         if (set == null) {
-            Set<String> newSet = new VerificationHashSet();
+            Set<String> newSet = new WhitespaceAndSuffixTolerantSet();
             for (String option : options) {
 //        newSet.addAll (resolveParentheses (option));
                 newSet.add(option);
@@ -346,7 +346,7 @@ public class VocableVerificationData {
             if (mandatoryToken.trim().equals("")) continue;
             mandatoryToken = normalizeWhitespaces(mandatoryToken);
             String[] optionalTokens = mandatoryToken.split(ConfigurationManager.getInstance().getOptionalTokenSplitChar());
-            Set<String> set = new VerificationHashSet();
+            Set<String> set = new WhitespaceAndSuffixTolerantSet();
             for (String token : optionalTokens) {
                 if (token.trim().equals("")) continue;
                 token = normalizeWhitespaces(token);
@@ -363,7 +363,7 @@ public class VocableVerificationData {
     }
 
     private Set<String> resolveParentheses(String value) {
-        Set<String> result = new VerificationHashSet();
+        Set<String> result = new WhitespaceAndSuffixTolerantSet();
         result.add(value);
 
         int start;
@@ -447,7 +447,7 @@ public class VocableVerificationData {
     }
 
     private Set<String> getAllTokensInternal() {
-        Set<String> result = new VerificationHashSet();
+        Set<String> result = new WhitespaceAndSuffixTolerantSet();
 
         for (Set<String> set : data) {
             result.addAll(set);
