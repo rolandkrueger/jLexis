@@ -22,7 +22,6 @@
  */
 package org.jlexis.data.vocable.verification;
 
-
 import org.jlexis.util.StringUtils;
 
 import java.util.*;
@@ -30,11 +29,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * TODO: update documentation
- * <p/>
- * Subclass of {@link java.util.HashSet} which will not accept the empty string as input value. If the empty string is
- * tried to be added, method {@link VerificationHashSet#add(String)} simply returns false and skips adding this value.
- *
+ * TODO: documentation
  * @author Roland Krueger
  */
 public class VerificationHashSet implements Set<String> {
