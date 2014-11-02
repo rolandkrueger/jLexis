@@ -27,12 +27,13 @@ import org.junit.Test;
 
 import java.util.*;
 
-import static junit.framework.Assert.*;
-import static org.hamcrest.CoreMatchers.hasItem;
+import static junit.framework.Assert.assertTrue;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
+import static org.hamcrest.core.IsCollectionContaining.hasItem;
 
 /**
  * @author Roland Krueger
@@ -43,6 +44,13 @@ public class WhitespaceAndSuffixTolerantSetTest {
     @Before
     public void setUp() {
         tolerantSet = new WhitespaceAndSuffixTolerantSet('#');
+    }
+
+    @Test
+    public void test_constructor_with_collection_argument() {
+        tolerantSet = new WhitespaceAndSuffixTolerantSet(Arrays.asList("test", "value"), '#', '+');
+        assertThat(tolerantSet, hasSize(2));
+        assertSetContainsAll("test#", "value+");
     }
 
     @Test
@@ -84,7 +92,7 @@ public class WhitespaceAndSuffixTolerantSetTest {
         tolerantSet.add(testValue);
         assertThat("set doesn't ignore whitespace",
                 tolerantSet.contains("test value with a lot of whitespace"), is(true));
-        assertThat("set doesn't keep original input", tolerantSet, hasItem(testValue));
+        assertThat("set doesn't keep original input", tolerantSet, hasItem(equalTo(testValue)));
     }
 
     @Test
@@ -126,16 +134,29 @@ public class WhitespaceAndSuffixTolerantSetTest {
 
     @Test
     public void test_remove() {
-        tolerantSet.addAll(new ArrayList<String>(Arrays.asList(new String[]{
-                "xxx.yyy", "wo? hier !", "string?", "test"
-        })));
+        tolerantSet.addAll(Arrays.asList("xxx.yyy", "wo? hier !", "string?", "test"));
 
-        assertEquals(4, tolerantSet.size());
-        tolerantSet.remove("test     ");
-        tolerantSet.remove("xxx .   \t yyy ");
-        tolerantSet.remove("     wo ?hier!  \t");
-        tolerantSet.remove("string  ?");
-        assertTrue(tolerantSet.isEmpty());
+        assertThat(tolerantSet, hasSize(4));
+        assertThat(tolerantSet.remove("test#"), is(false));
+        assertThat(tolerantSet.remove("not in set"), is(false));
+
+        assertThat(tolerantSet.remove("test     "), is(true));
+        assertThat(tolerantSet.remove("xxx .   \t yyy "), is(true));
+        assertThat(tolerantSet.remove("     wo ?hier!  \t"), is(true));
+        assertThat(tolerantSet.remove("string  ?"), is(true));
+        assertThat(tolerantSet, is(empty()));
+
+        assertThat(tolerantSet.remove(null), is(false));
+        assertThat(tolerantSet.remove(new Object()), is(false));
+    }
+
+    @Test
+    public void test_removeAll() {
+        tolerantSet.addAll(Arrays.asList("test value", "test"));
+        assertThat(tolerantSet.removeAll(Arrays.asList("not", "in", "set")), is(false));
+
+        assertThat(tolerantSet.removeAll(Arrays.asList("  test  value  ", "test ")), is(true));
+        assertThat(tolerantSet, is(empty()));
     }
 
     @Test
@@ -178,9 +199,28 @@ public class WhitespaceAndSuffixTolerantSetTest {
         assertThat(tolerantSet, is(empty()));
     }
 
+    @Test
+    public void test_contains_only_works_for_non_null_strings() {
+        tolerantSet.add("test value");
+
+        assertThat(tolerantSet.contains(null), is(false));
+        assertThat(tolerantSet.contains(new Object()), is(false));
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void test_retainAll_not_supported() {
+        tolerantSet.retainAll(Collections.emptyList());
+    }
+
+    @Test
+    public void test_contains_all() {
+        tolerantSet.add("test value");
+        assertThat(tolerantSet.containsAll(Arrays.asList("test value", "   test   value   ", "test value#")), is(true));
+    }
+
     private void assertSetContainsAll(String... values) {
         for (String value : values) {
-            assertThat("set doesn't contain value " + value,
+            assertThat("set doesn't contain value '" + value + "'",
                     tolerantSet.contains(value), is(true));
         }
     }

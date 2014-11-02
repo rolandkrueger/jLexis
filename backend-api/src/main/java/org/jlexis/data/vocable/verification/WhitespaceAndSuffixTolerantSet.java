@@ -22,40 +22,41 @@
  */
 package org.jlexis.data.vocable.verification;
 
-import org.jlexis.util.StringUtils;
-
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * TODO: documentation
+ *
  * @author Roland Krueger
  */
 public class WhitespaceAndSuffixTolerantSet implements Set<String> {
-    private Map<String, Pattern> data;
-    private String suffixToleranceChars;
+    /**
+     * Internal data store that maps the normalized user input on the original user input. User data is normalized by
+     * removing leading and trailing whitespace from the string and replacing all whitespace characters with a single
+     * blank character.
+     */
+    private Map<String, String> data;
+    private Pattern removeSuffixPattern;
+    private StringNormalizer normalizer;
 
     public WhitespaceAndSuffixTolerantSet() {
-        data = new HashMap<String, Pattern>();
-        suffixToleranceChars = "";
+        data = new HashMap<String, String>();
+        normalizer = new StringNormalizer();
+        removeSuffixPattern = Pattern.compile("\\s*(.*)\\s*");
     }
 
-    public WhitespaceAndSuffixTolerantSet(Collection<String> c) {
-        this();
-        addAll(c);
-    }
-
-    public WhitespaceAndSuffixTolerantSet(Collection<String> c, char[] suffixToleranceChars) {
+    public WhitespaceAndSuffixTolerantSet(Collection<String> c, char... suffixToleranceChars) {
         this(suffixToleranceChars);
         addAll(c);
     }
 
-    public WhitespaceAndSuffixTolerantSet(char ... suffixToleranceChars) {
+    public WhitespaceAndSuffixTolerantSet(char... suffixToleranceChars) {
         this();
 
         StringBuilder buf = new StringBuilder();
-        buf.append("[");
+        buf.append("\\s*(.*?)\\s*[");
         for (char c : suffixToleranceChars) {
             if (c == '[') buf.append("\\[");
             else if (c == ']') buf.append("\\]");
@@ -63,38 +64,22 @@ public class WhitespaceAndSuffixTolerantSet implements Set<String> {
         }
         buf.append("]?");
 
-        this.suffixToleranceChars = buf.toString();
+        this.removeSuffixPattern = Pattern.compile(buf.toString());
     }
 
     @Override
     public boolean add(String value) {
-        value = value.trim();
-        value = value.replaceAll("\\s+", " ");
-        String original = value;
-        if (value.equals("")) return false;
-        value = value.replaceAll("\\s*(\\W)\\s*", "\\\\s*$1\\\\s*");
-        value = StringUtils.escapeRegexSpecialChars(value);
-        value = String.format("%s%s", value.replace("\\s\\*", "\\s*"), suffixToleranceChars);
-
-        data.put(original, Pattern.compile(value));
+        data.put(normalizer.normalize(value), value);
         return true;
-    }
-
-    private String getKeyForValue(String value) {
-        value = value.trim();
-        for (String s : data.keySet()) {
-            Matcher matcher = data.get(s).matcher(value);
-            if (matcher.matches()) return s;
-        }
-        return null;
     }
 
     @Override
     public boolean addAll(Collection<? extends String> c) {
+        boolean result = false;
         for (String s : c) {
-            add(s);
+            result |= add(s);
         }
-        return true;
+        return result;
     }
 
     @Override
@@ -103,8 +88,18 @@ public class WhitespaceAndSuffixTolerantSet implements Set<String> {
     }
 
     @Override
-    public boolean contains(Object o) {
-        return getKeyForValue(o.toString()) != null;
+    public boolean contains(Object object) {
+        if (object == null || !(object instanceof String)) {
+            return false;
+        }
+
+        String normalizedValue = normalizer.normalize((String) object);
+        if (data.containsKey(normalizedValue)) {
+            return true;
+        }
+
+        Matcher matcher = removeSuffixPattern.matcher(normalizedValue);
+        return matcher.matches() && data.containsKey(matcher.group(1));
     }
 
     @Override
@@ -123,22 +118,22 @@ public class WhitespaceAndSuffixTolerantSet implements Set<String> {
 
     @Override
     public Iterator<String> iterator() {
-        return data.keySet().iterator();
+        return data.values().iterator();
     }
 
     @Override
     public boolean remove(Object o) {
-        String key = getKeyForValue(o.toString());
-        if (key == null) return false;
-        data.remove(key);
-        return true;
+        if (o == null || !(o instanceof String)) {
+            return false;
+        }
+        return data.remove(normalizer.normalize((String) o)) != null;
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        boolean result = true;
+        boolean result = false;
         for (Object o : c) {
-            result &= remove(o);
+            result |= remove(o);
         }
         return result;
     }
@@ -176,5 +171,21 @@ public class WhitespaceAndSuffixTolerantSet implements Set<String> {
     @Override
     public int hashCode() {
         return data.keySet().hashCode();
+    }
+
+    public static class StringNormalizer {
+        /**
+         * Normalizes a String by performing the following operations on it:
+         * <ul>
+         * <li>remove all leading and trailing whitespace</li>
+         * <li>replace all whitespaces with a single blank</li>
+         * <li>remove all whitespace before and after punctuation characters</li>
+         * </ul>
+         * @param value input value, must not be null
+         * @return normalized value
+         */
+        public String normalize(String value) {
+            return value.trim().replaceAll("\\s+", " ").replaceAll("\\s*(\\W+?)\\s*", "$1");
+        }
     }
 }
