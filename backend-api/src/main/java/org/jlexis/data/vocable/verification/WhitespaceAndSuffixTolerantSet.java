@@ -51,7 +51,7 @@ public class WhitespaceAndSuffixTolerantSet implements Set<String> {
         addAll(c);
     }
 
-    public WhitespaceAndSuffixTolerantSet(char[] suffixToleranceChars) {
+    public WhitespaceAndSuffixTolerantSet(char ... suffixToleranceChars) {
         this();
 
         StringBuilder buf = new StringBuilder();
