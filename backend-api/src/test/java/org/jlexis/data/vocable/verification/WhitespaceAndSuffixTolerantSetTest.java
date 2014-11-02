@@ -49,9 +49,6 @@ public class WhitespaceAndSuffixTolerantSetTest {
     public void test_when_no_suffix_defined_then_set_doesnt_tolerate_suffix_chars() {
         tolerantSet = new WhitespaceAndSuffixTolerantSet();
         tolerantSet.add("test value");
-        // surplus whitespace is tolerated
-        assertThat("set doesn't tolerate surplus whitespace",
-                tolerantSet.contains("test      value"), is(true));
         // an additional suffix '#' is not tolerated since no tolerated suffix characters have been provided
         assertThat("set incorrectly tolerates redundant suffix character although no such character was configured",
                 tolerantSet.contains("test value#"), is(false));
@@ -59,17 +56,7 @@ public class WhitespaceAndSuffixTolerantSetTest {
 
     @Test
     public void test_only_single_character_suffixes_are_tolerated() {
-        // tolerate characters #, +, and * as single-character suffix
-        tolerantSet = new WhitespaceAndSuffixTolerantSet('#', '+', '*');
         tolerantSet.add("test value");
-        assertThat("set doesn't tolerate redundant suffixes",
-                tolerantSet.containsAll(
-                        Arrays.asList(
-                                "test value",
-                                "test value*",
-                                "test value#",
-                                "test value+")),
-                is(true));
         assertThat("set incorrectly tolerates multi-character suffixes",
                 tolerantSet.contains("test value##"), is(false));
     }
@@ -138,7 +125,7 @@ public class WhitespaceAndSuffixTolerantSetTest {
     }
 
     @Test
-    public void testRemove() {
+    public void test_remove() {
         tolerantSet.addAll(new ArrayList<String>(Arrays.asList(new String[]{
                 "xxx.yyy", "wo? hier !", "string?", "test"
         })));
@@ -152,7 +139,7 @@ public class WhitespaceAndSuffixTolerantSetTest {
     }
 
     @Test
-    public void testIterator() {
+    public void test_iterator() {
         List<String> list = new ArrayList<String>(Arrays.asList(new String[]{
                 "_test_", "da.ta", "string?"
         }));
@@ -166,13 +153,13 @@ public class WhitespaceAndSuffixTolerantSetTest {
     }
 
     @Test
-    public void testAdd() {
+    public void test_add() {
         tolerantSet.add("test ? data string.");
         assertSetContainsAll("test ? data string.");
     }
 
     @Test
-    public void testAddAll() {
+    public void test_addAll() {
         List<String> setToAdd = new ArrayList<String>(Arrays.asList(new String[]{
                 "test", "data", "string?"
         }));
@@ -182,7 +169,7 @@ public class WhitespaceAndSuffixTolerantSetTest {
     }
 
     @Test
-    public void testClear() {
+    public void test_clear() {
         tolerantSet.addAll(new ArrayList<String>(Arrays.asList(new String[]{
                 "test", "data", "string?"
         })));
