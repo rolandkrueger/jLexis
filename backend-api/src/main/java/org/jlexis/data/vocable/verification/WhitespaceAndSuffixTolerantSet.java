@@ -91,14 +91,18 @@ public class WhitespaceAndSuffixTolerantSet implements Set<String> {
     }
 
     private String buildSuffixCharacterToleratingRegex(char[] suffixToleranceChars) {
-        StringBuilder buf = new StringBuilder("\\s*(.*?)\\s*[");
-        for (char c : suffixToleranceChars) {
-            if (c == '[' || c == ']') {
-                buf.append("\\");
+        StringBuilder buf = new StringBuilder("\\s*(.*?)\\s*");
+        if (suffixToleranceChars != null && suffixToleranceChars.length > 0) {
+            buf.append("[");
+            for (char c : suffixToleranceChars) {
+                if (c == '[' || c == ']') {
+                    buf.append("\\");
+                }
+                buf.append(c);
             }
-            buf.append(c);
+            buf.append("]?");
         }
-        return buf.append("]?").toString();
+        return buf.toString();
     }
 
     @Override
