@@ -30,7 +30,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses
         ({
                 VocableVerificationDataTest.class,
-                VerificationHashSetTest.class
+                WhitespaceAndSuffixTolerantSetTest.class
         })
 public class VerificationTestSuite {
 }
