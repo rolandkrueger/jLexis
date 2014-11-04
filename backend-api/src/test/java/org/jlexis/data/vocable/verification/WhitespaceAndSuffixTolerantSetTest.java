@@ -22,6 +22,7 @@
  */
 package org.jlexis.data.vocable.verification;
 
+import com.google.common.testing.EqualsTester;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,6 +32,7 @@ import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.arrayContainingInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
@@ -216,6 +218,27 @@ public class WhitespaceAndSuffixTolerantSetTest {
     public void test_contains_all() {
         tolerantSet.add("test value");
         assertThat(tolerantSet.containsAll(Arrays.asList("test value", "   test   value   ", "test value#")), is(true));
+    }
+
+    @Test
+    public void test_toArray() {
+        tolerantSet.addAll(Arrays.asList("  test  ", "  value "));
+        final Object[] array = tolerantSet.toArray();
+        assertThat(array, arrayContainingInAnyOrder("  test  ", "  value "));
+        assertThat(Arrays.asList(array), hasSize(2));
+    }
+
+    @Test
+    public void testEquals() {
+        Collection<String> values = Arrays.asList("   test value   ", "  value\t test    ");
+        Collection<String> valuesSingleWhitespaces = Arrays.asList("test value", "value test");
+
+        EqualsTester tester = new EqualsTester()
+                .addEqualityGroup(
+                        new WhitespaceAndSuffixTolerantSet(values, '#'), new WhitespaceAndSuffixTolerantSet(values, '#'),
+                        new WhitespaceAndSuffixTolerantSet(values, '#'), new WhitespaceAndSuffixTolerantSet(valuesSingleWhitespaces, '#'),
+                        new WhitespaceAndSuffixTolerantSet(values, '#'), new WhitespaceAndSuffixTolerantSet(values, '#', '+', '?'))
+                .testEquals();
     }
 
     private void assertSetContainsAll(String... values) {

@@ -18,16 +18,31 @@
  * You should have received a copy of the GNU General Public License
  * along with jLexis; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *
  */
 package org.jlexis.data.vocable.verification;
+
+import com.google.common.base.MoreObjects;
 
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * TODO: documentation
+ * Set implementation that has tolerant contains()- and remove()-semantics with regard to diverging whitespace and
+ * specific suffix characters. This means that contains() and remove() will accept input values which only differ in the
+ * layout of the contained whitespace characters or if they end with a certain tolerated suffix character.
+ * <p/>
+ * If, for instance, the set contains an item "some value", then method contains() will return true for all variants of
+ * this item with varying whitespace, e.g. <pre>" some   value  "</pre> or <pre>"some \t value"</pre>. If the set of
+ * tolerated suffix characters contains the #-character, then contains() even returns true for "some value#" (again,
+ * with varying whitespace being tolerated).
+ * <p/>
+ * The same applies to method remove(): if the item to be removed only differs from a set item with regard to whitespace
+ * or the tolerated suffix character, the item will be removed.
+ * <p/>
+ * The set of tolerated suffix characters is provided through the constructor. Only a single character of this set is
+ * tolerated at once. That is, value "some value#" or "some value*" will be accepted while "some value##" or "some
+ * value#*" will not be accepted if the set of tolerated characters is given as {'#', '*'}.
  *
  * @author Roland Krueger
  */
@@ -38,33 +53,52 @@ public class WhitespaceAndSuffixTolerantSet implements Set<String> {
      * blank character.
      */
     private Map<String, String> data;
+
+    /**
+     * Pattern to remove the tolerated suffix characters from an input String.
+     */
     private Pattern removeSuffixPattern;
+
+    /**
+     * Helper for normalizing an input String. Normalizing means removing redundant whitespace.
+     */
     private StringNormalizer normalizer;
 
+    /**
+     * Creates a whitespace-tolerant set that does not tolerate any suffix characters.
+     */
     public WhitespaceAndSuffixTolerantSet() {
         data = new HashMap<String, String>();
         normalizer = new StringNormalizer();
         removeSuffixPattern = Pattern.compile("\\s*(.*)\\s*");
     }
 
-    public WhitespaceAndSuffixTolerantSet(Collection<String> c, char... suffixToleranceChars) {
+    /**
+     * Creates a whitespace-tolerant set that tolerate the given list of suffix characters and populates the set with
+     * the given items.
+     */
+    public WhitespaceAndSuffixTolerantSet(Collection<String> items, char... suffixToleranceChars) {
         this(suffixToleranceChars);
-        addAll(c);
+        addAll(items);
     }
 
+    /**
+     * Creates a whitespace-tolerant set that tolerate the given list of suffix characters.
+     */
     public WhitespaceAndSuffixTolerantSet(char... suffixToleranceChars) {
         this();
+        this.removeSuffixPattern = Pattern.compile(buildSuffixCharacterToleratingRegex(suffixToleranceChars));
+    }
 
-        StringBuilder buf = new StringBuilder();
-        buf.append("\\s*(.*?)\\s*[");
+    private String buildSuffixCharacterToleratingRegex(char[] suffixToleranceChars) {
+        StringBuilder buf = new StringBuilder("\\s*(.*?)\\s*[");
         for (char c : suffixToleranceChars) {
-            if (c == '[') buf.append("\\[");
-            else if (c == ']') buf.append("\\]");
-            else buf.append(c);
+            if (c == '[' || c == ']') {
+                buf.append("\\");
+            }
+            buf.append(c);
         }
-        buf.append("]?");
-
-        this.removeSuffixPattern = Pattern.compile(buf.toString());
+        return buf.append("]?").toString();
     }
 
     @Override
@@ -150,22 +184,26 @@ public class WhitespaceAndSuffixTolerantSet implements Set<String> {
 
     @Override
     public Object[] toArray() {
-        return data.keySet().toArray();
+        return toArray(new String[]{});
     }
 
     @Override
     public <T> T[] toArray(T[] a) {
-        return data.keySet().toArray(a);
+        return data.values().toArray(a);
     }
 
     @Override
     public String toString() {
-        return data.keySet().toString();
+        return MoreObjects.toStringHelper(getClass()).add("values", data.values()).toString();
     }
 
     @Override
     public boolean equals(Object o) {
-        return data.keySet().equals(o);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        WhitespaceAndSuffixTolerantSet strings = (WhitespaceAndSuffixTolerantSet) o;
+        return Objects.equals(data.keySet(), strings.data.keySet());
     }
 
     @Override
@@ -175,12 +213,10 @@ public class WhitespaceAndSuffixTolerantSet implements Set<String> {
 
     public static class StringNormalizer {
         /**
-         * Normalizes a String by performing the following operations on it:
-         * <ul>
-         * <li>remove all leading and trailing whitespace</li>
-         * <li>replace all whitespaces with a single blank</li>
-         * <li>remove all whitespace before and after punctuation characters</li>
-         * </ul>
+         * Normalizes a String by performing the following operations on it: <ul> <li>remove all leading and trailing
+         * whitespace</li> <li>replace all whitespaces with a single blank</li> <li>remove all whitespace before and
+         * after punctuation characters</li> </ul>
+         *
          * @param value input value, must not be null
          * @return normalized value
          */
