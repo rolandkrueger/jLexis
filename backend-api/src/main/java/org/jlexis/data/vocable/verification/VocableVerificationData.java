@@ -23,6 +23,7 @@
 package org.jlexis.data.vocable.verification;
 
 
+import com.google.common.base.*;
 import org.apache.commons.lang.math.IntRange;
 import org.jlexis.data.languages.Language;
 import org.jlexis.data.vocable.terms.AbstractTermData;
@@ -32,6 +33,7 @@ import org.jlexis.managers.ConfigurationManager;
 import org.jlexis.util.StringUtils;
 
 import java.util.*;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -110,7 +112,7 @@ public class VocableVerificationData {
     private void resolveAllParentheses() {
         for (Set<String> set : data) {
             for (String string : set) {
-                set.addAll(resolveParentheses(string));
+                set.addAll(ResolveParentheses.resolveParentheses(string));
             }
         }
     }
@@ -334,12 +336,11 @@ public class VocableVerificationData {
         }
     }
 
-    public VocableVerificationData tokenizeAndAddString(String value) {
-        if (value == null || value.trim().equals(""))
+    public VocableVerificationData tokenizeAndAddString(String valueToAdd) {
+        String value = Strings.nullToEmpty(valueToAdd).trim();
+        if ("".equals(value)) {
             return this;
-
-        value = value.trim();
-
+        }
         String[] mandatoryTokens = value.split(ConfigurationManager.getInstance().getMandatoryTokenSplitChar());
 
         for (String mandatoryToken : mandatoryTokens) {
@@ -360,78 +361,6 @@ public class VocableVerificationData {
 
     private String normalizeWhitespaces(String value) {
         return value.replaceAll("\\s+", " ");
-    }
-
-    private Set<String> resolveParentheses(String value) {
-        Set<String> result = new WhitespaceAndSuffixTolerantSet();
-        result.add(value);
-
-        int start;
-        int end;
-
-        int i;
-        boolean moreToDo = true;
-        boolean done;
-        Set<IntRange> alreadyDoneParenthesesPairs = new HashSet<>();
-        moreToDo:
-        while (moreToDo) {
-            start = -1;
-            end = -1;
-            i = 0;
-
-            for (char c : value.toCharArray()) {
-                // TODO: make parentheses characters configurable
-                if (c == '(') {
-                    done = false;
-                    for (IntRange range : alreadyDoneParenthesesPairs) {
-                        if (range.getMinimumInteger() == i) {
-                            done = true;
-                            break;
-                        }
-                    }
-                    if (!done) start = i;
-                }
-                if (c == ')') {
-                    done = false;
-                    for (IntRange range : alreadyDoneParenthesesPairs) {
-                        if (range.getMaximumInteger() == i + 1) {
-                            done = true;
-                            break;
-                        }
-                    }
-                    if (!done) end = i + 1;
-
-                    if (end > start) {
-                        IntRange pair = new IntRange(start, end);
-                        if (!alreadyDoneParenthesesPairs.contains(pair)) {
-                            alreadyDoneParenthesesPairs.add(pair);
-                            if (start > -1 && end > -1 && end > start) {
-                                StringBuilder buf = new StringBuilder();
-                                buf.append(value.substring(0, start).trim()).append(value.substring(end));
-                                result.add(buf.toString());
-                                result.addAll(resolveParentheses(buf.toString()));
-
-                                buf.setLength(0);
-                                buf.append(value.substring(0, start));
-                                buf.append(value.substring(start + 1, end - 1));
-                                buf.append(value.substring(end));
-                                result.add(buf.toString());
-                                result.addAll(resolveParentheses(buf.toString()));
-                                continue moreToDo;
-                            }
-                        } else {
-                            start = -1;
-                            end = -1;
-                        }
-                    }
-                }
-                ++i;
-            }
-
-            if (start < 0 || end < 0) moreToDo = false;
-        }
-
-        return result;
     }
 
     public boolean contains(String token) {
@@ -558,8 +487,7 @@ public class VocableVerificationData {
     public final static class UnmodifiableVocableVerificationData extends VocableVerificationData {
 
         public UnmodifiableVocableVerificationData(VocableVerificationData data) {
-//      CheckForNull.check (data);
-            this.data = data.data;
+            this.data = Objects.requireNonNull(data.data);
             additionalQuestionText = data.additionalQuestionText;
             allIsOptional = data.allIsOptional;
             alternatives = data.alternatives;

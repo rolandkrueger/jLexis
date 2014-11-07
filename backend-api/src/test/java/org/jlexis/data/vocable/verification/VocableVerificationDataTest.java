@@ -36,7 +36,6 @@ import static org.junit.Assert.*;
 
 /**
  * @author Roland Krueger
- * @version $Id: VocableVerificationDataTest.java 204 2009-12-17 15:20:16Z roland $
  */
 public class VocableVerificationDataTest {
     private VocableVerificationData mTestObj;
@@ -228,7 +227,7 @@ public class VocableVerificationDataTest {
     }
 
     @Test
-    public void test_skipEmptStrings() {
+    public void test_skipEmptyStrings() {
         mTestObj.addMandatoryValue("");
         assertTrue(mTestObj.isEmpty());
     }
