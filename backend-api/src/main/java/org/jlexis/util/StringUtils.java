@@ -7,12 +7,16 @@
  */
 package org.jlexis.util;
 
+import com.google.common.base.Strings;
 
 /**
  * @author Roland Krueger
- * @version $Id: StringUtils.java 204 2009-12-17 15:20:16Z roland $
  */
-public class StringUtils {
+public final class StringUtils {
+
+    private StringUtils() {
+    }
+
     public static String escapeRegexSpecialChars(String value) {
         value = value.replace(".", "\\.");
         value = value.replace("?", "\\?");
@@ -29,5 +33,9 @@ public class StringUtils {
         value = value.replace("|", "\\|");
         value = value.replace("!", "\\!");
         return value;
+    }
+
+    public static boolean isStringNullOrEmpty(String value) {
+        return Strings.nullToEmpty(value).trim().isEmpty();
     }
 }

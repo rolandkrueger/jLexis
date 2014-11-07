@@ -23,24 +23,30 @@
 package org.jlexis.data.vocable.verification;
 
 
-import com.google.common.base.*;
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Splitter;
+import com.google.common.base.Strings;
 import org.apache.commons.lang.math.IntRange;
 import org.jlexis.data.languages.Language;
 import org.jlexis.data.vocable.terms.AbstractTermData;
 import org.jlexis.data.vocable.terms.InflectedTerm;
 import org.jlexis.data.vocable.terms.RegularTerm;
-import org.jlexis.managers.ConfigurationManager;
 import org.jlexis.util.StringUtils;
 
 import java.util.*;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static org.jlexis.data.vocable.verification.ResolveParentheses.resolveParentheses;
+import static org.jlexis.data.vocable.verification.ResolveParentheses.resolveParenthesesForList;
+import static org.jlexis.util.StringUtils.isStringNullOrEmpty;
 
 /**
  * @author Roland Krueger
  */
 public class VocableVerificationData {
+    public static final char MANDATORY_COMPONENT_SPLIT_CHAR = ';';
+    public static final char OPTIONAL_COMPONENT_SPLIT_CHAR = ',';
     private static Pattern sPattern1 = Pattern.compile("\\w+(\\w*\\W*)*\\w*\\W");
     private static Pattern sPattern2 = Pattern.compile("\\W\\w*(\\w*\\W*)*\\w+");
     private static Pattern sPattern3 = Pattern.compile("\\W(\\w*\\W*)*\\w*\\W");
@@ -112,7 +118,7 @@ public class VocableVerificationData {
     private void resolveAllParentheses() {
         for (Set<String> set : data) {
             for (String string : set) {
-                set.addAll(ResolveParentheses.resolveParentheses(string));
+                set.addAll(resolveParentheses(string));
             }
         }
     }
@@ -258,8 +264,7 @@ public class VocableVerificationData {
             data.add(set);
         }
 
-//    set.addAll (resolveParentheses (option));
-        set.add(option);
+        set.addAll(resolveParentheses(option));
     }
 
     public void addOptions(Collection<String> options) {
@@ -278,8 +283,7 @@ public class VocableVerificationData {
             return;
 
         Set<String> set = new WhitespaceAndSuffixTolerantSet();
-//    set.addAll (resolveParentheses (mandatoryValue));
-        set.add(mandatoryValue);
+        set.addAll(resolveParentheses(mandatoryValue));
 
         if (set.size() > 0)
             data.add(set);
@@ -295,72 +299,61 @@ public class VocableVerificationData {
     }
 
     public void addMandatoryValueWithOptions(Collection<String> options) {
-        if (allIsOptional)
+        if (allIsOptional) {
             throw new IllegalStateException("Cannot add mandatory values. This verification data is all optional. " +
                     " Use addOption() instead.");
-        if (options == null)
-            throw new NullPointerException("Argument is null.");
+        }
 
         Set<String> newSet = new WhitespaceAndSuffixTolerantSet();
-        for (String option : options) {
-//      newSet.addAll (resolveParentheses (option));
-            newSet.add(option);
-        }
-        if (newSet.size() > 0)
+        newSet.addAll(resolveParenthesesForList(options));
+        if (!newSet.isEmpty()) {
             data.add(newSet);
+        }
     }
 
     public void addMandatoryValueWithOptions(String mandatoryValue, Collection<String> options) {
-        if (allIsOptional)
+        if (allIsOptional) {
             throw new IllegalStateException("Cannot add mandatory values. This verification data is all optional. " +
                     " Use addOption() instead.");
-        if (mandatoryValue == null || options == null)
+        }
+        if (mandatoryValue == null || options == null) {
             throw new NullPointerException("One of the arguments is null.");
+        }
 
         Set<String> set = getAlternativesForMandatoryValue(mandatoryValue);
         if (set == null) {
             Set<String> newSet = new WhitespaceAndSuffixTolerantSet();
-            for (String option : options) {
-//        newSet.addAll (resolveParentheses (option));
-                newSet.add(option);
-            }
-//      newSet.addAll (resolveParentheses (mandatoryValue));
-            newSet.add(mandatoryValue);
+            newSet.addAll(resolveParenthesesForList(options));
+            newSet.addAll(resolveParentheses(mandatoryValue));
 
-            if (newSet.size() > 0)
+            if (!newSet.isEmpty()) {
                 data.add(newSet);
+            }
         } else {
-            for (String option : options)
-//        set.addAll (resolveParentheses (option));
-                set.add(option);
+            set.addAll(resolveParenthesesForList(options));
         }
     }
 
     public VocableVerificationData tokenizeAndAddString(String valueToAdd) {
-        String value = Strings.nullToEmpty(valueToAdd).trim();
-        if ("".equals(value)) {
+        if (isStringNullOrEmpty(valueToAdd)) {
             return this;
         }
-        String[] mandatoryTokens = value.split(ConfigurationManager.getInstance().getMandatoryTokenSplitChar());
 
-        for (String mandatoryToken : mandatoryTokens) {
-            if (mandatoryToken.trim().equals("")) continue;
-            mandatoryToken = normalizeWhitespaces(mandatoryToken);
-            String[] optionalTokens = mandatoryToken.split(ConfigurationManager.getInstance().getOptionalTokenSplitChar());
-            Set<String> set = new WhitespaceAndSuffixTolerantSet();
-            for (String token : optionalTokens) {
-                if (token.trim().equals("")) continue;
-                token = normalizeWhitespaces(token);
-//        set.addAll (resolveParentheses (token));
-                set.add(token);
-            }
-            addMandatoryValueWithOptions(set);
+        for (String mandatoryComponent : splitStringOmitEmptyAndTrim(Strings.nullToEmpty(valueToAdd), MANDATORY_COMPONENT_SPLIT_CHAR)) {
+            addMandatoryValueWithOptions(createListOfOptionalComponents(mandatoryComponent));
         }
         return this;
     }
 
-    private String normalizeWhitespaces(String value) {
-        return value.replaceAll("\\s+", " ");
+    private Set<String> createListOfOptionalComponents(String mandatoryComponent) {
+        return new WhitespaceAndSuffixTolerantSet(resolveParenthesesForList(splitStringOmitEmptyAndTrim(mandatoryComponent, OPTIONAL_COMPONENT_SPLIT_CHAR)));
+    }
+
+    private List<String> splitStringOmitEmptyAndTrim(String value, char separator) {
+        return Splitter.on(separator)
+                .omitEmptyStrings()
+                .trimResults()
+                .splitToList(value);
     }
 
     public boolean contains(String token) {
@@ -481,7 +474,9 @@ public class VocableVerificationData {
 
     @Override
     public String toString() {
-        return data.toString();
+        return MoreObjects.toStringHelper(getClass())
+                .add("data", data)
+                .toString();
     }
 
     public final static class UnmodifiableVocableVerificationData extends VocableVerificationData {

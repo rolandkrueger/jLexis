@@ -1,6 +1,6 @@
 package org.jlexis.data.vocable.verification
 
-import static org.jlexis.data.vocable.verification.ResolveParentheses.resolveParentheses
+import static org.jlexis.data.vocable.verification.ResolveParentheses.*
 
 class ResolveParenthesesTest extends GroovyTestCase {
 
@@ -11,6 +11,12 @@ class ResolveParenthesesTest extends GroovyTestCase {
     void test_with_two_pairs_of_parentheses() {
         assertEquals(["(un)gesund", "(un)gesund(es)", "(un)gesundes", "gesund", "gesund(es)", "gesundes", "ungesund", "ungesund(es)", "ungesundes"] as Set,
                 resolveParentheses("(un)gesund(es)"))
+    }
+
+    void test_resolve_collection_of_values() {
+        assertEquals(["(un)gesund", "(un)gesund(es)", "(un)gesundes", "gesund", "gesund(es)", "gesundes", "ungesund", "ungesund(es)", "ungesundes",
+                      "Lehrerin", "Lehrer", "Lehrer(in)"] as Set,
+                resolveParenthesesForList(["(un)gesund(es)", "Lehrer(in)"]))
     }
 
     void test_too_many_parentheses_will_return_input() {

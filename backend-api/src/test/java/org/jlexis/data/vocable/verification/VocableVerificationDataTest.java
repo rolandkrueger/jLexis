@@ -269,11 +269,6 @@ public class VocableVerificationDataTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void testAddMandatoryValueWithOptions_Fail3() {
-        mTestObj.addMandatoryValueWithOptions(null);
-    }
-
-    @Test(expected = NullPointerException.class)
     public void testAddMandatoryValueWithOptions_Fail4() {
         Collection<String> c = null;
         mTestObj.addMandatoryValueWithOptions("value", c);
