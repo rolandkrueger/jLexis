@@ -16,7 +16,7 @@ class ResolveParenthesesTest extends GroovyTestCase {
     void test_resolve_collection_of_values() {
         assertEquals(["(un)gesund", "(un)gesund(es)", "(un)gesundes", "gesund", "gesund(es)", "gesundes", "ungesund", "ungesund(es)", "ungesundes",
                       "Lehrerin", "Lehrer", "Lehrer(in)"] as Set,
-                resolveParenthesesForList(["(un)gesund(es)", "Lehrer(in)"]))
+                resolveParenthesesForCollection(["(un)gesund(es)", "Lehrer(in)"]))
     }
 
     void test_too_many_parentheses_will_return_input() {

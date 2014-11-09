@@ -113,7 +113,7 @@ public final class UnmodifiableVocable extends Vocable {
 
         @Override
         public VocableVerificationData getQuizVerificationData() {
-            return new VocableVerificationData.UnmodifiableVocableVerificationData(data.getQuizVerificationData());
+            return data.getQuizVerificationData();
         }
 
         @Override

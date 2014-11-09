@@ -35,7 +35,7 @@ public final class ResolveParentheses {
         return new ResolveParentheses().resolve(value);
     }
 
-    public static Set<String> resolveParenthesesForList(Collection<String> values) {
+    public static Set<String> resolveParenthesesForCollection(Collection<String> values) {
         if (values == null || values.isEmpty()) {
             return Collections.emptySet();
         }

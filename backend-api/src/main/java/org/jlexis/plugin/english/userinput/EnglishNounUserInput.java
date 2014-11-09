@@ -26,6 +26,7 @@ package org.jlexis.plugin.english.userinput;
 import org.jlexis.data.vocable.AbstractUserInput;
 import org.jlexis.data.vocable.terms.AbstractTermData;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
+import org.jlexis.data.vocable.verification.VocableVerificationData.DataWithMandatoryTermsBuilder;
 import org.jlexis.roklib.HTMLTextFormatter;
 import org.jlexis.roklib.TextFormatter;
 
@@ -333,7 +334,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
 
     @Override
     public VocableVerificationData getQuizVerificationData() {
-        VocableVerificationData result = new VocableVerificationData();
+        final DataWithMandatoryTermsBuilder builder = VocableVerificationData.createFromTerms();
         // TODO: I18N
 //    String additionalQuestionText = "Bitte auch die Pluralform eingeben. ";
         String additionalQuestionText = "Please also provide the plural form. ";
@@ -350,13 +351,13 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
 
         if (!beValues.isEmpty()) {
             if (!isDataDefinedFor(NOUN_PLURAL_TERM_KEY_BE)) additionalQuestionText = "";
-            result.addMandatoryTerm(beValues.get(0));
+            builder.addMandatoryTerm(beValues.get(0));
             for (int i = 1; i < beValues.size(); ++i) {
                 if (isPluralIrregularBE()) {
-                    result.addMandatoryTerm(beValues.get(i));
+                    builder.addMandatoryTerm(beValues.get(i));
                 } else {
                     additionalQuestionText = "";
-                    result.addOptionalTerm(beValues.get(i));
+                    builder.addOptionalTerm(beValues.get(i));
                 }
             }
             // TODO: I18N
@@ -366,7 +367,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
 
         // if there is only data in American English make the first piece of data mandatory
         if (beValues.isEmpty() && !aeValues.isEmpty()) {
-            result.addMandatoryTerm(aeValues.get(0));
+            builder.addMandatoryTerm(aeValues.get(0));
             if (!isPluralIrregularAE() || !isDataDefinedFor(NOUN_PLURAL_TERM_KEY_AE)) {
                 additionalQuestionText = "";
             }
@@ -374,18 +375,19 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
             additionalQuestionText = String.format("%s<i>American</i> English is expected.", additionalQuestionText);
         } else if (!beValues.isEmpty() && !aeValues.isEmpty()) {
             // if there is both British and American English data defined
-            result.addOptionalTerm(aeValues.get(0));
+            builder.addOptionalTerm(aeValues.get(0));
         }
 
         for (int i = 1; i < aeValues.size(); ++i) {
             if (isPluralIrregularAE() && beValues.isEmpty()) {
-                result.addMandatoryTerm(aeValues.get(i));
+                builder.addMandatoryTerm(aeValues.get(i));
             } else {
                 // make the remaining values for American English optional
-                result.addOptionalTerm(aeValues.get(i));
+                builder.addOptionalTerm(aeValues.get(i));
             }
         }
 
+        final VocableVerificationData result = builder.build();
         result.setAdditionalQuestionText(additionalQuestionText);
         return result;
     }

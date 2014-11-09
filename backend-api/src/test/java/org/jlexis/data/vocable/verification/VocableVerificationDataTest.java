@@ -22,27 +22,31 @@
  */
 package org.jlexis.data.vocable.verification;
 
-import org.jlexis.data.languages.Language;
 import org.jlexis.data.vocable.terms.RegularTerm;
+import org.jlexis.data.vocable.verification.VocableVerificationData.DataWithMandatoryTermsBuilder;
 import org.jlexis.managers.ConfigurationManager;
-import org.jlexis.plugin.PluginIdentifier;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 
 /**
  * @author Roland Krueger
  */
 public class VocableVerificationDataTest {
-    private VocableVerificationData mTestObj;
+    private DataWithMandatoryTermsBuilder builder;
 
     @Before
     public void setUp() {
-        mTestObj = new VocableVerificationData();
+        builder = VocableVerificationData.createFromTerms();
         ConfigurationManager.getInstance().setMandatoryTokenSplitChar(";");
         ConfigurationManager.getInstance().setOptionalTokenSplitChar(",");
     }
@@ -78,10 +82,9 @@ public class VocableVerificationDataTest {
     }
 
     private void verify(String data, String input, boolean matchExpected) {
-        mTestObj.tokenizeAndAddString(data);
-        VocableVerificationData comparison = new VocableVerificationData();
-        comparison.tokenizeAndAddString(input);
-        VocableVerificationResult result = mTestObj.verify(comparison);
+        builder.tokenizeAndAddString(data);
+        VocableVerificationData comparison = VocableVerificationData.createFromTerms().tokenizeAndAddString(input).build();
+        VocableVerificationResult result = builder.build().verify(comparison);
         if (matchExpected)
             assertEquals(VocableVerificationResultEnum.CORRECT, result.getResult());
         else
@@ -89,8 +92,9 @@ public class VocableVerificationDataTest {
     }
 
     private void verify(VocableVerificationData data, String input, boolean matchExpected) {
-        VocableVerificationData comparison = new VocableVerificationData();
-        comparison.tokenizeAndAddString(input);
+        VocableVerificationData comparison = VocableVerificationData
+                .createFromTerms()
+                .tokenizeAndAddString(input).build();
         VocableVerificationResult result = data.verify(comparison);
         if (matchExpected)
             assertEquals(VocableVerificationResultEnum.CORRECT, result.getResult());
@@ -100,246 +104,143 @@ public class VocableVerificationDataTest {
 
     @Test
     public void testTokenizeAndAddString_WithEmptyValues() {
-        mTestObj.tokenizeAndAddString("");
-        mTestObj.tokenizeAndAddString(null);
-        assertEquals(0, mTestObj.getAllTokens().size());
+        builder.tokenizeAndAddString("");
+        builder.tokenizeAndAddString(null);
+        assertEquals(0, builder.build().getAllTokens().size());
     }
 
     @Test
     public void testTokenizeAndAddString() {
-        mTestObj.tokenizeAndAddString("value1;;value2, opt1,,opt2,");
-        mTestObj.tokenizeAndAddString("A, B");
+        builder.tokenizeAndAddString("value1;;value2, opt1,,opt2,");
+        builder.tokenizeAndAddString("A, B");
 
-        assertEquals(6, mTestObj.getAllTokens().size());
-        assertEquals(3, mTestObj.getMandatoryValuesWithOptions().size());
+        VocableVerificationData data = builder.build();
+        assertEquals(6, data.getAllTokens().size());
+        assertEquals(3, data.getMandatoryValuesWithOptions().size());
 
-        HashSet<String> set1 = new HashSet<String>(Arrays.asList("value1"));
-        HashSet<String> set2 = new HashSet<String>(Arrays.asList("value2", "opt2", "opt1"));
-        HashSet<String> set3 = new HashSet<String>(Arrays.asList("A", "B"));
-        HashSet<Set<String>> set = new HashSet<Set<String>>();
+        Set<String> set1 = new HashSet<String>(Arrays.asList("value1"));
+        Set<String> set2 = new HashSet<String>(Arrays.asList("value2", "opt2", "opt1"));
+        Set<String> set3 = new HashSet<String>(Arrays.asList("A", "B"));
+        Set<Set<String>> set = new HashSet<Set<String>>();
         set.add(set1);
         set.add(set2);
         set.add(set3);
-        assertEquals(set, mTestObj.getMandatoryValuesWithOptions());
-        verify(mTestObj, "value1, opt1, A", true);
-        verify(mTestObj, "value1, opt1", false);
-        verify(mTestObj, "opt1, B", false);
-    }
-
-    @Test
-    public void testAddOption() {
-        mTestObj.makeAllOptional();
-        mTestObj.addOption("option1");
-        mTestObj.addOption("option2");
-        mTestObj.addOption("option1");
-
-        assertEquals(2, mTestObj.getAllTokens().size());
-        assertEquals(new HashSet<String>(Arrays.asList("option2", "option1")), mTestObj.getAllTokens());
+        assertThat(data.getMandatoryValuesWithOptions(), is(set));
+        verify(data, "value1, opt1, A", true);
+        verify(data, "value1, opt1", false);
+        verify(data, "opt1, B", false);
     }
 
     @Test
     public void testAddAlternativeTerm() {
-        mTestObj.tokenizeAndAddString("XXX, YYY; AAA, BBB");
-        mTestObj.addAlternativeTerm(new RegularTerm("A, B; 1, 2"));
+        builder.tokenizeAndAddString("XXX, YYY; AAA, BBB");
+        builder.addAlternativeTerm(new RegularTerm("A, B; 1, 2"));
 
-        assertEquals(2, mTestObj.getMandatoryValuesWithOptions().size());
-        assertEquals(1, mTestObj.getAlternatives().size());
-        assertEquals(8, mTestObj.getAllTokens().size());
-        verify(mTestObj, "B, 1", true);
-        verify(mTestObj, "A, 2, 1", true);
-        verify(mTestObj, "A, 2,B, 1", true);
-        verify(mTestObj, "XXX; AAA", true);
-        verify(mTestObj, "BBB;XXX; AAA", true);
-        verify(mTestObj, "BBB;XXX; AAA, YYY", true);
-        verify(mTestObj, "XXX, B", false);
-        verify(mTestObj, "AAA, 2, 1", false);
+        VocableVerificationData data = builder.build();
+
+        assertEquals(2, data.getMandatoryValuesWithOptions().size());
+        assertEquals(1, data.getAlternatives().size());
+        assertEquals(8, data.getAllTokens().size());
+        verify(data, "B, 1", true);
+        verify(data, "A, 2, 1", true);
+        verify(data, "A, 2,B, 1", true);
+        verify(data, "XXX; AAA", true);
+        verify(data, "BBB;XXX; AAA", true);
+        verify(data, "BBB;XXX; AAA, YYY", true);
+        verify(data, "XXX, B", false);
+        verify(data, "AAA, 2, 1", false);
     }
 
     @Test
     public void testAddOptionalValues() {
-        VocableVerificationData optional = new VocableVerificationData();
-        optional.tokenizeAndAddString("XXX, YYY, ZZZ");
-        mTestObj.tokenizeAndAddString("A, B; 1, 2");
-        mTestObj.addOptionalValues(optional);
+        VocableVerificationData optional = VocableVerificationData.createFromTerms()
+                .tokenizeAndAddString("XXX, YYY, ZZZ").build();
+        builder.tokenizeAndAddString("A, B; 1, 2");
+        builder.addOptionalValues(optional);
 
-        assertEquals(2, mTestObj.getMandatoryValuesWithOptions().size());
-        assertEquals(7, mTestObj.getAllTokens().size());
-        verify(mTestObj, "XXX, A, 1", true);
-        verify(mTestObj, "XXX,ZZZ", false);
-        verify(mTestObj, "XXX, A", false);
-        verify(mTestObj, "B, 1", true);
-        verify(mTestObj, "A, B", false);
-        verify(mTestObj, "2, 1", false);
+        VocableVerificationData data = builder.build();
+        assertEquals(2, data.getMandatoryValuesWithOptions().size());
+        assertEquals(7, data.getAllTokens().size());
+        verify(data, "XXX, A, 1", true);
+        verify(data, "XXX,ZZZ", false);
+        verify(data, "XXX, A", false);
+        verify(data, "B, 1", true);
+        verify(data, "A, B", false);
+        verify(data, "2, 1", false);
     }
 
-    @Test
-    public void testAddOptions() {
-        mTestObj.makeAllOptional();
-        mTestObj.addOptions(Arrays.asList("A", "B", "C"));
-        mTestObj.addOptions(Arrays.asList("1", "B", "3"));
+//    @Test
+//    public void testGetAlternativesForMandatoryValue() {
+//        builder.addMandatoryValue("value1");
+//        builder.addMandatoryValueWithOptions(Arrays.asList("value2", "opt1", "opt2"));
+//        builder.addMandatoryValueWithOptions("value1", Arrays.asList("A", "B"));
+//
+//        assertEquals(new HashSet<String>(Arrays.asList("value1", "A", "B")),
+//                builder.getAlternativesForMandatoryValue("B"));
+//        assertEquals(new HashSet<String>(Arrays.asList("value2", "opt1", "opt2")),
+//                builder.getAlternativesForMandatoryValue("opt1"));
+//    }
+//
+//    @Test
+//    public void testAddMandatoryValueWithOptions() {
+//        builder.addMandatoryValueWithOptions("value1", new String[]{"opt1", "opt2",
+//                "opt1" /* repeated value */});
+//        builder.addMandatoryValueWithOptions(Arrays.asList("value2", "optA"));
+//        builder.addMandatoryValueWithOptions("value2", Arrays.asList("optB"));
+//
+//        assertEquals(2, builder.getMandatoryValuesWithOptions().size());
+//        assertEquals(6, builder.getAllTokens().size());
+//        Iterator<Set<String>> it = builder.getMandatoryValuesWithOptions().iterator();
+//        assertEquals(new HashSet<String>(Arrays.asList("value1", "opt1", "opt2")), it.next());
+//        assertEquals(new HashSet<String>(Arrays.asList("value2", "optB", "optA")), it.next());
+//    }
+//
+//    @Test
+//    public void test_skipEmptyStrings() {
+//        builder.addMandatoryValue("");
+//        assertTrue(builder.isEmpty());
+//    }
+//
+//    @Test(expected = NullPointerException.class)
+//    public void testAddMandatoryValue_Fail2() {
+//        builder.addMandatoryValue(null);
+//    }
+//
+//    @Test(expected = IllegalStateException.class)
+//    public void testAddMandatoryValue_Fail() {
+//        builder.makeAllOptional();
+//        builder.addMandatoryValue("value");
+//    }
+//
+//    @Test
+//    public void testAddMandatoryValue() {
+//        builder.addMandatoryValue("value");
+//        builder.addMandatoryValue("string");
+//        builder.addMandatoryValue("value");
+//
+//        assertEquals(2, builder.getMandatoryValuesWithOptions().size());
+//        assertEquals(2, builder.getAllTokens().size());
+//        for (Set<String> set : builder.getMandatoryValuesWithOptions()) {
+//            assertEquals(1, set.size());
+//        }
+//    }
 
-        assertEquals(5, mTestObj.getAllTokens().size());
-        assertEquals(new HashSet<String>(Arrays.asList("1", "3", "C", "B", "A")), mTestObj.getAllTokens());
-    }
-
-    @Test
-    public void testMakeAllOptional() {
-        mTestObj.addMandatoryValueWithOptions("value1", Arrays.asList("A", "B"));
-        mTestObj.makeAllOptional();
-        mTestObj.addOption("1");
-        mTestObj.addOption("2");
-
-        assertEquals(5, mTestObj.getAllTokens().size());
-        assertEquals(new HashSet<String>(Arrays.asList("1", "2", "value1", "B", "A")), mTestObj.getAllTokens());
-    }
-
-    @Test
-    public void testGetAlternativesForMandatoryValue() {
-        mTestObj.addMandatoryValue("value1");
-        mTestObj.addMandatoryValueWithOptions(Arrays.asList("value2", "opt1", "opt2"));
-        mTestObj.addMandatoryValueWithOptions("value1", Arrays.asList("A", "B"));
-
-        assertEquals(new HashSet<String>(Arrays.asList("value1", "A", "B")),
-                mTestObj.getAlternativesForMandatoryValue("B"));
-        assertEquals(new HashSet<String>(Arrays.asList("value2", "opt1", "opt2")),
-                mTestObj.getAlternativesForMandatoryValue("opt1"));
-    }
-
-    @Test
-    public void testIsEmpty() {
-        assertTrue(mTestObj.isEmpty());
-        mTestObj.addMandatoryValue("test");
-        assertFalse(mTestObj.isEmpty());
-    }
-
-    @Test
-    public void testAddMandatoryValueWithOptions() {
-        mTestObj.addMandatoryValueWithOptions("value1", new String[]{"opt1", "opt2",
-                "opt1" /* repeated value */});
-        mTestObj.addMandatoryValueWithOptions(Arrays.asList("value2", "optA"));
-        mTestObj.addMandatoryValueWithOptions("value2", Arrays.asList("optB"));
-
-        assertEquals(2, mTestObj.getMandatoryValuesWithOptions().size());
-        assertEquals(6, mTestObj.getAllTokens().size());
-        Iterator<Set<String>> it = mTestObj.getMandatoryValuesWithOptions().iterator();
-        assertEquals(new HashSet<String>(Arrays.asList("value1", "opt1", "opt2")), it.next());
-        assertEquals(new HashSet<String>(Arrays.asList("value2", "optB", "optA")), it.next());
-    }
-
-    @Test
-    public void test_skipEmptyStrings() {
-        mTestObj.addMandatoryValue("");
-        assertTrue(mTestObj.isEmpty());
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testAddMandatoryValue_Fail2() {
-        mTestObj.addMandatoryValue(null);
-    }
-
-    @Test(expected = IllegalStateException.class)
-    public void testAddMandatoryValue_Fail() {
-        mTestObj.makeAllOptional();
-        mTestObj.addMandatoryValue("value");
-    }
-
-    @Test
-    public void testAddMandatoryValue() {
-        mTestObj.addMandatoryValue("value");
-        mTestObj.addMandatoryValue("string");
-        mTestObj.addMandatoryValue("value");
-
-        assertEquals(2, mTestObj.getMandatoryValuesWithOptions().size());
-        assertEquals(2, mTestObj.getAllTokens().size());
-        for (Set<String> set : mTestObj.getMandatoryValuesWithOptions()) {
-            assertEquals(1, set.size());
-        }
-    }
-
-    @Test(expected = IllegalStateException.class)
-    public void testAddMandatoryValueWithOptions_Fail() {
-        mTestObj.makeAllOptional();
-        mTestObj.addMandatoryValueWithOptions("value1", new String[]{"opt1", "opt2"});
-    }
-
-    @Test(expected = IllegalStateException.class)
-    public void testAddMandatoryValueWithOptions_Fail2() {
-        mTestObj.makeAllOptional();
-        mTestObj.addMandatoryValueWithOptions(Arrays.asList("value2", "optB", "optA"));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testAddMandatoryValueWithOptions_Fail4() {
-        Collection<String> c = null;
-        mTestObj.addMandatoryValueWithOptions("value", c);
-    }
-
-    @Test(expected = IllegalStateException.class)
-    public void testAddMandatoryValueWithOptions_Fail5() {
-        mTestObj.makeAllOptional();
-        Collection<String> c = new ArrayList<String>();
-        mTestObj.addMandatoryValueWithOptions("value", c);
-    }
-
-    @Test(expected = IllegalStateException.class)
-    public void testAddOption_Fail() {
-        mTestObj.addOption("option");
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testAddOption_Fail2() {
-        mTestObj.makeAllOptional();
-        mTestObj.addOption(null);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testAddOptions_Fail() {
-        mTestObj.makeAllOptional();
-        mTestObj.addOptions(null);
-    }
-
-    @Test(expected = IllegalStateException.class)
-    public void testAddOptions_Fail2() {
-        mTestObj.addOptions(Arrays.asList("value2", "optB", "optA"));
-    }
-
-    @Test
-    public void testNormalizeAbbreviations() {
-        mTestObj.tokenizeAndAddString("zzz il   y  \t a zzz; xxx iya xxx, yyy i.y.a. yyy, xxxiyaxxx; ooo .i.y.a. ooo");
-        mTestObj.normalizeAbbreviations(new Language(new PluginIdentifier("english-plugin", "1.0"), "English"));
-
-        VocableVerificationData compareObj = new VocableVerificationData();
-        compareObj.tokenizeAndAddString("zzz  .i.y.a. zzz; xxx i.y.a. xxx, yyy   iya yyy, xxxiyaxxx; ooo il \t y  a  ooo");
-        compareObj.normalizeAbbreviations(new Language(new PluginIdentifier("english-plugin", "1.0"), "English"));
-
-        VocableVerificationResult result = mTestObj.verify(compareObj);
-        assertEquals(VocableVerificationResultEnum.CORRECT, result.getResult());
-    }
+//    @Test
+//    public void testNormalizeAbbreviations() {
+//        builder.tokenizeAndAddString("zzz il   y  \t a zzz; xxx iya xxx, yyy i.y.a. yyy, xxxiyaxxx; ooo .i.y.a. ooo");
+//        builder.normalizeAbbreviations(new Language(new PluginIdentifier("english-plugin", "1.0"), "English"));
+//
+//        VocableVerificationData compareObj = new VocableVerificationData();
+//        compareObj.tokenizeAndAddString("zzz  .i.y.a. zzz; xxx i.y.a. xxx, yyy   iya yyy, xxxiyaxxx; ooo il \t y  a  ooo");
+//        compareObj.normalizeAbbreviations(new Language(new PluginIdentifier("english-plugin", "1.0"), "English"));
+//
+//        VocableVerificationResult result = builder.verify(compareObj);
+//        assertEquals(VocableVerificationResultEnum.CORRECT, result.getResult());
+//    }
 
     @Test
     public void testSetContainsIgnoreSpecificWhitespaces() {
         verify("was?; wo? hier !", "was ?, wo  ? hier!", true);
     }
 
-    @Test
-    public void testResolveParentheses() {
-        mTestObj = new VocableVerificationData();
-        verify("a(b) c (d (e)) f", "ab c d (e) f", true);
-        mTestObj = new VocableVerificationData();
-        verify("a(b) c (d (e)) f", "a(b) c (d ) f", true);
-        mTestObj = new VocableVerificationData();
-        verify("Lehrer(in)", "Lehrerin", true);
-        mTestObj = new VocableVerificationData();
-        verify("Lehrer(in)", "Lehrer(in)", true);
-        mTestObj = new VocableVerificationData();
-        verify("Lehrer(in)", "Lehrer, Lehrerin, Lehrer(in)", true);
-        mTestObj = new VocableVerificationData();
-        verify("a(b) c (d (e)) f", "ab c f", true);
-        mTestObj = new VocableVerificationData();
-        verify("a(b) c (d (e)) f", "a c f", true);
-        mTestObj = new VocableVerificationData();
-        verify("a(b) c (d (e)) f", "a c d e f", true);
-        mTestObj = new VocableVerificationData();
-        verify("a(b) c (d (e)) f", "a c d (e) f", true);
-    }
 }

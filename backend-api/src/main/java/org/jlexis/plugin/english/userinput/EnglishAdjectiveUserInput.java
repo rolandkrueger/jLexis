@@ -27,6 +27,7 @@ import org.jlexis.data.vocable.AbstractUserInput;
 import org.jlexis.data.vocable.standarduserinput.StandardAdjectiveUserInputDataHandler;
 import org.jlexis.data.vocable.terms.AbstractTermData;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
+import org.jlexis.data.vocable.verification.VocableVerificationData.DataWithMandatoryTermsBuilder;
 import org.jlexis.roklib.HTMLTextFormatter;
 import org.jlexis.roklib.TextFormatter;
 
@@ -111,7 +112,7 @@ public class EnglishAdjectiveUserInput extends AbstractEnglishPluginUserInput {
 
     @Override
     public VocableVerificationData getQuizVerificationData() {
-        VocableVerificationData result = new VocableVerificationData();
+        final DataWithMandatoryTermsBuilder builder = VocableVerificationData.createFromTerms();
         // TODO: i18n
         String additionalQuestionText = "Bitte auch %s%s eingeben. ";
         List<AbstractTermData> beValues = new LinkedList<>();
@@ -120,7 +121,7 @@ public class EnglishAdjectiveUserInput extends AbstractEnglishPluginUserInput {
         aeValues.addAll(mAdjectiveStandardInputAE.getTermData());
 
         if (!beValues.isEmpty()) {
-            result.addMandatoryTerm(beValues.get(0));
+            builder.addMandatoryTerm(beValues.get(0));
             if (isIrregularBE()) {
                 if (mAdjectiveStandardInputBE.isComparativeDataDefined() &&
                         mAdjectiveStandardInputBE.isSuperlativeDataDefined()) {
@@ -136,9 +137,9 @@ public class EnglishAdjectiveUserInput extends AbstractEnglishPluginUserInput {
             }
             for (int i = 1; i < beValues.size(); ++i) {
                 if (isIrregularBE()) {
-                    result.addMandatoryTerm(beValues.get(i));
+                    builder.addMandatoryTerm(beValues.get(i));
                 } else {
-                    result.addOptionalTerm(beValues.get(i));
+                    builder.addOptionalTerm(beValues.get(i));
                     additionalQuestionText = "";
                 }
             }
@@ -147,7 +148,7 @@ public class EnglishAdjectiveUserInput extends AbstractEnglishPluginUserInput {
 
         // if there is only data in American English make the first piece of data mandatory
         if (beValues.isEmpty() && !aeValues.isEmpty()) {
-            result.addMandatoryTerm(aeValues.get(0));
+            builder.addMandatoryTerm(aeValues.get(0));
             if (isIrregularAE()) {
                 if (mAdjectiveStandardInputAE.isComparativeDataDefined() &&
                         mAdjectiveStandardInputAE.isSuperlativeDataDefined()) {
@@ -165,17 +166,18 @@ public class EnglishAdjectiveUserInput extends AbstractEnglishPluginUserInput {
             additionalQuestionText = String.format("%sGefragt ist <i>amerikanisches</i> Englisch.", additionalQuestionText);
         } else if (!beValues.isEmpty() && !aeValues.isEmpty()) {
             // if there is both British and American English data defined
-            result.addOptionalTerm(aeValues.get(0));
+            builder.addOptionalTerm(aeValues.get(0));
         }
 
         for (int i = 1; i < aeValues.size(); ++i) {
             if (isIrregularAE() && beValues.isEmpty()) {
-                result.addMandatoryTerm(aeValues.get(i));
+                builder.addMandatoryTerm(aeValues.get(i));
             } else {
-                result.addOptionalTerm(aeValues.get(i));
+                builder.addOptionalTerm(aeValues.get(i));
             }
         }
 
+        final VocableVerificationData result = builder.build();
         result.setAdditionalQuestionText(additionalQuestionText);
         return result;
     }

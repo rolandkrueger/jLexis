@@ -74,7 +74,7 @@ public class WordStemTermTest extends AbstractTermDataTest {
     public void testGetVerificationData() {
         String testData = "test|term; 1, 2, 3;";
         mTestObj.setUserEnteredTerm(testData);
-        VocableVerificationData verificationData = new VocableVerificationData(mTestObj);
+        VocableVerificationData verificationData = VocableVerificationData.create().fromTermData(mTestObj).build();
         assertEquals(2, verificationData.getMandatoryValuesWithOptions().size());
         assertEquals(4, verificationData.getAllTokens().size());
         Set<String> set1 = new HashSet<String>();
@@ -83,19 +83,24 @@ public class WordStemTermTest extends AbstractTermDataTest {
         set2.add("1");
         set2.add("2");
         set2.add("3");
-        VocableVerificationData comparisonObject = new VocableVerificationData();
-        comparisonObject.addMandatoryValueWithOptions(set1);
-        comparisonObject.addMandatoryValueWithOptions(set2);
+        VocableVerificationData comparisonObject = null;
+        try {
+            comparisonObject = VocableVerificationData.createFromTerms()
+                    .addMandatoryValueWithOptions(set1)
+                    .addMandatoryValueWithOptions(set2).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         assertEquals(comparisonObject, verificationData);
 
         testData = "this is <the> testdata";
         mTestObj.setUserEnteredTerm(testData);
-        verificationData = new VocableVerificationData(mTestObj);
+        verificationData = VocableVerificationData.create().fromTermData(mTestObj).build();
         assertEquals(1, verificationData.getMandatoryValuesWithOptions().size());
         set1.clear();
         set1.add("this is the testdata");
-        comparisonObject = new VocableVerificationData();
-        comparisonObject.addMandatoryValueWithOptions(set1);
+        comparisonObject = VocableVerificationData.createFromTerms()
+                .addMandatoryValueWithOptions(set1).build();
         assertEquals(comparisonObject, verificationData);
     }
 }
