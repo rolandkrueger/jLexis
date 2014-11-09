@@ -105,6 +105,14 @@ public class VocableVerificationData {
         }
     }
 
+    public static Builder create() {
+        return new Builder();
+    }
+
+    public static DataWithMandatoryTermsBuilder createFromTerms() {
+        return new DataWithMandatoryTermsBuilder();
+    }
+
     @Deprecated
     public String getAdditionalQuestionText() {
         return additionalQuestionText;
@@ -190,12 +198,13 @@ public class VocableVerificationData {
         return Collections.unmodifiableList(alternatives);
     }
 
-    private void addOptionalValues(VocableVerificationData optionalValues) {
-        this.optionalValues.addAll(resolveParenthesesForCollection(optionalValues.getAllTokens()));
-    }
-
     private void addOptionalTerm(AbstractTermData term) {
-        addOptionalValues(new VocableVerificationData().tokenizeAndAddString(term.getResolvedAndPurgedTerm()));
+        optionalValues.addAll(
+                resolveParenthesesForCollection(
+                        VocableVerificationData.createFromTerms()
+                                .tokenizeAndAddString(term.getResolvedAndPurgedTerm())
+                                .build()
+                                .getAllTokens()));
     }
 
     private void removeOptionalValue(String value) {
@@ -206,16 +215,8 @@ public class VocableVerificationData {
         return optionalValues;
     }
 
-    protected void addAlternative(VocableVerificationData alternative) {
-        if (alternative != null) {
-            alternatives.add(alternative);
-        }
-    }
-
-    private void addAlternativeTerm(AbstractTermData alternativeTermData) {
-        VocableVerificationData alternative = new VocableVerificationData();
-        alternative.tokenizeAndAddString(alternativeTermData.getResolvedAndPurgedTerm());
-        addAlternative(alternative);
+    private void addAlternative(VocableVerificationData alternative) {
+        alternatives.add(Objects.requireNonNull(alternative, "cannot add null object as alternative"));
     }
 
     private void addMandatoryTerm(AbstractTermData mandatoryTermData) {
@@ -235,7 +236,7 @@ public class VocableVerificationData {
         return true;
     }
 
-    protected void addMandatoryValue(String mandatoryValue) {
+    private void addMandatoryValue(String mandatoryValue) {
         Objects.requireNonNull(mandatoryValue, "given mandatory value is null");
 
         if (contains(mandatoryValue)) {
@@ -250,34 +251,11 @@ public class VocableVerificationData {
         }
     }
 
-    protected void addMandatoryValueWithOptions(String mandatoryValue, String[] options) {
-        addMandatoryValueWithOptions(mandatoryValue, Arrays.asList(options));
-    }
-
     private void addMandatoryValueWithOptions(Collection<String> options) {
         Set<String> newSet = new WhitespaceAndSuffixTolerantSet();
         newSet.addAll(resolveParenthesesForCollection(options));
         if (!newSet.isEmpty()) {
             data.add(newSet);
-        }
-    }
-
-    protected void addMandatoryValueWithOptions(String mandatoryValue, Collection<String> options) {
-        if (mandatoryValue == null || options == null) {
-            throw new NullPointerException("One of the arguments is null.");
-        }
-
-        Set<String> set = getAlternativesForMandatoryValue(mandatoryValue);
-        if (set == null) {
-            Set<String> newSet = new WhitespaceAndSuffixTolerantSet();
-            newSet.addAll(resolveParenthesesForCollection(options));
-            newSet.addAll(resolveParentheses(mandatoryValue));
-
-            if (!newSet.isEmpty()) {
-                data.add(newSet);
-            }
-        } else {
-            set.addAll(resolveParenthesesForCollection(options));
         }
     }
 
@@ -327,7 +305,7 @@ public class VocableVerificationData {
         return result;
     }
 
-    protected Set<String> getAlternativesForMandatoryValue(String mandatoryValue) {
+    private Set<String> getAlternativesForMandatoryValue(String mandatoryValue) {
         for (Set<String> set : data) {
             if (set.contains(mandatoryValue)) {
                 return set;
@@ -439,14 +417,6 @@ public class VocableVerificationData {
                 .toString();
     }
 
-    public static Builder create() {
-        return new Builder();
-    }
-
-    public static DataWithMandatoryTermsBuilder createFromTerms() {
-        return new DataWithMandatoryTermsBuilder();
-    }
-
     public final static class Builder {
         public FinishedBuilder fromExisting(VocableVerificationData data) {
             return new FinishedBuilder(new VocableVerificationData(data));
@@ -462,11 +432,6 @@ public class VocableVerificationData {
 
         private DataWithMandatoryTermsBuilder() {
             this.data = new VocableVerificationData();
-        }
-
-        public DataWithMandatoryTermsBuilder addAlternativeTerm(AbstractTermData alternativeTermData) {
-            data.addAlternativeTerm(alternativeTermData);
-            return this;
         }
 
         public DataWithMandatoryTermsBuilder addMandatoryTerm(AbstractTermData mandatoryTermData) {
@@ -489,8 +454,8 @@ public class VocableVerificationData {
             return this;
         }
 
-        public DataWithMandatoryTermsBuilder addOptionalValues(VocableVerificationData optionalValues) {
-            data.addOptionalValues(optionalValues);
+        public DataWithMandatoryTermsBuilder addAlternative(VocableVerificationData alternative) {
+            data.addAlternative(alternative);
             return this;
         }
 

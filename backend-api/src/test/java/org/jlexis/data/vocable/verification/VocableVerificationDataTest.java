@@ -132,9 +132,9 @@ public class VocableVerificationDataTest {
     }
 
     @Test
-    public void testAddAlternativeTerm() {
+    public void testAddAlternative() {
         builder.tokenizeAndAddString("XXX, YYY; AAA, BBB");
-        builder.addAlternativeTerm(new RegularTerm("A, B; 1, 2"));
+        builder.addAlternative(VocableVerificationData.create().fromTermData(new RegularTerm("A, B; 1, 2")).build());
 
         VocableVerificationData data = builder.build();
 
@@ -151,23 +151,23 @@ public class VocableVerificationDataTest {
         verify(data, "AAA, 2, 1", false);
     }
 
-    @Test
-    public void testAddOptionalValues() {
-        VocableVerificationData optional = VocableVerificationData.createFromTerms()
-                .tokenizeAndAddString("XXX, YYY, ZZZ").build();
-        builder.tokenizeAndAddString("A, B; 1, 2");
-        builder.addOptionalValues(optional);
-
-        VocableVerificationData data = builder.build();
-        assertEquals(2, data.getMandatoryValuesWithOptions().size());
-        assertEquals(7, data.getAllTokens().size());
-        verify(data, "XXX, A, 1", true);
-        verify(data, "XXX,ZZZ", false);
-        verify(data, "XXX, A", false);
-        verify(data, "B, 1", true);
-        verify(data, "A, B", false);
-        verify(data, "2, 1", false);
-    }
+//    @Test
+//    public void testAddOptionalValues() {
+//        VocableVerificationData optional = VocableVerificationData.createFromTerms()
+//                .tokenizeAndAddString("XXX, YYY, ZZZ").build();
+//        builder.tokenizeAndAddString("A, B; 1, 2");
+//        builder.addOptionalValues(optional);
+//
+//        VocableVerificationData data = builder.build();
+//        assertEquals(2, data.getMandatoryValuesWithOptions().size());
+//        assertEquals(7, data.getAllTokens().size());
+//        verify(data, "XXX, A, 1", true);
+//        verify(data, "XXX,ZZZ", false);
+//        verify(data, "XXX, A", false);
+//        verify(data, "B, 1", true);
+//        verify(data, "A, B", false);
+//        verify(data, "2, 1", false);
+//    }
 
 //    @Test
 //    public void testGetAlternativesForMandatoryValue() {
