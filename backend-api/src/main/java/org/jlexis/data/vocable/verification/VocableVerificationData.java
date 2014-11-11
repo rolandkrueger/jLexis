@@ -37,7 +37,6 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.jlexis.data.vocable.verification.ResolveParentheses.resolveParentheses;
 import static org.jlexis.data.vocable.verification.ResolveParentheses.resolveParenthesesForCollection;
 
 /**
@@ -123,7 +122,6 @@ public class VocableVerificationData {
         this.additionalQuestionText = additionalQuestionText;
     }
 
-    private void resolveAllParentheses() {
     /**
      * Resolves all parenthesized content for all mandatory and optional components of this object. Resolving
      * parentheses is performed according to the contract of class {@link org.jlexis.data.vocable.verification.ResolveParentheses}.
@@ -137,9 +135,11 @@ public class VocableVerificationData {
      * typically invoked exactly once for a {@link org.jlexis.data.vocable.verification.VocableVerificationData} object
      * during the process of verifying a given answer to a vocabulary quiz question.
      */
+    public void resolveAllParenthesizedContent() {
         for (Set<String> set : data) {
             set.addAll(resolveParenthesesForCollection(set));
         }
+        optionalValues.addAll(resolveParenthesesForCollection(optionalValues));
     }
 
     public VocableVerificationResult verify(VocableVerificationData comparisonValue) {
@@ -161,8 +161,7 @@ public class VocableVerificationData {
         }
         Set<String> inputSet = new WhitespaceAndSuffixTolerantSet(comparisonValue.getAllTokens());
 
-        resolveAllParentheses();
-        optionalValues.addAll(resolveParenthesesForCollection(optionalValues));
+        resolveAllParenthesizedContent();
 
         for (VocableVerificationData alternative : alternatives) {
             VocableVerificationResult alternativeResult = alternative.verify(comparisonValue, forLanguage, normalizeAbbreviations);
@@ -247,21 +246,6 @@ public class VocableVerificationData {
             }
         }
         return true;
-    }
-
-    private void addMandatoryValue(String mandatoryValue) {
-        Objects.requireNonNull(mandatoryValue, "given mandatory value is null");
-
-        if (contains(mandatoryValue)) {
-            return;
-        }
-
-        Set<String> set = new WhitespaceAndSuffixTolerantSet();
-        set.addAll(resolveParentheses(mandatoryValue));
-
-        if (!set.isEmpty()) {
-            data.add(set);
-        }
     }
 
     private void addMandatoryValueWithOptions(Collection<String> options) {
