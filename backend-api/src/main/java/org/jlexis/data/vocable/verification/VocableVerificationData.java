@@ -124,6 +124,19 @@ public class VocableVerificationData {
     }
 
     private void resolveAllParentheses() {
+    /**
+     * Resolves all parenthesized content for all mandatory and optional components of this object. Resolving
+     * parentheses is performed according to the contract of class {@link org.jlexis.data.vocable.verification.ResolveParentheses}.
+     * <p/>
+     * For example, if the value <em>Lehrer(in)</em> has been set as a mandatory term for this data object, the result
+     * of calling this method will be that the parentheses of this term will be resolved into the three values
+     * <em>Lehrer(in)</em>, <em>Lehrer</em>, and <em>Lehrerin</em>. By that, providing at least one of these options as
+     * an answer during a vocabulary quiz will be accepted as a correct solution.
+     * <p/>
+     * This operation is idempotent, i.e. it can be called more than once with its result remaining the same. It is
+     * typically invoked exactly once for a {@link org.jlexis.data.vocable.verification.VocableVerificationData} object
+     * during the process of verifying a given answer to a vocabulary quiz question.
+     */
         for (Set<String> set : data) {
             set.addAll(resolveParenthesesForCollection(set));
         }

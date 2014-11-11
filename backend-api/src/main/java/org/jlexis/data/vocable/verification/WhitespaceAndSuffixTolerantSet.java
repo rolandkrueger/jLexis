@@ -215,11 +215,14 @@ public class WhitespaceAndSuffixTolerantSet implements Set<String> {
         return data.keySet().hashCode();
     }
 
+    /**
+     * Normalizes a String by performing the following operations on it: <ul> <li>remove all leading and trailing
+     * whitespace</li> <li>replace all whitespaces with a single blank</li> <li>remove all whitespace before and
+     * after punctuation characters</li> </ul>
+     */
     public static class StringNormalizer {
         /**
-         * Normalizes a String by performing the following operations on it: <ul> <li>remove all leading and trailing
-         * whitespace</li> <li>replace all whitespaces with a single blank</li> <li>remove all whitespace before and
-         * after punctuation characters</li> </ul>
+         * Normalizes a String as described above.
          *
          * @param value input value, must not be null
          * @return normalized value
