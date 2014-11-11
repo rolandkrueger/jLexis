@@ -30,11 +30,11 @@ import static org.jlexis.util.StringUtils.isStringNullOrEmpty;
  */
 public final class ResolveParentheses {
 
-    public static final String PARENTHESIZED_CONTENT_GROUP = "ParenthesizedContent";
-    public static final String CONTENT_BEFORE_PARENTHESES_GROUP = "ContentBeforeParentheses";
-    public static final String CONTENT_AFTER_PARENTHESES_GROUP = "ContentAfterParentheses";
+    private static final String PARENTHESIZED_CONTENT_GROUP = "ParenthesizedContent";
+    private static final String CONTENT_BEFORE_PARENTHESES_GROUP = "ContentBeforeParentheses";
+    private static final String CONTENT_AFTER_PARENTHESES_GROUP = "ContentAfterParentheses";
     private static Pattern PATTERN = Pattern.compile(
-                    "(?<ContentBeforeParentheses>.*?)" +
+            "(?<ContentBeforeParentheses>.*?)" +
                     "\\((?<ParenthesizedContent>[^()]*)\\)" +
                     "(?<ContentAfterParentheses>.*?)");
 
@@ -63,7 +63,7 @@ public final class ResolveParentheses {
             return Collections.singleton(value);
         }
 
-        return new ResolveParentheses().resolve(value);
+        return new ResolveParentheses().resolve(value, new HashSet<>());
     }
 
     /**
@@ -90,12 +90,12 @@ public final class ResolveParentheses {
         return result;
     }
 
-    private Set<String> resolve(String value) {
+    private Set<String> resolve(String value, Set<String> set) {
         if (isStringNullOrEmpty(value)) {
             return emptySet();
         }
 
-        Set<String> result = new HashSet<>(Collections.singleton(value.trim()));
+        set.add(value.trim());
         String processedPrefix = "";
         int groupCount = 0;
 
@@ -104,14 +104,14 @@ public final class ResolveParentheses {
             if (groupCount > 3) {
                 return Collections.singleton(value);
             }
-            result.addAll(resolve(processedPrefix + matcher.group(CONTENT_BEFORE_PARENTHESES_GROUP) + matcher.group(CONTENT_AFTER_PARENTHESES_GROUP)));
-            result.addAll(resolve(processedPrefix + matcher.group(CONTENT_BEFORE_PARENTHESES_GROUP) + matcher.group(PARENTHESIZED_CONTENT_GROUP) + matcher.group(CONTENT_AFTER_PARENTHESES_GROUP)));
+            set.addAll(resolve(processedPrefix + matcher.group(CONTENT_BEFORE_PARENTHESES_GROUP) + matcher.group(CONTENT_AFTER_PARENTHESES_GROUP), set));
+            set.addAll(resolve(processedPrefix + matcher.group(CONTENT_BEFORE_PARENTHESES_GROUP) + matcher.group(PARENTHESIZED_CONTENT_GROUP) + matcher.group(CONTENT_AFTER_PARENTHESES_GROUP), set));
             processedPrefix = value.substring(0, indexAfterClosingParentheses(matcher));
             matcher.region(indexAfterClosingParentheses(matcher), value.length());
             groupCount++;
         }
 
-        return result;
+        return set;
     }
 
     private int indexAfterClosingParentheses(Matcher matcher) {
