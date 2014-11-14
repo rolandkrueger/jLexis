@@ -30,18 +30,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * @author Roland Krueger
- * @version $Id: AbstractQuizTypeConfiguration.java 197 2009-12-14 07:27:08Z roland $
- */
 public abstract class AbstractQuizTypeConfiguration {
-    private Optional<Language> mLanguage;
-    private List<AbstractQuizQuestion> mQuizQuestions;
-    private AbstractQuizType mQuizType;
+    private Optional<Language> language;
+    private List<AbstractQuizQuestion> quizQuestions;
+    private AbstractQuizType quizType;
 
     protected AbstractQuizTypeConfiguration(AbstractQuizType type) {
-        mLanguage = Optional.empty();
-        mQuizType = Preconditions.checkNotNull(type);
+        language = Optional.empty();
+        quizType = Preconditions.checkNotNull(type);
     }
 
     protected abstract List<AbstractQuizQuestion> createQuizQuestionsForImpl(List<UnmodifiableLearningUnit> units, Language forLanguage);
@@ -51,25 +47,25 @@ public abstract class AbstractQuizTypeConfiguration {
     public abstract AbstractQuizTypeConfiguration getCopy();
 
     public final AbstractQuizType getQuizType() {
-        return mQuizType;
+        return quizType;
     }
 
     public final void createQuizQuestionsFor(List<UnmodifiableLearningUnit> units, Language forLanguage) {
-        mQuizQuestions = null;
-        mQuizQuestions = createQuizQuestionsForImpl(units, forLanguage);
+        quizQuestions = null;
+        quizQuestions = createQuizQuestionsForImpl(units, forLanguage);
     }
 
     public final List<AbstractQuizQuestion> getQuizQuestions() {
-        if (mQuizQuestions == null) return Collections.emptyList();
-        return mQuizQuestions;
+        if (quizQuestions == null) return Collections.emptyList();
+        return quizQuestions;
     }
 
     public final Optional<Language> getCorrespondingLanguage() {
-        return mLanguage;
+        return language;
     }
 
     public final void setCorrespondingLanguage(Language lang) {
         if (lang == null) return;
-        mLanguage = Optional.of(lang);
+        language = Optional.of(lang);
     }
 }

@@ -261,9 +261,7 @@ public class VocableVerificationData {
 
         data.forEach(result::addAll);
 
-        if (optionalValues != null) {
-            result.addAll(optionalValues);
-        }
+        result.addAll(optionalValues);
         for (VocableVerificationData data : alternatives) {
             result.addAll(data.getAllTokens());
         }
