@@ -25,7 +25,8 @@ package org.jlexis.data.vocable.verification;
 import java.util.*;
 
 /**
- * Represents the result of the evaluation for a given quiz answer.
+ * Represents the result of comparing one {@link org.jlexis.data.vocable.verification.VocableVerificationData} with
+ * another.
  *
  * @author Roland Krueger
  */
@@ -52,5 +53,17 @@ public class VocableComparisonResult {
 
     public Set<String> getRedundantValues() {
         return redundantValues;
+    }
+
+    public boolean hasMissingValues() {
+        return !missingValues.isEmpty();
+    }
+
+    public boolean hasRedundantValues() {
+        return !redundantValues.isEmpty();
+    }
+
+    public boolean isEmpty() {
+        return !hasMissingValues() && !hasRedundantValues();
     }
 }
