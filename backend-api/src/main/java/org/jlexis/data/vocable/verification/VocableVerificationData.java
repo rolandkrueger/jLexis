@@ -147,7 +147,7 @@ public class VocableVerificationData {
                                             boolean normalizeAbbreviations) {
         if (normalizeAbbreviations) {
             if (forLanguage == null) {
-                throw new NullPointerException("Cannot normalize abbreviations: Language object is null.");
+                throw new NullPointerException("Cannot harmonize abbreviations: Language object is null.");
             }
 //            normalizeAbbreviations(forLanguage);
 //            comparisonValue.normalizeAbbreviations(forLanguage);

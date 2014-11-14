@@ -66,7 +66,7 @@ public class AbbreviationAlternatives {
         alternatives.addAll(Arrays.asList(alternativesArray));
     }
 
-    public String normalize(String input) {
+    public String harmonize(String input) {
         String result = collapseWhitespace(input);
         result = result.replaceAll(regex, "$2" + fullForm + "$5");
         return collapseWhitespace(result);

@@ -25,7 +25,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
 @RunWith(Parameterized)
-class NormalizeAbbreviationAlternativesTest extends JLexisTestBase {
+class HarmonizeAbbreviationAlternativesTest extends JLexisTestBase {
 
     String fullForm
     String[]  alternatives
@@ -57,7 +57,7 @@ class NormalizeAbbreviationAlternativesTest extends JLexisTestBase {
         ]
     }
 
-    NormalizeAbbreviationAlternativesTest(String fullForm, def alternatives, String expectedOutput, String input) {
+    HarmonizeAbbreviationAlternativesTest(String fullForm, def alternatives, String expectedOutput, String input) {
         this.fullForm = fullForm
         this.alternatives = alternatives
         this.expectedOutput = expectedOutput
@@ -69,6 +69,6 @@ class NormalizeAbbreviationAlternativesTest extends JLexisTestBase {
         AbbreviationAlternatives abbreviationAlternatives = new AbbreviationAlternatives(fullForm)
         abbreviationAlternatives.setAlternatives(alternatives)
 
-        assertEquals("incorrect output for input '" + input + "'", expectedOutput, abbreviationAlternatives.normalize(input))
+        assertEquals("incorrect output for input '" + input + "'", expectedOutput, abbreviationAlternatives.harmonize(input))
     }
 }
