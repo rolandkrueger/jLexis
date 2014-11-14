@@ -29,11 +29,11 @@ import java.util.*;
  *
  * @author Roland Krueger
  */
-public class VocableVerificationResult {
+public class VocableComparisonResult {
     private Set<String> redundantValues;
     private Set<String> missingValues;
 
-    public VocableVerificationResult() {
+    public VocableComparisonResult() {
         redundantValues = new HashSet<>();
         missingValues = new HashSet<>();
     }

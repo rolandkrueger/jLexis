@@ -134,13 +134,13 @@ public class VocableVerificationData {
         optionalValues.addAll(resolveParenthesesForCollection(optionalValues));
     }
 
-    public VocableVerificationResult compareWith(VocableVerificationData comparisonValue) {
+    public VocableComparisonResult compareWith(VocableVerificationData comparisonValue) {
 
         return null;
     }
 
     @Deprecated
-    public VocableVerificationResult verify(VocableVerificationData comparisonValue) {
+    public VocableComparisonResult verify(VocableVerificationData comparisonValue) {
 
 //            normalizeAbbreviations(forLanguage);
 //            comparisonValue.normalizeAbbreviations(forLanguage);
@@ -149,7 +149,7 @@ public class VocableVerificationData {
         resolveAllParenthesizedContent();
 
         for (VocableVerificationData alternative : alternatives) {
-            VocableVerificationResult alternativeResult = alternative.verify(comparisonValue);
+            VocableComparisonResult alternativeResult = alternative.verify(comparisonValue);
 //            if (alternativeResult.getResult() == VocableVerificationResultEnum.CORRECT) {
 //                return alternativeResult;
 //            }
@@ -178,14 +178,14 @@ public class VocableVerificationData {
 
         if (compareData.isEmpty()) {
             if (inputSet.isEmpty()) {
-                return new VocableVerificationResult();
+                return new VocableComparisonResult();
             } else {
-                VocableVerificationResult result = new VocableVerificationResult();
+                VocableComparisonResult result = new VocableComparisonResult();
                 result.addRedundantValues(inputSet);
                 return result;
             }
         } else {
-            VocableVerificationResult result = new VocableVerificationResult();
+            VocableComparisonResult result = new VocableComparisonResult();
             result.addMissingValues(compareData.getAllTokens());
             return result;
         }
