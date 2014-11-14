@@ -22,11 +22,10 @@
 package org.jlexis.data.vocable.verification;
 
 import com.google.common.base.Joiner;
+import com.google.common.collect.Ordering;
 import org.jlexis.util.StringUtils;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -48,27 +47,51 @@ public class AbbreviationVariants {
         return variants;
     }
 
-    public void setVariants(String... variantsArray) {
+    public void setVariants(String variant, String... variantsArray) {
+        List<String> sortedVariants = createSortedListOfVariantsArray(variant, variantsArray);
+        buildRegexForFindingAbbreviationVariants(sortedVariants);
+        assembleVariantsInSet(variant, variantsArray);
+    }
+
+    private void assembleVariantsInSet(String variant, String[] variantsArray) {
         variants = new HashSet<>();
-        if (variantsArray == null || variantsArray.length == 0) {
-            return;
+        variants.add(variant);
+
+        if (variantsArray != null) {
+            variants.addAll(Arrays.asList(variantsArray));
+        }
+    }
+
+    private void buildRegexForFindingAbbreviationVariants(List<String> sortedVariants) {
+        List<String> transformedVariants = new ArrayList<>(sortedVariants.size());
+        for (String variants : sortedVariants) {
+            transformAndAddVariant(transformedVariants, variants);
         }
 
-        for (String variants : variantsArray) {
-            this.variants.add(
-                    transformToRegex(
-                            collapseWhitespace(StringUtils.escapeRegexSpecialChars(
-                                    checkNotNull(variants, "null variant is not allowed")))));
-        }
+        regex = "(" + Joiner.on("|").skipNulls().join(transformedVariants) + ")";
+    }
 
-        regex = "(" + Joiner.on("|").skipNulls().join(variants) + ")";
-        variants.clear();
-        variants.addAll(Arrays.asList(variantsArray));
+    private List<String> createSortedListOfVariantsArray(String variant, String[] variantsArray) {
+        List<String> sortedVariants = new ArrayList<>(variantsArray == null ? 1 : variantsArray.length + 1);
+        sortedVariants.add(variant);
+        if (variantsArray != null) {
+            for (String arrayVariant : variantsArray) {
+                sortedVariants.add(arrayVariant);
+            }
+        }
+        return  Ordering.natural().reverse().sortedCopy(sortedVariants);
+    }
+
+    private void transformAndAddVariant(List<String> list, String variants) {
+        list.add(
+                transformToRegex(
+                        collapseWhitespace(StringUtils.escapeRegexSpecialChars(
+                                checkNotNull(variants, "null variant is not allowed")))));
     }
 
     public String harmonize(String input) {
         String result = collapseWhitespace(input);
-        result = result.replaceAll(regex, "$2" + fullForm + "$5");
+        result = result.replaceAll(regex, fullForm);
         return collapseWhitespace(result);
     }
 
@@ -78,7 +101,9 @@ public class AbbreviationVariants {
         }
 
         String result = variants;
-        result = "((\\s)|\\b|^|(\\W))" + result + "((\\s)|\\b|$|(\\W))";
+        // use positive look behind and look ahead groups to assure that an abbreviation is enclosed by
+        // either a punctuation character, a whitespace, a word boundary or the beginning or end of the input
+        result = "(?<=(\\p{Punct})|(\\s)|(\\b)|^)" + result + "(?=(\\p{Punct})|(\\s)|(\\b)|$)";
         return result;
     }
 
@@ -93,7 +118,7 @@ public class AbbreviationVariants {
     }
 
     private String removeAllSpacesAroundNonWordCharacters(String input) {
-        input = input.replaceAll(" ?(\\W) ?", "$1");
+        input = input.replaceAll(" ?(\\p{Punct}) ?", "$1");
         return input;
     }
 

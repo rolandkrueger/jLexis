@@ -40,16 +40,6 @@ class AbbreviationVariantsTest extends JLexisTestBase {
         }
     }
 
-    void test_setVariants_null() {
-        abbreviationVariants.setVariants(null)
-        assertEquals([] as Set, abbreviationVariants.getVariants())
-    }
-
-    void test_setVariants_empty_array_yields_empty_set() {
-        abbreviationVariants.setVariants()
-        assertEquals([] as Set, abbreviationVariants.getVariants())
-    }
-
     void test_setVariants() {
         abbreviationVariants.setVariants("abbr.", "abbr.", "abbrev.")
         assertEquals(["abbrev.", "abbr."] as Set, abbreviationVariants.getVariants())
@@ -65,10 +55,12 @@ class AbbreviationVariantsTest extends JLexisTestBase {
         assertThat new AbbreviationVariants("abbreviation").getFullForm(), is("abbreviation")
     }
 
-    void test_setVariants_WithNull() {
+    void test_setVariants_With_null_or_empty() {
         shouldFail(NullPointerException) {
             abbreviationVariants.setVariants(null, null)
         }
+        shouldFail(NullPointerException) {
+            abbreviationVariants.setVariants(null)
+        }
     }
-
 }

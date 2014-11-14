@@ -38,8 +38,9 @@ class HarmonizeAbbreviationVariantsTest extends JLexisTestBase {
                 ["\t    abbreviation    ", ["abbr.", "abbrev.", "abbrv.", "abbr"], "abbreviation abbreviation abbreviation abbreviation", "abbreviation abbr. abbrev. abbrv."] as Object[],
                 ["abbreviation", ["abbr.", "abbrev.", "abbrv.", "abbr"], "abbreviation abbreviation abbreviation abbreviation", "abbreviation abbr. abbrev. abbrv."] as Object[],
                 ["abbreviation", ["abbr.", "abbrev.", "abbrv.", "abbr"], "xxxabbr.abbreviation", "xxxabbr.   abbr."] as Object[],
-                ["abbreviation", ["abbr.", "abbrev.", "abbrv.", "abbr"], "abbreviation abbreviation", "abbr.abbr"] as Object[],
-                ["abbreviation", ["abbr.", "abbrev.", "abbrv.", "abbr"], "abbreviation xxx(abbreviation)abbreviation", "abbr.xxx(abbr.)abbr"] as Object[],
+                ["abbreviation", ["abbr", "abbrev.", "abbrv.", "abbr."], "abbreviation abbreviation", "abbr.abbr"] as Object[],
+                ["abbreviation", ["abbr.", "abbrev.", "abbrv.", "abbr"], "xxx(abbreviation)xxx", "xxx(abbr.)xxx"] as Object[],
+                ["abbreviation", ["abbr.", "abbrev.", "abbrv.", "abbr"], "abbreviation xxx(abbreviation)abbreviation", "abbr. xxx(abbr.)abbr"] as Object[],
                 ["abbreviation", ["abbr.", "abbrev.", "abbrv.", "abbr"], "abbreviation", "abbreviation"] as Object[],
                 ["abbreviation", ["abbr.", "abbr"], "abbreviation", "abbr."] as Object[],
                 ["abbreviation", [/*"abbr",*/ "abbr."], "(abbreviation)", "(abbr.)"] as Object[],
@@ -54,6 +55,8 @@ class HarmonizeAbbreviationVariantsTest extends JLexisTestBase {
 
                 ["someone", ["so."], "", ""] as Object[],
                 ["someone", ["s{}][|+(^*)o."], "xxx", "xxx"] as Object[],
+
+                ["something", ["something", "sth", "sth.", "someth."], "-something-", "- sth. -"] as Object[],
         ]
     }
 
@@ -67,7 +70,7 @@ class HarmonizeAbbreviationVariantsTest extends JLexisTestBase {
     @Test
     void test_normalize() {
         AbbreviationVariants abbreviationVariants = new AbbreviationVariants(fullForm)
-        abbreviationVariants.setVariants(variants)
+        abbreviationVariants.setVariants(variants[0], variants)
 
         assertEquals("incorrect output for input '" + input + "'", expectedOutput, abbreviationVariants.harmonize(input))
     }
