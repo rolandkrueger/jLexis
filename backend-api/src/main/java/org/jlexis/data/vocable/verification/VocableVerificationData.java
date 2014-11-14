@@ -252,15 +252,6 @@ public class VocableVerificationData {
                 .splitToList(value);
     }
 
-    private boolean contains(String token) {
-        for (Set<String> set : data) {
-            if (set.contains(token)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public Set<String> getAllTokens() {
         return Collections.unmodifiableSet(getAllTokensInternal());
     }
