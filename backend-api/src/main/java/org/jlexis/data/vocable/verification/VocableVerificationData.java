@@ -26,16 +26,12 @@ package org.jlexis.data.vocable.verification;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
-import org.apache.commons.lang.math.IntRange;
 import org.jlexis.data.languages.Language;
 import org.jlexis.data.vocable.terms.AbstractTermData;
 import org.jlexis.data.vocable.terms.InflectedTerm;
 import org.jlexis.data.vocable.terms.RegularTerm;
-import org.jlexis.util.StringUtils;
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static org.jlexis.data.vocable.verification.ResolveParentheses.resolveParenthesesForCollection;
 
@@ -45,9 +41,6 @@ import static org.jlexis.data.vocable.verification.ResolveParentheses.resolvePar
 public class VocableVerificationData {
     public static final char MANDATORY_COMPONENT_SPLIT_CHAR = ';';
     public static final char OPTIONAL_COMPONENT_SPLIT_CHAR = ',';
-    private static Pattern sPattern1 = Pattern.compile("\\w+(\\w*\\W*)*\\w*\\W");
-    private static Pattern sPattern2 = Pattern.compile("\\W\\w*(\\w*\\W*)*\\w+");
-    private static Pattern sPattern3 = Pattern.compile("\\W(\\w*\\W*)*\\w*\\W");
 
     protected Set<Set<String>> data;
     protected List<VocableVerificationData> alternatives;
@@ -156,8 +149,8 @@ public class VocableVerificationData {
             if (forLanguage == null) {
                 throw new NullPointerException("Cannot normalize abbreviations: Language object is null.");
             }
-            normalizeAbbreviations(forLanguage);
-            comparisonValue.normalizeAbbreviations(forLanguage);
+//            normalizeAbbreviations(forLanguage);
+//            comparisonValue.normalizeAbbreviations(forLanguage);
         }
         Set<String> inputSet = new WhitespaceAndSuffixTolerantSet(comparisonValue.getAllTokens());
 
@@ -313,81 +306,6 @@ public class VocableVerificationData {
 
     public Set<Set<String>> getMandatoryValuesWithOptions() {
         return Collections.unmodifiableSet(data);
-    }
-
-    protected void normalizeAbbreviations(Language forLanguage) {
-        if (!forLanguage.getLanguagePlugin().isPresent()) {
-            return;
-        }
-        List<Set<String>> abbreviationAlternatives =
-                forLanguage.getLanguagePlugin().get().getAbbreviationAlternatives();
-
-        String abbreviation;
-        for (Set<String> set : data) {
-            Set<String> copySet = new HashSet<>(set);
-            for (String userAnswer : copySet) {
-                Set<IntRange> excludedRanges = new HashSet<>();
-                set.remove(userAnswer);
-                for (Set<String> abbreviationSet : abbreviationAlternatives) {
-                    if (abbreviationSet.isEmpty()) {
-                        continue;
-                    }
-                    Set<String> copyAbbreviationSet = new HashSet<>(abbreviationSet);
-                    String abbreviationMaster = abbreviationSet.iterator().next();
-
-                    while (!copyAbbreviationSet.isEmpty()) {
-                        abbreviation = "";
-                        for (String s : copyAbbreviationSet) {
-                            if (s.length() > abbreviation.length()) {
-                                abbreviation = s;
-                            }
-                        }
-                        copyAbbreviationSet.remove(abbreviation);
-                        userAnswer = replaceAbbreviation(excludedRanges, userAnswer, abbreviation, abbreviationMaster);
-                    }
-                }
-                set.add(userAnswer);
-            }
-        }
-    }
-
-    private String replaceAbbreviation(Set<IntRange> excludedRanges, String input,
-                                       String replacedAbbreviation, String masterAbbreviation) {
-        assert excludedRanges != null;
-        String regex = "\\b%s\\b";
-        Matcher matcher = sPattern1.matcher(replacedAbbreviation);
-        if (matcher.matches()) {
-            regex = "\\b%s";
-        }
-        matcher = sPattern2.matcher(replacedAbbreviation);
-        if (matcher.matches()) {
-            regex = "%s\\b";
-        }
-        matcher = sPattern3.matcher(replacedAbbreviation);
-        if (matcher.matches()) {
-            regex = "%s";
-        }
-
-        Pattern pattern = Pattern.compile(String.format(regex,
-                StringUtils.escapeRegexSpecialChars(replacedAbbreviation).replaceAll("\\s+", "\\\\s+")));
-        matcher = pattern.matcher(input);
-
-        StringBuilder buf = new StringBuilder(input);
-        whileLoop:
-        while (matcher.find()) {
-            for (IntRange range : excludedRanges) {
-                if (range.containsInteger(matcher.start())) {
-                    continue whileLoop;
-                }
-            }
-            IntRange range = new IntRange(matcher.start(), matcher.start() + masterAbbreviation.length() - 1);
-            excludedRanges.add(range);
-
-            buf.replace(matcher.start(), matcher.end(), masterAbbreviation);
-            matcher = pattern.matcher(buf);
-        }
-
-        return buf.toString();
     }
 
     @Override
