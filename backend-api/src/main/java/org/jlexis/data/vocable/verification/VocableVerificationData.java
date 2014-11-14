@@ -329,12 +329,11 @@ public class VocableVerificationData {
                 Set<IntRange> excludedRanges = new HashSet<>();
                 set.remove(userAnswer);
                 for (Set<String> abbreviationSet : abbreviationAlternatives) {
-                    Set<String> copyAbbreviationSet = new HashSet<>(abbreviationSet);
                     if (abbreviationSet.isEmpty()) {
                         continue;
                     }
+                    Set<String> copyAbbreviationSet = new HashSet<>(abbreviationSet);
                     String abbreviationMaster = abbreviationSet.iterator().next();
-
 
                     while (!copyAbbreviationSet.isEmpty()) {
                         abbreviation = "";
