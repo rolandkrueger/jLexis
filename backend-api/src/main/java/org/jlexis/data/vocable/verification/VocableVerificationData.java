@@ -41,10 +41,11 @@ public class VocableVerificationData {
     public static final char MANDATORY_COMPONENT_SPLIT_CHAR = ';';
     public static final char OPTIONAL_COMPONENT_SPLIT_CHAR = ',';
 
-    protected Set<Set<String>> data;
-    protected List<VocableVerificationData> alternatives;
-    protected WhitespaceAndSuffixTolerantSet optionalValues;
-    protected String additionalQuestionText;
+    private Set<Set<String>> data;
+    private List<VocableVerificationData> alternatives;
+    private WhitespaceAndSuffixTolerantSet optionalValues;
+    private String additionalQuestionText;
+    private SetOfAbbreviationVariants abbreviationVariants;
 
     private VocableVerificationData() {
         data = new HashSet<>();
@@ -180,7 +181,7 @@ public class VocableVerificationData {
         }
         return inputSet;
     }
-    
+
     public List<VocableVerificationData> getAlternatives() {
         return Collections.unmodifiableList(alternatives);
     }
@@ -190,7 +191,7 @@ public class VocableVerificationData {
                 resolveParenthesesForCollection(
                         VocableVerificationData.createFromTerms()
                                 .tokenizeAndAddString(term.getResolvedAndPurgedTerm())
-                                .build()
+                                .finish().build()
                                 .getAllTokens()));
     }
 
@@ -232,7 +233,10 @@ public class VocableVerificationData {
     }
 
     private VocableVerificationData tokenizeAndAddString(String valueToAdd) {
-        for (String mandatoryComponent : splitStringOmitEmptyAndTrim(Strings.nullToEmpty(valueToAdd), MANDATORY_COMPONENT_SPLIT_CHAR)) {
+        String value = Strings.nullToEmpty(valueToAdd);
+        value = abbreviationVariants.harmonizeAll(value);
+
+        for (String mandatoryComponent : splitStringOmitEmptyAndTrim(value, MANDATORY_COMPONENT_SPLIT_CHAR)) {
             addMandatoryValueWithOptions(createListOfOptionalComponents(mandatoryComponent));
         }
         return this;
@@ -313,11 +317,11 @@ public class VocableVerificationData {
                 .toString();
     }
 
-    public final static class Builder {
-        public FinishedBuilder fromExisting(VocableVerificationData data) {
-            return new FinishedBuilder(new VocableVerificationData(data));
-        }
+    public void setAbbreviationVariants(SetOfAbbreviationVariants abbreviationVariants) {
+        this.abbreviationVariants = abbreviationVariants;
+    }
 
+    public final static class Builder {
         public FinishedBuilder fromTermData(AbstractTermData termData) {
             return new FinishedBuilder(new VocableVerificationData(termData));
         }
@@ -355,8 +359,8 @@ public class VocableVerificationData {
             return this;
         }
 
-        public VocableVerificationData build() {
-            return data;
+        public FinishedBuilder finish() {
+            return new FinishedBuilder(data);
         }
     }
 
@@ -367,9 +371,13 @@ public class VocableVerificationData {
             this.data = data;
         }
 
+        public FinishedBuilder withAbbreviationVariants(SetOfAbbreviationVariants variants) {
+            data.setAbbreviationVariants(variants);
+            return this;
+        }
+
         public VocableVerificationData build() {
             return data;
         }
-
     }
 }

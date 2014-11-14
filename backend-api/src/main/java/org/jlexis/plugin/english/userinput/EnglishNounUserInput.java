@@ -387,7 +387,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
             }
         }
 
-        final VocableVerificationData result = builder.build();
+        final VocableVerificationData result = builder.finish().build();
         result.setAdditionalQuestionText(additionalQuestionText);
         return result;
     }

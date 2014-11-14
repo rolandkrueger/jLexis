@@ -88,7 +88,7 @@ public class RegularTermTest extends AbstractTermDataTest {
         VocableVerificationData comparisonObject =
                 VocableVerificationData.createFromTerms()
                         .addMandatoryValueWithOptions(set1)
-                        .addMandatoryValueWithOptions(set2).build();
+                        .addMandatoryValueWithOptions(set2).finish().build();
         assertEquals(comparisonObject, verificationData);
     }
 }

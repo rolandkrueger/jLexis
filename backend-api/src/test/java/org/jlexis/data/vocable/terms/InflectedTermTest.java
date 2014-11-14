@@ -84,7 +84,7 @@ public class InflectedTermTest extends AbstractTermDataTest {
         set2.add("-vocable");
         VocableVerificationData comparisonObject = VocableVerificationData.createFromTerms()
                 .addMandatoryValueWithOptions(set1)
-                .addMandatoryValueWithOptions(set2).build();
+                .addMandatoryValueWithOptions(set2).finish().build();
         assertEquals(comparisonObject, verificationData);
     }
 }

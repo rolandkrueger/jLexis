@@ -102,7 +102,7 @@ public abstract class AbstractQuizQuestion {
 
     public AnswerCorrectness checkUserAnswer() {
         if (mType == QuizAnswerType.TEXT && mExpectedAnswer != null) {
-            VocableVerificationData givenAnswer = VocableVerificationData.createFromTerms().build();
+            VocableVerificationData givenAnswer = VocableVerificationData.createFromTerms().finish().build();
             //        TODO: fix me
 //            givenAnswer.tokenizeAndAddString(((TextualAnswerPanel) AnswerPanelManager.getInstance().
 //                    getAnswerPanelFor(sTextualAnswerPanelHandle)).getAnswerText());
@@ -192,7 +192,7 @@ public abstract class AbstractQuizQuestion {
             throw new NullPointerException("Expected answer is null.");
         VocableVerificationData data = VocableVerificationData.createFromTerms()
                 .tokenizeAndAddString(expectedAnswer.getNormalizedTerm())
-                .build();
+                .finish().build();
         setExpectedAnswer(data);
     }
 

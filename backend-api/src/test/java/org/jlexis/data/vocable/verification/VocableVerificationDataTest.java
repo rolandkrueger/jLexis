@@ -75,8 +75,8 @@ public class VocableVerificationDataTest {
 
 //    private void verify(String data, String input, boolean matchExpected) {
 //        builder.tokenizeAndAddString(data);
-//        VocableVerificationData comparison = VocableVerificationData.createFromTerms().tokenizeAndAddString(input).build();
-//        VocableVerificationResult result = builder.build().verify(comparison);
+//        VocableVerificationData comparison = VocableVerificationData.createFromTerms().tokenizeAndAddString(input).finish();
+//        VocableVerificationResult result = builder.finish().verify(comparison);
 //        if (matchExpected)
 //            assertEquals(VocableVerificationResultEnum.CORRECT, result.getResult());
 //        else
@@ -86,7 +86,7 @@ public class VocableVerificationDataTest {
 //    private void verify(VocableVerificationData data, String input, boolean matchExpected) {
 //        VocableVerificationData comparison = VocableVerificationData
 //                .createFromTerms()
-//                .tokenizeAndAddString(input).build();
+//                .tokenizeAndAddString(input).finish();
 //        VocableVerificationResult result = data.verify(comparison);
 //        if (matchExpected)
 //            assertEquals(VocableVerificationResultEnum.CORRECT, result.getResult());
@@ -98,7 +98,7 @@ public class VocableVerificationDataTest {
     public void testTokenizeAndAddString_WithEmptyValues() {
         builder.tokenizeAndAddString("");
         builder.tokenizeAndAddString(null);
-        assertEquals(0, builder.build().getAllTokens().size());
+        assertEquals(0, builder.finish().build().getAllTokens().size());
     }
 
 //    @Test
@@ -106,7 +106,7 @@ public class VocableVerificationDataTest {
 //        builder.tokenizeAndAddString("value1;;value2, opt1,,opt2,");
 //        builder.tokenizeAndAddString("A, B");
 //
-//        VocableVerificationData data = builder.build();
+//        VocableVerificationData data = builder.finish();
 //        assertEquals(6, data.getAllTokens().size());
 //        assertEquals(3, data.getMandatoryValuesWithOptions().size());
 //
@@ -126,9 +126,9 @@ public class VocableVerificationDataTest {
 //    @Test
 //    public void testAddAlternative() {
 //        builder.tokenizeAndAddString("XXX, YYY; AAA, BBB");
-//        builder.addAlternative(VocableVerificationData.create().fromTermData(new RegularTerm("A, B; 1, 2")).build());
+//        builder.addAlternative(VocableVerificationData.create().fromTermData(new RegularTerm("A, B; 1, 2")).finish());
 //
-//        VocableVerificationData data = builder.build();
+//        VocableVerificationData data = builder.finish();
 //
 //        assertEquals(2, data.getMandatoryValuesWithOptions().size());
 //        assertEquals(1, data.getAlternatives().size());
@@ -146,11 +146,11 @@ public class VocableVerificationDataTest {
 //    @Test
 //    public void testAddOptionalValues() {
 //        VocableVerificationData optional = VocableVerificationData.createFromTerms()
-//                .tokenizeAndAddString("XXX, YYY, ZZZ").build();
+//                .tokenizeAndAddString("XXX, YYY, ZZZ").finish();
 //        builder.tokenizeAndAddString("A, B; 1, 2");
 //        builder.addOptionalValues(optional);
 //
-//        VocableVerificationData data = builder.build();
+//        VocableVerificationData data = builder.finish();
 //        assertEquals(2, data.getMandatoryValuesWithOptions().size());
 //        assertEquals(7, data.getAllTokens().size());
 //        verify(data, "XXX, A, 1", true);

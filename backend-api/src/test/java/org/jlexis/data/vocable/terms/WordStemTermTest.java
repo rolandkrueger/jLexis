@@ -87,7 +87,7 @@ public class WordStemTermTest extends AbstractTermDataTest {
         try {
             comparisonObject = VocableVerificationData.createFromTerms()
                     .addMandatoryValueWithOptions(set1)
-                    .addMandatoryValueWithOptions(set2).build();
+                    .addMandatoryValueWithOptions(set2).finish().build();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -100,7 +100,7 @@ public class WordStemTermTest extends AbstractTermDataTest {
         set1.clear();
         set1.add("this is the testdata");
         comparisonObject = VocableVerificationData.createFromTerms()
-                .addMandatoryValueWithOptions(set1).build();
+                .addMandatoryValueWithOptions(set1).finish().build();
         assertEquals(comparisonObject, verificationData);
     }
 }
