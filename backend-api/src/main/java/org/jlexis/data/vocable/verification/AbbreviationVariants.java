@@ -30,13 +30,13 @@ import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class AbbreviationAlternatives {
+public class AbbreviationVariants {
 
     private String fullForm;
-    private Set<String> alternatives;
+    private Set<String> variants;
     private String regex;
 
-    public AbbreviationAlternatives(String fullForm) {
+    public AbbreviationVariants(String fullForm) {
         this.fullForm = " " + collapseWhitespace(checkNotNull(fullForm)) + " ";
     }
 
@@ -44,26 +44,26 @@ public class AbbreviationAlternatives {
         return fullForm.trim();
     }
 
-    public Set<String> getAlternatives() {
-        return alternatives;
+    public Set<String> getVariants() {
+        return variants;
     }
 
-    public void setAlternatives(String... alternativesArray) {
-        alternatives = new HashSet<>();
-        if (alternativesArray == null || alternativesArray.length == 0) {
+    public void setVariants(String... variantsArray) {
+        variants = new HashSet<>();
+        if (variantsArray == null || variantsArray.length == 0) {
             return;
         }
 
-        for (String alternative : alternativesArray) {
-            alternatives.add(
+        for (String variants : variantsArray) {
+            this.variants.add(
                     transformToRegex(
                             collapseWhitespace(StringUtils.escapeRegexSpecialChars(
-                                    checkNotNull(alternative, "null alternative is not allowed")))));
+                                    checkNotNull(variants, "null variant is not allowed")))));
         }
 
-        regex = "(" + Joiner.on("|").skipNulls().join(alternatives) + ")";
-        alternatives.clear();
-        alternatives.addAll(Arrays.asList(alternativesArray));
+        regex = "(" + Joiner.on("|").skipNulls().join(variants) + ")";
+        variants.clear();
+        variants.addAll(Arrays.asList(variantsArray));
     }
 
     public String harmonize(String input) {
@@ -72,12 +72,12 @@ public class AbbreviationAlternatives {
         return collapseWhitespace(result);
     }
 
-    private String transformToRegex(String alternative) {
-        if (alternative.isEmpty()) {
+    private String transformToRegex(String variants) {
+        if (variants.isEmpty()) {
             return "";
         }
 
-        String result = alternative;
+        String result = variants;
         result = "((\\s)|\\b|^|(\\W))" + result + "((\\s)|\\b|$|(\\W))";
         return result;
     }
