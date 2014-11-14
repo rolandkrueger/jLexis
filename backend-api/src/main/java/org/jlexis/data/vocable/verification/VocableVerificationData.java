@@ -127,7 +127,7 @@ public class VocableVerificationData {
      * typically invoked exactly once for a {@link org.jlexis.data.vocable.verification.VocableVerificationData} object
      * during the process of verifying a given answer to a vocabulary quiz question.
      */
-    public void resolveAllParenthesizedContent() {
+    private void resolveAllParenthesizedContent() {
         for (Set<String> set : data) {
             set.addAll(resolveParenthesesForCollection(set));
         }
@@ -135,62 +135,52 @@ public class VocableVerificationData {
     }
 
     public VocableComparisonResult compareWith(VocableVerificationData comparisonValue) {
-
-        return null;
-    }
-
-    @Deprecated
-    public VocableComparisonResult verify(VocableVerificationData comparisonValue) {
-
-//            normalizeAbbreviations(forLanguage);
-//            comparisonValue.normalizeAbbreviations(forLanguage);
-        Set<String> inputSet = new WhitespaceAndSuffixTolerantSet(comparisonValue.getAllTokens());
-
+        final Set<String> inputSet = buildInputSetForComparison(comparisonValue);
         resolveAllParenthesizedContent();
-
-        for (VocableVerificationData alternative : alternatives) {
-            VocableComparisonResult alternativeResult = alternative.verify(comparisonValue);
-//            if (alternativeResult.getResult() == VocableVerificationResultEnum.CORRECT) {
-//                return alternativeResult;
-//            }
-        }
-
-        for (VocableVerificationData data : comparisonValue.getAlternatives()) {
-            inputSet.addAll(data.getAllTokens());
-        }
 
         // Create a copy of this object. The data of this copy will be removed as needed.
         VocableVerificationData compareData = new VocableVerificationData(this);
 
         for (String value : new HashSet<>(inputSet)) {
             Set<String> thisMandatory = getAlternativesForMandatoryValue(value);
-            if (thisMandatory != null) {
-                // if one of the mandatory answers is contained in the comparison verification data object
-                // remove the respective set of alternative values for this mandatory answer from the
-                // result object
-                compareData.data.remove(thisMandatory);
-                inputSet.removeAll(thisMandatory);
+            if (!thisMandatory.isEmpty()) {
+                markSetOfMandatoryVariantsAsFoundInBothObjects(inputSet, compareData, thisMandatory);
             } else if (compareData.getOptionalValues().contains(value)) {
-                compareData.removeOptionalValue(value);
-                inputSet.remove(value);
+                markOptionalValueAsFoundInBothObjects(inputSet, compareData, value);
             }
         }
 
+        VocableComparisonResult result = new VocableComparisonResult();
         if (compareData.isEmpty()) {
-            if (inputSet.isEmpty()) {
-                return new VocableComparisonResult();
-            } else {
-                VocableComparisonResult result = new VocableComparisonResult();
-                result.addRedundantValues(inputSet);
-                return result;
-            }
+            result.addRedundantValues(inputSet);
         } else {
-            VocableComparisonResult result = new VocableComparisonResult();
             result.addMissingValues(compareData.getAllTokens());
-            return result;
         }
+        return result;
     }
 
+    private void markOptionalValueAsFoundInBothObjects(Set<String> inputSet, VocableVerificationData compareData, String value) {
+        compareData.removeOptionalValue(value);
+        inputSet.remove(value);
+    }
+
+    /**
+     * if one of the mandatory answers is contained in the comparison verification data object remove the respective set
+     * of alternative values for this mandatory answer from the result object
+     */
+    private void markSetOfMandatoryVariantsAsFoundInBothObjects(Set<String> inputSet, VocableVerificationData compareData, Set<String> thisMandatory) {
+        compareData.data.remove(thisMandatory);
+        inputSet.removeAll(thisMandatory);
+    }
+
+    private Set<String> buildInputSetForComparison(VocableVerificationData comparisonValue) {
+        Set<String> inputSet = new WhitespaceAndSuffixTolerantSet(comparisonValue.getAllTokens());
+        for (VocableVerificationData data : comparisonValue.getAlternatives()) {
+            inputSet.addAll(data.getAllTokens());
+        }
+        return inputSet;
+    }
+    
     public List<VocableVerificationData> getAlternatives() {
         return Collections.unmodifiableList(alternatives);
     }
@@ -293,7 +283,7 @@ public class VocableVerificationData {
                 return set;
             }
         }
-        return null;
+        return Collections.emptySet();
     }
 
     public Set<Set<String>> getMandatoryValuesWithOptions() {
