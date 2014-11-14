@@ -166,8 +166,8 @@ public class VocableVerificationData {
     }
 
     /**
-     * if one of the mandatory answers is contained in the comparison verification data object remove the respective set
-     * of alternative values for this mandatory answer from the result object
+     * If one of the mandatory answers is contained in the comparison verification data object remove the respective set
+     * of alternative values for this mandatory answer from the result object.
      */
     private void markSetOfMandatoryVariantsAsFoundInBothObjects(Set<String> inputSet, VocableVerificationData compareData, Set<String> thisMandatory) {
         compareData.data.remove(thisMandatory);
@@ -188,11 +188,10 @@ public class VocableVerificationData {
 
     private void addOptionalTerm(AbstractTermData term) {
         optionalValues.addAll(
-                resolveParenthesesForCollection(
-                        VocableVerificationData.createFromTerms()
-                                .tokenizeAndAddString(term.getResolvedAndPurgedTerm())
-                                .finish().build()
-                                .getAllTokens()));
+                VocableVerificationData.createFromTerms()
+                        .tokenizeAndAddString(term.getResolvedAndPurgedTerm())
+                        .finish().build()
+                        .getAllTokens());
     }
 
     private void removeOptionalValue(String value) {
@@ -226,7 +225,7 @@ public class VocableVerificationData {
 
     private void addMandatoryValueWithOptions(Collection<String> options) {
         Set<String> newSet = new WhitespaceAndSuffixTolerantSet();
-        newSet.addAll(resolveParenthesesForCollection(options));
+        newSet.addAll(options);
         if (!newSet.isEmpty()) {
             data.add(newSet);
         }
@@ -243,7 +242,7 @@ public class VocableVerificationData {
     }
 
     private Set<String> createListOfOptionalComponents(String mandatoryComponent) {
-        return new WhitespaceAndSuffixTolerantSet(resolveParenthesesForCollection(splitStringOmitEmptyAndTrim(mandatoryComponent, OPTIONAL_COMPONENT_SPLIT_CHAR)));
+        return new WhitespaceAndSuffixTolerantSet(splitStringOmitEmptyAndTrim(mandatoryComponent, OPTIONAL_COMPONENT_SPLIT_CHAR));
     }
 
     private List<String> splitStringOmitEmptyAndTrim(String value, char separator) {
