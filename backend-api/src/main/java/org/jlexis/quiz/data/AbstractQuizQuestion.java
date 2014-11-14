@@ -28,6 +28,7 @@ import org.jlexis.data.vocable.terms.AbstractTermData;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Roland Krueger
@@ -57,11 +58,8 @@ public abstract class AbstractQuizQuestion {
 //        sMultipleChoiceAnswerPanelHandles = new HashMap<Integer, AnswerPanelHandle>();
     }
     public AbstractQuizQuestion(Vocable forVocable, Language forLanguage) {
-        if (forVocable == null || forLanguage == null)
-            throw new NullPointerException("One of the arguments is null.");
-
-        mVocable = forVocable;
-        mQueriedLanguage = forLanguage;
+        mVocable = Objects.requireNonNull(forVocable);
+        mQueriedLanguage = Objects.requireNonNull(forLanguage);
         mIncorrectlyAnsweredCount = 0;
         mNumberOfTimesQuestionWasPosed = 0;
     }
@@ -73,8 +71,7 @@ public abstract class AbstractQuizQuestion {
     public abstract Language getSourceLanguage();
 
     public void setSourceLanguage(Language sourceLanguage) {
-        if (sourceLanguage == null)
-            throw new NullPointerException("Source language is null.");
+        Objects.requireNonNull(sourceLanguage, "Source language is null.");
         setSourceLanguageImpl(sourceLanguage);
     }
 
@@ -135,9 +132,7 @@ public abstract class AbstractQuizQuestion {
     }
 
     public void setQuestionText(String text) {
-        if (text == null)
-            throw new NullPointerException("Question text is null.");
-
+        Objects.requireNonNull(text, "Question text is null.");
         mQuestionText = text;
     }
 
@@ -146,9 +141,7 @@ public abstract class AbstractQuizQuestion {
     }
 
     public void setTextToTranslate(String textToTranslate) {
-        if (textToTranslate == null)
-            throw new NullPointerException("Text to translate is null.");
-
+        Objects.requireNonNull(textToTranslate, "Text to translate is null.");
         mTextToTranslate = textToTranslate;
     }
 
@@ -167,29 +160,30 @@ public abstract class AbstractQuizQuestion {
     public void setQuizAnswerType(QuizAnswerType type) {
         if ((type == QuizAnswerType.MULTIPLE_CHOICE_MULTIPLE_SELECTION ||
                 type == QuizAnswerType.MULTIPLE_CHOICE_SINGLE_SELECTION) &&
-                mOptionLabels == null)
+                mOptionLabels == null) {
             throw new IllegalStateException("No option labels have been set with setMultipleChoiceOptions() yet.");
+        }
 
         if (type != QuizAnswerType.MULTIPLE_CHOICE_MULTIPLE_SELECTION &&
-                type != QuizAnswerType.MULTIPLE_CHOICE_SINGLE_SELECTION)
+                type != QuizAnswerType.MULTIPLE_CHOICE_SINGLE_SELECTION) {
             mOptionLabels = null;
+        }
 
         mType = type;
     }
 
     public void setExpectedAnswer(VocableVerificationData expectedAnswer) {
-        if (mType != QuizAnswerType.TEXT)
+        if (mType != QuizAnswerType.TEXT) {
             throw new IllegalStateException("This quiz question is not of type TEXT. Configure it as being of " +
                     "type text with setQuizAnswerType() first.");
-        if (expectedAnswer == null)
-            throw new NullPointerException("Expected answer object is null.");
+        }
+        Objects.requireNonNull(expectedAnswer, "Expected answer object is null.");
 
         mExpectedAnswer = expectedAnswer;
     }
 
     public void setExpectedAnswer(AbstractTermData expectedAnswer) {
-        if (expectedAnswer == null)
-            throw new NullPointerException("Expected answer is null.");
+        Objects.requireNonNull(expectedAnswer, "Expected answer is null.");
         VocableVerificationData data = VocableVerificationData.createFromTerms()
                 .tokenizeAndAddString(expectedAnswer.getNormalizedTerm())
                 .finish().build();
@@ -197,11 +191,11 @@ public abstract class AbstractQuizQuestion {
     }
 
     public void setMultipleChoiceOptions(List<String> optionLabels) {
-        if (optionLabels == null)
-            throw new NullPointerException("Option label list is null.");
+        Objects.requireNonNull(optionLabels, "Option label list is null.");
 
-        if (mType == null)
+        if (mType == null) {
             mType = QuizAnswerType.MULTIPLE_CHOICE_SINGLE_SELECTION;
+        }
 
         //        TODO: fix me
 //        mAnswerPanelHandle = sMultipleChoiceAnswerPanelHandles.get(optionLabels.size());
@@ -216,8 +210,9 @@ public abstract class AbstractQuizQuestion {
 
     public List<Integer> getSelectedOptionIndices() {
         if (mType != QuizAnswerType.MULTIPLE_CHOICE_MULTIPLE_SELECTION &&
-                mType != QuizAnswerType.MULTIPLE_CHOICE_SINGLE_SELECTION)
+                mType != QuizAnswerType.MULTIPLE_CHOICE_SINGLE_SELECTION) {
             throw new IllegalStateException("This quiz question is not a multiple choice question.");
+        }
         //        TODO: fix me
 //        if (mAnswerPanelHandle == null)
 //            throw new IllegalStateException("This quiz question hasn't been posed yet.");
@@ -228,8 +223,9 @@ public abstract class AbstractQuizQuestion {
     }
 
     public String getAnswerText() {
-        if (mType != QuizAnswerType.TEXT)
+        if (mType != QuizAnswerType.TEXT) {
             throw new IllegalStateException("This quiz question is not of type TEXT.");
+        }
         //        TODO: fix me
 //        if (mAnswerPanelHandle == null)
 //            throw new IllegalStateException("This quiz question hasn't been posed yet.");
