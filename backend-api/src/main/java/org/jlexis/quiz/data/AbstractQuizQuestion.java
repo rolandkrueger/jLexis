@@ -26,7 +26,6 @@ import org.jlexis.data.languages.Language;
 import org.jlexis.data.vocable.Vocable;
 import org.jlexis.data.vocable.terms.AbstractTermData;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
-import org.jlexis.data.vocable.verification.VocableVerificationResult;
 
 import java.util.List;
 
@@ -107,10 +106,10 @@ public abstract class AbstractQuizQuestion {
             //        TODO: fix me
 //            givenAnswer.tokenizeAndAddString(((TextualAnswerPanel) AnswerPanelManager.getInstance().
 //                    getAnswerPanelFor(sTextualAnswerPanelHandle)).getAnswerText());
-            VocableVerificationResult result = mExpectedAnswer.verify(givenAnswer, mQueriedLanguage);
+//            VocableVerificationResult result = mExpectedAnswer.verify(givenAnswer, mQueriedLanguage);
 
-            if (result.isCorrect())
-                return AnswerCorrectness.CORRECT;
+//            if (result.isCorrect())
+//                return AnswerCorrectness.CORRECT;
             return AnswerCorrectness.INCORRECT;
         } else
             return checkUserAnswerImpl();

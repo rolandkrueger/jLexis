@@ -20,12 +20,7 @@
 
 package org.jlexis.data.vocable.verification;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.*;
 
 /**
  * Manages a set of {@link AbbreviationVariants}
@@ -51,8 +46,8 @@ public class SetOfAbbreviationVariants {
      * @param moreVariants more optional variants (e.g. 'someth.', 'sth', 'smthg.', ...)
      */
     public void addAbbreviation(String fullForm, String variant, String... moreVariants) {
-        checkNotNull(fullForm);
-        checkNotNull(variant);
+        Objects.requireNonNull(fullForm);
+        Objects.requireNonNull(variant);
         if ("".equals(fullForm.trim()) || "".equals(variant.trim())) {
             throw new IllegalStateException("full form and first variant must not be empty");
         }
@@ -69,7 +64,7 @@ public class SetOfAbbreviationVariants {
      * @return the input String with all contained abbreviations harmonized with all abbreviation variants of this set
      */
     public String harmonizeAll(String input) {
-        checkNotNull(input);
+        Objects.requireNonNull(input);
 
         for (AbbreviationVariants abbreviationVariants : variants.values()) {
             input = abbreviationVariants.harmonize(input);

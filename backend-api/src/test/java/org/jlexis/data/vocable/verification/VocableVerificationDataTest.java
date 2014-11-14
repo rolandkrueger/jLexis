@@ -22,20 +22,12 @@
  */
 package org.jlexis.data.vocable.verification;
 
-import org.jlexis.data.vocable.terms.RegularTerm;
 import org.jlexis.data.vocable.verification.VocableVerificationData.DataWithMandatoryTermsBuilder;
 import org.jlexis.managers.ConfigurationManager;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 
 
 /**
@@ -51,56 +43,56 @@ public class VocableVerificationDataTest {
         ConfigurationManager.getInstance().setOptionalTokenSplitChar(",");
     }
 
-    @Test
-    public void testVerify1() {
-        verify("value1;;value2, opt1,; opt2,;A, B", "value2, opt1,; opt2,;value1,;A, B", true);
-    }
+//    @Test
+//    public void testVerify1() {
+//        verify("value1;;value2, opt1,; opt2,;A, B", "value2, opt1,; opt2,;value1,;A, B", true);
+//    }
+//
+//    @Test
+//    public void testVerify2() {
+//        verify("value1; value2, opt1, opt2; value3, A, B", "opt1, value1, opt2, A", true);
+//    }
+//
+//    @Test
+//    public void testVerify3() {
+//        verify("value1; value2, opt1, opt2; value3, A, B", "opt1, value1, opt2", false);
+//    }
+//
+//    @Test
+//    public void testVerify4() {
+//        verify("value1; value2, opt1, opt2; value3, A, B", "", false);
+//    }
+//
+//    @Test
+//    public void testVerify5() {
+//        verify("value1; value2, opt1, opt2; value3, A, B", "XXX, opt1, value1, opt2, A", false);
+//    }
+//
+//    @Test
+//    public void testVerify_WhitespacesAreNormalized() {
+//        verify("value containing   whitespaces; or \t even  tabs", "value \t containing whitespaces, or even \n tabs", true);
+//    }
 
-    @Test
-    public void testVerify2() {
-        verify("value1; value2, opt1, opt2; value3, A, B", "opt1, value1, opt2, A", true);
-    }
-
-    @Test
-    public void testVerify3() {
-        verify("value1; value2, opt1, opt2; value3, A, B", "opt1, value1, opt2", false);
-    }
-
-    @Test
-    public void testVerify4() {
-        verify("value1; value2, opt1, opt2; value3, A, B", "", false);
-    }
-
-    @Test
-    public void testVerify5() {
-        verify("value1; value2, opt1, opt2; value3, A, B", "XXX, opt1, value1, opt2, A", false);
-    }
-
-    @Test
-    public void testVerify_WhitespacesAreNormalized() {
-        verify("value containing   whitespaces; or \t even  tabs", "value \t containing whitespaces, or even \n tabs", true);
-    }
-
-    private void verify(String data, String input, boolean matchExpected) {
-        builder.tokenizeAndAddString(data);
-        VocableVerificationData comparison = VocableVerificationData.createFromTerms().tokenizeAndAddString(input).build();
-        VocableVerificationResult result = builder.build().verify(comparison);
-        if (matchExpected)
-            assertEquals(VocableVerificationResultEnum.CORRECT, result.getResult());
-        else
-            assertFalse(result.getResult() == VocableVerificationResultEnum.CORRECT);
-    }
-
-    private void verify(VocableVerificationData data, String input, boolean matchExpected) {
-        VocableVerificationData comparison = VocableVerificationData
-                .createFromTerms()
-                .tokenizeAndAddString(input).build();
-        VocableVerificationResult result = data.verify(comparison);
-        if (matchExpected)
-            assertEquals(VocableVerificationResultEnum.CORRECT, result.getResult());
-        else
-            assertFalse(result.getResult() == VocableVerificationResultEnum.CORRECT);
-    }
+//    private void verify(String data, String input, boolean matchExpected) {
+//        builder.tokenizeAndAddString(data);
+//        VocableVerificationData comparison = VocableVerificationData.createFromTerms().tokenizeAndAddString(input).build();
+//        VocableVerificationResult result = builder.build().verify(comparison);
+//        if (matchExpected)
+//            assertEquals(VocableVerificationResultEnum.CORRECT, result.getResult());
+//        else
+//            assertFalse(result.getResult() == VocableVerificationResultEnum.CORRECT);
+//    }
+//
+//    private void verify(VocableVerificationData data, String input, boolean matchExpected) {
+//        VocableVerificationData comparison = VocableVerificationData
+//                .createFromTerms()
+//                .tokenizeAndAddString(input).build();
+//        VocableVerificationResult result = data.verify(comparison);
+//        if (matchExpected)
+//            assertEquals(VocableVerificationResultEnum.CORRECT, result.getResult());
+//        else
+//            assertFalse(result.getResult() == VocableVerificationResultEnum.CORRECT);
+//    }
 
     @Test
     public void testTokenizeAndAddString_WithEmptyValues() {
@@ -109,47 +101,47 @@ public class VocableVerificationDataTest {
         assertEquals(0, builder.build().getAllTokens().size());
     }
 
-    @Test
-    public void testTokenizeAndAddString() {
-        builder.tokenizeAndAddString("value1;;value2, opt1,,opt2,");
-        builder.tokenizeAndAddString("A, B");
+//    @Test
+//    public void testTokenizeAndAddString() {
+//        builder.tokenizeAndAddString("value1;;value2, opt1,,opt2,");
+//        builder.tokenizeAndAddString("A, B");
+//
+//        VocableVerificationData data = builder.build();
+//        assertEquals(6, data.getAllTokens().size());
+//        assertEquals(3, data.getMandatoryValuesWithOptions().size());
+//
+//        Set<String> set1 = new HashSet<String>(Arrays.asList("value1"));
+//        Set<String> set2 = new HashSet<String>(Arrays.asList("value2", "opt2", "opt1"));
+//        Set<String> set3 = new HashSet<String>(Arrays.asList("A", "B"));
+//        Set<Set<String>> set = new HashSet<Set<String>>();
+//        set.add(set1);
+//        set.add(set2);
+//        set.add(set3);
+//        assertThat(data.getMandatoryValuesWithOptions(), is(set));
+//        verify(data, "value1, opt1, A", true);
+//        verify(data, "value1, opt1", false);
+//        verify(data, "opt1, B", false);
+//    }
 
-        VocableVerificationData data = builder.build();
-        assertEquals(6, data.getAllTokens().size());
-        assertEquals(3, data.getMandatoryValuesWithOptions().size());
-
-        Set<String> set1 = new HashSet<String>(Arrays.asList("value1"));
-        Set<String> set2 = new HashSet<String>(Arrays.asList("value2", "opt2", "opt1"));
-        Set<String> set3 = new HashSet<String>(Arrays.asList("A", "B"));
-        Set<Set<String>> set = new HashSet<Set<String>>();
-        set.add(set1);
-        set.add(set2);
-        set.add(set3);
-        assertThat(data.getMandatoryValuesWithOptions(), is(set));
-        verify(data, "value1, opt1, A", true);
-        verify(data, "value1, opt1", false);
-        verify(data, "opt1, B", false);
-    }
-
-    @Test
-    public void testAddAlternative() {
-        builder.tokenizeAndAddString("XXX, YYY; AAA, BBB");
-        builder.addAlternative(VocableVerificationData.create().fromTermData(new RegularTerm("A, B; 1, 2")).build());
-
-        VocableVerificationData data = builder.build();
-
-        assertEquals(2, data.getMandatoryValuesWithOptions().size());
-        assertEquals(1, data.getAlternatives().size());
-        assertEquals(8, data.getAllTokens().size());
-        verify(data, "B, 1", true);
-        verify(data, "A, 2, 1", true);
-        verify(data, "A, 2,B, 1", true);
-        verify(data, "XXX; AAA", true);
-        verify(data, "BBB;XXX; AAA", true);
-        verify(data, "BBB;XXX; AAA, YYY", true);
-        verify(data, "XXX, B", false);
-        verify(data, "AAA, 2, 1", false);
-    }
+//    @Test
+//    public void testAddAlternative() {
+//        builder.tokenizeAndAddString("XXX, YYY; AAA, BBB");
+//        builder.addAlternative(VocableVerificationData.create().fromTermData(new RegularTerm("A, B; 1, 2")).build());
+//
+//        VocableVerificationData data = builder.build();
+//
+//        assertEquals(2, data.getMandatoryValuesWithOptions().size());
+//        assertEquals(1, data.getAlternatives().size());
+//        assertEquals(8, data.getAllTokens().size());
+//        verify(data, "B, 1", true);
+//        verify(data, "A, 2, 1", true);
+//        verify(data, "A, 2,B, 1", true);
+//        verify(data, "XXX; AAA", true);
+//        verify(data, "BBB;XXX; AAA", true);
+//        verify(data, "BBB;XXX; AAA, YYY", true);
+//        verify(data, "XXX, B", false);
+//        verify(data, "AAA, 2, 1", false);
+//    }
 
 //    @Test
 //    public void testAddOptionalValues() {
@@ -237,10 +229,9 @@ public class VocableVerificationDataTest {
 //        VocableVerificationResult result = builder.verify(compareObj);
 //        assertEquals(VocableVerificationResultEnum.CORRECT, result.getResult());
 //    }
-
-    @Test
-    public void testSetContainsIgnoreSpecificWhitespaces() {
-        verify("was?; wo? hier !", "was ?, wo  ? hier!", true);
-    }
+//    @Test
+//    public void testSetContainsIgnoreSpecificWhitespaces() {
+//        verify("was?; wo? hier !", "was ?, wo  ? hier!", true);
+//    }
 
 }

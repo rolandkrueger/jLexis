@@ -26,7 +26,6 @@ package org.jlexis.data.vocable.verification;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
-import org.jlexis.data.languages.Language;
 import org.jlexis.data.vocable.terms.AbstractTermData;
 import org.jlexis.data.vocable.terms.InflectedTerm;
 import org.jlexis.data.vocable.terms.RegularTerm;
@@ -135,32 +134,25 @@ public class VocableVerificationData {
         optionalValues.addAll(resolveParenthesesForCollection(optionalValues));
     }
 
+    public VocableVerificationResult compareWith(VocableVerificationData comparisonValue) {
+
+        return null;
+    }
+
+    @Deprecated
     public VocableVerificationResult verify(VocableVerificationData comparisonValue) {
-        return verify(comparisonValue, null, false);
-    }
 
-    public VocableVerificationResult verify(VocableVerificationData comparisonValue, Language forLanguage) {
-        return verify(comparisonValue, forLanguage, true);
-    }
-
-    public VocableVerificationResult verify(VocableVerificationData comparisonValue, Language forLanguage,
-                                            boolean normalizeAbbreviations) {
-        if (normalizeAbbreviations) {
-            if (forLanguage == null) {
-                throw new NullPointerException("Cannot harmonize abbreviations: Language object is null.");
-            }
 //            normalizeAbbreviations(forLanguage);
 //            comparisonValue.normalizeAbbreviations(forLanguage);
-        }
         Set<String> inputSet = new WhitespaceAndSuffixTolerantSet(comparisonValue.getAllTokens());
 
         resolveAllParenthesizedContent();
 
         for (VocableVerificationData alternative : alternatives) {
-            VocableVerificationResult alternativeResult = alternative.verify(comparisonValue, forLanguage, normalizeAbbreviations);
-            if (alternativeResult.getResult() == VocableVerificationResultEnum.CORRECT) {
-                return alternativeResult;
-            }
+            VocableVerificationResult alternativeResult = alternative.verify(comparisonValue);
+//            if (alternativeResult.getResult() == VocableVerificationResultEnum.CORRECT) {
+//                return alternativeResult;
+//            }
         }
 
         for (VocableVerificationData data : comparisonValue.getAlternatives()) {
@@ -186,14 +178,14 @@ public class VocableVerificationData {
 
         if (compareData.isEmpty()) {
             if (inputSet.isEmpty()) {
-                return new VocableVerificationResult(VocableVerificationResultEnum.CORRECT);
+                return new VocableVerificationResult();
             } else {
-                VocableVerificationResult result = new VocableVerificationResult(VocableVerificationResultEnum.TOO_MANY_VALUES);
+                VocableVerificationResult result = new VocableVerificationResult();
                 result.addRedundantValues(inputSet);
                 return result;
             }
         } else {
-            VocableVerificationResult result = new VocableVerificationResult(VocableVerificationResultEnum.NOT_ENOUGH_VALUES);
+            VocableVerificationResult result = new VocableVerificationResult();
             result.addMissingValues(compareData.getAllTokens());
             return result;
         }

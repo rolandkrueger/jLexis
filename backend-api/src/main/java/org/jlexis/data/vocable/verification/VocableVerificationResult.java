@@ -30,18 +30,12 @@ import java.util.*;
  * @author Roland Krueger
  */
 public class VocableVerificationResult {
-    private VocableVerificationResultEnum result;
     private Set<String> redundantValues;
     private Set<String> missingValues;
 
-    public VocableVerificationResult(VocableVerificationResultEnum result) {
-        this.result = Objects.requireNonNull(result);
+    public VocableVerificationResult() {
         redundantValues = new HashSet<>();
         missingValues = new HashSet<>();
-    }
-
-    public boolean isCorrect() {
-        return result == VocableVerificationResultEnum.CORRECT;
     }
 
     public void addRedundantValues(Collection<String> redundantValues) {
@@ -50,10 +44,6 @@ public class VocableVerificationResult {
 
     public void addMissingValues(Collection<String> missingValues) {
         this.missingValues.addAll(missingValues);
-    }
-
-    public VocableVerificationResultEnum getResult() {
-        return result;
     }
 
     public Set<String> getMissingValues() {
