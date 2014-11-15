@@ -157,13 +157,20 @@ public class VocableVerificationData {
         return Collections.unmodifiableList(alternatives);
     }
 
-    private void addOptionalTerm(AbstractTermData term) {
+    private void addOptionalValue(String value) {
+        if ("".equals(Strings.nullToEmpty(value).trim())) {
+            return;
+        }
         optionalValues.addAll(
                 VocableVerificationData.create()
                         .withAbbreviationVariants(abbreviationVariants)
-                        .tokenizeAndAddString(term.getResolvedAndPurgedTerm())
+                        .tokenizeAndAddString(value)
                         .build()
                         .getAllValues());
+    }
+
+    private void addOptionalTerm(AbstractTermData term) {
+        addOptionalValue(term.getResolvedAndPurgedTerm());
     }
 
     private void removeOptionalValue(String value) {
@@ -300,6 +307,11 @@ public class VocableVerificationData {
 
         public DataWithMandatoryTermsBuilder addOptionalTerm(AbstractTermData term) {
             data.addOptionalTerm(term);
+            return this;
+        }
+
+        public DataWithMandatoryTermsBuilder addOptionalValue(String value) {
+            data.addOptionalValue(value);
             return this;
         }
 
