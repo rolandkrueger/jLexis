@@ -334,7 +334,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
 
     @Override
     public VocableVerificationData getQuizVerificationData() {
-        final DataWithMandatoryTermsBuilder builder = VocableVerificationData.createFromTerms();
+        final DataWithMandatoryTermsBuilder builder = VocableVerificationData.create().withoutAbbreviationVariants();
         // TODO: I18N
 //    String additionalQuestionText = "Bitte auch die Pluralform eingeben. ";
         String additionalQuestionText = "Please also provide the plural form. ";
@@ -387,7 +387,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
             }
         }
 
-        final VocableVerificationData result = builder.finish().build();
+        final VocableVerificationData result = builder.build();
         result.setAdditionalQuestionText(additionalQuestionText);
         return result;
     }

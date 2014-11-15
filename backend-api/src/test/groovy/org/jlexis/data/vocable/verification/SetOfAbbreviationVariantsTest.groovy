@@ -87,7 +87,7 @@ class SetOfAbbreviationVariantsTest extends GroovyTestCase {
 
     void test_harmonizeAll_with_input_null() {
         shouldFail(NullPointerException) {
-            set.harmonizeAll(null)
+            set.harmonizeAll((String) null)
         }
     }
 
@@ -99,6 +99,22 @@ class SetOfAbbreviationVariantsTest extends GroovyTestCase {
         assertEquals(ABBREVIATION, set.harmonizeAll("abbr"))
         assertEquals("something", set.harmonizeAll("someth."))
         assertEquals("abbreviation something", set.harmonizeAll("abbrev.   sth."))
+    }
+
+    void test_harmonizeAll_for_empty_collection_returns_empty_collection() {
+        assertTrue(set.harmonizeAll(Collections.emptyList()).isEmpty())
+    }
+
+    void test_harmonizeAll_for_null_or_empty_strings_returns_empty_collection() {
+        assertTrue(set.harmonizeAll(["", "   ", null]).isEmpty())
+    }
+
+    void test_harmonizeAll_for_collection() {
+        addTestAbbreviations()
+        set.addAbbreviation("something", "sth", "sth.", "someth.")
+
+        Collection<String> result = set.harmonizeAll(["abbr", "sth"])
+        assertEquals([ABBREVIATION, "something"], result)
     }
 
     private addTestAbbreviations() {

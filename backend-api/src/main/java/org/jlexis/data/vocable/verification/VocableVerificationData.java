@@ -74,12 +74,8 @@ public class VocableVerificationData {
         }
     }
 
-    public static Builder create() {
-        return new Builder();
-    }
-
-    public static DataWithMandatoryTermsBuilder createFromTerms() {
-        return new DataWithMandatoryTermsBuilder();
+    public static ChooseAbbreviationVariantsBuilder create() {
+        return new ChooseAbbreviationVariantsBuilder();
     }
 
     @Deprecated
@@ -163,9 +159,10 @@ public class VocableVerificationData {
 
     private void addOptionalTerm(AbstractTermData term) {
         optionalValues.addAll(
-                VocableVerificationData.createFromTerms()
+                VocableVerificationData.create()
+                        .withAbbreviationVariants(abbreviationVariants)
                         .tokenizeAndAddString(term.getResolvedAndPurgedTerm())
-                        .finish().build()
+                        .build()
                         .getAllValues());
     }
 
@@ -190,7 +187,11 @@ public class VocableVerificationData {
     }
 
     private void addMandatoryValueWithOptions(Collection<String> options) {
-       mandatoryValues.addMandatoryValueWithAlternatives(options);
+        Collection<String> optionsToAdd = options;
+        if (abbreviationVariants != null) {
+            optionsToAdd = abbreviationVariants.harmonizeAll(options);
+        }
+        mandatoryValues.addMandatoryValueWithAlternatives(optionsToAdd);
     }
 
     private VocableVerificationData tokenizeAndAddString(String valueToAdd) {
@@ -260,9 +261,13 @@ public class VocableVerificationData {
         return mandatoryValues.hashCode();
     }
 
-    public final static class Builder {
-        public FinishedBuilder fromTermData(AbstractTermData termData) {
-            return new FinishedBuilder(new VocableVerificationData(termData));
+    public final static class ChooseAbbreviationVariantsBuilder {
+        public DataWithMandatoryTermsBuilder withoutAbbreviationVariants() {
+            return new DataWithMandatoryTermsBuilder();
+        }
+
+        public DataWithMandatoryTermsBuilder withAbbreviationVariants(SetOfAbbreviationVariants abbreviationVariants) {
+            return new DataWithMandatoryTermsBuilder(abbreviationVariants);
         }
     }
 
@@ -271,6 +276,11 @@ public class VocableVerificationData {
 
         private DataWithMandatoryTermsBuilder() {
             this.data = new VocableVerificationData();
+        }
+
+        private DataWithMandatoryTermsBuilder(SetOfAbbreviationVariants abbreviationVariants) {
+            this();
+            data.setAbbreviationVariants(abbreviationVariants);
         }
 
         public DataWithMandatoryTermsBuilder addMandatoryTerm(AbstractTermData mandatoryTermData) {
@@ -295,23 +305,6 @@ public class VocableVerificationData {
 
         public DataWithMandatoryTermsBuilder addAlternative(VocableVerificationData alternative) {
             data.addAlternative(alternative);
-            return this;
-        }
-
-        public FinishedBuilder finish() {
-            return new FinishedBuilder(data);
-        }
-    }
-
-    public final static class FinishedBuilder {
-        private VocableVerificationData data;
-
-        private FinishedBuilder(VocableVerificationData data) {
-            this.data = data;
-        }
-
-        public FinishedBuilder withAbbreviationVariants(SetOfAbbreviationVariants variants) {
-            data.setAbbreviationVariants(variants);
             return this;
         }
 

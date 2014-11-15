@@ -32,15 +32,25 @@ import static org.junit.Assert.assertEquals;
 /**
  * @author Roland Krueger
  */
-public class VocableVerificationDataTest {
+public class VocableVerificationDataTest_old {
     private DataWithMandatoryTermsBuilder builder;
 
     @Before
     public void setUp() {
-        builder = VocableVerificationData.createFromTerms();
+        builder = VocableVerificationData.create().withoutAbbreviationVariants();
     }
 
-//    @Test
+    @Test
+    public void test_tokenizeAndAddString_with_empty_values() {
+        builder.tokenizeAndAddString("");
+        builder.tokenizeAndAddString(null);
+        assertEquals(0, builder.build().getAllValues().size());
+    }
+
+
+
+
+    //    @Test
 //    public void testVerify1() {
 //        verify("value1;;value2, opt1,; opt2,;A, B", "value2, opt1,; opt2,;value1,;A, B", true);
 //    }
@@ -68,8 +78,6 @@ public class VocableVerificationDataTest {
 //    @Test
 //    public void testVerify_WhitespacesAreNormalized() {
 //        verify("value containing   whitespaces; or \t even  tabs", "value \t containing whitespaces, or even \n tabs", true);
-//    }
-
 //    private void verify(String data, String input, boolean matchExpected) {
 //        builder.tokenizeAndAddString(data);
 //        VocableVerificationData comparison = VocableVerificationData.createFromTerms().tokenizeAndAddString(input).finish();
@@ -89,14 +97,7 @@ public class VocableVerificationDataTest {
 //            assertEquals(VocableVerificationResultEnum.CORRECT, result.getResult());
 //        else
 //            assertFalse(result.getResult() == VocableVerificationResultEnum.CORRECT);
-//    }
 
-    @Test
-    public void testTokenizeAndAddString_WithEmptyValues() {
-        builder.tokenizeAndAddString("");
-        builder.tokenizeAndAddString(null);
-        assertEquals(0, builder.finish().build().getAllValues().size());
-    }
 
 //    @Test
 //    public void testTokenizeAndAddString() {

@@ -112,7 +112,7 @@ public class EnglishAdjectiveUserInput extends AbstractEnglishPluginUserInput {
 
     @Override
     public VocableVerificationData getQuizVerificationData() {
-        final DataWithMandatoryTermsBuilder builder = VocableVerificationData.createFromTerms();
+        final DataWithMandatoryTermsBuilder builder = VocableVerificationData.create().withoutAbbreviationVariants();
         // TODO: i18n
         String additionalQuestionText = "Bitte auch %s%s eingeben. ";
         List<AbstractTermData> beValues = new LinkedList<>();
@@ -177,7 +177,7 @@ public class EnglishAdjectiveUserInput extends AbstractEnglishPluginUserInput {
             }
         }
 
-        final VocableVerificationData result = builder.finish().build();
+        final VocableVerificationData result = builder.build();
         result.setAdditionalQuestionText(additionalQuestionText);
         return result;
     }

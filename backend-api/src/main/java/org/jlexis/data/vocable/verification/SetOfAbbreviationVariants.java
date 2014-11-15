@@ -20,6 +20,8 @@
 
 package org.jlexis.data.vocable.verification;
 
+import com.google.common.base.Strings;
+
 import java.util.*;
 
 /**
@@ -71,6 +73,22 @@ public class SetOfAbbreviationVariants {
         }
 
         return input;
+    }
+
+    public Collection<String> harmonizeAll(Collection<String> inputValues) {
+        if (inputValues == null || inputValues.isEmpty()) {
+            return Collections.emptyList();
+        }
+        List<String> result = new ArrayList<>(inputValues.size());
+
+        for (String value : inputValues) {
+            final String harmonizedString = harmonizeAll(Strings.nullToEmpty(value));
+            if (!"".equals(harmonizedString.trim())) {
+                result.add(harmonizedString);
+            }
+        }
+
+        return result;
     }
 
     /**

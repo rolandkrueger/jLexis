@@ -74,7 +74,7 @@ public class WordStemTermTest extends AbstractTermDataTest {
     public void testGetVerificationData() {
         String testData = "test|term; 1, 2, 3;";
         mTestObj.setUserEnteredTerm(testData);
-        VocableVerificationData verificationData = VocableVerificationData.create().fromTermData(mTestObj).build();
+        VocableVerificationData verificationData = VocableVerificationData.create().withoutAbbreviationVariants().addMandatoryTerm(mTestObj).build();
         assertEquals(2, verificationData.getNumberOfMandatoryValues());
         assertEquals(4, verificationData.getAllValues().size());
         Set<String> set1 = new HashSet<String>();
@@ -85,9 +85,10 @@ public class WordStemTermTest extends AbstractTermDataTest {
         set2.add("3");
         VocableVerificationData comparisonObject = null;
         try {
-            comparisonObject = VocableVerificationData.createFromTerms()
+            comparisonObject = VocableVerificationData.create()
+                    .withoutAbbreviationVariants()
                     .addMandatoryValueWithOptions(set1)
-                    .addMandatoryValueWithOptions(set2).finish().build();
+                    .addMandatoryValueWithOptions(set2).build();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -95,12 +96,13 @@ public class WordStemTermTest extends AbstractTermDataTest {
 
         testData = "this is <the> testdata";
         mTestObj.setUserEnteredTerm(testData);
-        verificationData = VocableVerificationData.create().fromTermData(mTestObj).build();
+        verificationData = VocableVerificationData.create().withoutAbbreviationVariants().addMandatoryTerm(mTestObj).build();
         assertEquals(1, verificationData.getNumberOfMandatoryValues());
         set1.clear();
         set1.add("this is the testdata");
-        comparisonObject = VocableVerificationData.createFromTerms()
-                .addMandatoryValueWithOptions(set1).finish().build();
+        comparisonObject = VocableVerificationData.create()
+                .withoutAbbreviationVariants()
+                .addMandatoryValueWithOptions(set1).build();
         assertEquals(comparisonObject, verificationData);
     }
 }

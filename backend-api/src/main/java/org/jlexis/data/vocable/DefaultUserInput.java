@@ -68,7 +68,7 @@ public class DefaultUserInput extends AbstractStandardUserInput {
 
     @Override
     public VocableVerificationData getQuizVerificationData() {
-        VocableVerificationData result = VocableVerificationData.createFromTerms().addMandatoryTerm(getUserData(TERM_KEY)).finish().build();
+        VocableVerificationData result = VocableVerificationData.create().withoutAbbreviationVariants().addMandatoryTerm(getUserData(TERM_KEY)).build();
         return result;
     }
 
