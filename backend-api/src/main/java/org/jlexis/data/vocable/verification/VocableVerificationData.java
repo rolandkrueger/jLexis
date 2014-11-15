@@ -27,8 +27,6 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import org.jlexis.data.vocable.terms.AbstractTermData;
-import org.jlexis.data.vocable.terms.InflectedTerm;
-import org.jlexis.data.vocable.terms.RegularTerm;
 
 import java.util.*;
 
@@ -55,29 +53,7 @@ public class VocableVerificationData {
 
     private VocableVerificationData(AbstractTermData termData) {
         this();
-        VocableVerificationData tmp = new VocableVerificationData();
-
-        tmp.tokenizeAndAddString(termData.getNormalizedTerm());
-        for (Set<String> mandatorySetWithNormalizedTerms : tmp.getMandatoryValuesWithOptions()) {
-            Set<String> mandatorySet = new HashSet<>();
-            for (String value : mandatorySetWithNormalizedTerms) {
-                // For every token which the user has entered, add its resolved form to the
-                // verification data, so that the resolved term is also a valid answer
-                AbstractTermData term;
-                if (termData.isInflected()) {
-                    term = new InflectedTerm(termData.getWordStemObject());
-                } else {
-                    term = new RegularTerm();
-                }
-                term.setNormalizedTerm(value);
-                mandatorySet.add(term.getPurgedTerm());
-
-                RegularTerm regularTerm = new RegularTerm();
-                regularTerm.setUserEnteredTerm(term.getResolvedTerm());
-                mandatorySet.add(regularTerm.getPurgedTerm());
-            }
-            addMandatoryValueWithOptions(mandatorySet);
-        }
+        addMandatoryTerm(termData);
     }
 
     /**
