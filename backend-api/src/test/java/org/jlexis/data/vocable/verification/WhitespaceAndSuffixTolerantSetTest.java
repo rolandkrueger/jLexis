@@ -28,7 +28,6 @@ import org.junit.Test;
 
 import java.util.*;
 
-import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -171,8 +170,8 @@ public class WhitespaceAndSuffixTolerantSetTest {
         for (String s : tolerantSet) {
             compare.add(s);
         }
-        assertTrue(compare.containsAll(list));
-        assertTrue(list.containsAll(compare));
+        assertThat(compare.containsAll(list), is(true));
+        assertThat(list.containsAll(compare), is(true));
     }
 
     @Test

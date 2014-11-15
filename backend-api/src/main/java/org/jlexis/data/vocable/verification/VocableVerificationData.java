@@ -39,11 +39,13 @@ public class VocableVerificationData {
     public static final char MANDATORY_COMPONENT_SPLIT_CHAR = ';';
     public static final char OPTIONAL_COMPONENT_SPLIT_CHAR = ',';
 
-    private Set<Set<String>> data;
-    private List<VocableVerificationData> alternatives;
+    private Set<WhitespaceAndSuffixTolerantSet> data;
     private WhitespaceAndSuffixTolerantSet optionalValues;
-    private String additionalQuestionText;
+    private List<VocableVerificationData> alternatives;
     private SetOfAbbreviationVariants abbreviationVariants;
+
+    @Deprecated
+    private String additionalQuestionText;
 
     private VocableVerificationData() {
         data = new HashSet<>();
@@ -200,8 +202,7 @@ public class VocableVerificationData {
     }
 
     private void addMandatoryValueWithOptions(Collection<String> options) {
-        Set<String> newSet = new WhitespaceAndSuffixTolerantSet();
-        newSet.addAll(options);
+        WhitespaceAndSuffixTolerantSet newSet = new WhitespaceAndSuffixTolerantSet(options);
         if (!newSet.isEmpty()) {
             data.add(newSet);
         }
@@ -209,7 +210,9 @@ public class VocableVerificationData {
 
     private VocableVerificationData tokenizeAndAddString(String valueToAdd) {
         String value = Strings.nullToEmpty(valueToAdd);
-        value = abbreviationVariants.harmonizeAll(value);
+        if (abbreviationVariants != null) {
+            value = abbreviationVariants.harmonizeAll(value);
+        }
 
         for (String mandatoryComponent : splitStringOmitEmptyAndTrim(value, MANDATORY_COMPONENT_SPLIT_CHAR)) {
             addMandatoryValueWithOptions(createListOfOptionalComponents(mandatoryComponent));
