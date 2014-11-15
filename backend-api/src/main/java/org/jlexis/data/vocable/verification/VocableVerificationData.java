@@ -38,7 +38,7 @@ public class VocableVerificationData {
     public static final char MANDATORY_COMPONENT_SPLIT_CHAR = ';';
     public static final char OPTIONAL_COMPONENT_SPLIT_CHAR = ',';
 
-    private MandatoryValuesWithVariants mandatoryValues;
+    private MandatoryValuesWithAlternatives mandatoryValues;
     private WhitespaceAndSuffixTolerantSet optionalValues;
     private List<VocableVerificationData> alternatives;
     private SetOfAbbreviationVariants abbreviationVariants;
@@ -47,7 +47,7 @@ public class VocableVerificationData {
     private String additionalQuestionText;
 
     private VocableVerificationData() {
-        mandatoryValues = new MandatoryValuesWithVariants();
+        mandatoryValues = new MandatoryValuesWithAlternatives();
         alternatives = new LinkedList<>();
         optionalValues = new WhitespaceAndSuffixTolerantSet();
     }
@@ -65,7 +65,7 @@ public class VocableVerificationData {
     private VocableVerificationData(VocableVerificationData other) {
         this();
 
-        mandatoryValues = MandatoryValuesWithVariants.copy(other.mandatoryValues);
+        mandatoryValues = MandatoryValuesWithAlternatives.copy(other.mandatoryValues);
         optionalValues.addAll(other.optionalValues);
 
         // copy the alternatives
@@ -145,7 +145,7 @@ public class VocableVerificationData {
      * of alternative values for this mandatory answer from the result object.
      */
     private void markSetOfMandatoryVariantsAsFoundInBothObjects(Set<String> inputSet, VocableVerificationData compareData, Set<String> thisMandatory, String value) {
-        compareData.mandatoryValues.removeVariantsForValue(value);
+        compareData.mandatoryValues.removeAlternativesForValue(value);
         inputSet.removeAll(thisMandatory);
     }
 
@@ -190,7 +190,7 @@ public class VocableVerificationData {
     }
 
     private void addMandatoryValueWithOptions(Collection<String> options) {
-       mandatoryValues.addMandatoryValueWithVariants(options);
+       mandatoryValues.addMandatoryValueWithAlternatives(options);
     }
 
     private VocableVerificationData tokenizeAndAddString(String valueToAdd) {
@@ -234,7 +234,7 @@ public class VocableVerificationData {
     }
 
     private Set<String> getAlternativesForMandatoryValue(String value) {
-        return mandatoryValues.getVariantsForValue(value);
+        return mandatoryValues.getAlternativesForValue(value);
     }
 
     public int getNumberOfMandatoryValues() {
@@ -252,9 +252,7 @@ public class VocableVerificationData {
 
         VocableVerificationData that = (VocableVerificationData) o;
 
-        if (!mandatoryValues.equals(that.mandatoryValues)) return false;
-
-        return true;
+        return mandatoryValues.equals(that.mandatoryValues);
     }
 
     @Override

@@ -29,25 +29,25 @@ import java.util.Set;
 
 import static org.jlexis.data.vocable.verification.ResolveParentheses.resolveParenthesesForCollection;
 
-public class MandatoryValuesWithVariants {
+public class MandatoryValuesWithAlternatives {
 
     private Set<WhitespaceAndSuffixTolerantSet> data;
 
-    public MandatoryValuesWithVariants() {
+    public MandatoryValuesWithAlternatives() {
         data = new HashSet<>();
     }
 
-    public static MandatoryValuesWithVariants copy(MandatoryValuesWithVariants values) {
-        MandatoryValuesWithVariants copy = new MandatoryValuesWithVariants();
+    public static MandatoryValuesWithAlternatives copy(MandatoryValuesWithAlternatives values) {
+        MandatoryValuesWithAlternatives copy = new MandatoryValuesWithAlternatives();
 
         for (WhitespaceAndSuffixTolerantSet set : values.data) {
-            copy.addMandatoryValueWithVariants(set);
+            copy.addMandatoryValueWithAlternatives(set);
         }
 
         return copy;
     }
 
-    public void addMandatoryValueWithVariants(Collection<String> values) {
+    public void addMandatoryValueWithAlternatives(Collection<String> values) {
         if (values == null || values.isEmpty()) {
             return;
         }
@@ -60,11 +60,11 @@ public class MandatoryValuesWithVariants {
         return Collections.unmodifiableSet(result);
     }
 
-    public Set<String> getVariantsForValue(String value) {
-        return Collections.unmodifiableSet(getVariantsForValueInternal(value));
+    public Set<String> getAlternativesForValue(String value) {
+        return Collections.unmodifiableSet(getAlternativesForValueInternal(value));
     }
 
-    private Set<String> getVariantsForValueInternal(String value) {
+    private Set<String> getAlternativesForValueInternal(String value) {
         if (Strings.nullToEmpty(value).trim().isEmpty()) {
             return Collections.emptySet();
         }
@@ -77,8 +77,8 @@ public class MandatoryValuesWithVariants {
         return Collections.emptySet();
     }
 
-    public boolean removeVariantsForValue(String value) {
-        return data.remove(getVariantsForValueInternal(value));
+    public boolean removeAlternativesForValue(String value) {
+        return data.remove(getAlternativesForValueInternal(value));
     }
 
     public boolean isEmpty() {
@@ -109,7 +109,7 @@ public class MandatoryValuesWithVariants {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        MandatoryValuesWithVariants that = (MandatoryValuesWithVariants) o;
+        MandatoryValuesWithAlternatives that = (MandatoryValuesWithAlternatives) o;
 
         if (!data.equals(that.data)) return false;
 
