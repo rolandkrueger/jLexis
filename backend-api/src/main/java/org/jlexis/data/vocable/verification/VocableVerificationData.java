@@ -131,7 +131,7 @@ public class VocableVerificationData {
         if (compareData.isEmpty()) {
             result.addRedundantValues(inputSet);
         } else {
-            result.addMissingValues(compareData.getAllTokens());
+            result.addMissingValues(compareData.getAllValues());
         }
         return result;
     }
@@ -151,9 +151,9 @@ public class VocableVerificationData {
     }
 
     private Set<String> buildInputSetForComparison(VocableVerificationData comparisonValue) {
-        Set<String> inputSet = new WhitespaceAndSuffixTolerantSet(comparisonValue.getAllTokens());
+        Set<String> inputSet = new WhitespaceAndSuffixTolerantSet(comparisonValue.getAllValues());
         for (VocableVerificationData data : comparisonValue.getAlternatives()) {
-            inputSet.addAll(data.getAllTokens());
+            inputSet.addAll(data.getAllValues());
         }
         return inputSet;
     }
@@ -167,7 +167,7 @@ public class VocableVerificationData {
                 VocableVerificationData.createFromTerms()
                         .tokenizeAndAddString(term.getResolvedAndPurgedTerm())
                         .finish().build()
-                        .getAllTokens());
+                        .getAllValues());
     }
 
     private void removeOptionalValue(String value) {
@@ -228,18 +228,18 @@ public class VocableVerificationData {
                 .splitToList(value);
     }
 
-    public Set<String> getAllTokens() {
-        return Collections.unmodifiableSet(getAllTokensInternal());
+    public Set<String> getAllValues() {
+        return Collections.unmodifiableSet(getAllValuesInternal());
     }
 
-    private Set<String> getAllTokensInternal() {
+    private Set<String> getAllValuesInternal() {
         Set<String> result = new WhitespaceAndSuffixTolerantSet();
 
         data.forEach(result::addAll);
 
         result.addAll(optionalValues);
         for (VocableVerificationData data : alternatives) {
-            result.addAll(data.getAllTokens());
+            result.addAll(data.getAllValues());
         }
 
         return result;

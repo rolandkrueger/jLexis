@@ -23,7 +23,6 @@
 package org.jlexis.data.vocable.verification;
 
 import org.jlexis.data.vocable.verification.VocableVerificationData.DataWithMandatoryTermsBuilder;
-import org.jlexis.managers.ConfigurationManager;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -39,8 +38,6 @@ public class VocableVerificationDataTest {
     @Before
     public void setUp() {
         builder = VocableVerificationData.createFromTerms();
-        ConfigurationManager.getInstance().setMandatoryTokenSplitChar(";");
-        ConfigurationManager.getInstance().setOptionalTokenSplitChar(",");
     }
 
 //    @Test
@@ -98,7 +95,7 @@ public class VocableVerificationDataTest {
     public void testTokenizeAndAddString_WithEmptyValues() {
         builder.tokenizeAndAddString("");
         builder.tokenizeAndAddString(null);
-        assertEquals(0, builder.finish().build().getAllTokens().size());
+        assertEquals(0, builder.finish().build().getAllValues().size());
     }
 
 //    @Test
@@ -107,7 +104,7 @@ public class VocableVerificationDataTest {
 //        builder.tokenizeAndAddString("A, B");
 //
 //        VocableVerificationData data = builder.finish();
-//        assertEquals(6, data.getAllTokens().size());
+//        assertEquals(6, data.getAllValues().size());
 //        assertEquals(3, data.getMandatoryValuesWithOptions().size());
 //
 //        Set<String> set1 = new HashSet<String>(Arrays.asList("value1"));
@@ -132,7 +129,7 @@ public class VocableVerificationDataTest {
 //
 //        assertEquals(2, data.getMandatoryValuesWithOptions().size());
 //        assertEquals(1, data.getAlternatives().size());
-//        assertEquals(8, data.getAllTokens().size());
+//        assertEquals(8, data.getAllValues().size());
 //        verify(data, "B, 1", true);
 //        verify(data, "A, 2, 1", true);
 //        verify(data, "A, 2,B, 1", true);
@@ -152,7 +149,7 @@ public class VocableVerificationDataTest {
 //
 //        VocableVerificationData data = builder.finish();
 //        assertEquals(2, data.getMandatoryValuesWithOptions().size());
-//        assertEquals(7, data.getAllTokens().size());
+//        assertEquals(7, data.getAllValues().size());
 //        verify(data, "XXX, A, 1", true);
 //        verify(data, "XXX,ZZZ", false);
 //        verify(data, "XXX, A", false);
@@ -181,7 +178,7 @@ public class VocableVerificationDataTest {
 //        builder.addMandatoryValueWithOptions("value2", Arrays.asList("optB"));
 //
 //        assertEquals(2, builder.getMandatoryValuesWithOptions().size());
-//        assertEquals(6, builder.getAllTokens().size());
+//        assertEquals(6, builder.getAllValues().size());
 //        Iterator<Set<String>> it = builder.getMandatoryValuesWithOptions().iterator();
 //        assertEquals(new HashSet<String>(Arrays.asList("value1", "opt1", "opt2")), it.next());
 //        assertEquals(new HashSet<String>(Arrays.asList("value2", "optB", "optA")), it.next());
@@ -211,7 +208,7 @@ public class VocableVerificationDataTest {
 //        builder.addMandatoryValue("value");
 //
 //        assertEquals(2, builder.getMandatoryValuesWithOptions().size());
-//        assertEquals(2, builder.getAllTokens().size());
+//        assertEquals(2, builder.getAllValues().size());
 //        for (Set<String> set : builder.getMandatoryValuesWithOptions()) {
 //            assertEquals(1, set.size());
 //        }
