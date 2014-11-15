@@ -25,23 +25,18 @@ package org.jlexis.data.vocable.verification;
 import java.util.*;
 
 /**
- * Represents the result of the evaluation for a given quiz answer.
+ * Represents the result of comparing one {@link org.jlexis.data.vocable.verification.VocableVerificationData} with
+ * another.
  *
  * @author Roland Krueger
  */
-public class VocableVerificationResult {
-    private VocableVerificationResultEnum result;
+public class VocableComparisonResult {
     private Set<String> redundantValues;
     private Set<String> missingValues;
 
-    public VocableVerificationResult(VocableVerificationResultEnum result) {
-        this.result = Objects.requireNonNull(result);
+    public VocableComparisonResult() {
         redundantValues = new HashSet<>();
         missingValues = new HashSet<>();
-    }
-
-    public boolean isCorrect() {
-        return result == VocableVerificationResultEnum.CORRECT;
     }
 
     public void addRedundantValues(Collection<String> redundantValues) {
@@ -52,15 +47,23 @@ public class VocableVerificationResult {
         this.missingValues.addAll(missingValues);
     }
 
-    public VocableVerificationResultEnum getResult() {
-        return result;
-    }
-
     public Set<String> getMissingValues() {
         return missingValues;
     }
 
     public Set<String> getRedundantValues() {
         return redundantValues;
+    }
+
+    public boolean hasMissingValues() {
+        return !missingValues.isEmpty();
+    }
+
+    public boolean hasRedundantValues() {
+        return !redundantValues.isEmpty();
+    }
+
+    public boolean isEmpty() {
+        return !hasMissingValues() && !hasRedundantValues();
     }
 }

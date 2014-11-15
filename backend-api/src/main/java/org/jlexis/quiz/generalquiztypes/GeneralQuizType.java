@@ -35,12 +35,8 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author Roland Krueger
- * @version $Id: GeneralQuizType.java 199 2009-12-14 12:44:47Z roland $
- */
 public class GeneralQuizType extends AbstractQuizType {
-    private String mDescription;
+    private String description;
 //  private GeneralQuizConfigPanel mConfigPanel;
 
     public GeneralQuizType() {
@@ -113,14 +109,14 @@ public class GeneralQuizType extends AbstractQuizType {
         @Override
         public String getDescription() {
             // TODO: I18N
-            if (mDescription == null) {
+            if (description == null) {
                 StringBuilder buf = new StringBuilder();
 //        buf.append ("Abfragerichtung: ");
                 buf.append("Test order: ");
                 buf.append(mQuizMode.toString());
-                mDescription = buf.toString();
+                description = buf.toString();
             }
-            return mDescription;
+            return description;
         }
 
         public class GeneralQuizQuestion extends AbstractQuizQuestion {
@@ -142,7 +138,6 @@ public class GeneralQuizType extends AbstractQuizType {
                 Language sourceLanguage = null;
                 if (mQuizMode == GeneralQuizMode.MIXED) {
                     sourceLanguage = forUnit.getRandomLanguageExcept(forLanguage);
-                    System.out.println(sourceLanguage + " -> " + forLanguage);
                 } else if (mQuizMode == GeneralQuizMode.NATIVE_TO_FOREIGN_LANGUAGE) {
                     sourceLanguage = forUnit.getNativeLanguage();
                 } else {

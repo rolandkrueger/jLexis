@@ -1,15 +1,13 @@
 /*
- * Created on 30.09.2009
- * 
- * Copyright 2007-2009 Roland Krueger (www.rolandkrueger.info)
- * 
+ * Copyright 2007-2014 Roland Krueger (www.rolandkrueger.info)
+ *
  * This file is part of jLexis.
  *
  * jLexis is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * jLexis is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -215,11 +213,14 @@ public class WhitespaceAndSuffixTolerantSet implements Set<String> {
         return data.keySet().hashCode();
     }
 
+    /**
+     * Normalizes a String by performing the following operations on it: <ul> <li>remove all leading and trailing
+     * whitespace</li> <li>replace all whitespaces with a single blank</li> <li>remove all whitespace before and
+     * after punctuation characters</li> </ul>
+     */
     public static class StringNormalizer {
         /**
-         * Normalizes a String by performing the following operations on it: <ul> <li>remove all leading and trailing
-         * whitespace</li> <li>replace all whitespaces with a single blank</li> <li>remove all whitespace before and
-         * after punctuation characters</li> </ul>
+         * Normalizes a String as described above.
          *
          * @param value input value, must not be null
          * @return normalized value

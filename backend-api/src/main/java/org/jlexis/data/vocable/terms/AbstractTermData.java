@@ -69,11 +69,8 @@ public abstract class AbstractTermData {
     }
 
     protected String removeMarkerStrings(String string) {
-        String result = string.replace(WORD_STEM_MARKER, "");
-        result = result.replace(WORD_STEM_BEGIN_MARKER, "");
-        result = result.replace(WORD_STEM_END_MARKER, "");
-        result = result.replace(WORD_STEM_PLACEHOLDER, "");
-        result = result.replace(SPECIAL_CHAR_PLACEHOLDER, "$");
+        String result = string.replace(WORD_STEM_PLACEHOLDER, "");
+        result = purge(result);
 
         return result;
     }

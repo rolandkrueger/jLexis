@@ -29,7 +29,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses
         ({
-                VocableVerificationDataTest.class,
+                VocableVerificationDataTest_old.class,
                 WhitespaceAndSuffixTolerantSetTest.class
         })
 public class VerificationTestSuite {

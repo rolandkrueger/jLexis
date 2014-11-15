@@ -26,31 +26,25 @@ import org.jlexis.data.languages.Language;
 import org.jlexis.data.vocable.Vocable;
 import org.jlexis.data.vocable.terms.AbstractTermData;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
-import org.jlexis.data.vocable.verification.VocableVerificationResult;
 
 import java.util.List;
+import java.util.Objects;
 
-/**
- * @author Roland Krueger
- * @version $Id: AbstractQuizQuestion.java 136 2009-10-02 18:20:53Z roland $
- */
 public abstract class AbstractQuizQuestion {
-    private Vocable mVocable;
-
-    ;
-    private QuizAnswerType mType = QuizAnswerType.TEXT;
+    private Vocable vocable;
+    private QuizAnswerType type = QuizAnswerType.TEXT;
 
     //        TODO: fix me
 //    private static AnswerPanelHandle sTextualAnswerPanelHandle;
 //    private static Map<Integer, AnswerPanelHandle> sMultipleChoiceAnswerPanelHandles;
-    private List<String> mOptionLabels;
-    private boolean mUseStandardQuestion = false;
-    private String mQuestionText;
-    private String mTextToTranslate;
-    private Language mQueriedLanguage;
-    private VocableVerificationData mExpectedAnswer;
-    private int mIncorrectlyAnsweredCount;
-    private int mNumberOfTimesQuestionWasPosed;
+    private List<String> optionLabels;
+    private boolean useStandardQuestion = false;
+    private String questionText;
+    private String textToTranslate;
+    private Language queriedLanguage;
+    private VocableVerificationData expectedAnswer;
+    private int incorrectlyAnsweredCount;
+    private int numberOfTimesQuestionWasPosed;
     static {
         // register the standard answer panels provided by this class
 //        TODO: fix me
@@ -58,13 +52,10 @@ public abstract class AbstractQuizQuestion {
 //        sMultipleChoiceAnswerPanelHandles = new HashMap<Integer, AnswerPanelHandle>();
     }
     public AbstractQuizQuestion(Vocable forVocable, Language forLanguage) {
-        if (forVocable == null || forLanguage == null)
-            throw new NullPointerException("One of the arguments is null.");
-
-        mVocable = forVocable;
-        mQueriedLanguage = forLanguage;
-        mIncorrectlyAnsweredCount = 0;
-        mNumberOfTimesQuestionWasPosed = 0;
+        vocable = Objects.requireNonNull(forVocable);
+        queriedLanguage = Objects.requireNonNull(forLanguage);
+        incorrectlyAnsweredCount = 0;
+        numberOfTimesQuestionWasPosed = 0;
     }
     //        TODO: fix me
 //    private AnswerPanelHandle mAnswerPanelHandle;
@@ -74,43 +65,42 @@ public abstract class AbstractQuizQuestion {
     public abstract Language getSourceLanguage();
 
     public void setSourceLanguage(Language sourceLanguage) {
-        if (sourceLanguage == null)
-            throw new NullPointerException("Source language is null.");
+        Objects.requireNonNull(sourceLanguage, "Source language is null.");
         setSourceLanguageImpl(sourceLanguage);
     }
 
     protected abstract AnswerCorrectness checkUserAnswerImpl();
 
     public int getIncorrectlyAnsweredCount() {
-        return mIncorrectlyAnsweredCount;
+        return incorrectlyAnsweredCount;
     }
 
     public int getNumberOfTimesQuestionWasPosed() {
-        return mNumberOfTimesQuestionWasPosed;
+        return numberOfTimesQuestionWasPosed;
     }
 
     public void increaseIncorrectAnswers() {
-        mIncorrectlyAnsweredCount++;
+        incorrectlyAnsweredCount++;
     }
 
     public void decreaseQuestionPosed() {
-        mNumberOfTimesQuestionWasPosed--;
+        numberOfTimesQuestionWasPosed--;
     }
 
     public void increaseQuestionPosed() {
-        mNumberOfTimesQuestionWasPosed++;
+        numberOfTimesQuestionWasPosed++;
     }
 
     public AnswerCorrectness checkUserAnswer() {
-        if (mType == QuizAnswerType.TEXT && mExpectedAnswer != null) {
-            VocableVerificationData givenAnswer = new VocableVerificationData();
+        if (type == QuizAnswerType.TEXT && expectedAnswer != null) {
+            VocableVerificationData givenAnswer = VocableVerificationData.create().withoutAbbreviationVariants().build();
             //        TODO: fix me
 //            givenAnswer.tokenizeAndAddString(((TextualAnswerPanel) AnswerPanelManager.getInstance().
 //                    getAnswerPanelFor(sTextualAnswerPanelHandle)).getAnswerText());
-            VocableVerificationResult result = mExpectedAnswer.verify(givenAnswer, mQueriedLanguage);
+//            VocableVerificationResult result = expectedAnswer.verify(givenAnswer, queriedLanguage);
 
-            if (result.isCorrect())
-                return AnswerCorrectness.CORRECT;
+//            if (result.isCorrect())
+//                return AnswerCorrectness.CORRECT;
             return AnswerCorrectness.INCORRECT;
         } else
             return checkUserAnswerImpl();
@@ -118,7 +108,7 @@ public abstract class AbstractQuizQuestion {
 
     public String getGivenAnswer() {
         //        TODO: fix me
-//        if (mType == QuizAnswerType.TEXT && mExpectedAnswer != null) {
+//        if (type == QuizAnswerType.TEXT && expectedAnswer != null) {
 //            return ((TextualAnswerPanel) AnswerPanelManager.getInstance().
 //                    getAnswerPanelFor(sTextualAnswerPanelHandle)).getAnswerText();
 //        } else return getGivenAnswerImpl();
@@ -128,80 +118,79 @@ public abstract class AbstractQuizQuestion {
     protected abstract String getGivenAnswerImpl();
 
     public Vocable getVocable() {
-        return mVocable;
+        return vocable;
     }
 
     public String getQuestionText() {
-        return mQuestionText;
+        return questionText;
     }
 
     public void setQuestionText(String text) {
-        if (text == null)
-            throw new NullPointerException("Question text is null.");
-
-        mQuestionText = text;
+        Objects.requireNonNull(text, "Question text is null.");
+        questionText = text;
     }
 
     public String getTextToTranslate() {
-        return mTextToTranslate;
+        return textToTranslate;
     }
 
     public void setTextToTranslate(String textToTranslate) {
-        if (textToTranslate == null)
-            throw new NullPointerException("Text to translate is null.");
-
-        mTextToTranslate = textToTranslate;
+        Objects.requireNonNull(textToTranslate, "Text to translate is null.");
+        this.textToTranslate = textToTranslate;
     }
 
     public boolean isStandardQuestionUsed() {
-        return mUseStandardQuestion;
+        return useStandardQuestion;
     }
 
     public Language getQueriedLanguage() {
-        return mQueriedLanguage;
+        return queriedLanguage;
     }
 
     public void useStandardQuestion() {
-        mUseStandardQuestion = true;
+        useStandardQuestion = true;
     }
 
     public void setQuizAnswerType(QuizAnswerType type) {
         if ((type == QuizAnswerType.MULTIPLE_CHOICE_MULTIPLE_SELECTION ||
                 type == QuizAnswerType.MULTIPLE_CHOICE_SINGLE_SELECTION) &&
-                mOptionLabels == null)
+                optionLabels == null) {
             throw new IllegalStateException("No option labels have been set with setMultipleChoiceOptions() yet.");
+        }
 
         if (type != QuizAnswerType.MULTIPLE_CHOICE_MULTIPLE_SELECTION &&
-                type != QuizAnswerType.MULTIPLE_CHOICE_SINGLE_SELECTION)
-            mOptionLabels = null;
+                type != QuizAnswerType.MULTIPLE_CHOICE_SINGLE_SELECTION) {
+            optionLabels = null;
+        }
 
-        mType = type;
+        this.type = type;
     }
 
     public void setExpectedAnswer(VocableVerificationData expectedAnswer) {
-        if (mType != QuizAnswerType.TEXT)
+        if (type != QuizAnswerType.TEXT) {
             throw new IllegalStateException("This quiz question is not of type TEXT. Configure it as being of " +
                     "type text with setQuizAnswerType() first.");
-        if (expectedAnswer == null)
-            throw new NullPointerException("Expected answer object is null.");
+        }
+        Objects.requireNonNull(expectedAnswer, "Expected answer object is null.");
 
-        mExpectedAnswer = expectedAnswer;
+        this.expectedAnswer = expectedAnswer;
     }
 
     public void setExpectedAnswer(AbstractTermData expectedAnswer) {
-        if (expectedAnswer == null)
-            throw new NullPointerException("Expected answer is null.");
-        VocableVerificationData data = new VocableVerificationData();
-        data.tokenizeAndAddString(expectedAnswer.getNormalizedTerm());
+        Objects.requireNonNull(expectedAnswer, "Expected answer is null.");
+        VocableVerificationData data = VocableVerificationData.create()
+                .withoutAbbreviationVariants()
+                .tokenizeAndAddString(expectedAnswer.getNormalizedTerm())
+                .build();
         setExpectedAnswer(data);
     }
 
     public void setMultipleChoiceOptions(List<String> optionLabels) {
-        if (optionLabels == null)
-            throw new NullPointerException("Option label list is null.");
+        Objects.requireNonNull(optionLabels, "Option label list is null.");
 
-        if (mType == null)
-            mType = QuizAnswerType.MULTIPLE_CHOICE_SINGLE_SELECTION;
+        if (type == null) {
+            type = QuizAnswerType.MULTIPLE_CHOICE_SINGLE_SELECTION;
+        }
 
         //        TODO: fix me
 //        mAnswerPanelHandle = sMultipleChoiceAnswerPanelHandles.get(optionLabels.size());
@@ -211,13 +200,14 @@ public abstract class AbstractQuizQuestion {
 //            sMultipleChoiceAnswerPanelHandles.put(optionLabels.size(), mAnswerPanelHandle);
 //        }
 
-        mOptionLabels = optionLabels;
+        this.optionLabels = optionLabels;
     }
 
     public List<Integer> getSelectedOptionIndices() {
-        if (mType != QuizAnswerType.MULTIPLE_CHOICE_MULTIPLE_SELECTION &&
-                mType != QuizAnswerType.MULTIPLE_CHOICE_SINGLE_SELECTION)
+        if (type != QuizAnswerType.MULTIPLE_CHOICE_MULTIPLE_SELECTION &&
+                type != QuizAnswerType.MULTIPLE_CHOICE_SINGLE_SELECTION) {
             throw new IllegalStateException("This quiz question is not a multiple choice question.");
+        }
         //        TODO: fix me
 //        if (mAnswerPanelHandle == null)
 //            throw new IllegalStateException("This quiz question hasn't been posed yet.");
@@ -228,8 +218,9 @@ public abstract class AbstractQuizQuestion {
     }
 
     public String getAnswerText() {
-        if (mType != QuizAnswerType.TEXT)
+        if (type != QuizAnswerType.TEXT) {
             throw new IllegalStateException("This quiz question is not of type TEXT.");
+        }
         //        TODO: fix me
 //        if (mAnswerPanelHandle == null)
 //            throw new IllegalStateException("This quiz question hasn't been posed yet.");
@@ -258,7 +249,7 @@ public abstract class AbstractQuizQuestion {
 //        if (answerPanelHandle == null)
 //            throw new NullPointerException("Panel is null.");
 //
-//        if (mType != QuizAnswerType.PROVIDED)
+//        if (type != QuizAnswerType.PROVIDED)
 //            throw new IllegalStateException("Quiz answer type is not set to PROVIDED.");
 //
 //        mAnswerPanelHandle = answerPanelHandle;
@@ -267,16 +258,16 @@ public abstract class AbstractQuizQuestion {
     //        TODO: fix me
 //    public AnswerPanelHandle getAnswerPanelHandle() {
 //        if (mAnswerPanelHandle == null) {
-//            if (mType == QuizAnswerType.TEXT) {
+//            if (type == QuizAnswerType.TEXT) {
 //                mAnswerPanelHandle = sTextualAnswerPanelHandle;
 //            } else {
 //                throw new IllegalStateException("No answer panel handle has been provided for this quiz question.");
 //            }
 //        }
-//        if (mType == QuizAnswerType.MULTIPLE_CHOICE_MULTIPLE_SELECTION ||
-//                mType == QuizAnswerType.MULTIPLE_CHOICE_SINGLE_SELECTION) {
+//        if (type == QuizAnswerType.MULTIPLE_CHOICE_MULTIPLE_SELECTION ||
+//                type == QuizAnswerType.MULTIPLE_CHOICE_SINGLE_SELECTION) {
 //            ((MultipleChoiceAnswerPanel) AnswerPanelManager.getInstance().
-//                    getAnswerPanelFor(mAnswerPanelHandle)).setChoices(mOptionLabels, mType);
+//                    getAnswerPanelFor(mAnswerPanelHandle)).setChoices(optionLabels, type);
 //        }
 //        return mAnswerPanelHandle;
 //    }

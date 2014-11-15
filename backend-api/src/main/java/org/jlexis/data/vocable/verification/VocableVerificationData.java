@@ -23,62 +23,38 @@
 package org.jlexis.data.vocable.verification;
 
 
-import org.apache.commons.lang.math.IntRange;
-import org.jlexis.data.languages.Language;
+import com.google.common.base.Splitter;
+import com.google.common.base.Strings;
 import org.jlexis.data.vocable.terms.AbstractTermData;
-import org.jlexis.data.vocable.terms.InflectedTerm;
-import org.jlexis.data.vocable.terms.RegularTerm;
-import org.jlexis.managers.ConfigurationManager;
-import org.jlexis.util.StringUtils;
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import static org.jlexis.data.vocable.verification.ResolveParentheses.resolveParenthesesForCollection;
 
 /**
  * @author Roland Krueger
  */
 public class VocableVerificationData {
-    private static Pattern sPattern1 = Pattern.compile("\\w+(\\w*\\W*)*\\w*\\W");
-    private static Pattern sPattern2 = Pattern.compile("\\W\\w*(\\w*\\W*)*\\w+");
-    private static Pattern sPattern3 = Pattern.compile("\\W(\\w*\\W*)*\\w*\\W");
+    public static final char MANDATORY_COMPONENT_SPLIT_CHAR = ';';
+    public static final char OPTIONAL_COMPONENT_SPLIT_CHAR = ',';
 
-    protected Set<Set<String>> data;
-    protected boolean allIsOptional = false;
-    protected List<VocableVerificationData> alternatives;
-    protected VocableVerificationData optionalValues;
-    protected String additionalQuestionText;
+    private MandatoryValuesWithAlternatives mandatoryValues;
+    private WhitespaceAndSuffixTolerantSet optionalValues;
+    private List<VocableVerificationData> alternatives;
+    private SetOfAbbreviationVariants abbreviationVariants;
 
-    public VocableVerificationData() {
-        data = new HashSet<>();
+    @Deprecated
+    private String additionalQuestionText;
+
+    private VocableVerificationData() {
+        mandatoryValues = new MandatoryValuesWithAlternatives();
         alternatives = new LinkedList<>();
+        optionalValues = new WhitespaceAndSuffixTolerantSet();
     }
 
-    public VocableVerificationData(AbstractTermData termData) {
+    private VocableVerificationData(AbstractTermData termData) {
         this();
-        VocableVerificationData tmp = new VocableVerificationData();
-
-        tmp.tokenizeAndAddString(termData.getNormalizedTerm());
-        for (Set<String> mandatorySetWithNormalizedTerms : tmp.getMandatoryValuesWithOptions()) {
-            Set<String> mandatorySet = new HashSet<>();
-            for (String value : mandatorySetWithNormalizedTerms) {
-                // For every token which the user has entered, add its resolved form to the
-                // verification data, so that the resolved term is also a valid answer
-                AbstractTermData term;
-                if (termData.isInflected()) {
-                    term = new InflectedTerm(termData.getWordStemObject());
-                } else {
-                    term = new RegularTerm();
-                }
-                term.setNormalizedTerm(value);
-                mandatorySet.add(term.getPurgedTerm());
-
-                RegularTerm regularTerm = new RegularTerm();
-                regularTerm.setUserEnteredTerm(term.getResolvedTerm());
-                mandatorySet.add(regularTerm.getPurgedTerm());
-            }
-            addMandatoryValueWithOptions(mandatorySet);
-        }
+        addMandatoryTerm(termData);
     }
 
     /**
@@ -88,10 +64,9 @@ public class VocableVerificationData {
      */
     private VocableVerificationData(VocableVerificationData other) {
         this();
-        allIsOptional = other.allIsOptional;
 
-        data.addAll(other.data);
-        addOptionalValues(other.getOptionalValues());
+        mandatoryValues = MandatoryValuesWithAlternatives.copy(other.mandatoryValues);
+        optionalValues.addAll(other.optionalValues);
 
         // copy the alternatives
         for (VocableVerificationData data : other.alternatives) {
@@ -99,542 +74,254 @@ public class VocableVerificationData {
         }
     }
 
+    public static ChooseAbbreviationVariantsBuilder create() {
+        return new ChooseAbbreviationVariantsBuilder();
+    }
+
+    @Deprecated
     public String getAdditionalQuestionText() {
         return additionalQuestionText;
     }
 
+    @Deprecated
     public void setAdditionalQuestionText(String additionalQuestionText) {
         this.additionalQuestionText = additionalQuestionText;
     }
 
-    private void resolveAllParentheses() {
-        for (Set<String> set : data) {
-            for (String string : set) {
-                set.addAll(resolveParentheses(string));
-            }
-        }
+    /**
+     * Resolves all parenthesized content for all mandatory and optional components of this object. Resolving
+     * parentheses is performed according to the contract of class {@link org.jlexis.data.vocable.verification.ResolveParentheses}.
+     * <p/>
+     * For example, if the value <em>Lehrer(in)</em> has been set as a mandatory term for this data object, the result
+     * of calling this method will be that the parentheses of this term will be resolved into the three values
+     * <em>Lehrer(in)</em>, <em>Lehrer</em>, and <em>Lehrerin</em>. By that, providing at least one of these options as
+     * an answer during a vocabulary quiz will be accepted as a correct solution.
+     * <p/>
+     * This operation is idempotent, i.e. it can be called more than once with its result remaining the same. It is
+     * typically invoked exactly once for a {@link org.jlexis.data.vocable.verification.VocableVerificationData} object
+     * during the process of verifying a given answer to a vocabulary quiz question.
+     */
+    private void resolveAllParenthesizedContent() {
+        mandatoryValues.resolveAllParenthesizedContent();
+        optionalValues.addAll(resolveParenthesesForCollection(optionalValues));
     }
 
-    public VocableVerificationResult verify(VocableVerificationData comparisonValue) {
-        return verify(comparisonValue, null, false);
-    }
-
-    public VocableVerificationResult verify(VocableVerificationData comparisonValue, Language forLanguage) {
-        return verify(comparisonValue, forLanguage, true);
-    }
-
-    public VocableVerificationResult verify(VocableVerificationData comparisonValue, Language forLanguage,
-                                            boolean normalizeAbbreviations) {
-        if (normalizeAbbreviations) {
-            if (forLanguage == null)
-                throw new NullPointerException("Cannot normalize abbreviations: Language object is null.");
-            normalizeAbbreviations(forLanguage);
-            comparisonValue.normalizeAbbreviations(forLanguage);
-        }
-        Set<String> inputSet = new WhitespaceAndSuffixTolerantSet(comparisonValue.getAllTokens());
-
-        resolveAllParentheses();
-        if (optionalValues != null) optionalValues.resolveAllParentheses();
-
-        for (VocableVerificationData alternative : alternatives) {
-            VocableVerificationResult alternativeResult = alternative.verify(comparisonValue, forLanguage, normalizeAbbreviations);
-            if (alternativeResult.getResult() == VocableVerificationResultEnum.CORRECT)
-                return alternativeResult;
-        }
-
-        for (VocableVerificationData data : comparisonValue.getAlternatives()) {
-            inputSet.addAll(data.getAllTokens());
-        }
+    public VocableComparisonResult compareWith(VocableVerificationData comparisonValue) {
+        final Set<String> inputSet = buildInputSetForComparison(comparisonValue);
+        resolveAllParenthesizedContent();
 
         // Create a copy of this object. The data of this copy will be removed as needed.
         VocableVerificationData compareData = new VocableVerificationData(this);
 
         for (String value : new HashSet<>(inputSet)) {
             Set<String> thisMandatory = getAlternativesForMandatoryValue(value);
-            if (thisMandatory != null) {
-                // if one of the mandatory answers is contained in the comparison verification data object
-                // remove the respective set of alternative values for this mandatory answer from the
-                // result object
-                compareData.data.remove(thisMandatory);
-                inputSet.removeAll(thisMandatory);
+            if (!thisMandatory.isEmpty()) {
+                markSetOfMandatoryVariantsAsFoundInBothObjects(inputSet, compareData, thisMandatory, value);
             } else if (compareData.getOptionalValues().contains(value)) {
-                compareData.removeOptionalValue(value);
-                inputSet.remove(value);
+                markOptionalValueAsFoundInBothObjects(inputSet, compareData, value);
             }
         }
 
+        VocableComparisonResult result = new VocableComparisonResult();
         if (compareData.isEmpty()) {
-            if (inputSet.isEmpty()) {
-                return new VocableVerificationResult(VocableVerificationResultEnum.CORRECT);
-            } else {
-                VocableVerificationResult result = new VocableVerificationResult(VocableVerificationResultEnum.TOO_MANY_VALUES);
-                result.addRedundantValues(inputSet);
-                return result;
-            }
+            result.addRedundantValues(inputSet);
         } else {
-            VocableVerificationResult result = new VocableVerificationResult(VocableVerificationResultEnum.NOT_ENOUGH_VALUES);
-            result.addMissingValues(compareData.getAllTokens());
-            return result;
+            result.addMissingValues(compareData.getAllValues());
         }
+        return result;
+    }
+
+    private void markOptionalValueAsFoundInBothObjects(Set<String> inputSet, VocableVerificationData compareData, String value) {
+        compareData.removeOptionalValue(value);
+        inputSet.remove(value);
+    }
+
+    /**
+     * If one of the mandatory answers is contained in the comparison verification data object remove the respective set
+     * of alternative values for this mandatory answer from the result object.
+     */
+    private void markSetOfMandatoryVariantsAsFoundInBothObjects(Set<String> inputSet, VocableVerificationData compareData, Set<String> thisMandatory, String value) {
+        compareData.mandatoryValues.removeAlternativesForValue(value);
+        inputSet.removeAll(thisMandatory);
+    }
+
+    private Set<String> buildInputSetForComparison(VocableVerificationData comparisonValue) {
+        Set<String> inputSet = new WhitespaceAndSuffixTolerantSet(comparisonValue.getAllValues());
+        for (VocableVerificationData data : comparisonValue.getAlternatives()) {
+            inputSet.addAll(data.getAllValues());
+        }
+        return inputSet;
     }
 
     public List<VocableVerificationData> getAlternatives() {
         return Collections.unmodifiableList(alternatives);
     }
 
-    public void addOptionalValues(VocableVerificationData optionalValues) {
-        if (this.optionalValues == null) {
-            this.optionalValues = new VocableVerificationData();
-            this.optionalValues.makeAllOptional();
+    private void addOptionalValue(String value) {
+        if ("".equals(Strings.nullToEmpty(value).trim())) {
+            return;
         }
-
-        this.optionalValues.addOptions(optionalValues.getAllTokens());
+        optionalValues.addAll(
+                VocableVerificationData.create()
+                        .withAbbreviationVariants(abbreviationVariants)
+                        .tokenizeAndAddString(value)
+                        .build()
+                        .getAllValues());
     }
 
-    public void addOptionalTerm(AbstractTermData term) {
-        addOptionalValues(new VocableVerificationData().tokenizeAndAddString(term.getResolvedAndPurgedTerm()));
+    private void addOptionalTerm(AbstractTermData term) {
+        addOptionalValue(term.getResolvedAndPurgedTerm());
     }
 
     private void removeOptionalValue(String value) {
-        assert optionalValues.allIsOptional;
-
-        if (optionalValues.data.size() > 0)
-            optionalValues.data.iterator().next().remove(value);
+        optionalValues.remove(value);
     }
 
-    public VocableVerificationData getOptionalValues() {
-        if (optionalValues == null) return new VocableVerificationData();
+    private Set<String> getOptionalValues() {
         return optionalValues;
     }
 
-    public void addAlternative(VocableVerificationData alternative) {
-        if (alternative == null)
-            throw new NullPointerException("Alternative is null.");
-
-        alternatives.add(alternative);
+    private void addAlternative(VocableVerificationData alternative) {
+        alternatives.add(Objects.requireNonNull(alternative, "cannot add null object as alternative"));
     }
 
-    public void addAlternativeTerm(AbstractTermData alternativeTermData) {
-        VocableVerificationData alternative = new VocableVerificationData();
-        alternative.tokenizeAndAddString(alternativeTermData.getResolvedAndPurgedTerm());
-        addAlternative(alternative);
-    }
-
-    public void addMandatoryTerm(AbstractTermData mandatoryTermData) {
+    private void addMandatoryTerm(AbstractTermData mandatoryTermData) {
         tokenizeAndAddString(mandatoryTermData.getResolvedAndPurgedTerm());
     }
 
-    public void makeAllOptional() {
-        Set<String> allTokens = getAllTokensInternal();
-        data.clear();
-        if (allTokens.size() > 0)
-            data.add(allTokens);
-        allIsOptional = true;
+    protected boolean isEmpty() {
+        return mandatoryValues.isEmpty();
     }
 
-    public boolean isEmpty() {
-        if (data.size() == 0) return true;
-
-        for (Set<String> set : data) {
-            if (!set.isEmpty()) return false;
+    private void addMandatoryValueWithOptions(Collection<String> options) {
+        Collection<String> optionsToAdd = options;
+        if (abbreviationVariants != null) {
+            optionsToAdd = abbreviationVariants.harmonizeAll(options);
         }
-        return true;
+        mandatoryValues.addMandatoryValueWithAlternatives(optionsToAdd);
     }
 
-    public void addOption(String option) {
-        if (!allIsOptional)
-            throw new IllegalStateException("This verification data is not all optional. Set this state with " +
-                    "makeAllOptional() first.");
-        if (option == null)
-            throw new NullPointerException("Argument is null.");
-
-        Set<String> set;
-        if (data.size() > 0) {
-            set = data.iterator().next();
-        } else {
-            set = new WhitespaceAndSuffixTolerantSet();
-            data.add(set);
+    private VocableVerificationData tokenizeAndAddString(String valueToAdd) {
+        String value = Strings.nullToEmpty(valueToAdd);
+        if (abbreviationVariants != null) {
+            value = abbreviationVariants.harmonizeAll(value);
         }
 
-//    set.addAll (resolveParentheses (option));
-        set.add(option);
-    }
-
-    public void addOptions(Collection<String> options) {
-        Objects.requireNonNull(options, "options collection to be added is null");
-        options.forEach(this::addOption);
-    }
-
-    public void addMandatoryValue(String mandatoryValue) {
-        if (allIsOptional) {
-            throw new IllegalStateException("Cannot add mandatory values. This verification data is all optional. " +
-                    " Use addOption() instead.");
-        }
-        Objects.requireNonNull(mandatoryValue, "given mandatory value is null");
-
-        if (contains(mandatoryValue))
-            return;
-
-        Set<String> set = new WhitespaceAndSuffixTolerantSet();
-//    set.addAll (resolveParentheses (mandatoryValue));
-        set.add(mandatoryValue);
-
-        if (set.size() > 0)
-            data.add(set);
-    }
-
-    public void addMandatoryValueWithOptions(String mandatoryValue, String[] options) {
-        if (allIsOptional) {
-            throw new IllegalStateException("Cannot add mandatory values. This verification data is all optional. " +
-                    " Use addOption() instead.");
-        }
-
-        addMandatoryValueWithOptions(mandatoryValue, Arrays.asList(options));
-    }
-
-    public void addMandatoryValueWithOptions(Collection<String> options) {
-        if (allIsOptional)
-            throw new IllegalStateException("Cannot add mandatory values. This verification data is all optional. " +
-                    " Use addOption() instead.");
-        if (options == null)
-            throw new NullPointerException("Argument is null.");
-
-        Set<String> newSet = new WhitespaceAndSuffixTolerantSet();
-        for (String option : options) {
-//      newSet.addAll (resolveParentheses (option));
-            newSet.add(option);
-        }
-        if (newSet.size() > 0)
-            data.add(newSet);
-    }
-
-    public void addMandatoryValueWithOptions(String mandatoryValue, Collection<String> options) {
-        if (allIsOptional)
-            throw new IllegalStateException("Cannot add mandatory values. This verification data is all optional. " +
-                    " Use addOption() instead.");
-        if (mandatoryValue == null || options == null)
-            throw new NullPointerException("One of the arguments is null.");
-
-        Set<String> set = getAlternativesForMandatoryValue(mandatoryValue);
-        if (set == null) {
-            Set<String> newSet = new WhitespaceAndSuffixTolerantSet();
-            for (String option : options) {
-//        newSet.addAll (resolveParentheses (option));
-                newSet.add(option);
-            }
-//      newSet.addAll (resolveParentheses (mandatoryValue));
-            newSet.add(mandatoryValue);
-
-            if (newSet.size() > 0)
-                data.add(newSet);
-        } else {
-            for (String option : options)
-//        set.addAll (resolveParentheses (option));
-                set.add(option);
-        }
-    }
-
-    public VocableVerificationData tokenizeAndAddString(String value) {
-        if (value == null || value.trim().equals(""))
-            return this;
-
-        value = value.trim();
-
-        String[] mandatoryTokens = value.split(ConfigurationManager.getInstance().getMandatoryTokenSplitChar());
-
-        for (String mandatoryToken : mandatoryTokens) {
-            if (mandatoryToken.trim().equals("")) continue;
-            mandatoryToken = normalizeWhitespaces(mandatoryToken);
-            String[] optionalTokens = mandatoryToken.split(ConfigurationManager.getInstance().getOptionalTokenSplitChar());
-            Set<String> set = new WhitespaceAndSuffixTolerantSet();
-            for (String token : optionalTokens) {
-                if (token.trim().equals("")) continue;
-                token = normalizeWhitespaces(token);
-//        set.addAll (resolveParentheses (token));
-                set.add(token);
-            }
-            addMandatoryValueWithOptions(set);
+        for (String mandatoryComponent : splitStringOmitEmptyAndTrim(value, MANDATORY_COMPONENT_SPLIT_CHAR)) {
+            addMandatoryValueWithOptions(createListOfOptionalComponents(mandatoryComponent));
         }
         return this;
     }
 
-    private String normalizeWhitespaces(String value) {
-        return value.replaceAll("\\s+", " ");
+    private Set<String> createListOfOptionalComponents(String mandatoryComponent) {
+        return new WhitespaceAndSuffixTolerantSet(splitStringOmitEmptyAndTrim(mandatoryComponent, OPTIONAL_COMPONENT_SPLIT_CHAR));
     }
 
-    private Set<String> resolveParentheses(String value) {
+    private List<String> splitStringOmitEmptyAndTrim(String value, char separator) {
+        return Splitter.on(separator)
+                .omitEmptyStrings()
+                .trimResults()
+                .splitToList(value);
+    }
+
+    public Set<String> getAllValues() {
+        return Collections.unmodifiableSet(getAllValuesInternal());
+    }
+
+    private Set<String> getAllValuesInternal() {
         Set<String> result = new WhitespaceAndSuffixTolerantSet();
-        result.add(value);
 
-        int start;
-        int end;
+        result.addAll(mandatoryValues.getAllValues());
 
-        int i;
-        boolean moreToDo = true;
-        boolean done;
-        Set<IntRange> alreadyDoneParenthesesPairs = new HashSet<>();
-        moreToDo:
-        while (moreToDo) {
-            start = -1;
-            end = -1;
-            i = 0;
-
-            for (char c : value.toCharArray()) {
-                // TODO: make parentheses characters configurable
-                if (c == '(') {
-                    done = false;
-                    for (IntRange range : alreadyDoneParenthesesPairs) {
-                        if (range.getMinimumInteger() == i) {
-                            done = true;
-                            break;
-                        }
-                    }
-                    if (!done) start = i;
-                }
-                if (c == ')') {
-                    done = false;
-                    for (IntRange range : alreadyDoneParenthesesPairs) {
-                        if (range.getMaximumInteger() == i + 1) {
-                            done = true;
-                            break;
-                        }
-                    }
-                    if (!done) end = i + 1;
-
-                    if (end > start) {
-                        IntRange pair = new IntRange(start, end);
-                        if (!alreadyDoneParenthesesPairs.contains(pair)) {
-                            alreadyDoneParenthesesPairs.add(pair);
-                            if (start > -1 && end > -1 && end > start) {
-                                StringBuilder buf = new StringBuilder();
-                                buf.append(value.substring(0, start).trim()).append(value.substring(end));
-                                result.add(buf.toString());
-                                result.addAll(resolveParentheses(buf.toString()));
-
-                                buf.setLength(0);
-                                buf.append(value.substring(0, start));
-                                buf.append(value.substring(start + 1, end - 1));
-                                buf.append(value.substring(end));
-                                result.add(buf.toString());
-                                result.addAll(resolveParentheses(buf.toString()));
-                                continue moreToDo;
-                            }
-                        } else {
-                            start = -1;
-                            end = -1;
-                        }
-                    }
-                }
-                ++i;
-            }
-
-            if (start < 0 || end < 0) moreToDo = false;
+        result.addAll(optionalValues);
+        for (VocableVerificationData data : alternatives) {
+            result.addAll(data.getAllValues());
         }
 
         return result;
     }
 
-    public boolean contains(String token) {
-        for (Set<String> set : data) {
-            if (set.contains(token))
-                return true;
-        }
-        return false;
+    private Set<String> getAlternativesForMandatoryValue(String value) {
+        return mandatoryValues.getAlternativesForValue(value);
     }
 
-    public Set<String> getAllTokens() {
-        return Collections.unmodifiableSet(getAllTokensInternal());
+    public int getNumberOfMandatoryValues() {
+        return mandatoryValues.getSize();
     }
 
-    private Set<String> getAllTokensInternal() {
-        Set<String> result = new WhitespaceAndSuffixTolerantSet();
-
-        for (Set<String> set : data) {
-            result.addAll(set);
-        }
-
-        if (optionalValues != null)
-            result.addAll(optionalValues.getAllTokens());
-        for (VocableVerificationData data : alternatives)
-            result.addAll(data.getAllTokens());
-
-        return result;
+    public void setAbbreviationVariants(SetOfAbbreviationVariants abbreviationVariants) {
+        this.abbreviationVariants = abbreviationVariants;
     }
 
-    public Set<String> getAlternativesForMandatoryValue(String mandatoryValue) {
-        for (Set<String> set : data) {
-            if (set.contains(mandatoryValue)) return set;
-        }
-        return null;
-    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-    public Set<Set<String>> getMandatoryValuesWithOptions() {
-        return Collections.unmodifiableSet(data);
-    }
+        VocableVerificationData that = (VocableVerificationData) o;
 
-    public void normalizeAbbreviations(Language forLanguage) {
-        if (!forLanguage.getLanguagePlugin().isPresent()) return;
-        List<Set<String>> abbreviationAlternatives =
-                forLanguage.getLanguagePlugin().get().getAbbreviationAlternatives();
-
-        String abbreviation;
-        for (Set<String> set : data) {
-            Set<String> copySet = new HashSet<>(set);
-            for (String userAnswer : copySet) {
-                Set<IntRange> excludedRanges = new HashSet<>();
-                set.remove(userAnswer);
-                for (Set<String> abbreviationSet : abbreviationAlternatives) {
-                    Set<String> copyAbbreviationSet = new HashSet<>(abbreviationSet);
-                    if (abbreviationSet.isEmpty()) continue;
-                    String abbreviationMaster = abbreviationSet.iterator().next();
-
-
-                    while (!copyAbbreviationSet.isEmpty()) {
-                        abbreviation = "";
-                        for (String s : copyAbbreviationSet) {
-                            if (s.length() > abbreviation.length()) abbreviation = s;
-                        }
-                        copyAbbreviationSet.remove(abbreviation);
-                        userAnswer = replaceAbbreviation(excludedRanges, userAnswer, abbreviation, abbreviationMaster);
-                    }
-                }
-                set.add(userAnswer);
-            }
-        }
-    }
-
-    private String replaceAbbreviation(Set<IntRange> excludedRanges, String input,
-                                       String replacedAbbreviation, String masterAbbreviation) {
-        assert excludedRanges != null;
-        String regex = "\\b%s\\b";
-        Matcher m = sPattern1.matcher(replacedAbbreviation);
-        if (m.matches()) regex = "\\b%s";
-        m = sPattern2.matcher(replacedAbbreviation);
-        if (m.matches()) regex = "%s\\b";
-        m = sPattern3.matcher(replacedAbbreviation);
-        if (m.matches()) regex = "%s";
-
-        Pattern pattern = Pattern.compile(String.format(regex,
-                StringUtils.escapeRegexSpecialChars(replacedAbbreviation).replaceAll("\\s+", "\\\\s+")));
-        m = pattern.matcher(input);
-
-        StringBuilder buf = new StringBuilder(input);
-        whileLoop:
-        while (m.find()) {
-            for (IntRange range : excludedRanges) {
-                if (range.containsInteger(m.start())) continue whileLoop;
-            }
-            IntRange range = new IntRange(m.start(), m.start() + masterAbbreviation.length() - 1);
-            excludedRanges.add(range);
-
-            buf.replace(m.start(), m.end(), masterAbbreviation);
-            m = pattern.matcher(buf);
-        }
-
-        return buf.toString();
+        return mandatoryValues.equals(that.mandatoryValues);
     }
 
     @Override
     public int hashCode() {
-        return data.hashCode();
+        return mandatoryValues.hashCode();
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) return false;
-        if (obj == this) return true;
-        if (!(obj instanceof VocableVerificationData))
-            return false;
+    public final static class ChooseAbbreviationVariantsBuilder {
+        public DataWithMandatoryTermsBuilder withoutAbbreviationVariants() {
+            return new DataWithMandatoryTermsBuilder();
+        }
 
-        VocableVerificationData other = (VocableVerificationData) obj;
-        return data.equals(other.data);
+        public DataWithMandatoryTermsBuilder withAbbreviationVariants(SetOfAbbreviationVariants abbreviationVariants) {
+            return new DataWithMandatoryTermsBuilder(abbreviationVariants);
+        }
     }
 
-    @Override
-    public String toString() {
-        return data.toString();
-    }
+    public final static class DataWithMandatoryTermsBuilder {
+        private VocableVerificationData data;
 
-    public final static class UnmodifiableVocableVerificationData extends VocableVerificationData {
-
-        public UnmodifiableVocableVerificationData(VocableVerificationData data) {
-//      CheckForNull.check (data);
-            this.data = data.data;
-            additionalQuestionText = data.additionalQuestionText;
-            allIsOptional = data.allIsOptional;
-            alternatives = data.alternatives;
-            optionalValues = data.optionalValues;
+        private DataWithMandatoryTermsBuilder() {
+            this.data = new VocableVerificationData();
         }
 
-        @Override
-        public void setAdditionalQuestionText(String additonalQuestionText) {
-            throw new UnsupportedOperationException("This object cannot be modified.");
+        private DataWithMandatoryTermsBuilder(SetOfAbbreviationVariants abbreviationVariants) {
+            this();
+            data.setAbbreviationVariants(abbreviationVariants);
         }
 
-        @Override
-        public void addMandatoryTerm(AbstractTermData mandatoryTermData) {
-            throw new UnsupportedOperationException("This object cannot be modified.");
+        public DataWithMandatoryTermsBuilder addMandatoryTerm(AbstractTermData mandatoryTermData) {
+            data.addMandatoryTerm(mandatoryTermData);
+            return this;
         }
 
-        @Override
-        public void addAlternative(VocableVerificationData alternative) {
-            // TODO Auto-generated method stub
-            super.addAlternative(alternative);
+        public DataWithMandatoryTermsBuilder addMandatoryValueWithOptions(Collection<String> options) {
+            data.addMandatoryValueWithOptions(options);
+            return this;
         }
 
-        @Override
-        public void addAlternativeTerm(AbstractTermData alternativeTermData) {
-            throw new UnsupportedOperationException("This object cannot be modified.");
+        public DataWithMandatoryTermsBuilder tokenizeAndAddString(String valueToAdd) {
+            data.tokenizeAndAddString(valueToAdd);
+            return this;
         }
 
-        @Override
-        public void addMandatoryValue(String mandatoryValue) {
-            throw new UnsupportedOperationException("This object cannot be modified.");
+        public DataWithMandatoryTermsBuilder addOptionalTerm(AbstractTermData term) {
+            data.addOptionalTerm(term);
+            return this;
         }
 
-        @Override
-        public void addMandatoryValueWithOptions(Collection<String> options) {
-            throw new UnsupportedOperationException("This object cannot be modified.");
+        public DataWithMandatoryTermsBuilder addOptionalValue(String value) {
+            data.addOptionalValue(value);
+            return this;
         }
 
-        @Override
-        public void addMandatoryValueWithOptions(String mandatoryValue, Collection<String> options) {
-            throw new UnsupportedOperationException("This object cannot be modified.");
+        public DataWithMandatoryTermsBuilder addAlternative(VocableVerificationData alternative) {
+            data.addAlternative(alternative);
+            return this;
         }
 
-        @Override
-        public void addMandatoryValueWithOptions(String mandatoryValue, String[] options) {
-            throw new UnsupportedOperationException("This object cannot be modified.");
-        }
-
-        @Override
-        public void addOption(String option) {
-            throw new UnsupportedOperationException("This object cannot be modified.");
-        }
-
-        @Override
-        public void addOptionalValues(VocableVerificationData optionalValues) {
-            throw new UnsupportedOperationException("This object cannot be modified.");
-        }
-
-        @Override
-        public void addOptions(Collection<String> options) {
-            throw new UnsupportedOperationException("This object cannot be modified.");
-        }
-
-        @Override
-        public void makeAllOptional() {
-            throw new UnsupportedOperationException("This object cannot be modified.");
-        }
-
-        @Override
-        public void addOptionalTerm(AbstractTermData term) {
-            throw new UnsupportedOperationException("This object cannot be modified.");
-        }
-
-        @Override
-        public VocableVerificationData tokenizeAndAddString(String value) {
-            throw new UnsupportedOperationException("This object cannot be modified.");
+        public VocableVerificationData build() {
+            return data;
         }
     }
 }

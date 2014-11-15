@@ -30,9 +30,10 @@ package org.jlexis.data.vocable.verification;
  */
 public enum VocableVerificationResultEnum {
     /**
-     * Given answer was correct
+     * Given answer was correct.
      */
     CORRECT,
+    INCORRECT,
     /**
      * Value for an incorrect answer: all required variants were given, but in addition one or more incorrect surplus
      * variants were given as well.

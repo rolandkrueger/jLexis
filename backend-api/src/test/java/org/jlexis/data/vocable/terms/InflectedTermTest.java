@@ -72,9 +72,9 @@ public class InflectedTermTest extends AbstractTermDataTest {
     public void testGetVerificationData() {
         mStem.setUserEnteredTerm("test|term");
         mTestObj.setUserEnteredTerm("--value; --vocable, word");
-        VocableVerificationData verificationData = new VocableVerificationData(mTestObj);
-        assertEquals(2, verificationData.getMandatoryValuesWithOptions().size());
-        assertEquals(5, verificationData.getAllTokens().size());
+        VocableVerificationData verificationData = VocableVerificationData.create().withoutAbbreviationVariants().addMandatoryTerm(mTestObj).build();
+        assertEquals(2, verificationData.getNumberOfMandatoryValues());
+        assertEquals(5, verificationData.getAllValues().size());
         Set<String> set1 = new HashSet<String>();
         set1.add("testvalue");
         set1.add("-value");
@@ -82,9 +82,10 @@ public class InflectedTermTest extends AbstractTermDataTest {
         set2.add("testvocable");
         set2.add("word");
         set2.add("-vocable");
-        VocableVerificationData comparisonObject = new VocableVerificationData();
-        comparisonObject.addMandatoryValueWithOptions(set1);
-        comparisonObject.addMandatoryValueWithOptions(set2);
+        VocableVerificationData comparisonObject = VocableVerificationData.create()
+                .withoutAbbreviationVariants()
+                .addMandatoryValueWithOptions(set1)
+                .addMandatoryValueWithOptions(set2).build();
         assertEquals(comparisonObject, verificationData);
     }
 }

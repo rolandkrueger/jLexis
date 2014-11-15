@@ -68,14 +68,17 @@
       <module name="ui" target="1.8" />
     </bytecodeTargetLevel>
   </component>
-  <component name="CopyrightManager" default="">
+  <component name="CopyrightManager" default="jlexis">
     <copyright>
-      <option name="notice" value="/*&#10; * Created on &amp;#36;date&#10; * &#10; * Copyright &amp;#36;today.date Roland Krueger (www.rolandkrueger.info)&#10; * &#10; * This file is part of jLexis.&#10; *&#10; * jLexis is free software; you can redistribute it and/or modify&#10; * it under the terms of the GNU General Public License as published by&#10; * the Free Software Foundation; either version 2 of the License, or&#10; * (at your option) any later version.&#10; * &#10; * jLexis is distributed in the hope that it will be useful,&#10; * but WITHOUT ANY WARRANTY; without even the implied warranty of&#10; * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&#10; * GNU General Public License for more details.&#10; *&#10; * You should have received a copy of the GNU General Public License&#10; * along with jLexis; if not, write to the Free Software&#10; * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA&#10; *&#10; */" />
+      <option name="notice" value="Copyright 2007-&amp;#36;today.year Roland Krueger (www.rolandkrueger.info)&#10;&#10;This file is part of jLexis.&#10;&#10;jLexis is free software; you can redistribute it and/or modify&#10;it under the terms of the GNU General Public License as published by&#10;the Free Software Foundation; either version 2 of the License, or&#10;(at your option) any later version.&#10;&#10;jLexis is distributed in the hope that it will be useful,&#10;but WITHOUT ANY WARRANTY; without even the implied warranty of&#10;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the&#10;GNU General Public License for more details.&#10;&#10;You should have received a copy of the GNU General Public License&#10;along with jLexis; if not, write to the Free Software&#10;Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA" />
       <option name="keyword" value="Copyright" />
       <option name="allowReplaceKeyword" value="" />
       <option name="myName" value="jlexis" />
       <option name="myLocal" value="true" />
     </copyright>
+    <module2copyright>
+      <element module="All" copyright="jlexis" />
+    </module2copyright>
     <LanguageOptions name="JAVA">
       <option name="fileTypeOverride" value="3" />
     </LanguageOptions>
@@ -535,4 +538,3 @@
     </library>
   </component>
 </project>
-

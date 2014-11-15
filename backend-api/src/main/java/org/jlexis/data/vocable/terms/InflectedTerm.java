@@ -23,22 +23,22 @@
  */
 package org.jlexis.data.vocable.terms;
 
+import java.util.Objects;
+
 public class InflectedTerm extends AbstractTermData {
     private AbstractTermData wordStem;
 
     public InflectedTerm(AbstractTermData stem) {
-        if (stem == null)
-            throw new NullPointerException("Stem object is null.");
-        if (!stem.isWordStem())
+        Objects.requireNonNull(stem, "Stem object is null.");
+        if (!stem.isWordStem()) {
             throw new IllegalArgumentException("Given argument is not a word stem.");
+        }
 
         wordStem = stem;
     }
 
     @Override
     public String getResolvedTerm() {
-        if (wordStem == null) return getUserEnteredTerm();
-
         String result = normalizedTerm.replace(WORD_STEM_PLACEHOLDER, wordStem.getWordStem());
         result = removeMarkerStrings(result);
         return result;
