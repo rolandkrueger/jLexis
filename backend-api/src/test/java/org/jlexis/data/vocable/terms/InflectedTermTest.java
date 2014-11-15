@@ -73,7 +73,7 @@ public class InflectedTermTest extends AbstractTermDataTest {
         mStem.setUserEnteredTerm("test|term");
         mTestObj.setUserEnteredTerm("--value; --vocable, word");
         VocableVerificationData verificationData = VocableVerificationData.create().fromTermData(mTestObj).build();
-        assertEquals(2, verificationData.getMandatoryValuesWithOptions().size());
+        assertEquals(2, verificationData.getNumberOfMandatoryValues());
         assertEquals(5, verificationData.getAllValues().size());
         Set<String> set1 = new HashSet<String>();
         set1.add("testvalue");

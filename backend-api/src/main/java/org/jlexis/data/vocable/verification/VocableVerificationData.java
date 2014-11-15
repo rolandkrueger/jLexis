@@ -23,7 +23,6 @@
 package org.jlexis.data.vocable.verification;
 
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import org.jlexis.data.vocable.terms.AbstractTermData;
@@ -39,7 +38,7 @@ public class VocableVerificationData {
     public static final char MANDATORY_COMPONENT_SPLIT_CHAR = ';';
     public static final char OPTIONAL_COMPONENT_SPLIT_CHAR = ',';
 
-    private Set<WhitespaceAndSuffixTolerantSet> data;
+    private MandatoryValuesWithVariants mandatoryValues;
     private WhitespaceAndSuffixTolerantSet optionalValues;
     private List<VocableVerificationData> alternatives;
     private SetOfAbbreviationVariants abbreviationVariants;
@@ -48,7 +47,7 @@ public class VocableVerificationData {
     private String additionalQuestionText;
 
     private VocableVerificationData() {
-        data = new HashSet<>();
+        mandatoryValues = new MandatoryValuesWithVariants();
         alternatives = new LinkedList<>();
         optionalValues = new WhitespaceAndSuffixTolerantSet();
     }
@@ -66,7 +65,7 @@ public class VocableVerificationData {
     private VocableVerificationData(VocableVerificationData other) {
         this();
 
-        data.addAll(other.data);
+        mandatoryValues = MandatoryValuesWithVariants.copy(other.mandatoryValues);
         optionalValues.addAll(other.optionalValues);
 
         // copy the alternatives
@@ -107,9 +106,7 @@ public class VocableVerificationData {
      * during the process of verifying a given answer to a vocabulary quiz question.
      */
     private void resolveAllParenthesizedContent() {
-        for (Set<String> set : data) {
-            set.addAll(resolveParenthesesForCollection(set));
-        }
+        mandatoryValues.resolveAllParenthesizedContent();
         optionalValues.addAll(resolveParenthesesForCollection(optionalValues));
     }
 
@@ -123,7 +120,7 @@ public class VocableVerificationData {
         for (String value : new HashSet<>(inputSet)) {
             Set<String> thisMandatory = getAlternativesForMandatoryValue(value);
             if (!thisMandatory.isEmpty()) {
-                markSetOfMandatoryVariantsAsFoundInBothObjects(inputSet, compareData, thisMandatory);
+                markSetOfMandatoryVariantsAsFoundInBothObjects(inputSet, compareData, thisMandatory, value);
             } else if (compareData.getOptionalValues().contains(value)) {
                 markOptionalValueAsFoundInBothObjects(inputSet, compareData, value);
             }
@@ -147,8 +144,8 @@ public class VocableVerificationData {
      * If one of the mandatory answers is contained in the comparison verification data object remove the respective set
      * of alternative values for this mandatory answer from the result object.
      */
-    private void markSetOfMandatoryVariantsAsFoundInBothObjects(Set<String> inputSet, VocableVerificationData compareData, Set<String> thisMandatory) {
-        compareData.data.remove(thisMandatory);
+    private void markSetOfMandatoryVariantsAsFoundInBothObjects(Set<String> inputSet, VocableVerificationData compareData, Set<String> thisMandatory, String value) {
+        compareData.mandatoryValues.removeVariantsForValue(value);
         inputSet.removeAll(thisMandatory);
     }
 
@@ -189,23 +186,11 @@ public class VocableVerificationData {
     }
 
     protected boolean isEmpty() {
-        if (data.isEmpty()) {
-            return true;
-        }
-
-        for (Set<String> set : data) {
-            if (!set.isEmpty()) {
-                return false;
-            }
-        }
-        return true;
+        return mandatoryValues.isEmpty();
     }
 
     private void addMandatoryValueWithOptions(Collection<String> options) {
-        WhitespaceAndSuffixTolerantSet newSet = new WhitespaceAndSuffixTolerantSet(options);
-        if (!newSet.isEmpty()) {
-            data.add(newSet);
-        }
+       mandatoryValues.addMandatoryValueWithVariants(options);
     }
 
     private VocableVerificationData tokenizeAndAddString(String valueToAdd) {
@@ -238,7 +223,7 @@ public class VocableVerificationData {
     private Set<String> getAllValuesInternal() {
         Set<String> result = new WhitespaceAndSuffixTolerantSet();
 
-        data.forEach(result::addAll);
+        result.addAll(mandatoryValues.getAllValues());
 
         result.addAll(optionalValues);
         for (VocableVerificationData data : alternatives) {
@@ -248,44 +233,33 @@ public class VocableVerificationData {
         return result;
     }
 
-    private Set<String> getAlternativesForMandatoryValue(String mandatoryValue) {
-        for (Set<String> set : data) {
-            if (set.contains(mandatoryValue)) {
-                return set;
-            }
-        }
-        return Collections.emptySet();
+    private Set<String> getAlternativesForMandatoryValue(String value) {
+        return mandatoryValues.getVariantsForValue(value);
     }
 
-    public Set<Set<String>> getMandatoryValuesWithOptions() {
-        return Collections.unmodifiableSet(data);
-    }
-
-    @Override
-    public int hashCode() {
-        return data.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) return false;
-        if (obj == this) return true;
-        if (!(obj instanceof VocableVerificationData))
-            return false;
-
-        VocableVerificationData other = (VocableVerificationData) obj;
-        return data.equals(other.data);
-    }
-
-    @Override
-    public String toString() {
-        return MoreObjects.toStringHelper(getClass())
-                .add("data", data)
-                .toString();
+    public int getNumberOfMandatoryValues() {
+        return mandatoryValues.getSize();
     }
 
     public void setAbbreviationVariants(SetOfAbbreviationVariants abbreviationVariants) {
         this.abbreviationVariants = abbreviationVariants;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        VocableVerificationData that = (VocableVerificationData) o;
+
+        if (!mandatoryValues.equals(that.mandatoryValues)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return mandatoryValues.hashCode();
     }
 
     public final static class Builder {

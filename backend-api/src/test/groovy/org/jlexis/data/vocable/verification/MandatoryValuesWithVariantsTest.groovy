@@ -47,12 +47,28 @@ class MandatoryValuesWithVariantsTest extends GroovyTestCase {
         assertThat(values.getVariantsForValue("c"), hasSize(3))
     }
 
+    void test_addMandatoryValueWithVariants_with_null_and_empty_collection() {
+        values.addMandatoryValueWithVariants(null)
+        assertTrue(values.isEmpty())
+        values.addMandatoryValueWithVariants([])
+        assertTrue(values.isEmpty())
+    }
+
     void test_getAllValues() {
         values.addMandatoryValueWithVariants(["a", "b", "c"])
         values.addMandatoryValueWithVariants(["1", "2", "3"])
 
         WhitespaceAndSuffixTolerantSet allValues = new WhitespaceAndSuffixTolerantSet(["a", "b", "c", "1", "2", "3"])
-        assertEquals(allValues, values.getAllValues())
+        assertEquals(allValues.size(), values.getAllValues().size())
+    }
+
+    void test_getAllValues_returns_unmodifiable_set() {
+        values.addMandatoryValueWithVariants(["a", "b", "c"])
+        Set<String> allValues = values.getAllValues()
+
+        shouldFail(UnsupportedOperationException) {
+            allValues.add "d"
+        }
     }
 
     void test_getVariantsForValue() {
@@ -73,10 +89,10 @@ class MandatoryValuesWithVariantsTest extends GroovyTestCase {
 
     void test_getVariantsForValue_returns_unmodifiable_set() {
         values.addMandatoryValueWithVariants(["a", "b", "c"])
-        Set<String> variants = values.getVariantsForValue("a")
+        Set<String> variants = values.getVariantsForValue "a"
 
         shouldFail(UnsupportedOperationException) {
-            variants.add("d")
+            variants.add "d"
         }
     }
 

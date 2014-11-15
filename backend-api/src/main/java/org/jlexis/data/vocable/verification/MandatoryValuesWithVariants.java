@@ -48,13 +48,16 @@ public class MandatoryValuesWithVariants {
     }
 
     public void addMandatoryValueWithVariants(Collection<String> values) {
+        if (values == null || values.isEmpty()) {
+            return;
+        }
         data.add(new WhitespaceAndSuffixTolerantSet(values));
     }
 
     public Set<String> getAllValues() {
         Set<String> result = new WhitespaceAndSuffixTolerantSet();
         data.forEach(result::addAll);
-        return result;
+        return Collections.unmodifiableSet(result);
     }
 
     public Set<String> getVariantsForValue(String value) {
