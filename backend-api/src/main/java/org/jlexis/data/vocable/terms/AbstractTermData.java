@@ -69,19 +69,23 @@ public abstract class AbstractTermData {
     }
 
     public void setEncodedString(String encodedString) {
-        this.encodedString = requireNonNull(encodedString).trim();
+        this.encodedString = nullToEmpty(encodedString).trim();
     }
 
     public String getUserEnteredString() {
-        String result = replace(encodedString, WORD_STEM_MARKER_ENCODED_PATTERN, WORD_STEM_MARKER);
-        result = replace(result, WORD_STEM_BEGIN_MARKER_ENCODED_PATTERN, BEGIN_WORD_STEM_MARKER);
-        result = replace(result, WORD_STEM_END_MARKER_ENCODED_PATTERN, END_WORD_STEM_MARKER);
-        result = replace(result, WORD_STEM_PLACEHOLDER_ENCODED_PATTERN, WORD_STEM_PLACEHOLDER);
-        return replace(result, DOLLAR_SIGN_ENCODED_PATTERN, DOLLAR_SIGN);
+        if (userEnteredString == null) {
+            String result = replace(encodedString, WORD_STEM_MARKER_ENCODED_PATTERN, WORD_STEM_MARKER);
+            result = replace(result, WORD_STEM_BEGIN_MARKER_ENCODED_PATTERN, BEGIN_WORD_STEM_MARKER);
+            result = replace(result, WORD_STEM_END_MARKER_ENCODED_PATTERN, END_WORD_STEM_MARKER);
+            result = replace(result, WORD_STEM_PLACEHOLDER_ENCODED_PATTERN, WORD_STEM_PLACEHOLDER);
+            userEnteredString = replace(result, DOLLAR_SIGN_ENCODED_PATTERN, DOLLAR_SIGN);
+        }
+        return userEnteredString;
     }
 
     public void setUserEnteredString(String string) {
-        String result = replace(requireNonNull(string), DOLLAR_SIGN_PATTERN, DOLLAR_SIGN_ENCODED);
+        userEnteredString = nullToEmpty(string).trim();
+        String result = replace(userEnteredString, DOLLAR_SIGN_PATTERN, DOLLAR_SIGN_ENCODED);
         result = replace(result, WORD_STEM_MARKER_PATTERN, WORD_STEM_MARKER_ENCODED);
         result = replace(result, BEGIN_WORD_STEM_MARKER_PATTERN, WORD_STEM_BEGIN_MARKER_ENCODED);
         result = replace(result, END_WORD_STEM_MARKER_PATTERN, WORD_STEM_END_MARKER_ENCODED);
@@ -98,7 +102,10 @@ public abstract class AbstractTermData {
     }
 
     public String getCleanedString() {
-        return clean(encodedString);
+        if (cleanedString == null) {
+            cleanedString = clean(encodedString);
+        }
+        return cleanedString;
     }
 
     protected String clean(String string) {
