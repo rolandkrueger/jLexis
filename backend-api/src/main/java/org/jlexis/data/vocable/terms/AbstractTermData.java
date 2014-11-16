@@ -124,7 +124,7 @@ public abstract class AbstractTermData {
 
     public abstract boolean isInflected();
 
-    public abstract AbstractTermData getWordStemObject();
+    public abstract AbstractTermData getWordStemTerm();
 
     public abstract String getResolvedAndPurgedTerm();
 

@@ -63,7 +63,7 @@ public class RegularTerm extends AbstractTermData {
     }
 
     @Override
-    public AbstractTermData getWordStemObject() {
+    public AbstractTermData getWordStemTerm() {
         throw new UnsupportedOperationException("This object is not an inflected term.");
     }
 

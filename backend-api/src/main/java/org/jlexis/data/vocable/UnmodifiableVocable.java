@@ -181,8 +181,8 @@ public final class UnmodifiableVocable extends Vocable {
         }
 
         @Override
-        public AbstractTermData getWordStemObject() {
-            return data.getWordStemObject();
+        public AbstractTermData getWordStemTerm() {
+            return data.getWordStemTerm();
         }
 
         @Override
