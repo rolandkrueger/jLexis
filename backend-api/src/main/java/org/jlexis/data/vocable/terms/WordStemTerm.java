@@ -23,7 +23,7 @@
  */
 package org.jlexis.data.vocable.terms;
 
-public class WordStemTerm extends AbstractTermData {
+public class WordStemTerm extends AbstractTerm {
     public String getStringWithWordStemResolved() {
         return getUserEnteredString();
     }
@@ -52,7 +52,7 @@ public class WordStemTerm extends AbstractTermData {
     }
 
     @Override
-    public AbstractTermData getWordStemTerm() {
+    public AbstractTerm getWordStemTerm() {
         throw new UnsupportedOperationException("This object is not an inflected term.");
     }
 }

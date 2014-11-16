@@ -32,9 +32,9 @@ import java.util.Set;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 
-public class RegularTermTest extends AbstractTermDataTest {
+public class RegularTermTest extends AbstractTermTest {
     @Override
-    public AbstractTermData getTestObject() {
+    public AbstractTerm getTestObject() {
         return new RegularTerm();
     }
 

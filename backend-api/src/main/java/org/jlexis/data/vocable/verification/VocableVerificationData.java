@@ -25,7 +25,7 @@ package org.jlexis.data.vocable.verification;
 
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
-import org.jlexis.data.vocable.terms.AbstractTermData;
+import org.jlexis.data.vocable.terms.AbstractTerm;
 
 import java.util.*;
 
@@ -52,7 +52,7 @@ public class VocableVerificationData {
         optionalValues = new WhitespaceAndSuffixTolerantSet();
     }
 
-    private VocableVerificationData(AbstractTermData termData) {
+    private VocableVerificationData(AbstractTerm termData) {
         this();
         addMandatoryTerm(termData);
     }
@@ -169,7 +169,7 @@ public class VocableVerificationData {
                         .getAllValues());
     }
 
-    private void addOptionalTerm(AbstractTermData term) {
+    private void addOptionalTerm(AbstractTerm term) {
         addOptionalValue(term.getCleanedStringWithWordStemResolved());
     }
 
@@ -185,7 +185,7 @@ public class VocableVerificationData {
         alternatives.add(Objects.requireNonNull(alternative, "cannot add null object as alternative"));
     }
 
-    private void addMandatoryTerm(AbstractTermData mandatoryTermData) {
+    private void addMandatoryTerm(AbstractTerm mandatoryTermData) {
         tokenizeAndAddString(mandatoryTermData.getCleanedStringWithWordStemResolved());
     }
 
@@ -290,7 +290,7 @@ public class VocableVerificationData {
             data.setAbbreviationVariants(abbreviationVariants);
         }
 
-        public DataWithMandatoryTermsBuilder addMandatoryTerm(AbstractTermData mandatoryTermData) {
+        public DataWithMandatoryTermsBuilder addMandatoryTerm(AbstractTerm mandatoryTermData) {
             data.addMandatoryTerm(mandatoryTermData);
             return this;
         }
@@ -305,7 +305,7 @@ public class VocableVerificationData {
             return this;
         }
 
-        public DataWithMandatoryTermsBuilder addOptionalTerm(AbstractTermData term) {
+        public DataWithMandatoryTermsBuilder addOptionalTerm(AbstractTerm term) {
             data.addOptionalTerm(term);
             return this;
         }

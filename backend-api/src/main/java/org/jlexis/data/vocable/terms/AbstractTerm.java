@@ -24,16 +24,14 @@
 package org.jlexis.data.vocable.terms;
 
 import com.google.common.base.MoreObjects;
-import com.google.common.base.Strings;
 
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.google.common.base.Strings.nullToEmpty;
 import static java.util.Objects.requireNonNull;
 
-public abstract class AbstractTermData {
+public abstract class AbstractTerm {
     protected final static String WORD_STEM_MARKER_ENCODED = Matcher.quoteReplacement("${|}");
     protected final static String WORD_STEM_BEGIN_MARKER_ENCODED = Matcher.quoteReplacement("${<}");
     protected final static String WORD_STEM_END_MARKER_ENCODED = Matcher.quoteReplacement("${>}");
@@ -132,7 +130,7 @@ public abstract class AbstractTermData {
 
     public abstract boolean isInflected();
 
-    public abstract AbstractTermData getWordStemTerm();
+    public abstract AbstractTerm getWordStemTerm();
 
     public abstract String getWordStemString();
 

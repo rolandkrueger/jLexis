@@ -60,7 +60,7 @@ public abstract class AbstractUserInput implements UserInput {
      * specific part of a {@link Vocable}, such as the vocabulary data of one language itself, comments, examples and
      * extra data.
      */
-    private Map<RegisteredVocableDataKey, AbstractTermData> data;
+    private Map<RegisteredVocableDataKey, AbstractTerm> data;
     private String inputType;
     private Map<String, WordStemTerm> wordStems;
     private Map<String, InflectedTerm> inflectedTerms;
@@ -136,7 +136,7 @@ public abstract class AbstractUserInput implements UserInput {
         data.clear();
         Map<RegisteredVocableDataKey, RegularTerm> dboMap = databaseObj.getData();
         for (RegisteredVocableDataKey key : dboMap.keySet()) {
-            AbstractTermData term = getRegisteredTermTypeForKey(key.getKey());
+            AbstractTerm term = getRegisteredTermTypeForKey(key.getKey());
             term.setEncodedString(dboMap.get(key).getEncodedString());
             data.put(key, term);
         }
@@ -162,13 +162,13 @@ public abstract class AbstractUserInput implements UserInput {
         if (data == null)
             throw new NullPointerException("User data object is null.");
 
-        AbstractTermData term = getRegisteredTermTypeForKey(identifier);
+        AbstractTerm term = getRegisteredTermTypeForKey(identifier);
         term.setUserEnteredString(data);
         this.data.put(REGISTERED_KEYS.get(identifier), term);
     }
 
-    private AbstractTermData getRegisteredTermTypeForKey(String identifier) {
-        AbstractTermData term = inflectedTerms.get(identifier);
+    private AbstractTerm getRegisteredTermTypeForKey(String identifier) {
+        AbstractTerm term = inflectedTerms.get(identifier);
         if (term != null) return term;
 
         term = wordStems.get(identifier);
@@ -204,12 +204,12 @@ public abstract class AbstractUserInput implements UserInput {
         return inputType.equals(other.getUserInputIdentifier());
     }
 
-    public AbstractTermData getUserData(String identifier) {
+    public AbstractTerm getUserData(String identifier) {
         if (!isKeyRegistered(identifier))
             throw new IllegalStateException(String.format("Given identifier '%s' has not been provided " +
                     "by AbstractUserInput.getUserInputIdentifiers().", identifier));
 
-        AbstractTermData result = data.get(new RegisteredVocableDataKey(identifier));
+        AbstractTerm result = data.get(new RegisteredVocableDataKey(identifier));
         if (result == null) result = new RegularTerm();
 
         return result;

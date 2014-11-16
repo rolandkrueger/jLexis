@@ -28,8 +28,8 @@ import org.junit.Test;
 
 import static junit.framework.Assert.*;
 
-public abstract class AbstractTermDataTest {
-    protected AbstractTermData mTestObj;
+public abstract class AbstractTermTest {
+    protected AbstractTerm mTestObj;
 
     protected String[] mNormalizedTestStrings = new String[]{
             "${-}xxx xxx${-} -x-",
@@ -43,7 +43,7 @@ public abstract class AbstractTermDataTest {
             "xx--xxx <abc>xx$",
             "${-} ${<} ${>} ${|}"};
 
-    public abstract AbstractTermData getTestObject();
+    public abstract AbstractTerm getTestObject();
 
     public abstract void testGetVerificationData();
 

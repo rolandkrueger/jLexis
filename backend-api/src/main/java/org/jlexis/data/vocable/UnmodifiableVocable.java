@@ -23,7 +23,7 @@
 package org.jlexis.data.vocable;
 
 import org.jlexis.data.languages.Language;
-import org.jlexis.data.vocable.terms.AbstractTermData;
+import org.jlexis.data.vocable.terms.AbstractTerm;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -87,8 +87,8 @@ public final class UnmodifiableVocable extends Vocable {
             return data.getShortVersion();
         }
 
-        public final org.jlexis.data.vocable.terms.AbstractTermData getUserData(String identifier) {
-            return new UnmodifiableTermData(data.getUserData(identifier));
+        public final AbstractTerm getUserData(String identifier) {
+            return new UnmodifiableTerm(data.getUserData(identifier));
         }
 
         public final String getUserInputIdentifier() {
@@ -132,10 +132,10 @@ public final class UnmodifiableVocable extends Vocable {
         }
     }
 
-    private final static class UnmodifiableTermData extends AbstractTermData {
-        private AbstractTermData data;
+    private final static class UnmodifiableTerm extends AbstractTerm {
+        private AbstractTerm data;
 
-        public UnmodifiableTermData(AbstractTermData data) {
+        public UnmodifiableTerm(AbstractTerm data) {
             this.data = Objects.requireNonNull(data);
         }
 
@@ -181,7 +181,7 @@ public final class UnmodifiableVocable extends Vocable {
         }
 
         @Override
-        public AbstractTermData getWordStemTerm() {
+        public AbstractTerm getWordStemTerm() {
             return data.getWordStemTerm();
         }
 

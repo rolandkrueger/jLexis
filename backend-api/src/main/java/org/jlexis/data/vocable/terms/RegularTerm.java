@@ -23,7 +23,7 @@
  */
 package org.jlexis.data.vocable.terms;
 
-public class RegularTerm extends AbstractTermData {
+public class RegularTerm extends AbstractTerm {
     public RegularTerm() {
         this("");
     }
@@ -63,7 +63,7 @@ public class RegularTerm extends AbstractTermData {
     }
 
     @Override
-    public AbstractTermData getWordStemTerm() {
+    public AbstractTerm getWordStemTerm() {
         throw new UnsupportedOperationException("This object is not an inflected term.");
     }
 }

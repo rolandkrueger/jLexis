@@ -32,9 +32,9 @@ import java.util.Set;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 
-public class WordStemTermTest extends AbstractTermDataTest {
+public class WordStemTermTest extends AbstractTermTest {
     @Override
-    public AbstractTermData getTestObject() {
+    public AbstractTerm getTestObject() {
         return new WordStemTerm();
     }
 

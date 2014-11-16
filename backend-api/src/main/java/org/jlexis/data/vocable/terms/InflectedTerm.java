@@ -25,10 +25,10 @@ package org.jlexis.data.vocable.terms;
 
 import java.util.Objects;
 
-public class InflectedTerm extends AbstractTermData {
-    private AbstractTermData wordStem;
+public class InflectedTerm extends AbstractTerm {
+    private AbstractTerm wordStem;
 
-    public InflectedTerm(AbstractTermData stem) {
+    public InflectedTerm(AbstractTerm stem) {
         Objects.requireNonNull(stem, "Stem object is null.");
         if (!stem.isWordStem()) {
             throw new IllegalArgumentException("Given argument is not a word stem.");
@@ -50,7 +50,7 @@ public class InflectedTerm extends AbstractTermData {
     }
 
     @Override
-    public AbstractTermData getWordStemTerm() {
+    public AbstractTerm getWordStemTerm() {
         return wordStem;
     }
 

@@ -32,11 +32,11 @@ import java.util.Set;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 
-public class InflectedTermTest extends AbstractTermDataTest {
+public class InflectedTermTest extends AbstractTermTest {
     private WordStemTerm mStem;
 
     @Override
-    public AbstractTermData getTestObject() {
+    public AbstractTerm getTestObject() {
         mStem = new WordStemTerm();
         return new InflectedTerm(mStem);
     }
