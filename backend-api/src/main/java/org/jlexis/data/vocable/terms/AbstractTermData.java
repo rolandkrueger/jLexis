@@ -24,16 +24,37 @@
 package org.jlexis.data.vocable.terms;
 
 import com.google.common.base.MoreObjects;
-import org.jlexis.managers.ConfigurationManager;
 
-import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static java.util.Objects.requireNonNull;
 
 public abstract class AbstractTermData {
-    protected final static String WORD_STEM_MARKER = "${|}";
-    protected final static String WORD_STEM_BEGIN_MARKER = "${<}";
-    protected final static String WORD_STEM_END_MARKER = "${>}";
-    protected final static String WORD_STEM_PLACEHOLDER = "${-}";
-    protected final static String SPECIAL_CHAR_PLACEHOLDER = "${$}";
+    protected final static String WORD_STEM_MARKER_ENCODED = Matcher.quoteReplacement("${|}");
+    protected final static String WORD_STEM_BEGIN_MARKER_ENCODED = Matcher.quoteReplacement("${<}");
+    protected final static String WORD_STEM_END_MARKER_ENCODED = Matcher.quoteReplacement("${>}");
+    protected final static String WORD_STEM_PLACEHOLDER_ENCODED = Matcher.quoteReplacement("${-}");
+    protected final static String DOLLAR_SIGN_ENCODED = Matcher.quoteReplacement("${$}");
+
+    private final static String WORD_STEM_MARKER = Matcher.quoteReplacement("|");
+    private final static String BEGIN_WORD_STEM_MARKER = Matcher.quoteReplacement("<");
+    private final static String END_WORD_STEM_MARKER = Matcher.quoteReplacement(">");
+    private final static String WORD_STEM_PLACEHOLDER = Matcher.quoteReplacement("--");
+    private final static String DOLLAR_SIGN = Matcher.quoteReplacement("$");
+    private final static String HYPHEN_SIGN = Matcher.quoteReplacement("-");
+
+    private final static Pattern WORD_STEM_MARKER_ENCODED_PATTERN = Pattern.compile("${|}", Pattern.LITERAL);
+    private final static Pattern WORD_STEM_BEGIN_MARKER_ENCODED_PATTERN = Pattern.compile("${<}", Pattern.LITERAL);
+    private final static Pattern WORD_STEM_END_MARKER_ENCODED_PATTERN = Pattern.compile("${>}", Pattern.LITERAL);
+    private final static Pattern WORD_STEM_PLACEHOLDER_ENCODED_PATTERN = Pattern.compile("${-}", Pattern.LITERAL);
+    private final static Pattern DOLLAR_SIGN_ENCODED_PATTERN = Pattern.compile("${$}", Pattern.LITERAL);
+
+    private final static Pattern WORD_STEM_MARKER_PATTERN = Pattern.compile("|", Pattern.LITERAL);
+    private final static Pattern BEGIN_WORD_STEM_MARKER_PATTERN = Pattern.compile("<", Pattern.LITERAL);
+    private final static Pattern END_WORD_STEM_MARKER_PATTERN = Pattern.compile(">", Pattern.LITERAL);
+    private final static Pattern WORD_STEM_PLACEHOLDER_PATTERN = Pattern.compile("--", Pattern.LITERAL);
+    private final static Pattern DOLLAR_SIGN_PATTERN = Pattern.compile("$", Pattern.LITERAL);
 
     protected String normalizedTerm = "";
 
@@ -42,34 +63,30 @@ public abstract class AbstractTermData {
     }
 
     public void setNormalizedTerm(String normalizedTerm) {
-        this.normalizedTerm = Objects.requireNonNull(normalizedTerm).trim();
+        this.normalizedTerm = requireNonNull(normalizedTerm).trim();
     }
 
     public String getUserEnteredTerm() {
-        ConfigurationManager config = ConfigurationManager.getInstance();
-        String result = normalizedTerm.replace(WORD_STEM_MARKER, config.getWordStemMarker());
-        result = result.replace(WORD_STEM_BEGIN_MARKER, config.getWordStemBeginMarker());
-        result = result.replace(WORD_STEM_END_MARKER, config.getWordStemEndMarker());
-        result = result.replace(WORD_STEM_PLACEHOLDER, config.getWordStemPlaceholder());
-        result = result.replace(SPECIAL_CHAR_PLACEHOLDER, "$");
-        return result;
+        String result = replace(normalizedTerm, WORD_STEM_MARKER_ENCODED_PATTERN, WORD_STEM_MARKER);
+        result = replace(result, WORD_STEM_BEGIN_MARKER_ENCODED_PATTERN, BEGIN_WORD_STEM_MARKER);
+        result = replace(result, WORD_STEM_END_MARKER_ENCODED_PATTERN, END_WORD_STEM_MARKER);
+        result = replace(result, WORD_STEM_PLACEHOLDER_ENCODED_PATTERN, WORD_STEM_PLACEHOLDER);
+        return replace(result, DOLLAR_SIGN_ENCODED_PATTERN, DOLLAR_SIGN);
     }
 
     public void setUserEnteredTerm(String term) {
-        Objects.requireNonNull(term);
-
-        ConfigurationManager config = ConfigurationManager.getInstance();
-        String result = term.replace("$", SPECIAL_CHAR_PLACEHOLDER);
-        result = result.replace(config.getWordStemMarker(), WORD_STEM_MARKER);
-        result = result.replace(config.getWordStemBeginMarker(), WORD_STEM_BEGIN_MARKER);
-        result = result.replace(config.getWordStemEndMarker(), WORD_STEM_END_MARKER);
-        result = result.replace(config.getWordStemPlaceholder(), WORD_STEM_PLACEHOLDER);
+        String result = replace(requireNonNull(term), DOLLAR_SIGN_PATTERN, DOLLAR_SIGN_ENCODED);
+        result = replace(result, WORD_STEM_MARKER_PATTERN, WORD_STEM_MARKER_ENCODED);
+        result = replace(result, BEGIN_WORD_STEM_MARKER_PATTERN, WORD_STEM_BEGIN_MARKER_ENCODED);
+        result = replace(result, END_WORD_STEM_MARKER_PATTERN, WORD_STEM_END_MARKER_ENCODED);
+        result = replace(result, WORD_STEM_PLACEHOLDER_PATTERN, WORD_STEM_PLACEHOLDER_ENCODED);
 
         setNormalizedTerm(result);
     }
 
     protected String removeMarkerStrings(String string) {
-        String result = string.replace(WORD_STEM_PLACEHOLDER, "");
+
+        String result = replace(string, WORD_STEM_PLACEHOLDER_PATTERN, "");
         result = purge(result);
 
         return result;
@@ -80,13 +97,16 @@ public abstract class AbstractTermData {
     }
 
     protected String purge(String string) {
-        String result = string.replace(WORD_STEM_MARKER, "");
-        result = result.replace(WORD_STEM_BEGIN_MARKER, "");
-        result = result.replace(WORD_STEM_END_MARKER, "");
-        result = result.replace(WORD_STEM_PLACEHOLDER, "-");
-        result = result.replace(SPECIAL_CHAR_PLACEHOLDER, "$");
-
+        String result = replace(string, WORD_STEM_MARKER_ENCODED_PATTERN, "");
+        result = replace(result, WORD_STEM_BEGIN_MARKER_ENCODED_PATTERN, "");
+        result = replace(result, WORD_STEM_END_MARKER_ENCODED_PATTERN, "");
+        result = replace(result, WORD_STEM_PLACEHOLDER_ENCODED_PATTERN, HYPHEN_SIGN);
+        result = replace(result, DOLLAR_SIGN_ENCODED_PATTERN, DOLLAR_SIGN);
         return result;
+    }
+
+    private String replace(String value, Pattern pattern, String replacement) {
+        return pattern.matcher(value).replaceAll(replacement);
     }
 
     public boolean isEmpty() {
