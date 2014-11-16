@@ -38,14 +38,14 @@ public class InflectedTerm extends AbstractTermData {
     }
 
     @Override
-    public String getResolvedTerm() {
-        String result = encodedTerm.replace(WORD_STEM_PLACEHOLDER_ENCODED, wordStem.getWordStem());
+    public String getStringWithWordStemResolved() {
+        String result = getEncodedString().replace(WORD_STEM_PLACEHOLDER_ENCODED, wordStem.getWordStemString());
         result = removeMarkerStrings(result);
         return result;
     }
 
     @Override
-    public String getWordStem() {
+    public String getWordStemString() {
         throw new UnsupportedOperationException("This is not a word stem.");
     }
 
@@ -65,7 +65,7 @@ public class InflectedTerm extends AbstractTermData {
     }
 
     @Override
-    public String getResolvedAndPurgedTerm() {
-        return purge(getResolvedTerm());
+    public String getCleanedStringWithWordStemResolved() {
+        return clean(getStringWithWordStemResolved());
     }
 }

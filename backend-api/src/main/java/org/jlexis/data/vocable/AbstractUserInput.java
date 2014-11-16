@@ -119,7 +119,7 @@ public abstract class AbstractUserInput implements UserInput {
 
         Map<RegisteredVocableDataKey, RegularTerm> preparedData = new HashMap<RegisteredVocableDataKey, RegularTerm>();
         for (RegisteredVocableDataKey key : data.keySet()) {
-            preparedData.put(key, new RegularTerm(data.get(key).getEncodedTerm()));
+            preparedData.put(key, new RegularTerm(data.get(key).getEncodedString()));
         }
 
         mDatabaseObject.setData(preparedData);
@@ -137,7 +137,7 @@ public abstract class AbstractUserInput implements UserInput {
         Map<RegisteredVocableDataKey, RegularTerm> dboMap = databaseObj.getData();
         for (RegisteredVocableDataKey key : dboMap.keySet()) {
             AbstractTermData term = getRegisteredTermTypeForKey(key.getKey());
-            term.setEncodedTerm(dboMap.get(key).getEncodedTerm());
+            term.setEncodedString(dboMap.get(key).getEncodedString());
             data.put(key, term);
         }
 
@@ -163,7 +163,7 @@ public abstract class AbstractUserInput implements UserInput {
             throw new NullPointerException("User data object is null.");
 
         AbstractTermData term = getRegisteredTermTypeForKey(identifier);
-        term.setUserEnteredTerm(data);
+        term.setUserEnteredString(data);
         this.data.put(REGISTERED_KEYS.get(identifier), term);
     }
 
@@ -258,18 +258,18 @@ public abstract class AbstractUserInput implements UserInput {
     public abstract VocableVerificationData getQuizVerificationData();
 
     public String getPurgedUserData(String identifier) {
-        return getUserData(identifier).getPurgedTerm();
+        return getUserData(identifier).getCleanedString();
     }
 
     public String getUserEnteredTerm(String identifier) {
-        return getUserData(identifier).getUserEnteredTerm();
+        return getUserData(identifier).getUserEnteredString();
     }
 
     public String getResolvedUserData(String identifier) {
-        return getUserData(identifier).getResolvedTerm();
+        return getUserData(identifier).getStringWithWordStemResolved();
     }
 
     public String getResolvedAndPurgedUserData(String identifier) {
-        return getUserData(identifier).getResolvedAndPurgedTerm();
+        return getUserData(identifier).getCleanedStringWithWordStemResolved();
     }
 }

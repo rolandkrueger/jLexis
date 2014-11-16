@@ -56,47 +56,48 @@ public abstract class AbstractTermData {
     private final static Pattern WORD_STEM_PLACEHOLDER_PATTERN = Pattern.compile("--", Pattern.LITERAL);
     private final static Pattern DOLLAR_SIGN_PATTERN = Pattern.compile("$", Pattern.LITERAL);
 
-    protected String encodedTerm = "";
+    private String encodedString = "";
+    private String userEnteredString;
+    private String cleanedString;
 
-    public String getEncodedTerm() {
-        return encodedTerm;
+    public String getEncodedString() {
+        return encodedString;
     }
 
-    public void setEncodedTerm(String encodedTerm) {
-        this.encodedTerm = requireNonNull(encodedTerm).trim();
+    public void setEncodedString(String encodedString) {
+        this.encodedString = requireNonNull(encodedString).trim();
     }
 
-    public String getUserEnteredTerm() {
-        String result = replace(encodedTerm, WORD_STEM_MARKER_ENCODED_PATTERN, WORD_STEM_MARKER);
+    public String getUserEnteredString() {
+        String result = replace(encodedString, WORD_STEM_MARKER_ENCODED_PATTERN, WORD_STEM_MARKER);
         result = replace(result, WORD_STEM_BEGIN_MARKER_ENCODED_PATTERN, BEGIN_WORD_STEM_MARKER);
         result = replace(result, WORD_STEM_END_MARKER_ENCODED_PATTERN, END_WORD_STEM_MARKER);
         result = replace(result, WORD_STEM_PLACEHOLDER_ENCODED_PATTERN, WORD_STEM_PLACEHOLDER);
         return replace(result, DOLLAR_SIGN_ENCODED_PATTERN, DOLLAR_SIGN);
     }
 
-    public void setUserEnteredTerm(String term) {
-        String result = replace(requireNonNull(term), DOLLAR_SIGN_PATTERN, DOLLAR_SIGN_ENCODED);
+    public void setUserEnteredString(String string) {
+        String result = replace(requireNonNull(string), DOLLAR_SIGN_PATTERN, DOLLAR_SIGN_ENCODED);
         result = replace(result, WORD_STEM_MARKER_PATTERN, WORD_STEM_MARKER_ENCODED);
         result = replace(result, BEGIN_WORD_STEM_MARKER_PATTERN, WORD_STEM_BEGIN_MARKER_ENCODED);
         result = replace(result, END_WORD_STEM_MARKER_PATTERN, WORD_STEM_END_MARKER_ENCODED);
         result = replace(result, WORD_STEM_PLACEHOLDER_PATTERN, WORD_STEM_PLACEHOLDER_ENCODED);
 
-        setEncodedTerm(result);
+        setEncodedString(result);
     }
 
     protected String removeMarkerStrings(String string) {
-
         String result = replace(string, WORD_STEM_PLACEHOLDER_PATTERN, "");
-        result = purge(result);
+        result = clean(result);
 
         return result;
     }
 
-    public String getPurgedTerm() {
-        return purge(encodedTerm);
+    public String getCleanedString() {
+        return clean(encodedString);
     }
 
-    protected String purge(String string) {
+    protected String clean(String string) {
         String result = replace(string, WORD_STEM_MARKER_ENCODED_PATTERN, "");
         result = replace(result, WORD_STEM_BEGIN_MARKER_ENCODED_PATTERN, "");
         result = replace(result, WORD_STEM_END_MARKER_ENCODED_PATTERN, "");
@@ -105,18 +106,18 @@ public abstract class AbstractTermData {
         return result;
     }
 
-    private String replace(String value, Pattern pattern, String replacement) {
+    protected String replace(String value, Pattern pattern, String replacement) {
         return pattern.matcher(value).replaceAll(replacement);
     }
 
     public boolean isEmpty() {
-        return "".equals(getEncodedTerm());
+        return "".equals(getEncodedString());
     }
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("user entered term", getUserEnteredTerm())
+                .add("user entered value", getUserEnteredString())
                 .toString();
     }
 
@@ -126,9 +127,9 @@ public abstract class AbstractTermData {
 
     public abstract AbstractTermData getWordStemTerm();
 
-    public abstract String getResolvedAndPurgedTerm();
+    public abstract String getCleanedStringWithWordStemResolved();
 
-    public abstract String getWordStem();
+    public abstract String getWordStemString();
 
-    public abstract String getResolvedTerm();
+    public abstract String getStringWithWordStemResolved();
 }

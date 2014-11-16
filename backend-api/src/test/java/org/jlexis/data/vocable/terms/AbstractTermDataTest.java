@@ -61,16 +61,16 @@ public abstract class AbstractTermDataTest {
     @Test
     public void testGetNormalizedTerm() {
         for (String data : mNormalizedTestStrings) {
-            mTestObj.setEncodedTerm(data);
-            assertEquals(data, mTestObj.getEncodedTerm());
+            mTestObj.setEncodedString(data);
+            assertEquals(data, mTestObj.getEncodedString());
         }
     }
 
     @Test
     public void testGetUserEnteredTerm() {
         for (String data : mUserTestStrings) {
-            mTestObj.setUserEnteredTerm(data);
-            assertEquals(data, mTestObj.getUserEnteredTerm());
+            mTestObj.setUserEnteredString(data);
+            assertEquals(data, mTestObj.getUserEnteredString());
         }
     }
 
@@ -82,30 +82,30 @@ public abstract class AbstractTermDataTest {
                 "xx-xxx abcxx$",
                 "-   "};
         for (int i = 0; i < purged.length; ++i) {
-            mTestObj.setEncodedTerm(mNormalizedTestStrings[i]);
-            assertEquals(purged[i], mTestObj.getPurgedTerm());
+            mTestObj.setEncodedString(mNormalizedTestStrings[i]);
+            assertEquals(purged[i], mTestObj.getCleanedString());
         }
     }
 
     @Test(expected = NullPointerException.class)
     public void testSetUserEnteredTermFail() {
-        mTestObj.setUserEnteredTerm(null);
+        mTestObj.setUserEnteredString(null);
     }
 
     @Test(expected = NullPointerException.class)
     public void testSetNormalizedTermFail() {
-        mTestObj.setEncodedTerm(null);
+        mTestObj.setEncodedString(null);
     }
 
     @Test
     public void testIsEmpty() {
         assertTrue(mTestObj.isEmpty());
-        mTestObj.setEncodedTerm("");
+        mTestObj.setEncodedString("");
         assertTrue(mTestObj.isEmpty());
-        mTestObj.setUserEnteredTerm("");
+        mTestObj.setUserEnteredString("");
         assertTrue(mTestObj.isEmpty());
 
-        mTestObj.setUserEnteredTerm("xxx");
+        mTestObj.setUserEnteredString("xxx");
         assertFalse(mTestObj.isEmpty());
     }
 }

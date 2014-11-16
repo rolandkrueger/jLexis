@@ -42,12 +42,12 @@ public class WordStemTermTest extends AbstractTermDataTest {
     @Test
     public void testGetResolvedTerm() {
         for (String data : mUserTestStrings) {
-            mTestObj.setUserEnteredTerm(data);
-            assertEquals(data, mTestObj.getResolvedTerm());
+            mTestObj.setUserEnteredString(data);
+            assertEquals(data, mTestObj.getStringWithWordStemResolved());
         }
         for (String data : mNormalizedTestStrings) {
-            mTestObj.setUserEnteredTerm(data);
-            assertEquals(data, mTestObj.getResolvedTerm());
+            mTestObj.setUserEnteredString(data);
+            assertEquals(data, mTestObj.getStringWithWordStemResolved());
         }
     }
 
@@ -58,8 +58,8 @@ public class WordStemTermTest extends AbstractTermDataTest {
         String[] wordStems = new String[]{"abcd", "xxxx", "zzzz"};
 
         for (int i = 0; i < words.length; ++i) {
-            mTestObj.setUserEnteredTerm(words[i]);
-            assertEquals(wordStems[i], mTestObj.getWordStem());
+            mTestObj.setUserEnteredString(words[i]);
+            assertEquals(wordStems[i], mTestObj.getWordStemString());
         }
     }
 
@@ -73,7 +73,7 @@ public class WordStemTermTest extends AbstractTermDataTest {
     @Test
     public void testGetVerificationData() {
         String testData = "test|term; 1, 2, 3;";
-        mTestObj.setUserEnteredTerm(testData);
+        mTestObj.setUserEnteredString(testData);
         VocableVerificationData verificationData = VocableVerificationData.create().withoutAbbreviationVariants().addMandatoryTerm(mTestObj).build();
         assertEquals(2, verificationData.getNumberOfMandatoryValues());
         assertEquals(4, verificationData.getAllValues().size());
@@ -95,7 +95,7 @@ public class WordStemTermTest extends AbstractTermDataTest {
         assertEquals(comparisonObject, verificationData);
 
         testData = "this is <the> testdata";
-        mTestObj.setUserEnteredTerm(testData);
+        mTestObj.setUserEnteredString(testData);
         verificationData = VocableVerificationData.create().withoutAbbreviationVariants().addMandatoryTerm(mTestObj).build();
         assertEquals(1, verificationData.getNumberOfMandatoryValues());
         set1.clear();

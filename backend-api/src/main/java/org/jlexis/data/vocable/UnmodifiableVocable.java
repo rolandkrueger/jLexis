@@ -139,32 +139,32 @@ public final class UnmodifiableVocable extends Vocable {
             this.data = Objects.requireNonNull(data);
         }
 
-        public final String getEncodedTerm() {
-            return data.getEncodedTerm();
+        public final String getEncodedString() {
+            return data.getEncodedString();
         }
 
-        public final void setEncodedTerm(String normalizedTerm) {
+        public final void setEncodedString(String normalizedTerm) {
             throw new UnsupportedOperationException("This object cannot be modified.");
         }
 
-        public final String getPurgedTerm() {
-            return data.getPurgedTerm();
+        public final String getCleanedString() {
+            return data.getCleanedString();
         }
 
-        public final String getResolvedTerm() {
-            return data.getResolvedTerm();
+        public final String getStringWithWordStemResolved() {
+            return data.getStringWithWordStemResolved();
         }
 
-        public final String getUserEnteredTerm() {
-            return data.getUserEnteredTerm();
+        public final String getUserEnteredString() {
+            return data.getUserEnteredString();
         }
 
-        public final void setUserEnteredTerm(String term) {
+        public final void setUserEnteredString(String string) {
             throw new UnsupportedOperationException("This object cannot be modified.");
         }
 
-        public final String getWordStem() {
-            return data.getWordStem();
+        public final String getWordStemString() {
+            return data.getWordStemString();
         }
 
         public final boolean isEmpty() {
@@ -191,8 +191,8 @@ public final class UnmodifiableVocable extends Vocable {
         }
 
         @Override
-        public String getResolvedAndPurgedTerm() {
-            return data.getResolvedAndPurgedTerm();
+        public String getCleanedStringWithWordStemResolved() {
+            return data.getCleanedStringWithWordStemResolved();
         }
     }
 }

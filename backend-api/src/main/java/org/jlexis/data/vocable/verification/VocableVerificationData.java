@@ -170,7 +170,7 @@ public class VocableVerificationData {
     }
 
     private void addOptionalTerm(AbstractTermData term) {
-        addOptionalValue(term.getResolvedAndPurgedTerm());
+        addOptionalValue(term.getCleanedStringWithWordStemResolved());
     }
 
     private void removeOptionalValue(String value) {
@@ -186,7 +186,7 @@ public class VocableVerificationData {
     }
 
     private void addMandatoryTerm(AbstractTermData mandatoryTermData) {
-        tokenizeAndAddString(mandatoryTermData.getResolvedAndPurgedTerm());
+        tokenizeAndAddString(mandatoryTermData.getCleanedStringWithWordStemResolved());
     }
 
     protected boolean isEmpty() {

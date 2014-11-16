@@ -29,17 +29,17 @@ public class RegularTerm extends AbstractTermData {
     }
 
     public RegularTerm(String term) {
-        super.setEncodedTerm(term);
+        super.setEncodedString(term);
     }
 
     @Override
-    public String getResolvedTerm() {
-        return getUserEnteredTerm();
+    public String getStringWithWordStemResolved() {
+        return getUserEnteredString();
     }
 
     @Override
-    public String getWordStem() {
-        return getUserEnteredTerm();
+    public String getWordStemString() {
+        return getUserEnteredString();
     }
 
     @Override
@@ -48,13 +48,13 @@ public class RegularTerm extends AbstractTermData {
     }
 
     @Override
-    public String getUserEnteredTerm() {
-        return getEncodedTerm();
+    public String getUserEnteredString() {
+        return getEncodedString();
     }
 
     @Override
-    public void setUserEnteredTerm(String term) {
-        super.setEncodedTerm(term);
+    public void setUserEnteredString(String string) {
+        super.setEncodedString(string);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class RegularTerm extends AbstractTermData {
     }
 
     @Override
-    public String getResolvedAndPurgedTerm() {
-        return getPurgedTerm();
+    public String getCleanedStringWithWordStemResolved() {
+        return getCleanedString();
     }
 }

@@ -42,12 +42,12 @@ public class RegularTermTest extends AbstractTermDataTest {
     @Test
     public void testGetResolvedTerm() {
         for (String data : mUserTestStrings) {
-            mTestObj.setUserEnteredTerm(data);
-            assertEquals(data, mTestObj.getResolvedTerm());
+            mTestObj.setUserEnteredString(data);
+            assertEquals(data, mTestObj.getStringWithWordStemResolved());
         }
         for (String data : mNormalizedTestStrings) {
-            mTestObj.setUserEnteredTerm(data);
-            assertEquals(data, mTestObj.getResolvedTerm());
+            mTestObj.setUserEnteredString(data);
+            assertEquals(data, mTestObj.getStringWithWordStemResolved());
         }
     }
 
@@ -55,12 +55,12 @@ public class RegularTermTest extends AbstractTermDataTest {
     @Test
     public void testGetWordStem() {
         for (String data : mUserTestStrings) {
-            mTestObj.setUserEnteredTerm(data);
-            assertEquals(data, mTestObj.getWordStem());
+            mTestObj.setUserEnteredString(data);
+            assertEquals(data, mTestObj.getWordStemString());
         }
         for (String data : mNormalizedTestStrings) {
-            mTestObj.setUserEnteredTerm(data);
-            assertEquals(data, mTestObj.getWordStem());
+            mTestObj.setUserEnteredString(data);
+            assertEquals(data, mTestObj.getWordStemString());
         }
     }
 
@@ -74,7 +74,7 @@ public class RegularTermTest extends AbstractTermDataTest {
     @Test
     public void testGetVerificationData() {
         String testData = "a, b; 1, 2, 3;";
-        mTestObj.setUserEnteredTerm(testData);
+        mTestObj.setUserEnteredString(testData);
         VocableVerificationData verificationData = VocableVerificationData.create().withoutAbbreviationVariants().addMandatoryTerm(mTestObj).build();
         assertEquals(2, verificationData.getNumberOfMandatoryValues());
         assertEquals(5, verificationData.getAllValues().size());

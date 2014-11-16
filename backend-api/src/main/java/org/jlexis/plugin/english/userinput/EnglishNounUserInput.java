@@ -187,7 +187,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
         boolean result = false;
         try {
             result = IrregularPlural.valueOf(
-                    getUserData(IRREGULAR_PLURAL_KEY_AE).getUserEnteredTerm()).equals(IrregularPlural.IRREGULAR);
+                    getUserData(IRREGULAR_PLURAL_KEY_AE).getUserEnteredString()).equals(IrregularPlural.IRREGULAR);
         } catch (IllegalArgumentException iaExc) {
             return false;
         }
@@ -205,7 +205,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
         boolean result = false;
         try {
             result = IrregularPlural.valueOf(
-                    getUserData(IRREGULAR_PLURAL_KEY_BE).getUserEnteredTerm()).equals(IrregularPlural.IRREGULAR);
+                    getUserData(IRREGULAR_PLURAL_KEY_BE).getUserEnteredString()).equals(IrregularPlural.IRREGULAR);
         } catch (IllegalArgumentException iaExc) {
             return false;
         }

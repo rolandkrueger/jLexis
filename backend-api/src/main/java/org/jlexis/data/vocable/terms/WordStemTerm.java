@@ -24,20 +24,21 @@
 package org.jlexis.data.vocable.terms;
 
 public class WordStemTerm extends AbstractTermData {
-    public String getResolvedTerm() {
-        return getUserEnteredTerm();
+    public String getStringWithWordStemResolved() {
+        return getUserEnteredString();
     }
 
     @Override
-    public String getWordStem() {
-        if (encodedTerm.indexOf(WORD_STEM_MARKER_ENCODED) > 0) {
-            return encodedTerm.substring(0, encodedTerm.indexOf(WORD_STEM_MARKER_ENCODED));
-        } else if (encodedTerm.indexOf(WORD_STEM_BEGIN_MARKER_ENCODED) > 0 &&
-                encodedTerm.indexOf(WORD_STEM_END_MARKER_ENCODED) > 0) {
-            return encodedTerm.substring(encodedTerm.indexOf(WORD_STEM_BEGIN_MARKER_ENCODED) + WORD_STEM_BEGIN_MARKER_ENCODED.length(),
-                    encodedTerm.indexOf(WORD_STEM_END_MARKER_ENCODED));
+    public String getWordStemString() {
+        String encodedString = getEncodedString();
+        if (encodedString.indexOf(WORD_STEM_MARKER_ENCODED) > 0) {
+            return encodedString.substring(0, encodedString.indexOf(WORD_STEM_MARKER_ENCODED));
+        } else if (encodedString.indexOf(WORD_STEM_BEGIN_MARKER_ENCODED) > 0 &&
+                encodedString.indexOf(WORD_STEM_END_MARKER_ENCODED) > 0) {
+            return encodedString.substring(encodedString.indexOf(WORD_STEM_BEGIN_MARKER_ENCODED) + WORD_STEM_BEGIN_MARKER_ENCODED.length(),
+                    encodedString.indexOf(WORD_STEM_END_MARKER_ENCODED));
         }
-        return encodedTerm;
+        return encodedString;
     }
 
     @Override
@@ -56,7 +57,7 @@ public class WordStemTerm extends AbstractTermData {
     }
 
     @Override
-    public String getResolvedAndPurgedTerm() {
-        return getPurgedTerm();
+    public String getCleanedStringWithWordStemResolved() {
+        return getCleanedString();
     }
 }
