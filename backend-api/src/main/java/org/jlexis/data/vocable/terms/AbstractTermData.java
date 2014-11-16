@@ -24,10 +24,13 @@
 package org.jlexis.data.vocable.terms;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Strings;
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.google.common.base.Strings.nullToEmpty;
 import static java.util.Objects.requireNonNull;
 
 public abstract class AbstractTermData {
@@ -59,6 +62,7 @@ public abstract class AbstractTermData {
     private String encodedString = "";
     private String userEnteredString;
     private String cleanedString;
+    private String cleanedStringWithWordStemResolved;
 
     public String getEncodedString() {
         return encodedString;
@@ -106,19 +110,15 @@ public abstract class AbstractTermData {
         return result;
     }
 
-    protected String replace(String value, Pattern pattern, String replacement) {
-        return pattern.matcher(value).replaceAll(replacement);
-    }
-
     public boolean isEmpty() {
         return "".equals(getEncodedString());
     }
 
-    @Override
-    public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("user entered value", getUserEnteredString())
-                .toString();
+    public final  String getCleanedStringWithWordStemResolved() {
+        if (cleanedStringWithWordStemResolved == null) {
+            cleanedStringWithWordStemResolved = clean(getStringWithWordStemResolved());
+        }
+        return cleanedStringWithWordStemResolved;
     }
 
     public abstract boolean isWordStem();
@@ -127,9 +127,18 @@ public abstract class AbstractTermData {
 
     public abstract AbstractTermData getWordStemTerm();
 
-    public abstract String getCleanedStringWithWordStemResolved();
-
     public abstract String getWordStemString();
 
     public abstract String getStringWithWordStemResolved();
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("user entered value", getUserEnteredString())
+                .toString();
+    }
+
+    protected String replace(String value, Pattern pattern, String replacement) {
+        return pattern.matcher(value).replaceAll(replacement);
+    }
 }

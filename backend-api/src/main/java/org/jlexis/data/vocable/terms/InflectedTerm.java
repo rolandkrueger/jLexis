@@ -63,9 +63,4 @@ public class InflectedTerm extends AbstractTermData {
     public boolean isInflected() {
         return true;
     }
-
-    @Override
-    public String getCleanedStringWithWordStemResolved() {
-        return clean(getStringWithWordStemResolved());
-    }
 }

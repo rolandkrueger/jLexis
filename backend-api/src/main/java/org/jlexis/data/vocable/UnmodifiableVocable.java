@@ -189,10 +189,5 @@ public final class UnmodifiableVocable extends Vocable {
         public final String toString() {
             return data.toString();
         }
-
-        @Override
-        public String getCleanedStringWithWordStemResolved() {
-            return data.getCleanedStringWithWordStemResolved();
-        }
     }
 }

@@ -55,9 +55,4 @@ public class WordStemTerm extends AbstractTermData {
     public AbstractTermData getWordStemTerm() {
         throw new UnsupportedOperationException("This object is not an inflected term.");
     }
-
-    @Override
-    public String getCleanedStringWithWordStemResolved() {
-        return getCleanedString();
-    }
 }
