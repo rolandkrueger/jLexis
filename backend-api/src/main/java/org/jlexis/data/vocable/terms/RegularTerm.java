@@ -29,7 +29,7 @@ public class RegularTerm extends AbstractTermData {
     }
 
     public RegularTerm(String term) {
-        super.setNormalizedTerm(term);
+        super.setEncodedTerm(term);
     }
 
     @Override
@@ -49,12 +49,12 @@ public class RegularTerm extends AbstractTermData {
 
     @Override
     public String getUserEnteredTerm() {
-        return getNormalizedTerm();
+        return getEncodedTerm();
     }
 
     @Override
     public void setUserEnteredTerm(String term) {
-        super.setNormalizedTerm(term);
+        super.setEncodedTerm(term);
     }
 
     @Override

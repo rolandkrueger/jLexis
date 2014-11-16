@@ -39,7 +39,7 @@ public class InflectedTerm extends AbstractTermData {
 
     @Override
     public String getResolvedTerm() {
-        String result = normalizedTerm.replace(WORD_STEM_PLACEHOLDER_ENCODED, wordStem.getWordStem());
+        String result = encodedTerm.replace(WORD_STEM_PLACEHOLDER_ENCODED, wordStem.getWordStem());
         result = removeMarkerStrings(result);
         return result;
     }

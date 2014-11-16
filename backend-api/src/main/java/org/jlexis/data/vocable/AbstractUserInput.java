@@ -119,7 +119,7 @@ public abstract class AbstractUserInput implements UserInput {
 
         Map<RegisteredVocableDataKey, RegularTerm> preparedData = new HashMap<RegisteredVocableDataKey, RegularTerm>();
         for (RegisteredVocableDataKey key : data.keySet()) {
-            preparedData.put(key, new RegularTerm(data.get(key).getNormalizedTerm()));
+            preparedData.put(key, new RegularTerm(data.get(key).getEncodedTerm()));
         }
 
         mDatabaseObject.setData(preparedData);
@@ -137,7 +137,7 @@ public abstract class AbstractUserInput implements UserInput {
         Map<RegisteredVocableDataKey, RegularTerm> dboMap = databaseObj.getData();
         for (RegisteredVocableDataKey key : dboMap.keySet()) {
             AbstractTermData term = getRegisteredTermTypeForKey(key.getKey());
-            term.setNormalizedTerm(dboMap.get(key).getNormalizedTerm());
+            term.setEncodedTerm(dboMap.get(key).getEncodedTerm());
             data.put(key, term);
         }
 

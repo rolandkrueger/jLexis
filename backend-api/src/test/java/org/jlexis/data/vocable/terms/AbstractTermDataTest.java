@@ -61,8 +61,8 @@ public abstract class AbstractTermDataTest {
     @Test
     public void testGetNormalizedTerm() {
         for (String data : mNormalizedTestStrings) {
-            mTestObj.setNormalizedTerm(data);
-            assertEquals(data, mTestObj.getNormalizedTerm());
+            mTestObj.setEncodedTerm(data);
+            assertEquals(data, mTestObj.getEncodedTerm());
         }
     }
 
@@ -82,7 +82,7 @@ public abstract class AbstractTermDataTest {
                 "xx-xxx abcxx$",
                 "-   "};
         for (int i = 0; i < purged.length; ++i) {
-            mTestObj.setNormalizedTerm(mNormalizedTestStrings[i]);
+            mTestObj.setEncodedTerm(mNormalizedTestStrings[i]);
             assertEquals(purged[i], mTestObj.getPurgedTerm());
         }
     }
@@ -94,13 +94,13 @@ public abstract class AbstractTermDataTest {
 
     @Test(expected = NullPointerException.class)
     public void testSetNormalizedTermFail() {
-        mTestObj.setNormalizedTerm(null);
+        mTestObj.setEncodedTerm(null);
     }
 
     @Test
     public void testIsEmpty() {
         assertTrue(mTestObj.isEmpty());
-        mTestObj.setNormalizedTerm("");
+        mTestObj.setEncodedTerm("");
         assertTrue(mTestObj.isEmpty());
         mTestObj.setUserEnteredTerm("");
         assertTrue(mTestObj.isEmpty());

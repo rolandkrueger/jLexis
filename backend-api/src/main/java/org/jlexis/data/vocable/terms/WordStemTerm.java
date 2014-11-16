@@ -30,14 +30,14 @@ public class WordStemTerm extends AbstractTermData {
 
     @Override
     public String getWordStem() {
-        if (normalizedTerm.indexOf(WORD_STEM_MARKER_ENCODED) > 0) {
-            return normalizedTerm.substring(0, normalizedTerm.indexOf(WORD_STEM_MARKER_ENCODED));
-        } else if (normalizedTerm.indexOf(WORD_STEM_BEGIN_MARKER_ENCODED) > 0 &&
-                normalizedTerm.indexOf(WORD_STEM_END_MARKER_ENCODED) > 0) {
-            return normalizedTerm.substring(normalizedTerm.indexOf(WORD_STEM_BEGIN_MARKER_ENCODED) + WORD_STEM_BEGIN_MARKER_ENCODED.length(),
-                    normalizedTerm.indexOf(WORD_STEM_END_MARKER_ENCODED));
+        if (encodedTerm.indexOf(WORD_STEM_MARKER_ENCODED) > 0) {
+            return encodedTerm.substring(0, encodedTerm.indexOf(WORD_STEM_MARKER_ENCODED));
+        } else if (encodedTerm.indexOf(WORD_STEM_BEGIN_MARKER_ENCODED) > 0 &&
+                encodedTerm.indexOf(WORD_STEM_END_MARKER_ENCODED) > 0) {
+            return encodedTerm.substring(encodedTerm.indexOf(WORD_STEM_BEGIN_MARKER_ENCODED) + WORD_STEM_BEGIN_MARKER_ENCODED.length(),
+                    encodedTerm.indexOf(WORD_STEM_END_MARKER_ENCODED));
         }
-        return normalizedTerm;
+        return encodedTerm;
     }
 
     @Override

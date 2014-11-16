@@ -180,7 +180,7 @@ public abstract class AbstractQuizQuestion {
         Objects.requireNonNull(expectedAnswer, "Expected answer is null.");
         VocableVerificationData data = VocableVerificationData.create()
                 .withoutAbbreviationVariants()
-                .tokenizeAndAddString(expectedAnswer.getNormalizedTerm())
+                .tokenizeAndAddString(expectedAnswer.getEncodedTerm())
                 .build();
         setExpectedAnswer(data);
     }

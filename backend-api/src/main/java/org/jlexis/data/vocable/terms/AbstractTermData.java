@@ -56,18 +56,18 @@ public abstract class AbstractTermData {
     private final static Pattern WORD_STEM_PLACEHOLDER_PATTERN = Pattern.compile("--", Pattern.LITERAL);
     private final static Pattern DOLLAR_SIGN_PATTERN = Pattern.compile("$", Pattern.LITERAL);
 
-    protected String normalizedTerm = "";
+    protected String encodedTerm = "";
 
-    public String getNormalizedTerm() {
-        return normalizedTerm;
+    public String getEncodedTerm() {
+        return encodedTerm;
     }
 
-    public void setNormalizedTerm(String normalizedTerm) {
-        this.normalizedTerm = requireNonNull(normalizedTerm).trim();
+    public void setEncodedTerm(String encodedTerm) {
+        this.encodedTerm = requireNonNull(encodedTerm).trim();
     }
 
     public String getUserEnteredTerm() {
-        String result = replace(normalizedTerm, WORD_STEM_MARKER_ENCODED_PATTERN, WORD_STEM_MARKER);
+        String result = replace(encodedTerm, WORD_STEM_MARKER_ENCODED_PATTERN, WORD_STEM_MARKER);
         result = replace(result, WORD_STEM_BEGIN_MARKER_ENCODED_PATTERN, BEGIN_WORD_STEM_MARKER);
         result = replace(result, WORD_STEM_END_MARKER_ENCODED_PATTERN, END_WORD_STEM_MARKER);
         result = replace(result, WORD_STEM_PLACEHOLDER_ENCODED_PATTERN, WORD_STEM_PLACEHOLDER);
@@ -81,7 +81,7 @@ public abstract class AbstractTermData {
         result = replace(result, END_WORD_STEM_MARKER_PATTERN, WORD_STEM_END_MARKER_ENCODED);
         result = replace(result, WORD_STEM_PLACEHOLDER_PATTERN, WORD_STEM_PLACEHOLDER_ENCODED);
 
-        setNormalizedTerm(result);
+        setEncodedTerm(result);
     }
 
     protected String removeMarkerStrings(String string) {
@@ -93,7 +93,7 @@ public abstract class AbstractTermData {
     }
 
     public String getPurgedTerm() {
-        return purge(normalizedTerm);
+        return purge(encodedTerm);
     }
 
     protected String purge(String string) {
@@ -110,7 +110,7 @@ public abstract class AbstractTermData {
     }
 
     public boolean isEmpty() {
-        return "".equals(getNormalizedTerm());
+        return "".equals(getEncodedTerm());
     }
 
     @Override

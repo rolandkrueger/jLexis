@@ -139,11 +139,11 @@ public final class UnmodifiableVocable extends Vocable {
             this.data = Objects.requireNonNull(data);
         }
 
-        public final String getNormalizedTerm() {
-            return data.getNormalizedTerm();
+        public final String getEncodedTerm() {
+            return data.getEncodedTerm();
         }
 
-        public final void setNormalizedTerm(String normalizedTerm) {
+        public final void setEncodedTerm(String normalizedTerm) {
             throw new UnsupportedOperationException("This object cannot be modified.");
         }
 
