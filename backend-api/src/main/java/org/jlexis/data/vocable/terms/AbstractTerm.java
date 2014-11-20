@@ -83,7 +83,6 @@ public abstract class AbstractTerm {
     }
 
     public void setUserEnteredString(String string) {
-        clearCachedStrings();
         userEnteredString = nullToEmpty(string).trim();
         String result = replace(userEnteredString, DOLLAR_SIGN_PATTERN, DOLLAR_SIGN_ENCODED);
         result = replace(result, WORD_STEM_MARKER_PATTERN, WORD_STEM_MARKER_ENCODED);

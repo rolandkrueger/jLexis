@@ -36,7 +36,7 @@ public class InflectedTermTest extends AbstractTermTest {
     private WordStemTerm mStem;
 
     @Override
-    public AbstractTerm getTestObject() {
+    public AbstractTerm createTerm() {
         mStem = new WordStemTerm();
         return new InflectedTerm(mStem);
     }

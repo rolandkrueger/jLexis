@@ -34,7 +34,7 @@ import static junit.framework.Assert.assertTrue;
 
 public class WordStemTermTest extends AbstractTermTest {
     @Override
-    public AbstractTerm getTestObject() {
+    public AbstractTerm createTerm() {
         return new WordStemTerm();
     }
 
@@ -45,7 +45,7 @@ public class WordStemTermTest extends AbstractTermTest {
             term.setUserEnteredString(data);
             assertEquals(data, term.getStringWithWordStemResolved());
         }
-        for (String data : normalizedTestStrings) {
+        for (String data : encodedTestStrings) {
             term.setUserEnteredString(data);
             assertEquals(data, term.getStringWithWordStemResolved());
         }

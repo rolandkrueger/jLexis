@@ -27,11 +27,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.Assert.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public abstract class AbstractTermTest {
     protected AbstractTerm term;
 
-    protected String[] normalizedTestStrings = new String[]{
+    protected String[] encodedTestStrings = new String[]{
             "${-}xxx xxx${-} -x-",
             "abc${|}def",
             "xx${-}xxx ${<}abc${>}xx${$}",
@@ -43,8 +45,9 @@ public abstract class AbstractTermTest {
             "xx--xxx <abc>xx$",
             "${-} ${<} ${>} ${|}"};
 
-    public abstract AbstractTerm getTestObject();
+    public abstract AbstractTerm createTerm();
 
+    @Deprecated
     public abstract void testGetVerificationData();
 
     public abstract void testIsWordStem();
@@ -55,19 +58,19 @@ public abstract class AbstractTermTest {
 
     @Before
     public void setUp() {
-        term = getTestObject();
+        term = createTerm();
     }
 
     @Test
-    public void testGetNormalizedTerm() {
-        for (String data : normalizedTestStrings) {
+    public void test_getEncodedString() {
+        for (String data : encodedTestStrings) {
             term.setEncodedString(data);
             assertEquals(data, term.getEncodedString());
         }
     }
 
     @Test
-    public void testGetUserEnteredTerm() {
+    public void test_getUserEnteredString() {
         for (String data : userTestStrings) {
             term.setUserEnteredString(data);
             assertEquals(data, term.getUserEnteredString());
@@ -75,37 +78,77 @@ public abstract class AbstractTermTest {
     }
 
     @Test
-    public void testGetPurgedTerm() {
+    public void test_getter_return_empty_string_for_new_term() {
+        assertThat(term.getEncodedString(), is(""));
+        assertThat(term.getUserEnteredString(), is(""));
+        assertThat(term.getCleanedString(), is(""));
+        assertThat(term.getCleanedStringWithWordStemResolved(), is(""));
+        assertThat(term.getStringWithWordStemResolved(), is(""));
+    }
+
+    @Test
+    public void test_setEncodedString_is_properly_decoded() {
+        term.setEncodedString("${$} ${-} ${<} ${|} ${>}");
+        assertThat(term.getUserEnteredString(), is("$ -- < | >"));
+        assertThat(term.getEncodedString(), is("${$} ${-} ${<} ${|} ${>}"));
+    }
+
+    @Test
+    public void test_special_characters_are_encoded() {
+        term.setUserEnteredString("$ -- < | >");
+        assertThat(term.getUserEnteredString(), is("$ -- < | >"));
+        assertThat(term.getEncodedString(), is("${$} ${-} ${<} ${|} ${>}"));
+    }
+
+    @Test
+    public void test_cached_strings_are_properly_cleared_in_the_setters() {
+        term.setUserEnteredString("abc");
+        term.setEncodedString("123");
+        assertThat(term.getEncodedString(), is("123"));
+        assertThat(term.getUserEnteredString(), is("123"));
+
+        term = createTerm();
+        term.setEncodedString("abc");
+        term.setUserEnteredString("123");
+        assertThat(term.getEncodedString(), is("123"));
+        assertThat(term.getUserEnteredString(), is("123"));
+    }
+
+    @Test
+    public void test_getCleanedString() {
         String[] purged = new String[]{
                 "-xxx xxx- -x-",
                 "abcdef",
                 "xx-xxx abcxx$",
                 "-   "};
         for (int i = 0; i < purged.length; ++i) {
-            term.setEncodedString(normalizedTestStrings[i]);
+            term.setEncodedString(encodedTestStrings[i]);
             assertEquals(purged[i], term.getCleanedString());
         }
     }
 
-    @Test(expected = NullPointerException.class)
-    public void testSetUserEnteredTermFail() {
+    @Test
+    public void test_setUserEnteredString_null() {
         term.setUserEnteredString(null);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testSetNormalizedTermFail() {
-        term.setEncodedString(null);
+        assertThat(term.getUserEnteredString(), is(""));
     }
 
     @Test
-    public void testIsEmpty() {
-        assertTrue(term.isEmpty());
+    public void test_setEncodedString_null() {
+        term.setEncodedString(null);
+        assertThat(term.getEncodedString(), is(""));
+    }
+
+    @Test
+    public void test_isEmpty() {
+        assertThat(term.isEmpty(), is(true));
         term.setEncodedString("");
-        assertTrue(term.isEmpty());
+        assertThat(term.isEmpty(), is(true));
+
         term.setUserEnteredString("");
-        assertTrue(term.isEmpty());
+        assertThat(term.isEmpty(), is(true));
 
         term.setUserEnteredString("xxx");
-        assertFalse(term.isEmpty());
+        assertThat(term.isEmpty(), is(false));
     }
 }

@@ -34,7 +34,7 @@ import static junit.framework.Assert.assertFalse;
 
 public class RegularTermTest extends AbstractTermTest {
     @Override
-    public AbstractTerm getTestObject() {
+    public AbstractTerm createTerm() {
         return new RegularTerm();
     }
 
@@ -45,7 +45,7 @@ public class RegularTermTest extends AbstractTermTest {
             term.setUserEnteredString(data);
             assertEquals(data, term.getStringWithWordStemResolved());
         }
-        for (String data : normalizedTestStrings) {
+        for (String data : encodedTestStrings) {
             term.setUserEnteredString(data);
             assertEquals(data, term.getStringWithWordStemResolved());
         }
@@ -58,7 +58,7 @@ public class RegularTermTest extends AbstractTermTest {
             term.setUserEnteredString(data);
             assertEquals(data, term.getWordStemString());
         }
-        for (String data : normalizedTestStrings) {
+        for (String data : encodedTestStrings) {
             term.setUserEnteredString(data);
             assertEquals(data, term.getWordStemString());
         }
