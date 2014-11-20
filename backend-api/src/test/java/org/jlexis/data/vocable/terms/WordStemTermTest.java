@@ -41,13 +41,13 @@ public class WordStemTermTest extends AbstractTermTest {
     @Override
     @Test
     public void testGetResolvedTerm() {
-        for (String data : mUserTestStrings) {
-            mTestObj.setUserEnteredString(data);
-            assertEquals(data, mTestObj.getStringWithWordStemResolved());
+        for (String data : userTestStrings) {
+            term.setUserEnteredString(data);
+            assertEquals(data, term.getStringWithWordStemResolved());
         }
-        for (String data : mNormalizedTestStrings) {
-            mTestObj.setUserEnteredString(data);
-            assertEquals(data, mTestObj.getStringWithWordStemResolved());
+        for (String data : normalizedTestStrings) {
+            term.setUserEnteredString(data);
+            assertEquals(data, term.getStringWithWordStemResolved());
         }
     }
 
@@ -58,23 +58,23 @@ public class WordStemTermTest extends AbstractTermTest {
         String[] wordStems = new String[]{"abcd", "xxxx", "zzzz"};
 
         for (int i = 0; i < words.length; ++i) {
-            mTestObj.setUserEnteredString(words[i]);
-            assertEquals(wordStems[i], mTestObj.getWordStemString());
+            term.setUserEnteredString(words[i]);
+            assertEquals(wordStems[i], term.getWordStemString());
         }
     }
 
     @Override
     @Test
     public void testIsWordStem() {
-        assertTrue(mTestObj.isWordStem());
+        assertTrue(term.isWordStem());
     }
 
     @Override
     @Test
     public void testGetVerificationData() {
         String testData = "test|term; 1, 2, 3;";
-        mTestObj.setUserEnteredString(testData);
-        VocableVerificationData verificationData = VocableVerificationData.create().withoutAbbreviationVariants().addMandatoryTerm(mTestObj).build();
+        term.setUserEnteredString(testData);
+        VocableVerificationData verificationData = VocableVerificationData.create().withoutAbbreviationVariants().addMandatoryTerm(term).build();
         assertEquals(2, verificationData.getNumberOfMandatoryValues());
         assertEquals(4, verificationData.getAllValues().size());
         Set<String> set1 = new HashSet<String>();
@@ -95,8 +95,8 @@ public class WordStemTermTest extends AbstractTermTest {
         assertEquals(comparisonObject, verificationData);
 
         testData = "this is <the> testdata";
-        mTestObj.setUserEnteredString(testData);
-        verificationData = VocableVerificationData.create().withoutAbbreviationVariants().addMandatoryTerm(mTestObj).build();
+        term.setUserEnteredString(testData);
+        verificationData = VocableVerificationData.create().withoutAbbreviationVariants().addMandatoryTerm(term).build();
         assertEquals(1, verificationData.getNumberOfMandatoryValues());
         set1.clear();
         set1.add("this is the testdata");

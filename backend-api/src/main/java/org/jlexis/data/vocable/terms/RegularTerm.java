@@ -24,14 +24,6 @@
 package org.jlexis.data.vocable.terms;
 
 public class RegularTerm extends AbstractTerm {
-    public RegularTerm() {
-        this("");
-    }
-
-    public RegularTerm(String term) {
-        super.setEncodedString(term);
-    }
-
     @Override
     public String getStringWithWordStemResolved() {
         return getUserEnteredString();

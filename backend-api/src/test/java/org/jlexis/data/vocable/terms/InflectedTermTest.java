@@ -50,29 +50,29 @@ public class InflectedTermTest extends AbstractTermTest {
 
         for (int i = 0; i < words.length; ++i) {
             mStem.setUserEnteredString(words[i]);
-            mTestObj.setUserEnteredString(inflected[i]);
-            assertEquals(resolved[i], mTestObj.getStringWithWordStemResolved());
+            term.setUserEnteredString(inflected[i]);
+            assertEquals(resolved[i], term.getStringWithWordStemResolved());
         }
     }
 
     @Override
     @Test(expected = UnsupportedOperationException.class)
     public void testGetWordStem() {
-        mTestObj.getWordStemString();
+        term.getWordStemString();
     }
 
     @Override
     @Test
     public void testIsWordStem() {
-        assertFalse(mTestObj.isWordStem());
+        assertFalse(term.isWordStem());
     }
 
     @Override
     @Test
     public void testGetVerificationData() {
         mStem.setUserEnteredString("test|term");
-        mTestObj.setUserEnteredString("--value; --vocable, word");
-        VocableVerificationData verificationData = VocableVerificationData.create().withoutAbbreviationVariants().addMandatoryTerm(mTestObj).build();
+        term.setUserEnteredString("--value; --vocable, word");
+        VocableVerificationData verificationData = VocableVerificationData.create().withoutAbbreviationVariants().addMandatoryTerm(term).build();
         assertEquals(2, verificationData.getNumberOfMandatoryValues());
         assertEquals(5, verificationData.getAllValues().size());
         Set<String> set1 = new HashSet<String>();

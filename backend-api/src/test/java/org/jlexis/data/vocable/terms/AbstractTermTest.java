@@ -29,15 +29,15 @@ import org.junit.Test;
 import static junit.framework.Assert.*;
 
 public abstract class AbstractTermTest {
-    protected AbstractTerm mTestObj;
+    protected AbstractTerm term;
 
-    protected String[] mNormalizedTestStrings = new String[]{
+    protected String[] normalizedTestStrings = new String[]{
             "${-}xxx xxx${-} -x-",
             "abc${|}def",
             "xx${-}xxx ${<}abc${>}xx${$}",
             "${-} ${<} ${>} ${|}"};
 
-    protected String[] mUserTestStrings = new String[]{
+    protected String[] userTestStrings = new String[]{
             "--xxx xxx-- -x-",
             "abc|def",
             "xx--xxx <abc>xx$",
@@ -55,22 +55,22 @@ public abstract class AbstractTermTest {
 
     @Before
     public void setUp() {
-        mTestObj = getTestObject();
+        term = getTestObject();
     }
 
     @Test
     public void testGetNormalizedTerm() {
-        for (String data : mNormalizedTestStrings) {
-            mTestObj.setEncodedString(data);
-            assertEquals(data, mTestObj.getEncodedString());
+        for (String data : normalizedTestStrings) {
+            term.setEncodedString(data);
+            assertEquals(data, term.getEncodedString());
         }
     }
 
     @Test
     public void testGetUserEnteredTerm() {
-        for (String data : mUserTestStrings) {
-            mTestObj.setUserEnteredString(data);
-            assertEquals(data, mTestObj.getUserEnteredString());
+        for (String data : userTestStrings) {
+            term.setUserEnteredString(data);
+            assertEquals(data, term.getUserEnteredString());
         }
     }
 
@@ -82,30 +82,30 @@ public abstract class AbstractTermTest {
                 "xx-xxx abcxx$",
                 "-   "};
         for (int i = 0; i < purged.length; ++i) {
-            mTestObj.setEncodedString(mNormalizedTestStrings[i]);
-            assertEquals(purged[i], mTestObj.getCleanedString());
+            term.setEncodedString(normalizedTestStrings[i]);
+            assertEquals(purged[i], term.getCleanedString());
         }
     }
 
     @Test(expected = NullPointerException.class)
     public void testSetUserEnteredTermFail() {
-        mTestObj.setUserEnteredString(null);
+        term.setUserEnteredString(null);
     }
 
     @Test(expected = NullPointerException.class)
     public void testSetNormalizedTermFail() {
-        mTestObj.setEncodedString(null);
+        term.setEncodedString(null);
     }
 
     @Test
     public void testIsEmpty() {
-        assertTrue(mTestObj.isEmpty());
-        mTestObj.setEncodedString("");
-        assertTrue(mTestObj.isEmpty());
-        mTestObj.setUserEnteredString("");
-        assertTrue(mTestObj.isEmpty());
+        assertTrue(term.isEmpty());
+        term.setEncodedString("");
+        assertTrue(term.isEmpty());
+        term.setUserEnteredString("");
+        assertTrue(term.isEmpty());
 
-        mTestObj.setUserEnteredString("xxx");
-        assertFalse(mTestObj.isEmpty());
+        term.setUserEnteredString("xxx");
+        assertFalse(term.isEmpty());
     }
 }

@@ -25,7 +25,10 @@
 package org.jlexis.data.vocable;
 
 import com.google.common.base.Strings;
-import org.jlexis.data.vocable.terms.*;
+import org.jlexis.data.vocable.terms.AbstractTerm;
+import org.jlexis.data.vocable.terms.InflectedTerm;
+import org.jlexis.data.vocable.terms.RegularTerm;
+import org.jlexis.data.vocable.terms.WordStemTerm;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
 
 import java.util.HashMap;
@@ -112,37 +115,37 @@ public abstract class AbstractUserInput implements UserInput {
 //    IS_SYNCHRONIZED_WITH_DATABASE = true;
     }
 
-    @Deprecated
-    public DBO_AbstractUserInput getDatabaseObject() {
-        if (mDatabaseObject == null)
-            mDatabaseObject = new DBO_AbstractUserInput();
+//    @Deprecated
+//    public DBO_AbstractUserInput getDatabaseObject() {
+//        if (mDatabaseObject == null)
+//            mDatabaseObject = new DBO_AbstractUserInput();
+//
+//        Map<RegisteredVocableDataKey, RegularTerm> preparedData = new HashMap<RegisteredVocableDataKey, RegularTerm>();
+//        for (RegisteredVocableDataKey key : data.keySet()) {
+//            preparedData.put(key, new RegularTerm(data.get(key).getEncodedString()));
+//        }
+//
+//        mDatabaseObject.setData(preparedData);
+//        mDatabaseObject.setInputType(inputType);
+//
+//        return mDatabaseObject;
+//    }
 
-        Map<RegisteredVocableDataKey, RegularTerm> preparedData = new HashMap<RegisteredVocableDataKey, RegularTerm>();
-        for (RegisteredVocableDataKey key : data.keySet()) {
-            preparedData.put(key, new RegularTerm(data.get(key).getEncodedString()));
-        }
-
-        mDatabaseObject.setData(preparedData);
-        mDatabaseObject.setInputType(inputType);
-
-        return mDatabaseObject;
-    }
-
-    @Deprecated
-    protected void setDatabaseObject(DBO_AbstractUserInput databaseObj) {
-        if (databaseObj == null)
-            throw new NullPointerException("Argument is null.");
-
-        data.clear();
-        Map<RegisteredVocableDataKey, RegularTerm> dboMap = databaseObj.getData();
-        for (RegisteredVocableDataKey key : dboMap.keySet()) {
-            AbstractTerm term = getRegisteredTermTypeForKey(key.getKey());
-            term.setEncodedString(dboMap.get(key).getEncodedString());
-            data.put(key, term);
-        }
-
-        inputType = databaseObj.getInputType();
-    }
+//    @Deprecated
+//    protected void setDatabaseObject(DBO_AbstractUserInput databaseObj) {
+//        if (databaseObj == null)
+//            throw new NullPointerException("Argument is null.");
+//
+//        data.clear();
+//        Map<RegisteredVocableDataKey, RegularTerm> dboMap = databaseObj.getData();
+//        for (RegisteredVocableDataKey key : dboMap.keySet()) {
+//            AbstractTerm term = getRegisteredTermTypeForKey(key.getKey());
+//            term.setEncodedString(dboMap.get(key).getEncodedString());
+//            data.put(key, term);
+//        }
+//
+//        inputType = databaseObj.getInputType();
+//    }
 
     @Override
     public abstract boolean isEmpty();

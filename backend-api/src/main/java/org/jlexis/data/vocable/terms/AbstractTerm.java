@@ -67,7 +67,8 @@ public abstract class AbstractTerm {
     }
 
     public void setEncodedString(String encodedString) {
-        this.encodedString = nullToEmpty(encodedString).trim();
+        clearCachedStrings();
+        setEncodedStringIntern(encodedString);
     }
 
     public String getUserEnteredString() {
@@ -82,6 +83,7 @@ public abstract class AbstractTerm {
     }
 
     public void setUserEnteredString(String string) {
+        clearCachedStrings();
         userEnteredString = nullToEmpty(string).trim();
         String result = replace(userEnteredString, DOLLAR_SIGN_PATTERN, DOLLAR_SIGN_ENCODED);
         result = replace(result, WORD_STEM_MARKER_PATTERN, WORD_STEM_MARKER_ENCODED);
@@ -89,7 +91,11 @@ public abstract class AbstractTerm {
         result = replace(result, END_WORD_STEM_MARKER_PATTERN, WORD_STEM_END_MARKER_ENCODED);
         result = replace(result, WORD_STEM_PLACEHOLDER_PATTERN, WORD_STEM_PLACEHOLDER_ENCODED);
 
-        setEncodedString(result);
+        setEncodedStringIntern(result);
+    }
+
+    private void setEncodedStringIntern(String encodedString) {
+        this.encodedString = nullToEmpty(encodedString).trim();
     }
 
     protected String removeMarkerStrings(String string) {
@@ -124,6 +130,13 @@ public abstract class AbstractTerm {
             cleanedStringWithWordStemResolved = clean(getStringWithWordStemResolved());
         }
         return cleanedStringWithWordStemResolved;
+    }
+
+    private void clearCachedStrings() {
+        encodedString = "";
+        userEnteredString = null;
+        cleanedString = null;
+        cleanedStringWithWordStemResolved = null;
     }
 
     public abstract boolean isWordStem();

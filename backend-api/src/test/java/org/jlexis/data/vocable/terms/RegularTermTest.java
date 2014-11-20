@@ -41,41 +41,41 @@ public class RegularTermTest extends AbstractTermTest {
     @Override
     @Test
     public void testGetResolvedTerm() {
-        for (String data : mUserTestStrings) {
-            mTestObj.setUserEnteredString(data);
-            assertEquals(data, mTestObj.getStringWithWordStemResolved());
+        for (String data : userTestStrings) {
+            term.setUserEnteredString(data);
+            assertEquals(data, term.getStringWithWordStemResolved());
         }
-        for (String data : mNormalizedTestStrings) {
-            mTestObj.setUserEnteredString(data);
-            assertEquals(data, mTestObj.getStringWithWordStemResolved());
+        for (String data : normalizedTestStrings) {
+            term.setUserEnteredString(data);
+            assertEquals(data, term.getStringWithWordStemResolved());
         }
     }
 
     @Override
     @Test
     public void testGetWordStem() {
-        for (String data : mUserTestStrings) {
-            mTestObj.setUserEnteredString(data);
-            assertEquals(data, mTestObj.getWordStemString());
+        for (String data : userTestStrings) {
+            term.setUserEnteredString(data);
+            assertEquals(data, term.getWordStemString());
         }
-        for (String data : mNormalizedTestStrings) {
-            mTestObj.setUserEnteredString(data);
-            assertEquals(data, mTestObj.getWordStemString());
+        for (String data : normalizedTestStrings) {
+            term.setUserEnteredString(data);
+            assertEquals(data, term.getWordStemString());
         }
     }
 
     @Override
     @Test
     public void testIsWordStem() {
-        assertFalse(mTestObj.isWordStem());
+        assertFalse(term.isWordStem());
     }
 
     @Override
     @Test
     public void testGetVerificationData() {
         String testData = "a, b; 1, 2, 3;";
-        mTestObj.setUserEnteredString(testData);
-        VocableVerificationData verificationData = VocableVerificationData.create().withoutAbbreviationVariants().addMandatoryTerm(mTestObj).build();
+        term.setUserEnteredString(testData);
+        VocableVerificationData verificationData = VocableVerificationData.create().withoutAbbreviationVariants().addMandatoryTerm(term).build();
         assertEquals(2, verificationData.getNumberOfMandatoryValues());
         assertEquals(5, verificationData.getAllValues().size());
         Set<String> set1 = new HashSet<String>();
