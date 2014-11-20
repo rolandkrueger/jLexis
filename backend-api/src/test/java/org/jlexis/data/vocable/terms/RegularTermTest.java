@@ -23,47 +23,14 @@
  */
 package org.jlexis.data.vocable.terms;
 
-import org.jlexis.data.vocable.verification.VocableVerificationData;
 import org.junit.Test;
-
-import java.util.HashSet;
-import java.util.Set;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class RegularTermTest extends AbstractTermTest {
-    @Override
-    public AbstractTerm createTerm() {
-        return new RegularTerm();
-    }
-
-    @Override
-    @Test
-    public void testGetResolvedTerm() {
-        for (String data : userTestStrings) {
-            term.setUserEnteredString(data);
-            assertEquals(data, term.getStringWithWordStemResolved());
-        }
-        for (String data : encodedTestStrings) {
-            term.setUserEnteredString(data);
-            assertEquals(data, term.getStringWithWordStemResolved());
-        }
-    }
-
-    @Override
-    @Test
-    public void testGetWordStem() {
-        for (String data : userTestStrings) {
-            term.setUserEnteredString(data);
-            assertEquals(data, term.getWordStemString());
-        }
-        for (String data : encodedTestStrings) {
-            term.setUserEnteredString(data);
-            assertEquals(data, term.getWordStemString());
-        }
-    }
-
     @Override
     @Test
     public void testIsWordStem() {
@@ -71,25 +38,30 @@ public class RegularTermTest extends AbstractTermTest {
     }
 
     @Override
+    public AbstractTerm createTerm() {
+        return new RegularTerm();
+    }
+
     @Test
-    public void testGetVerificationData() {
-        String testData = "a, b; 1, 2, 3;";
-        term.setUserEnteredString(testData);
-        VocableVerificationData verificationData = VocableVerificationData.create().withoutAbbreviationVariants().addMandatoryTerm(term).build();
-        assertEquals(2, verificationData.getNumberOfMandatoryValues());
-        assertEquals(5, verificationData.getAllValues().size());
-        Set<String> set1 = new HashSet<String>();
-        set1.add("a");
-        set1.add("b");
-        Set<String> set2 = new HashSet<String>();
-        set2.add("1");
-        set2.add("2");
-        set2.add("3");
-        VocableVerificationData comparisonObject =
-                VocableVerificationData.create()
-                        .withoutAbbreviationVariants()
-                        .addMandatoryValueWithOptions(set1)
-                        .addMandatoryValueWithOptions(set2).build();
-        assertEquals(comparisonObject, verificationData);
+    public void testGetResolvedTerm() {
+        term.setUserEnteredString("--xxx");
+        assertThat(term.getStringWithWordStemResolved(), is("--xxx"));
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void test_getWordStemTerm_not_supported() {
+        term.getWordStemTerm();
+    }
+
+    @Test
+    public void testGetWordStemString() {
+        for (String data : userTestStrings) {
+            term.setUserEnteredString(data);
+            assertEquals(data, term.getWordStemString());
+        }
+        for (String data : encodedTestStrings) {
+            term.setUserEnteredString(data);
+            assertEquals(data, term.getWordStemString());
+        }
     }
 }

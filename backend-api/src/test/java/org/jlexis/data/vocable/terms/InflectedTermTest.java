@@ -23,69 +23,33 @@
  */
 package org.jlexis.data.vocable.terms;
 
-import org.jlexis.data.vocable.verification.VocableVerificationData;
 import org.junit.Test;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class InflectedTermTest extends AbstractTermTest {
-    private WordStemTerm mStem;
+    private WordStemTerm wordStem;
 
     @Override
     public AbstractTerm createTerm() {
-        mStem = new WordStemTerm();
-        return new InflectedTerm(mStem);
+        wordStem = new WordStemTerm();
+        return new InflectedTerm(wordStem);
     }
 
-    @Override
-    @Test
-    public void testGetResolvedTerm() {
-        String[] words = new String[]{"abcd", "xxxx|yyy", "(aa) <zzzz>ooo"};
-        String[] inflected = new String[]{"--xyz", "--ooo $", "vvv--vvv"};
-        String[] resolved = new String[]{"abcdxyz", "xxxxooo $", "vvvzzzzvvv"};
-
-        for (int i = 0; i < words.length; ++i) {
-            mStem.setUserEnteredString(words[i]);
-            term.setUserEnteredString(inflected[i]);
-            assertEquals(resolved[i], term.getStringWithWordStemResolved());
-        }
+    @Test(expected = NullPointerException.class)
+    public void test_constructor_requires_non_null_argument() {
+        new InflectedTerm(null);
     }
 
-    @Override
     @Test(expected = UnsupportedOperationException.class)
-    public void testGetWordStem() {
+    public void testGetWordStemString() {
         term.getWordStemString();
     }
 
     @Override
     @Test
     public void testIsWordStem() {
-        assertFalse(term.isWordStem());
-    }
-
-    @Override
-    @Test
-    public void testGetVerificationData() {
-        mStem.setUserEnteredString("test|term");
-        term.setUserEnteredString("--value; --vocable, word");
-        VocableVerificationData verificationData = VocableVerificationData.create().withoutAbbreviationVariants().addMandatoryTerm(term).build();
-        assertEquals(2, verificationData.getNumberOfMandatoryValues());
-        assertEquals(5, verificationData.getAllValues().size());
-        Set<String> set1 = new HashSet<String>();
-        set1.add("testvalue");
-        set1.add("-value");
-        Set<String> set2 = new HashSet<String>();
-        set2.add("testvocable");
-        set2.add("word");
-        set2.add("-vocable");
-        VocableVerificationData comparisonObject = VocableVerificationData.create()
-                .withoutAbbreviationVariants()
-                .addMandatoryValueWithOptions(set1)
-                .addMandatoryValueWithOptions(set2).build();
-        assertEquals(comparisonObject, verificationData);
+        assertThat(term.isWordStem(), is(false));
     }
 }

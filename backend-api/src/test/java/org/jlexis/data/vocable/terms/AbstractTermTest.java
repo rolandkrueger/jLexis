@@ -47,14 +47,7 @@ public abstract class AbstractTermTest {
 
     public abstract AbstractTerm createTerm();
 
-    @Deprecated
-    public abstract void testGetVerificationData();
-
     public abstract void testIsWordStem();
-
-    public abstract void testGetResolvedTerm();
-
-    public abstract void testGetWordStem();
 
     @Before
     public void setUp() {

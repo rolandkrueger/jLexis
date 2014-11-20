@@ -32,30 +32,34 @@ import static com.google.common.base.Strings.nullToEmpty;
 import static java.util.Objects.requireNonNull;
 
 public abstract class AbstractTerm {
-    protected final static String WORD_STEM_MARKER_ENCODED = Matcher.quoteReplacement("${|}");
-    protected final static String WORD_STEM_BEGIN_MARKER_ENCODED = Matcher.quoteReplacement("${<}");
-    protected final static String WORD_STEM_END_MARKER_ENCODED = Matcher.quoteReplacement("${>}");
-    protected final static String WORD_STEM_PLACEHOLDER_ENCODED = Matcher.quoteReplacement("${-}");
-    protected final static String DOLLAR_SIGN_ENCODED = Matcher.quoteReplacement("${$}");
+    protected final static String WORD_STEM_MARKER_ENCODED = "${|}";
+    protected final static String WORD_STEM_BEGIN_MARKER_ENCODED = "${<}";
+    protected final static String WORD_STEM_END_MARKER_ENCODED = "${>}";
 
-    private final static String WORD_STEM_MARKER = Matcher.quoteReplacement("|");
-    private final static String BEGIN_WORD_STEM_MARKER = Matcher.quoteReplacement("<");
-    private final static String END_WORD_STEM_MARKER = Matcher.quoteReplacement(">");
-    private final static String WORD_STEM_PLACEHOLDER = Matcher.quoteReplacement("--");
-    private final static String DOLLAR_SIGN = Matcher.quoteReplacement("$");
-    private final static String HYPHEN_SIGN = Matcher.quoteReplacement("-");
+    protected final static String WORD_STEM_MARKER_ENCODED_QUOTED = Matcher.quoteReplacement("${|}");
+    protected final static String WORD_STEM_BEGIN_MARKER_ENCODED_QUOTED = Matcher.quoteReplacement("${<}");
+    protected final static String WORD_STEM_END_MARKER_ENCODED_QUOTED = Matcher.quoteReplacement("${>}");
+    protected final static String WORD_STEM_PLACEHOLDER_ENCODED_QUOTED = Matcher.quoteReplacement("${-}");
+    protected final static String DOLLAR_SIGN_ENCODED_QUOTED = Matcher.quoteReplacement("${$}");
 
-    private final static Pattern WORD_STEM_MARKER_ENCODED_PATTERN = Pattern.compile("${|}", Pattern.LITERAL);
-    private final static Pattern WORD_STEM_BEGIN_MARKER_ENCODED_PATTERN = Pattern.compile("${<}", Pattern.LITERAL);
-    private final static Pattern WORD_STEM_END_MARKER_ENCODED_PATTERN = Pattern.compile("${>}", Pattern.LITERAL);
-    private final static Pattern WORD_STEM_PLACEHOLDER_ENCODED_PATTERN = Pattern.compile("${-}", Pattern.LITERAL);
-    private final static Pattern DOLLAR_SIGN_ENCODED_PATTERN = Pattern.compile("${$}", Pattern.LITERAL);
+    protected final static String WORD_STEM_MARKER = Matcher.quoteReplacement("|");
+    protected final static String BEGIN_WORD_STEM_MARKER = Matcher.quoteReplacement("<");
+    protected final static String END_WORD_STEM_MARKER = Matcher.quoteReplacement(">");
+    protected final static String WORD_STEM_PLACEHOLDER = Matcher.quoteReplacement("--");
+    protected final static String DOLLAR_SIGN = Matcher.quoteReplacement("$");
+    protected final static String HYPHEN_SIGN = Matcher.quoteReplacement("-");
 
-    private final static Pattern WORD_STEM_MARKER_PATTERN = Pattern.compile("|", Pattern.LITERAL);
-    private final static Pattern BEGIN_WORD_STEM_MARKER_PATTERN = Pattern.compile("<", Pattern.LITERAL);
-    private final static Pattern END_WORD_STEM_MARKER_PATTERN = Pattern.compile(">", Pattern.LITERAL);
-    private final static Pattern WORD_STEM_PLACEHOLDER_PATTERN = Pattern.compile("--", Pattern.LITERAL);
-    private final static Pattern DOLLAR_SIGN_PATTERN = Pattern.compile("$", Pattern.LITERAL);
+    protected final static Pattern WORD_STEM_MARKER_ENCODED_PATTERN = Pattern.compile("${|}", Pattern.LITERAL);
+    protected final static Pattern WORD_STEM_BEGIN_MARKER_ENCODED_PATTERN = Pattern.compile("${<}", Pattern.LITERAL);
+    protected final static Pattern WORD_STEM_END_MARKER_ENCODED_PATTERN = Pattern.compile("${>}", Pattern.LITERAL);
+    protected final static Pattern WORD_STEM_PLACEHOLDER_ENCODED_PATTERN = Pattern.compile("${-}", Pattern.LITERAL);
+    protected final static Pattern DOLLAR_SIGN_ENCODED_PATTERN = Pattern.compile("${$}", Pattern.LITERAL);
+
+    protected final static Pattern WORD_STEM_MARKER_PATTERN = Pattern.compile("|", Pattern.LITERAL);
+    protected final static Pattern BEGIN_WORD_STEM_MARKER_PATTERN = Pattern.compile("<", Pattern.LITERAL);
+    protected final static Pattern END_WORD_STEM_MARKER_PATTERN = Pattern.compile(">", Pattern.LITERAL);
+    protected final static Pattern WORD_STEM_PLACEHOLDER_PATTERN = Pattern.compile("--", Pattern.LITERAL);
+    protected final static Pattern DOLLAR_SIGN_PATTERN = Pattern.compile("$", Pattern.LITERAL);
 
     private String encodedString = "";
     private String userEnteredString;
@@ -84,11 +88,11 @@ public abstract class AbstractTerm {
 
     public void setUserEnteredString(String string) {
         userEnteredString = nullToEmpty(string).trim();
-        String result = replace(userEnteredString, DOLLAR_SIGN_PATTERN, DOLLAR_SIGN_ENCODED);
-        result = replace(result, WORD_STEM_MARKER_PATTERN, WORD_STEM_MARKER_ENCODED);
-        result = replace(result, BEGIN_WORD_STEM_MARKER_PATTERN, WORD_STEM_BEGIN_MARKER_ENCODED);
-        result = replace(result, END_WORD_STEM_MARKER_PATTERN, WORD_STEM_END_MARKER_ENCODED);
-        result = replace(result, WORD_STEM_PLACEHOLDER_PATTERN, WORD_STEM_PLACEHOLDER_ENCODED);
+        String result = replace(userEnteredString, DOLLAR_SIGN_PATTERN, DOLLAR_SIGN_ENCODED_QUOTED);
+        result = replace(result, WORD_STEM_MARKER_PATTERN, WORD_STEM_MARKER_ENCODED_QUOTED);
+        result = replace(result, BEGIN_WORD_STEM_MARKER_PATTERN, WORD_STEM_BEGIN_MARKER_ENCODED_QUOTED);
+        result = replace(result, END_WORD_STEM_MARKER_PATTERN, WORD_STEM_END_MARKER_ENCODED_QUOTED);
+        result = replace(result, WORD_STEM_PLACEHOLDER_PATTERN, WORD_STEM_PLACEHOLDER_ENCODED_QUOTED);
 
         setEncodedStringIntern(result);
     }

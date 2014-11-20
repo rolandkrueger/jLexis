@@ -23,14 +23,11 @@
  */
 package org.jlexis.data.vocable.terms;
 
-import org.jlexis.data.vocable.verification.VocableVerificationData;
 import org.junit.Test;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class WordStemTermTest extends AbstractTermTest {
     @Override
@@ -38,71 +35,15 @@ public class WordStemTermTest extends AbstractTermTest {
         return new WordStemTerm();
     }
 
-    @Override
     @Test
     public void testGetResolvedTerm() {
-        for (String data : userTestStrings) {
-            term.setUserEnteredString(data);
-            assertEquals(data, term.getStringWithWordStemResolved());
-        }
-        for (String data : encodedTestStrings) {
-            term.setUserEnteredString(data);
-            assertEquals(data, term.getStringWithWordStemResolved());
-        }
-    }
-
-    @Override
-    @Test
-    public void testGetWordStem() {
-        String[] words = new String[]{"abcd", "xxxx|yyy", "(aa) <zzzz>ooo"};
-        String[] wordStems = new String[]{"abcd", "xxxx", "zzzz"};
-
-        for (int i = 0; i < words.length; ++i) {
-            term.setUserEnteredString(words[i]);
-            assertEquals(wordStems[i], term.getWordStemString());
-        }
+        term.setUserEnteredString("--xxx");
+        assertThat(term.getStringWithWordStemResolved(), is("--xxx"));
     }
 
     @Override
     @Test
     public void testIsWordStem() {
         assertTrue(term.isWordStem());
-    }
-
-    @Override
-    @Test
-    public void testGetVerificationData() {
-        String testData = "test|term; 1, 2, 3;";
-        term.setUserEnteredString(testData);
-        VocableVerificationData verificationData = VocableVerificationData.create().withoutAbbreviationVariants().addMandatoryTerm(term).build();
-        assertEquals(2, verificationData.getNumberOfMandatoryValues());
-        assertEquals(4, verificationData.getAllValues().size());
-        Set<String> set1 = new HashSet<String>();
-        set1.add("testterm");
-        Set<String> set2 = new HashSet<String>();
-        set2.add("1");
-        set2.add("2");
-        set2.add("3");
-        VocableVerificationData comparisonObject = null;
-        try {
-            comparisonObject = VocableVerificationData.create()
-                    .withoutAbbreviationVariants()
-                    .addMandatoryValueWithOptions(set1)
-                    .addMandatoryValueWithOptions(set2).build();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        assertEquals(comparisonObject, verificationData);
-
-        testData = "this is <the> testdata";
-        term.setUserEnteredString(testData);
-        verificationData = VocableVerificationData.create().withoutAbbreviationVariants().addMandatoryTerm(term).build();
-        assertEquals(1, verificationData.getNumberOfMandatoryValues());
-        set1.clear();
-        set1.add("this is the testdata");
-        comparisonObject = VocableVerificationData.create()
-                .withoutAbbreviationVariants()
-                .addMandatoryValueWithOptions(set1).build();
-        assertEquals(comparisonObject, verificationData);
     }
 }
