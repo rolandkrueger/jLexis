@@ -131,21 +131,21 @@ public abstract class AbstractUserInput implements UserInput {
         return mDatabaseObject;
     }
 
-//    @Deprecated
-//    protected void setDatabaseObject(DBO_AbstractUserInput databaseObj) {
-//        if (databaseObj == null)
-//            throw new NullPointerException("Argument is null.");
-//
-//        data.clear();
-//        Map<RegisteredVocableDataKey, RegularTerm> dboMap = databaseObj.getData();
-//        for (RegisteredVocableDataKey key : dboMap.keySet()) {
-//            AbstractTerm term = getRegisteredTermTypeForKey(key.getKey());
-//            term.setEncodedString(dboMap.get(key).getEncodedString());
-//            data.put(key, term);
-//        }
-//
-//        inputType = databaseObj.getInputType();
-//    }
+    @Deprecated
+    protected void setDatabaseObject(DBO_AbstractUserInput databaseObj) {
+        if (databaseObj == null)
+            throw new NullPointerException("Argument is null.");
+
+        data.clear();
+        Map<RegisteredVocableDataKey, RegularTerm> dboMap = databaseObj.getData();
+        for (RegisteredVocableDataKey key : dboMap.keySet()) {
+            AbstractTerm term = getRegisteredTermTypeForKey(key.getKey());
+            term.setEncodedString(dboMap.get(key).getEncodedString());
+            data.put(key, term);
+        }
+
+        inputType = databaseObj.getInputType();
+    }
 
     @Override
     public abstract boolean isEmpty();
