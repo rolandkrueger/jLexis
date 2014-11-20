@@ -40,16 +40,6 @@ public class RegularTerm extends AbstractTerm {
     }
 
     @Override
-    public String getUserEnteredString() {
-        return getEncodedString();
-    }
-
-    @Override
-    public void setUserEnteredString(String string) {
-        super.setEncodedString(string);
-    }
-
-    @Override
     public boolean isInflected() {
         return false;
     }
