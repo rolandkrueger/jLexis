@@ -23,21 +23,22 @@
  */
 package org.jlexis.data.vocable.terms;
 
-public class WordStemTerm extends AbstractTermData {
-    public String getResolvedTerm() {
-        return getUserEnteredTerm();
+public class WordStemTerm extends AbstractTerm {
+    public String getStringWithWordStemResolved() {
+        return getUserEnteredString();
     }
 
     @Override
-    public String getWordStem() {
-        if (normalizedTerm.indexOf(WORD_STEM_MARKER) > 0) {
-            return normalizedTerm.substring(0, normalizedTerm.indexOf(WORD_STEM_MARKER));
-        } else if (normalizedTerm.indexOf(WORD_STEM_BEGIN_MARKER) > 0 &&
-                normalizedTerm.indexOf(WORD_STEM_END_MARKER) > 0) {
-            return normalizedTerm.substring(normalizedTerm.indexOf(WORD_STEM_BEGIN_MARKER) + WORD_STEM_BEGIN_MARKER.length(),
-                    normalizedTerm.indexOf(WORD_STEM_END_MARKER));
+    public String getWordStemString() {
+        String encodedString = getEncodedString();
+        if (encodedString.indexOf(WORD_STEM_MARKER_ENCODED) > 0) {
+            return encodedString.substring(0, encodedString.indexOf(WORD_STEM_MARKER_ENCODED));
+        } else if (encodedString.indexOf(WORD_STEM_BEGIN_MARKER_ENCODED) > 0 &&
+                encodedString.indexOf(WORD_STEM_END_MARKER_ENCODED) > 0) {
+            return encodedString.substring(encodedString.indexOf(WORD_STEM_BEGIN_MARKER_ENCODED) + WORD_STEM_BEGIN_MARKER_ENCODED.length(),
+                    encodedString.indexOf(WORD_STEM_END_MARKER_ENCODED));
         }
-        return normalizedTerm;
+        return encodedString;
     }
 
     @Override
@@ -51,12 +52,7 @@ public class WordStemTerm extends AbstractTermData {
     }
 
     @Override
-    public AbstractTermData getWordStemObject() {
+    public AbstractTerm getWordStemTerm() {
         throw new UnsupportedOperationException("This object is not an inflected term.");
-    }
-
-    @Override
-    public String getResolvedAndPurgedTerm() {
-        return getPurgedTerm();
     }
 }

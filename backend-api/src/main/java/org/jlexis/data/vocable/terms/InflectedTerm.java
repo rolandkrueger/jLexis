@@ -23,34 +23,33 @@
  */
 package org.jlexis.data.vocable.terms;
 
-import java.util.Objects;
+import java.util.regex.Matcher;
 
-public class InflectedTerm extends AbstractTermData {
-    private AbstractTermData wordStem;
+import static java.util.Objects.requireNonNull;
 
-    public InflectedTerm(AbstractTermData stem) {
-        Objects.requireNonNull(stem, "Stem object is null.");
-        if (!stem.isWordStem()) {
-            throw new IllegalArgumentException("Given argument is not a word stem.");
-        }
+public class InflectedTerm extends AbstractTerm {
+    private AbstractTerm wordStem;
 
-        wordStem = stem;
+    public InflectedTerm(WordStemTerm stem) {
+        wordStem = requireNonNull(stem, "word stem object is null.");
     }
 
     @Override
-    public String getResolvedTerm() {
-        String result = normalizedTerm.replace(WORD_STEM_PLACEHOLDER, wordStem.getWordStem());
+    public String getStringWithWordStemResolved() {
+        String result = replace(getEncodedString(),
+                WORD_STEM_PLACEHOLDER_ENCODED_PATTERN,
+                Matcher.quoteReplacement(wordStem.getWordStemString()));
         result = removeMarkerStrings(result);
         return result;
     }
 
     @Override
-    public String getWordStem() {
+    public String getWordStemString() {
         throw new UnsupportedOperationException("This is not a word stem.");
     }
 
     @Override
-    public AbstractTermData getWordStemObject() {
+    public AbstractTerm getWordStemTerm() {
         return wordStem;
     }
 
@@ -62,10 +61,5 @@ public class InflectedTerm extends AbstractTermData {
     @Override
     public boolean isInflected() {
         return true;
-    }
-
-    @Override
-    public String getResolvedAndPurgedTerm() {
-        return purge(getResolvedTerm());
     }
 }

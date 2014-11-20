@@ -23,23 +23,15 @@
  */
 package org.jlexis.data.vocable.terms;
 
-public class RegularTerm extends AbstractTermData {
-    public RegularTerm() {
-        this("");
-    }
-
-    public RegularTerm(String term) {
-        super.setNormalizedTerm(term);
+public class RegularTerm extends AbstractTerm {
+    @Override
+    public String getStringWithWordStemResolved() {
+        return getUserEnteredString();
     }
 
     @Override
-    public String getResolvedTerm() {
-        return getUserEnteredTerm();
-    }
-
-    @Override
-    public String getWordStem() {
-        return getUserEnteredTerm();
+    public String getWordStemString() {
+        return getUserEnteredString();
     }
 
     @Override
@@ -48,27 +40,12 @@ public class RegularTerm extends AbstractTermData {
     }
 
     @Override
-    public String getUserEnteredTerm() {
-        return getNormalizedTerm();
-    }
-
-    @Override
-    public void setUserEnteredTerm(String term) {
-        super.setNormalizedTerm(term);
-    }
-
-    @Override
     public boolean isInflected() {
         return false;
     }
 
     @Override
-    public AbstractTermData getWordStemObject() {
+    public AbstractTerm getWordStemTerm() {
         throw new UnsupportedOperationException("This object is not an inflected term.");
-    }
-
-    @Override
-    public String getResolvedAndPurgedTerm() {
-        return getPurgedTerm();
     }
 }

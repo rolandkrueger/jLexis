@@ -46,14 +46,14 @@ public class DefaultUserInput extends AbstractStandardUserInput {
     @Override
     public String getHTMLVersion() {
         TextFormatter formatter = new TextFormatter(new HTMLTextFormatter());
-        formatter.appendBold(getUserData(TERM_KEY).getUserEnteredTerm());
+        formatter.appendBold(getUserData(TERM_KEY).getUserEnteredString());
         getStandardUserInputDataHandler().getHTMLVersion(formatter, "");
         return formatter.getFormattedText().toString();
     }
 
     @Override
     public String getShortVersion() {
-        return getUserData(TERM_KEY).getUserEnteredTerm();
+        return getUserData(TERM_KEY).getUserEnteredString();
     }
 
     @Override

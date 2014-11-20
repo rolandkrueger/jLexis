@@ -25,7 +25,10 @@
 package org.jlexis.data.vocable;
 
 import com.google.common.base.Strings;
-import org.jlexis.data.vocable.terms.*;
+import org.jlexis.data.vocable.terms.AbstractTerm;
+import org.jlexis.data.vocable.terms.InflectedTerm;
+import org.jlexis.data.vocable.terms.RegularTerm;
+import org.jlexis.data.vocable.terms.WordStemTerm;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
 
 import java.util.HashMap;
@@ -60,7 +63,7 @@ public abstract class AbstractUserInput implements UserInput {
      * specific part of a {@link Vocable}, such as the vocabulary data of one language itself, comments, examples and
      * extra data.
      */
-    private Map<RegisteredVocableDataKey, AbstractTermData> data;
+    private Map<RegisteredVocableDataKey, AbstractTerm> data;
     private String inputType;
     private Map<String, WordStemTerm> wordStems;
     private Map<String, InflectedTerm> inflectedTerms;
@@ -114,16 +117,16 @@ public abstract class AbstractUserInput implements UserInput {
 
     @Deprecated
     public DBO_AbstractUserInput getDatabaseObject() {
-        if (mDatabaseObject == null)
-            mDatabaseObject = new DBO_AbstractUserInput();
-
-        Map<RegisteredVocableDataKey, RegularTerm> preparedData = new HashMap<RegisteredVocableDataKey, RegularTerm>();
-        for (RegisteredVocableDataKey key : data.keySet()) {
-            preparedData.put(key, new RegularTerm(data.get(key).getNormalizedTerm()));
-        }
-
-        mDatabaseObject.setData(preparedData);
-        mDatabaseObject.setInputType(inputType);
+//        if (mDatabaseObject == null)
+//            mDatabaseObject = new DBO_AbstractUserInput();
+//
+//        Map<RegisteredVocableDataKey, RegularTerm> preparedData = new HashMap<RegisteredVocableDataKey, RegularTerm>();
+//        for (RegisteredVocableDataKey key : data.keySet()) {
+//            preparedData.put(key, new RegularTerm(data.get(key).getEncodedString()));
+//        }
+//
+//        mDatabaseObject.setData(preparedData);
+//        mDatabaseObject.setInputType(inputType);
 
         return mDatabaseObject;
     }
@@ -136,8 +139,8 @@ public abstract class AbstractUserInput implements UserInput {
         data.clear();
         Map<RegisteredVocableDataKey, RegularTerm> dboMap = databaseObj.getData();
         for (RegisteredVocableDataKey key : dboMap.keySet()) {
-            AbstractTermData term = getRegisteredTermTypeForKey(key.getKey());
-            term.setNormalizedTerm(dboMap.get(key).getNormalizedTerm());
+            AbstractTerm term = getRegisteredTermTypeForKey(key.getKey());
+            term.setEncodedString(dboMap.get(key).getEncodedString());
             data.put(key, term);
         }
 
@@ -162,13 +165,13 @@ public abstract class AbstractUserInput implements UserInput {
         if (data == null)
             throw new NullPointerException("User data object is null.");
 
-        AbstractTermData term = getRegisteredTermTypeForKey(identifier);
-        term.setUserEnteredTerm(data);
+        AbstractTerm term = getRegisteredTermTypeForKey(identifier);
+        term.setUserEnteredString(data);
         this.data.put(REGISTERED_KEYS.get(identifier), term);
     }
 
-    private AbstractTermData getRegisteredTermTypeForKey(String identifier) {
-        AbstractTermData term = inflectedTerms.get(identifier);
+    private AbstractTerm getRegisteredTermTypeForKey(String identifier) {
+        AbstractTerm term = inflectedTerms.get(identifier);
         if (term != null) return term;
 
         term = wordStems.get(identifier);
@@ -204,12 +207,12 @@ public abstract class AbstractUserInput implements UserInput {
         return inputType.equals(other.getUserInputIdentifier());
     }
 
-    public AbstractTermData getUserData(String identifier) {
+    public AbstractTerm getUserData(String identifier) {
         if (!isKeyRegistered(identifier))
             throw new IllegalStateException(String.format("Given identifier '%s' has not been provided " +
                     "by AbstractUserInput.getUserInputIdentifiers().", identifier));
 
-        AbstractTermData result = data.get(new RegisteredVocableDataKey(identifier));
+        AbstractTerm result = data.get(new RegisteredVocableDataKey(identifier));
         if (result == null) result = new RegularTerm();
 
         return result;
@@ -258,18 +261,18 @@ public abstract class AbstractUserInput implements UserInput {
     public abstract VocableVerificationData getQuizVerificationData();
 
     public String getPurgedUserData(String identifier) {
-        return getUserData(identifier).getPurgedTerm();
+        return getUserData(identifier).getCleanedString();
     }
 
     public String getUserEnteredTerm(String identifier) {
-        return getUserData(identifier).getUserEnteredTerm();
+        return getUserData(identifier).getUserEnteredString();
     }
 
     public String getResolvedUserData(String identifier) {
-        return getUserData(identifier).getResolvedTerm();
+        return getUserData(identifier).getStringWithWordStemResolved();
     }
 
     public String getResolvedAndPurgedUserData(String identifier) {
-        return getUserData(identifier).getResolvedAndPurgedTerm();
+        return getUserData(identifier).getCleanedStringWithWordStemResolved();
     }
 }

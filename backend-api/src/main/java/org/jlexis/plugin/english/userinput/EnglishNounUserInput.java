@@ -24,7 +24,7 @@
 package org.jlexis.plugin.english.userinput;
 
 import org.jlexis.data.vocable.AbstractUserInput;
-import org.jlexis.data.vocable.terms.AbstractTermData;
+import org.jlexis.data.vocable.terms.AbstractTerm;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
 import org.jlexis.data.vocable.verification.VocableVerificationData.DataWithMandatoryTermsBuilder;
 import org.jlexis.roklib.HTMLTextFormatter;
@@ -187,7 +187,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
         boolean result = false;
         try {
             result = IrregularPlural.valueOf(
-                    getUserData(IRREGULAR_PLURAL_KEY_AE).getUserEnteredTerm()).equals(IrregularPlural.IRREGULAR);
+                    getUserData(IRREGULAR_PLURAL_KEY_AE).getUserEnteredString()).equals(IrregularPlural.IRREGULAR);
         } catch (IllegalArgumentException iaExc) {
             return false;
         }
@@ -205,7 +205,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
         boolean result = false;
         try {
             result = IrregularPlural.valueOf(
-                    getUserData(IRREGULAR_PLURAL_KEY_BE).getUserEnteredTerm()).equals(IrregularPlural.IRREGULAR);
+                    getUserData(IRREGULAR_PLURAL_KEY_BE).getUserEnteredString()).equals(IrregularPlural.IRREGULAR);
         } catch (IllegalArgumentException iaExc) {
             return false;
         }
@@ -338,12 +338,12 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
         // TODO: I18N
 //    String additionalQuestionText = "Bitte auch die Pluralform eingeben. ";
         String additionalQuestionText = "Please also provide the plural form. ";
-        List<AbstractTermData> beValues = new LinkedList<>();
+        List<AbstractTerm> beValues = new LinkedList<>();
         if (isDataDefinedFor(NOUN_SINGULAR_TERM_KEY_BE))
             beValues.add(getUserData(NOUN_SINGULAR_TERM_KEY_BE));
         if (isDataDefinedFor(NOUN_PLURAL_TERM_KEY_BE))
             beValues.add(getUserData(NOUN_PLURAL_TERM_KEY_BE));
-        List<AbstractTermData> aeValues = new LinkedList<>();
+        List<AbstractTerm> aeValues = new LinkedList<>();
         if (isDataDefinedFor(NOUN_SINGULAR_TERM_KEY_AE))
             aeValues.add(getUserData(NOUN_SINGULAR_TERM_KEY_AE));
         if (isDataDefinedFor(NOUN_PLURAL_TERM_KEY_AE))

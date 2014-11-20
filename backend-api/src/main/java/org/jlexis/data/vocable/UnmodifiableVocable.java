@@ -23,7 +23,7 @@
 package org.jlexis.data.vocable;
 
 import org.jlexis.data.languages.Language;
-import org.jlexis.data.vocable.terms.AbstractTermData;
+import org.jlexis.data.vocable.terms.AbstractTerm;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -87,8 +87,8 @@ public final class UnmodifiableVocable extends Vocable {
             return data.getShortVersion();
         }
 
-        public final org.jlexis.data.vocable.terms.AbstractTermData getUserData(String identifier) {
-            return new UnmodifiableTermData(data.getUserData(identifier));
+        public final AbstractTerm getUserData(String identifier) {
+            return new UnmodifiableTerm(data.getUserData(identifier));
         }
 
         public final String getUserInputIdentifier() {
@@ -132,39 +132,39 @@ public final class UnmodifiableVocable extends Vocable {
         }
     }
 
-    private final static class UnmodifiableTermData extends AbstractTermData {
-        private AbstractTermData data;
+    private final static class UnmodifiableTerm extends AbstractTerm {
+        private AbstractTerm data;
 
-        public UnmodifiableTermData(AbstractTermData data) {
+        public UnmodifiableTerm(AbstractTerm data) {
             this.data = Objects.requireNonNull(data);
         }
 
-        public final String getNormalizedTerm() {
-            return data.getNormalizedTerm();
+        public final String getEncodedString() {
+            return data.getEncodedString();
         }
 
-        public final void setNormalizedTerm(String normalizedTerm) {
+        public final void setEncodedString(String normalizedTerm) {
             throw new UnsupportedOperationException("This object cannot be modified.");
         }
 
-        public final String getPurgedTerm() {
-            return data.getPurgedTerm();
+        public final String getCleanedString() {
+            return data.getCleanedString();
         }
 
-        public final String getResolvedTerm() {
-            return data.getResolvedTerm();
+        public final String getStringWithWordStemResolved() {
+            return data.getStringWithWordStemResolved();
         }
 
-        public final String getUserEnteredTerm() {
-            return data.getUserEnteredTerm();
+        public final String getUserEnteredString() {
+            return data.getUserEnteredString();
         }
 
-        public final void setUserEnteredTerm(String term) {
+        public final void setUserEnteredString(String string) {
             throw new UnsupportedOperationException("This object cannot be modified.");
         }
 
-        public final String getWordStem() {
-            return data.getWordStem();
+        public final String getWordStemString() {
+            return data.getWordStemString();
         }
 
         public final boolean isEmpty() {
@@ -181,18 +181,13 @@ public final class UnmodifiableVocable extends Vocable {
         }
 
         @Override
-        public AbstractTermData getWordStemObject() {
-            return data.getWordStemObject();
+        public AbstractTerm getWordStemTerm() {
+            return data.getWordStemTerm();
         }
 
         @Override
         public final String toString() {
             return data.toString();
-        }
-
-        @Override
-        public String getResolvedAndPurgedTerm() {
-            return data.getResolvedAndPurgedTerm();
         }
     }
 }

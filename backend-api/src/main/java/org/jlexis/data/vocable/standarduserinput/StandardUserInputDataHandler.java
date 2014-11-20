@@ -84,7 +84,7 @@ public class StandardUserInputDataHandler extends AbstractStandardUserInputDataH
     }
 
     public final String getComment() {
-        return getParent().getUserData(mCommentKey).getUserEnteredTerm();
+        return getParent().getUserData(mCommentKey).getUserEnteredString();
     }
 
     public final void setComment(String comment) {
@@ -92,7 +92,7 @@ public class StandardUserInputDataHandler extends AbstractStandardUserInputDataH
     }
 
     public final String getExample() {
-        return getParent().getUserData(mExampleKey).getUserEnteredTerm();
+        return getParent().getUserData(mExampleKey).getUserEnteredString();
     }
 
     public final void setExample(String example) {
@@ -100,7 +100,7 @@ public class StandardUserInputDataHandler extends AbstractStandardUserInputDataH
     }
 
     public final String getPhonetics() {
-        return getParent().getUserData(mPhoneticsKey).getUserEnteredTerm();
+        return getParent().getUserData(mPhoneticsKey).getUserEnteredString();
     }
 
     public final void setPhonetics(String phonetics) {
@@ -108,7 +108,7 @@ public class StandardUserInputDataHandler extends AbstractStandardUserInputDataH
     }
 
     public final String getPronunciation() {
-        return getParent().getUserData(mPronunciationKey).getUserEnteredTerm();
+        return getParent().getUserData(mPronunciationKey).getUserEnteredString();
     }
 
     public final void setPronunciation(String pronunciation) {
