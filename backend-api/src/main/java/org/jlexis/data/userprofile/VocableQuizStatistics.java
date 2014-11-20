@@ -22,17 +22,13 @@
  */
 package org.jlexis.data.userprofile;
 
-import org.jlexis.data.vocable.Vocable;
-import sun.plugin.util.UserProfile;
 
-/**
- * @author Roland Krueger
- * @version $Id: VocableQuizStatistics.java 159 2009-10-23 21:40:42Z roland $
- */
+import org.jlexis.data.vocable.Vocable;
+
 public class VocableQuizStatistics {
     private long mId;
     private Vocable mVocable;
-    private UserProfile mForUser;
+//    private UserProfile mForUser;
     private int mCorrectlyAnswered;
     private int mIncorrectlyAnswered;
 
@@ -73,11 +69,11 @@ public class VocableQuizStatistics {
         return mIncorrectlyAnswered + mCorrectlyAnswered;
     }
 
-    public UserProfile getForUser() {
-        return mForUser;
-    }
-
-    public void setForUser(UserProfile forUser) {
-        mForUser = forUser;
-    }
+//    public UserProfile getForUser() {
+//        return null;
+//    }
+//
+//    public void setForUser(UserProfile forUser) {
+//
+//    }
 }
