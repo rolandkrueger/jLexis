@@ -82,7 +82,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     ;
 
     @Override
-    protected AbstractUserInput createNewUserInputObject() {
+    protected AbstractUserInput createUserInputObject() {
         return new EnglishNounUserInput();
     }
 

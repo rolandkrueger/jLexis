@@ -49,7 +49,7 @@ public abstract class AbstractWordType {
     public abstract WordTypeEnum getWordTypeEnum();
 
     public final AbstractUserInput createNewUserInputObject() {
-        AbstractUserInput result = userInputPrototype.createNewUserInputObject();
+        AbstractUserInput result = userInputPrototype.createUserInputObject();
         result.init();
         return result;
     }

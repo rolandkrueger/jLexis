@@ -62,7 +62,7 @@ public class DefaultUserInput extends AbstractStandardUserInput {
     }
 
     @Override
-    protected AbstractUserInput createNewUserInputObject() {
+    protected AbstractUserInput createUserInputObject() {
         return new DefaultUserInput();
     }
 

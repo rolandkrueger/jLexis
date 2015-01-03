@@ -69,7 +69,7 @@ public class EnglishAdjectiveUserInput extends AbstractEnglishPluginUserInput {
     }
 
     @Override
-    protected AbstractUserInput createNewUserInputObject() {
+    protected AbstractUserInput createUserInputObject() {
         return new EnglishAdjectiveUserInput();
     }
 

@@ -91,7 +91,7 @@ public class VocableData {
 //            // TODO: ensure that the used word type identifier is never unknown for the plugin
 //            AbstractWordType wordType = mForLanguage.getLanguagePlugin().get().getWordTypeFor(mWordTypeIdentifier.get());
 //            assert wordType != null;
-//            mUserInput = wordType.createNewUserInputObject();
+//            mUserInput = wordType.createUserInputObject();
 //            mUserInput.setDatabaseObject(mUserInputFromDatabase);
 //        }
 

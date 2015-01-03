@@ -48,7 +48,7 @@ public class AbstractUserInputTestObject extends AbstractUserInput {
     }
 
     @Override
-    protected AbstractUserInput createNewUserInputObject() {
+    protected AbstractUserInput createUserInputObject() {
         return new AbstractUserInputTestObject();
     }
 

@@ -29,7 +29,6 @@ import org.jlexis.data.vocable.terms.AbstractTerm;
 import org.jlexis.data.vocable.terms.InflectedTerm;
 import org.jlexis.data.vocable.terms.RegularTerm;
 import org.jlexis.data.vocable.terms.WordStemTerm;
-import org.jlexis.data.vocable.verification.VocableVerificationData;
 import org.jlexis.util.StringUtils;
 
 import java.util.HashMap;
@@ -92,7 +91,8 @@ public abstract class AbstractUserInput implements UserInput {
         inputType = databaseObj.getInputType();
     }
 
-    protected abstract AbstractUserInput createNewUserInputObject();
+    protected abstract AbstractUserInput createUserInputObject();
+
     public void addUserInput(RegisteredVocableDataKey identifier, String input) {
         if (StringUtils.isStringNullOrEmpty(input)) {
             return;
@@ -152,9 +152,6 @@ public abstract class AbstractUserInput implements UserInput {
 
         inflectedTerms.put(inflectedTermKey, new InflectedTerm(wordStems.get(governingWordStemKey)));
     }
-
-    @Override
-    public abstract VocableVerificationData getQuizVerificationData();
 
     public String getPurgedUserData(RegisteredVocableDataKey identifier) {
         return getUserInput(identifier).getCleanedString();
