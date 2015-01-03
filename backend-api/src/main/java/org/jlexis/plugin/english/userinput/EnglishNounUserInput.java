@@ -69,8 +69,6 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
         setSingularPluralTypeAE(SingularPluralForm.UNSPECIFIED);
     }
 
-    ;
-
     @Override
     protected RegisteredVocableDataKey[] getUserInputIdentifiersImpl() {
         return new RegisteredVocableDataKey[]{NOUN_SINGULAR_TERM_KEY_BE, NOUN_PLURAL_TERM_KEY_BE,
@@ -78,8 +76,6 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
                 NOUN_SINGULAR_TERM_KEY_AE, NOUN_PLURAL_TERM_KEY_AE, COUNTABILITY_KEY_AE,
                 SINGULAR_PLURAL_TYPE_KEY_AE, IRREGULAR_PLURAL_KEY_AE, IRREGULAR_PLURAL_PHONETICS_KEY_AE};
     }
-
-    ;
 
     @Override
     protected AbstractUserInput createUserInputObject() {
@@ -90,7 +86,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     public String getHTMLVersion() {
         TextFormatter formatter = new TextFormatter(new HTMLTextFormatter());
         if (isInputDefinedFor(NOUN_SINGULAR_TERM_KEY_BE)) {
-            formatter.appendBold(getPurgedUserData(NOUN_SINGULAR_TERM_KEY_BE));
+            formatter.appendBold(getUserInput(NOUN_SINGULAR_TERM_KEY_BE).getCleanedString());
             if (getStandardInputBE().isPhoneticsDefined())
                 formatter.append(" [").append(getStandardInputBE().getPhonetics()).append("]");
             formatter.appendItalic(" noun");
@@ -108,7 +104,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
         }
         if (isInputDefinedFor(NOUN_PLURAL_TERM_KEY_BE) && isPluralIrregularBE()) {
             if (isInputDefinedFor(NOUN_SINGULAR_TERM_KEY_BE)) formatter.append(" ");
-            formatter.append("(").appendItalic("pl. ").appendBold(getPurgedUserData(NOUN_PLURAL_TERM_KEY_BE));
+            formatter.append("(").appendItalic("pl. ").appendBold(getUserInput(NOUN_PLURAL_TERM_KEY_BE).getCleanedString());
             if (isInputDefinedFor(IRREGULAR_PLURAL_PHONETICS_KEY_BE)) {
                 formatter.append(" [").append(getPluralPhoneticsBE()).append("]");
             }
@@ -120,7 +116,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
         }
 
         if (isInputDefinedFor(NOUN_SINGULAR_TERM_KEY_AE)) {
-            formatter.appendBold(getPurgedUserData(NOUN_SINGULAR_TERM_KEY_AE));
+            formatter.appendBold(getUserInput(NOUN_SINGULAR_TERM_KEY_AE).getCleanedString());
             if (getAmericanStandardValues().isPhoneticsDefined())
                 formatter.append(" [").append(getStandardInputAE().getPhonetics()).append("]");
             if (! isInputDefinedFor(NOUN_SINGULAR_TERM_KEY_BE)) {
@@ -139,7 +135,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
                 formatter.append("]");
             if (isInputDefinedFor(NOUN_PLURAL_TERM_KEY_AE) && isPluralIrregularAE()) {
                 if (isInputDefinedFor(NOUN_SINGULAR_TERM_KEY_AE)) formatter.append(" ");
-                formatter.append("(").appendItalic("pl. ").appendBold(getPurgedUserData(NOUN_PLURAL_TERM_KEY_AE));
+                formatter.append("(").appendItalic("pl. ").appendBold(getUserInput(NOUN_PLURAL_TERM_KEY_AE).getCleanedString());
                 if (isInputDefinedFor(IRREGULAR_PLURAL_PHONETICS_KEY_AE)) {
                     formatter.append(" [").append(getPluralPhoneticsAE()).append("]");
                 }
@@ -161,20 +157,20 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     @Override
     public String getShortVersion() {
         StringBuilder buf = new StringBuilder();
-        buf.append(getPurgedUserData(NOUN_SINGULAR_TERM_KEY_BE));
+        buf.append(getUserInput(NOUN_SINGULAR_TERM_KEY_BE).getCleanedString());
         if (isInputDefinedFor(NOUN_PLURAL_TERM_KEY_BE) && isPluralIrregularBE()) {
             if (isInputDefinedFor(NOUN_SINGULAR_TERM_KEY_BE)) buf.append(", ");
-            buf.append(getPurgedUserData(NOUN_PLURAL_TERM_KEY_BE));
+            buf.append(getUserInput(NOUN_PLURAL_TERM_KEY_BE).getCleanedString());
         }
         if (isInputDefinedFor(NOUN_SINGULAR_TERM_KEY_AE) &&
                 isInputDefinedFor(NOUN_SINGULAR_TERM_KEY_BE))
             buf.append(" (BrE) / ");
 
         if (isInputDefinedFor(NOUN_SINGULAR_TERM_KEY_AE)) {
-            buf.append(getPurgedUserData(NOUN_SINGULAR_TERM_KEY_AE));
+            buf.append(getUserInput(NOUN_SINGULAR_TERM_KEY_AE).getCleanedString());
             if (isInputDefinedFor(NOUN_PLURAL_TERM_KEY_AE) && isPluralIrregularAE()) {
                 if (isInputDefinedFor(NOUN_SINGULAR_TERM_KEY_AE)) buf.append(", ");
-                buf.append(getPurgedUserData(NOUN_PLURAL_TERM_KEY_AE));
+                buf.append(getUserInput(NOUN_PLURAL_TERM_KEY_AE).getCleanedString());
             }
             buf.append(" (AmE)");
         }
@@ -219,7 +215,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     }
 
     public String getPluralPhoneticsBE() {
-        return getUserEnteredTerm(IRREGULAR_PLURAL_PHONETICS_KEY_BE);
+        return getUserInput(IRREGULAR_PLURAL_PHONETICS_KEY_BE).getUserEnteredString();
     }
 
     public void setPluralPhoneticsBE(String phonetics) {
@@ -227,7 +223,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     }
 
     public String getPluralPhoneticsAE() {
-        return getUserEnteredTerm(IRREGULAR_PLURAL_PHONETICS_KEY_AE);
+        return getUserInput(IRREGULAR_PLURAL_PHONETICS_KEY_AE).getUserEnteredString();
     }
 
     public void setPluralPhoneticsAE(String phonetics) {
@@ -235,7 +231,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     }
 
     public String getSingularBE() {
-        return getUserEnteredTerm(NOUN_SINGULAR_TERM_KEY_BE);
+        return getUserInput(NOUN_SINGULAR_TERM_KEY_BE).getUserEnteredString();
     }
 
     public void setSingularBE(String noun) {
@@ -243,7 +239,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     }
 
     public String getSingularAE() {
-        return getUserEnteredTerm(NOUN_SINGULAR_TERM_KEY_AE);
+        return getUserInput(NOUN_SINGULAR_TERM_KEY_AE).getUserEnteredString();
     }
 
     public void setSingularAE(String noun) {
@@ -251,7 +247,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     }
 
     public String getPluralBE() {
-        return getUserEnteredTerm(NOUN_PLURAL_TERM_KEY_BE);
+        return getUserInput(NOUN_PLURAL_TERM_KEY_BE).getUserEnteredString();
     }
 
     public void setPluralBE(String noun) {
@@ -259,7 +255,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     }
 
     public String getPluralAE() {
-        return getUserEnteredTerm(NOUN_PLURAL_TERM_KEY_AE);
+        return getUserInput(NOUN_PLURAL_TERM_KEY_AE).getUserEnteredString();
     }
 
     public void setPluralAE(String noun) {
@@ -269,7 +265,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     public Countability getCountabilityBE() {
         Countability result;
         try {
-            result = Countability.valueOf(getUserEnteredTerm(COUNTABILITY_KEY_BE));
+            result = Countability.valueOf(getUserInput(COUNTABILITY_KEY_BE).getUserEnteredString());
         } catch (IllegalArgumentException nfExc) {
             return Countability.UNSPECIFIED;
         }
@@ -283,7 +279,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     public Countability getCountabilityAE() {
         Countability result;
         try {
-            result = Countability.valueOf(getUserEnteredTerm(COUNTABILITY_KEY_AE));
+            result = Countability.valueOf(getUserInput(COUNTABILITY_KEY_AE).getUserEnteredString());
         } catch (IllegalArgumentException nfExc) {
             return Countability.UNSPECIFIED;
         }
@@ -297,7 +293,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     public SingularPluralForm getSingularPluralTypeBE() {
         SingularPluralForm result;
         try {
-            result = SingularPluralForm.valueOf(getUserEnteredTerm(SINGULAR_PLURAL_TYPE_KEY_BE));
+            result = SingularPluralForm.valueOf(getUserInput(SINGULAR_PLURAL_TYPE_KEY_BE).getUserEnteredString());
         } catch (IllegalArgumentException nfExc) {
             return SingularPluralForm.UNSPECIFIED;
         }
@@ -311,7 +307,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     public SingularPluralForm getSingularPluralTypeAE() {
         SingularPluralForm result;
         try {
-            result = SingularPluralForm.valueOf(getUserEnteredTerm(SINGULAR_PLURAL_TYPE_KEY_AE));
+            result = SingularPluralForm.valueOf(getUserInput(SINGULAR_PLURAL_TYPE_KEY_AE).getUserEnteredString());
         } catch (IllegalArgumentException nfExc) {
             return SingularPluralForm.UNSPECIFIED;
         }

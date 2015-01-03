@@ -26,8 +26,10 @@ package org.jlexis.data.vocable;
 
 import com.google.common.base.Strings;
 import org.jlexis.data.vocable.terms.AbstractTerm;
+import org.jlexis.data.vocable.terms.EmptyTerm;
 import org.jlexis.data.vocable.terms.InflectedTerm;
 import org.jlexis.data.vocable.terms.RegularTerm;
+import org.jlexis.data.vocable.terms.UnmodifiableTerm;
 import org.jlexis.data.vocable.terms.WordStemTerm;
 import org.jlexis.util.StringUtils;
 
@@ -57,39 +59,37 @@ public abstract class AbstractUserInput implements UserInput {
      * specific part of a {@link Vocable}, such as the vocabulary data of one language itself, comments, examples and
      * extra data.
      */
-    private Map<RegisteredVocableDataKey, AbstractTerm> data;
-    private String userInputIdentifier;
+    private Map<RegisteredVocableDataKey, AbstractTerm> regularTerms;
     private Map<RegisteredVocableDataKey, WordStemTerm> wordStems;
     private Map<RegisteredVocableDataKey, InflectedTerm> inflectedTerms;
 
+    private String userInputIdentifier;
+
     private AbstractUserInput() {
-        data = new HashMap<>(8);
+        regularTerms = new HashMap<>(8);
         wordStems = new HashMap<>(1);
         inflectedTerms = new HashMap<>(5);
     }
 
-    protected AbstractUserInput(String inputType) {
+    protected AbstractUserInput(String userInputIdentifier) {
         this();
-        if (Strings.isNullOrEmpty(inputType)) {
-            throw new IllegalArgumentException("empty input type string not accepted");
+        if (Strings.isNullOrEmpty(userInputIdentifier)) {
+            throw new IllegalArgumentException("empty user input identifier string not accepted");
         }
 
-        this.userInputIdentifier = inputType;
+        this.userInputIdentifier = userInputIdentifier;
     }
 
-    @Deprecated
-    protected void setDatabaseObject(DBO_AbstractUserInput databaseObj) {
-
-        data.clear();
-        Map<RegisteredVocableDataKey, RegularTerm> dboMap = databaseObj.getData();
-        for (RegisteredVocableDataKey key : dboMap.keySet()) {
-            AbstractTerm term = getTermForKey(key);
-            term.setEncodedString(dboMap.get(key).getEncodedString());
-            data.put(key, term);
-        }
-
-        userInputIdentifier = databaseObj.getInputType();
-    }
+//    protected void setDatabaseObject(DBO_AbstractUserInput databaseObj) {
+//        data.clear();
+//        Map<RegisteredVocableDataKey, RegularTerm> dboMap = databaseObj.getData();
+//        for (RegisteredVocableDataKey key : dboMap.keySet()) {
+//            AbstractTerm term = getTermForKey(key);
+//            term.setEncodedString(dboMap.get(key).getEncodedString());
+//            data.put(key, term);
+//        }
+//        userInputIdentifier = databaseObj.getInputType();
+//    }
 
     protected abstract AbstractUserInput createUserInputObject();
 
@@ -98,8 +98,16 @@ public abstract class AbstractUserInput implements UserInput {
             return;
         }
 
-        getTermForKey(identifier)
+        createNewRegularTermIfInputNotAvailable(identifier, getTermForKey(identifier))
                 .setUserEnteredString(input);
+    }
+
+    private AbstractTerm createNewRegularTermIfInputNotAvailable(RegisteredVocableDataKey identifier, AbstractTerm term) {
+        if (term == null) {
+            term = new RegularTerm();
+            regularTerms.put(identifier, term);
+        }
+        return term;
     }
 
     private AbstractTerm getTermForKey(RegisteredVocableDataKey identifier) {
@@ -111,9 +119,7 @@ public abstract class AbstractUserInput implements UserInput {
             return wordStems.get(identifier);
         }
 
-        AbstractTerm term = new RegularTerm();
-        data.put(identifier, term);
-        return term;
+        return regularTerms.get(identifier);
     }
 
     public boolean correspondsTo(UserInput other) {
@@ -121,13 +127,17 @@ public abstract class AbstractUserInput implements UserInput {
     }
 
     public AbstractTerm getUserInput(RegisteredVocableDataKey identifier) {
-        checkArgument(data.containsKey(identifier), String.format("no user input found for key %s", identifier));
+        AbstractTerm term = getTermForKey(identifier);
 
-        return data.get(identifier);
+        if (term != null) {
+            return new UnmodifiableTerm(term);
+        } else {
+            return EmptyTerm.instance();
+        }
     }
 
     public boolean isInputDefinedFor(RegisteredVocableDataKey identifier) {
-        return data.containsKey(identifier) && !data.get(identifier).isEmpty();
+        return ! getUserInput(identifier).isEmpty();
     }
 
     public String getUserInputIdentifier() {
@@ -135,8 +145,15 @@ public abstract class AbstractUserInput implements UserInput {
     }
 
     public void replace(AbstractUserInput userInput) {
-        data.clear();
-        data.putAll(userInput.data);
+        checkArgument(correspondsTo(userInput), "cannot replace: this user input type does not correspond to the " +
+                "given user input");
+
+        regularTerms.clear();
+        regularTerms.putAll(userInput.regularTerms);
+        wordStems.clear();
+        wordStems.putAll(userInput.wordStems);
+        inflectedTerms.clear();
+        inflectedTerms.putAll(userInput.inflectedTerms);
     }
 
     public void setWordStem(RegisteredVocableDataKey identifier) {
@@ -151,21 +168,5 @@ public abstract class AbstractUserInput implements UserInput {
         checkArgument(! inflectedTerms.containsKey(inflectedTermKey), String.format("The key %s has already been configured as an inflected term.", inflectedTermKey));
 
         inflectedTerms.put(inflectedTermKey, new InflectedTerm(wordStems.get(governingWordStemKey)));
-    }
-
-    public String getPurgedUserData(RegisteredVocableDataKey identifier) {
-        return getUserInput(identifier).getCleanedString();
-    }
-
-    public String getUserEnteredTerm(RegisteredVocableDataKey identifier) {
-        return getUserInput(identifier).getUserEnteredString();
-    }
-
-    public String getResolvedUserData(RegisteredVocableDataKey identifier) {
-        return getUserInput(identifier).getStringWithWordStemResolved();
-    }
-
-    public String getResolvedAndPurgedUserData(RegisteredVocableDataKey identifier) {
-        return getUserInput(identifier).getCleanedStringWithWordStemResolved();
     }
 }

@@ -108,7 +108,7 @@ public class StandardAdjectiveUserInputDataHandler extends AbstractStandardUserI
     }
 
     public String getPositive() {
-        return getParent().getUserEnteredTerm(positiveKey);
+        return getParent().getUserInput(positiveKey).getUserEnteredString();
     }
 
     public void setPositive(String positive) {
@@ -116,11 +116,11 @@ public class StandardAdjectiveUserInputDataHandler extends AbstractStandardUserI
     }
 
     public String getPositiveResolvedAndPurged() {
-        return getParent().getResolvedAndPurgedUserData(positiveKey);
+        return getParent().getUserInput(positiveKey).getCleanedStringWithWordStemResolved();
     }
 
     public String getComparative() {
-        return getParent().getUserEnteredTerm(comparativeKey);
+        return getParent().getUserInput(comparativeKey).getUserEnteredString();
     }
 
     public void setComparative(String comparative) {
@@ -128,11 +128,11 @@ public class StandardAdjectiveUserInputDataHandler extends AbstractStandardUserI
     }
 
     public String getComparativeResolvedAndPurged() {
-        return getParent().getResolvedAndPurgedUserData(comparativeKey);
+        return getParent().getUserInput(comparativeKey).getCleanedStringWithWordStemResolved();
     }
 
     public String getSuperlative() {
-        return getParent().getUserEnteredTerm(superlativeKey);
+        return getParent().getUserInput(superlativeKey).getUserEnteredString();
     }
 
     public void setSuperlative(String superlative) {
@@ -140,11 +140,11 @@ public class StandardAdjectiveUserInputDataHandler extends AbstractStandardUserI
     }
 
     public String getSuperlativeResolvedAndPurged() {
-        return getParent().getResolvedAndPurgedUserData(superlativeKey);
+        return getParent().getUserInput(superlativeKey).getCleanedStringWithWordStemResolved();
     }
 
     public boolean isNotComparable() {
-        return getParent().getUserEnteredTerm(isNotComparableKey).equals("1");
+        return getParent().getUserInput(isNotComparableKey).equals("1");
     }
 
     public void setNotComparable(boolean isNotComparable) {
@@ -152,7 +152,7 @@ public class StandardAdjectiveUserInputDataHandler extends AbstractStandardUserI
     }
 
     public boolean isIrregular() {
-        return getParent().getUserEnteredTerm(isIrregularKey).equals("1");
+        return getParent().getUserInput(isIrregularKey).equals("1");
     }
 
     public void setIrregular(boolean isIrregular) {

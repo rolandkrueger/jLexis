@@ -290,7 +290,7 @@ public class EnglishAdjectiveUserInput extends AbstractEnglishPluginUserInput {
     public AdjectiveUsage getAdjectiveUsageBE() {
         AdjectiveUsage result;
         try {
-            result = AdjectiveUsage.valueOf(getUserEnteredTerm(ADJECTIVE_USAGE_BE));
+            result = AdjectiveUsage.valueOf(getUserInput(ADJECTIVE_USAGE_BE).getUserEnteredString());
         } catch (IllegalArgumentException nfExc) {
             return AdjectiveUsage.UNSPECIFIED;
         }
@@ -304,7 +304,7 @@ public class EnglishAdjectiveUserInput extends AbstractEnglishPluginUserInput {
     public AdjectiveUsage getAdjectiveUsageAE() {
         AdjectiveUsage result;
         try {
-            result = AdjectiveUsage.valueOf(getUserEnteredTerm(ADJECTIVE_USAGE_AE));
+            result = AdjectiveUsage.valueOf(getUserInput(ADJECTIVE_USAGE_AE).getUserEnteredString());
         } catch (IllegalArgumentException nfExc) {
             return AdjectiveUsage.UNSPECIFIED;
         }
