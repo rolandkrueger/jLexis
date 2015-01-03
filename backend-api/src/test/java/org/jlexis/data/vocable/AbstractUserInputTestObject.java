@@ -82,11 +82,6 @@ public class AbstractUserInputTestObject extends AbstractUserInput {
     }
 
     @Override
-    protected String[] getUserInputIdentifiers() {
-        return new String[]{"IDENTIFIER"};
-    }
-
-    @Override
     public boolean isEmpty() {
         return false;
     }

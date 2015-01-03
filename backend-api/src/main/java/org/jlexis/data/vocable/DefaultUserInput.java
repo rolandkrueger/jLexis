@@ -32,16 +32,16 @@ import org.jlexis.roklib.TextFormatter;
 
 public class DefaultUserInput extends AbstractStandardUserInput {
     private static final String INPUT_ID = DefaultUserInput.class.getCanonicalName();
-    public static final String TERM_KEY = INPUT_ID + ".TERM";
+    public static final RegisteredVocableDataKey TERM_KEY = new RegisteredVocableDataKey(INPUT_ID + ".TERM");
 
     public DefaultUserInput() {
         super(INPUT_ID);
     }
 
-    @Override
-    protected String[] getUserInputIdentifiersImpl() {
-        return new String[]{TERM_KEY};
-    }
+//    @Override
+//    protected String[] getUserInputIdentifiersImpl() {
+//        return new String[]{TERM_KEY};
+//    }
 
     @Override
     public String getHTMLVersion() {

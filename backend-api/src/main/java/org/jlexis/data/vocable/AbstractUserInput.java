@@ -84,7 +84,7 @@ public abstract class AbstractUserInput implements UserInput {
         data.clear();
         Map<RegisteredVocableDataKey, RegularTerm> dboMap = databaseObj.getData();
         for (RegisteredVocableDataKey key : dboMap.keySet()) {
-            AbstractTerm term = getRegisteredTermTypeForKey(key);
+            AbstractTerm term = getTermForKey(key);
             term.setEncodedString(dboMap.get(key).getEncodedString());
             data.put(key, term);
         }
@@ -92,24 +92,17 @@ public abstract class AbstractUserInput implements UserInput {
         inputType = databaseObj.getInputType();
     }
 
-    @Override
-    public abstract boolean isEmpty();
-
-    @Override
-    public abstract void init();
-
     protected abstract AbstractUserInput createNewUserInputObject();
-
     public void addUserInput(RegisteredVocableDataKey identifier, String input) {
         if (StringUtils.isStringNullOrEmpty(input)) {
             return;
         }
 
-        getRegisteredTermTypeForKey(identifier)
+        getTermForKey(identifier)
                 .setUserEnteredString(input);
     }
 
-    private AbstractTerm getRegisteredTermTypeForKey(RegisteredVocableDataKey identifier) {
+    private AbstractTerm getTermForKey(RegisteredVocableDataKey identifier) {
         if (inflectedTerms.containsKey(identifier)) {
             return inflectedTerms.get(identifier);
         }
@@ -128,13 +121,12 @@ public abstract class AbstractUserInput implements UserInput {
     }
 
     public AbstractTerm getUserInput(RegisteredVocableDataKey identifier) {
-        AbstractTerm result = data.get(identifier);
-        if (result == null) result = new RegularTerm();
+        checkArgument(data.containsKey(identifier), String.format("no user input found for key %s", identifier));
 
-        return result;
+        return data.get(identifier);
     }
 
-    public boolean isDataDefinedFor(RegisteredVocableDataKey identifier) {
+    public boolean isInputDefinedFor(RegisteredVocableDataKey identifier) {
         return data.containsKey(identifier) && !data.get(identifier).isEmpty();
     }
 
@@ -147,11 +139,11 @@ public abstract class AbstractUserInput implements UserInput {
         data.putAll(userInput.data);
     }
 
-    public void setWordStem(RegisteredVocableDataKey registeredKey) {
-        checkArgument(! wordStems.containsKey(registeredKey), String.format("The key %s has already been" +
-                " configured as word stem.", registeredKey));
+    public void setWordStem(RegisteredVocableDataKey identifier) {
+        checkArgument(! wordStems.containsKey(identifier), String.format("The key %s has already been" +
+                " configured as word stem.", identifier));
 
-        wordStems.put(registeredKey, new WordStemTerm());
+        wordStems.put(identifier, new WordStemTerm());
     }
 
     public void addWordStemChild(RegisteredVocableDataKey governingWordStemKey, RegisteredVocableDataKey inflectedTermKey) {

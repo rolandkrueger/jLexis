@@ -25,8 +25,6 @@ package org.jlexis.data.vocable;
 import org.jlexis.data.languages.Language;
 import org.jlexis.data.vocable.terms.AbstractTerm;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 import java.util.Objects;
 
@@ -66,13 +64,8 @@ public final class UnmodifiableVocable extends Vocable {
             this.data = data;
         }
 
-        public final void addUserInput(String identifier, String data) {
+        public final void addUserInput(RegisteredVocableDataKey identifier, String data) {
             this.data.addUserInput(identifier, data);
-        }
-
-        @Deprecated
-        public final void appendXMLData(Document document, Element root) {
-            throw new UnsupportedOperationException("Deprecated method.");
         }
 
         public final DBO_AbstractUserInput getDatabaseObject() {
@@ -87,7 +80,7 @@ public final class UnmodifiableVocable extends Vocable {
             return data.getShortVersion();
         }
 
-        public final AbstractTerm getUserInput(String identifier) {
+        public final AbstractTerm getUserInput(RegisteredVocableDataKey identifier) {
             return new UnmodifiableTerm(data.getUserInput(identifier));
         }
 
@@ -95,8 +88,8 @@ public final class UnmodifiableVocable extends Vocable {
             return data.getUserInputIdentifier();
         }
 
-        public final boolean isDataDefinedFor(String identifier) {
-            return data.isDataDefinedFor(identifier);
+        public final boolean isInputDefinedFor(RegisteredVocableDataKey identifier) {
+            return data.isInputDefinedFor(identifier);
         }
 
         public final boolean isEmpty() {

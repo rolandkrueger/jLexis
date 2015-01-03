@@ -26,6 +26,7 @@ package org.jlexis.data.vocable.standarduserinput;
 
 
 import org.jlexis.data.vocable.AbstractUserInput;
+import org.jlexis.data.vocable.RegisteredVocableDataKey;
 import org.jlexis.roklib.TextFormatter;
 
 /**
@@ -43,9 +44,9 @@ public abstract class AbstractStandardUserInputDataHandler {
         mUserInputIdentifierExtension = userInputIdentifierExtension;
     }
 
-    protected String getUniqueIdentifier(String discriminator) {
-        return String.format("%s_%s%s", mParent.getUserInputIdentifier(),
-                mUserInputIdentifierExtension, discriminator);
+    protected RegisteredVocableDataKey getUniqueIdentifier(String discriminator) {
+        return new RegisteredVocableDataKey(String.format("%s_%s%s", mParent.getUserInputIdentifier(),
+                mUserInputIdentifierExtension, discriminator));
     }
 
     protected String getUserInputIdentifierExtension() {
@@ -60,7 +61,7 @@ public abstract class AbstractStandardUserInputDataHandler {
 
     public abstract boolean isAnyTextInputDefined();
 
-    public abstract String[] getUserInputIdentifiers();
+    public abstract RegisteredVocableDataKey[] getUserInputIdentifiers();
 
     public abstract void getHTMLVersion(TextFormatter formatter, String addOn);
 }

@@ -25,11 +25,8 @@ package org.jlexis.plugin.english.userinput;
 
 import org.jlexis.data.vocable.AbstractUserInput;
 import org.jlexis.data.vocable.DefaultUserInput;
+import org.jlexis.data.vocable.RegisteredVocableDataKey;
 import org.jlexis.data.vocable.standarduserinput.StandardUserInputDataHandler;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public abstract class AbstractEnglishPluginUserInput extends AbstractUserInput {
     private StandardUserInputDataHandler mStandardInputBE;
@@ -41,7 +38,7 @@ public abstract class AbstractEnglishPluginUserInput extends AbstractUserInput {
         mStandardInputAE = new StandardUserInputDataHandler(this, "AE");
     }
 
-    protected abstract String[] getUserInputIdentifiersImpl();
+    protected abstract RegisteredVocableDataKey[] getUserInputIdentifiersImpl();
 
     protected abstract boolean isEmptyImpl();
 
@@ -52,14 +49,14 @@ public abstract class AbstractEnglishPluginUserInput extends AbstractUserInput {
                 isEmptyImpl();
     }
 
-    @Override
-    public String[] getUserInputIdentifiers() {
-        List<String> userInputIDs = new ArrayList<String>(10);
-        userInputIDs.addAll(Arrays.asList(mStandardInputBE.getUserInputIdentifiers()));
-        userInputIDs.addAll(Arrays.asList(mStandardInputAE.getUserInputIdentifiers()));
-        userInputIDs.addAll(Arrays.asList(getUserInputIdentifiersImpl()));
-        return userInputIDs.toArray(new String[]{});
-    }
+//    @Override
+//    public String[] getUserInputIdentifiers() {
+//        List<String> userInputIDs = new ArrayList<String>(10);
+//        userInputIDs.addAll(Arrays.asList(mStandardInputBE.getUserInputIdentifiers()));
+//        userInputIDs.addAll(Arrays.asList(mStandardInputAE.getUserInputIdentifiers()));
+//        userInputIDs.addAll(Arrays.asList(getUserInputIdentifiersImpl()));
+//        return userInputIDs.toArray(new String[]{});
+//    }
 
     protected StandardUserInputDataHandler getStandardInputBE() {
         return mStandardInputBE;

@@ -73,7 +73,7 @@ public interface UserInput {
 
     public abstract AbstractTerm getUserInput(RegisteredVocableDataKey identifier);
 
-    public abstract boolean isDataDefinedFor(RegisteredVocableDataKey identifier);
+    public abstract boolean isInputDefinedFor(RegisteredVocableDataKey identifier);
 
     public abstract String getUserInputIdentifier();
 

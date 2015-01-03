@@ -24,6 +24,7 @@
 package org.jlexis.plugin.english.userinput;
 
 import org.jlexis.data.vocable.AbstractUserInput;
+import org.jlexis.data.vocable.RegisteredVocableDataKey;
 import org.jlexis.data.vocable.terms.AbstractTerm;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
 import org.jlexis.data.vocable.verification.VocableVerificationData.DataWithMandatoryTermsBuilder;
@@ -39,19 +40,20 @@ import java.util.List;
  */
 public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     private static final String INPUT_ID = EnglishNounUserInput.class.getCanonicalName();
-    public static final String NOUN_SINGULAR_TERM_KEY_BE = INPUT_ID + ".SINGULAR_TERM_BE";
-    public static final String NOUN_PLURAL_TERM_KEY_BE = INPUT_ID + ".PLURAL_TERM_BE";
-    public static final String COUNTABILITY_KEY_BE = INPUT_ID + ".COUNTABILITY_KEY_BE";
-    public static final String SINGULAR_PLURAL_TYPE_KEY_BE = INPUT_ID + ".SINGULAR_PLURAL_TYPE_KEY_BE";
-    public static final String IRREGULAR_PLURAL_KEY_BE = INPUT_ID + ".IRREGULAR_PLURAL_BE";
-    public static final String IRREGULAR_PLURAL_PHONETICS_KEY_BE = INPUT_ID + ".IRREGULAR_PLURAL_PHONETICS_BE";
+    public static final RegisteredVocableDataKey NOUN_SINGULAR_TERM_KEY_BE = new RegisteredVocableDataKey(INPUT_ID +
+            ".SINGULAR_TERM_BE");
+    public static final RegisteredVocableDataKey NOUN_PLURAL_TERM_KEY_BE = new RegisteredVocableDataKey(INPUT_ID + ".PLURAL_TERM_BE");
+    public static final RegisteredVocableDataKey COUNTABILITY_KEY_BE = new RegisteredVocableDataKey(INPUT_ID + ".COUNTABILITY_KEY_BE");
+    public static final RegisteredVocableDataKey SINGULAR_PLURAL_TYPE_KEY_BE = new RegisteredVocableDataKey(INPUT_ID + ".SINGULAR_PLURAL_TYPE_KEY_BE");
+    public static final RegisteredVocableDataKey IRREGULAR_PLURAL_KEY_BE = new RegisteredVocableDataKey(INPUT_ID + ".IRREGULAR_PLURAL_BE");
+    public static final RegisteredVocableDataKey IRREGULAR_PLURAL_PHONETICS_KEY_BE = new RegisteredVocableDataKey(INPUT_ID + ".IRREGULAR_PLURAL_PHONETICS_BE");
 
-    public static final String NOUN_SINGULAR_TERM_KEY_AE = INPUT_ID + ".SINGULAR_TERM_AE";
-    public static final String NOUN_PLURAL_TERM_KEY_AE = INPUT_ID + ".PLURAL_TERM_AE";
-    public static final String COUNTABILITY_KEY_AE = INPUT_ID + ".COUNTABILITY_KEY_AE";
-    public static final String SINGULAR_PLURAL_TYPE_KEY_AE = INPUT_ID + ".SINGULAR_PLURAL_TYPE_KEY_AE";
-    public static final String IRREGULAR_PLURAL_KEY_AE = INPUT_ID + ".IRREGULAR_PLURAL_AE";
-    public static final String IRREGULAR_PLURAL_PHONETICS_KEY_AE = INPUT_ID + ".IRREGULAR_PLURAL_PHONETICS_AE";
+    public static final RegisteredVocableDataKey NOUN_SINGULAR_TERM_KEY_AE = new RegisteredVocableDataKey(INPUT_ID + ".SINGULAR_TERM_AE");
+    public static final RegisteredVocableDataKey NOUN_PLURAL_TERM_KEY_AE = new RegisteredVocableDataKey(INPUT_ID + ".PLURAL_TERM_AE");
+    public static final RegisteredVocableDataKey COUNTABILITY_KEY_AE = new RegisteredVocableDataKey(INPUT_ID + ".COUNTABILITY_KEY_AE");
+    public static final RegisteredVocableDataKey SINGULAR_PLURAL_TYPE_KEY_AE = new RegisteredVocableDataKey(INPUT_ID + ".SINGULAR_PLURAL_TYPE_KEY_AE");
+    public static final RegisteredVocableDataKey IRREGULAR_PLURAL_KEY_AE = new RegisteredVocableDataKey(INPUT_ID + ".IRREGULAR_PLURAL_AE");
+    public static final RegisteredVocableDataKey IRREGULAR_PLURAL_PHONETICS_KEY_AE = new RegisteredVocableDataKey(INPUT_ID + ".IRREGULAR_PLURAL_PHONETICS_AE");
 
     public EnglishNounUserInput() {
         super(INPUT_ID);
@@ -70,8 +72,8 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     ;
 
     @Override
-    protected String[] getUserInputIdentifiersImpl() {
-        return new String[]{NOUN_SINGULAR_TERM_KEY_BE, NOUN_PLURAL_TERM_KEY_BE,
+    protected RegisteredVocableDataKey[] getUserInputIdentifiersImpl() {
+        return new RegisteredVocableDataKey[]{NOUN_SINGULAR_TERM_KEY_BE, NOUN_PLURAL_TERM_KEY_BE,
                 COUNTABILITY_KEY_BE, SINGULAR_PLURAL_TYPE_KEY_BE, IRREGULAR_PLURAL_KEY_BE, IRREGULAR_PLURAL_PHONETICS_KEY_BE,
                 NOUN_SINGULAR_TERM_KEY_AE, NOUN_PLURAL_TERM_KEY_AE, COUNTABILITY_KEY_AE,
                 SINGULAR_PLURAL_TYPE_KEY_AE, IRREGULAR_PLURAL_KEY_AE, IRREGULAR_PLURAL_PHONETICS_KEY_AE};
@@ -87,7 +89,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     @Override
     public String getHTMLVersion() {
         TextFormatter formatter = new TextFormatter(new HTMLTextFormatter());
-        if (isDataDefinedFor(NOUN_SINGULAR_TERM_KEY_BE)) {
+        if (isInputDefinedFor(NOUN_SINGULAR_TERM_KEY_BE)) {
             formatter.appendBold(getPurgedUserData(NOUN_SINGULAR_TERM_KEY_BE));
             if (getStandardInputBE().isPhoneticsDefined())
                 formatter.append(" [").append(getStandardInputBE().getPhonetics()).append("]");
@@ -104,24 +106,24 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
             if (getCountabilityBE() != Countability.UNSPECIFIED || getSingularPluralTypeBE() != SingularPluralForm.UNSPECIFIED)
                 formatter.append("]");
         }
-        if (isDataDefinedFor(NOUN_PLURAL_TERM_KEY_BE) && isPluralIrregularBE()) {
-            if (isDataDefinedFor(NOUN_SINGULAR_TERM_KEY_BE)) formatter.append(" ");
+        if (isInputDefinedFor(NOUN_PLURAL_TERM_KEY_BE) && isPluralIrregularBE()) {
+            if (isInputDefinedFor(NOUN_SINGULAR_TERM_KEY_BE)) formatter.append(" ");
             formatter.append("(").appendItalic("pl. ").appendBold(getPurgedUserData(NOUN_PLURAL_TERM_KEY_BE));
-            if (isDataDefinedFor(IRREGULAR_PLURAL_PHONETICS_KEY_BE)) {
+            if (isInputDefinedFor(IRREGULAR_PLURAL_PHONETICS_KEY_BE)) {
                 formatter.append(" [").append(getPluralPhoneticsBE()).append("]");
             }
             formatter.append(")");
         }
-        if (isDataDefinedFor(NOUN_SINGULAR_TERM_KEY_AE) &&
-                isDataDefinedFor(NOUN_SINGULAR_TERM_KEY_BE)) {
+        if (isInputDefinedFor(NOUN_SINGULAR_TERM_KEY_AE) &&
+                isInputDefinedFor(NOUN_SINGULAR_TERM_KEY_BE)) {
             formatter.appendItalic(" (BrE)").append(" / ");
         }
 
-        if (isDataDefinedFor(NOUN_SINGULAR_TERM_KEY_AE)) {
+        if (isInputDefinedFor(NOUN_SINGULAR_TERM_KEY_AE)) {
             formatter.appendBold(getPurgedUserData(NOUN_SINGULAR_TERM_KEY_AE));
             if (getAmericanStandardValues().isPhoneticsDefined())
                 formatter.append(" [").append(getStandardInputAE().getPhonetics()).append("]");
-            if (!isDataDefinedFor(NOUN_SINGULAR_TERM_KEY_BE)) {
+            if (! isInputDefinedFor(NOUN_SINGULAR_TERM_KEY_BE)) {
                 formatter.appendItalic(" noun");
             }
             if (getCountabilityAE() != Countability.UNSPECIFIED || getSingularPluralTypeAE() != SingularPluralForm.UNSPECIFIED)
@@ -135,10 +137,10 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
             }
             if (getCountabilityAE() != Countability.UNSPECIFIED || getSingularPluralTypeAE() != SingularPluralForm.UNSPECIFIED)
                 formatter.append("]");
-            if (isDataDefinedFor(NOUN_PLURAL_TERM_KEY_AE) && isPluralIrregularAE()) {
-                if (isDataDefinedFor(NOUN_SINGULAR_TERM_KEY_AE)) formatter.append(" ");
+            if (isInputDefinedFor(NOUN_PLURAL_TERM_KEY_AE) && isPluralIrregularAE()) {
+                if (isInputDefinedFor(NOUN_SINGULAR_TERM_KEY_AE)) formatter.append(" ");
                 formatter.append("(").appendItalic("pl. ").appendBold(getPurgedUserData(NOUN_PLURAL_TERM_KEY_AE));
-                if (isDataDefinedFor(IRREGULAR_PLURAL_PHONETICS_KEY_AE)) {
+                if (isInputDefinedFor(IRREGULAR_PLURAL_PHONETICS_KEY_AE)) {
                     formatter.append(" [").append(getPluralPhoneticsAE()).append("]");
                 }
                 formatter.append(")");
@@ -160,18 +162,18 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     public String getShortVersion() {
         StringBuilder buf = new StringBuilder();
         buf.append(getPurgedUserData(NOUN_SINGULAR_TERM_KEY_BE));
-        if (isDataDefinedFor(NOUN_PLURAL_TERM_KEY_BE) && isPluralIrregularBE()) {
-            if (isDataDefinedFor(NOUN_SINGULAR_TERM_KEY_BE)) buf.append(", ");
+        if (isInputDefinedFor(NOUN_PLURAL_TERM_KEY_BE) && isPluralIrregularBE()) {
+            if (isInputDefinedFor(NOUN_SINGULAR_TERM_KEY_BE)) buf.append(", ");
             buf.append(getPurgedUserData(NOUN_PLURAL_TERM_KEY_BE));
         }
-        if (isDataDefinedFor(NOUN_SINGULAR_TERM_KEY_AE) &&
-                isDataDefinedFor(NOUN_SINGULAR_TERM_KEY_BE))
+        if (isInputDefinedFor(NOUN_SINGULAR_TERM_KEY_AE) &&
+                isInputDefinedFor(NOUN_SINGULAR_TERM_KEY_BE))
             buf.append(" (BrE) / ");
 
-        if (isDataDefinedFor(NOUN_SINGULAR_TERM_KEY_AE)) {
+        if (isInputDefinedFor(NOUN_SINGULAR_TERM_KEY_AE)) {
             buf.append(getPurgedUserData(NOUN_SINGULAR_TERM_KEY_AE));
-            if (isDataDefinedFor(NOUN_PLURAL_TERM_KEY_AE) && isPluralIrregularAE()) {
-                if (isDataDefinedFor(NOUN_SINGULAR_TERM_KEY_AE)) buf.append(", ");
+            if (isInputDefinedFor(NOUN_PLURAL_TERM_KEY_AE) && isPluralIrregularAE()) {
+                if (isInputDefinedFor(NOUN_SINGULAR_TERM_KEY_AE)) buf.append(", ");
                 buf.append(getPurgedUserData(NOUN_PLURAL_TERM_KEY_AE));
             }
             buf.append(" (AmE)");
@@ -181,7 +183,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     }
 
     public boolean isPluralIrregularAE() {
-        if (!isDataDefinedFor(IRREGULAR_PLURAL_KEY_AE)) return false;
+        if (! isInputDefinedFor(IRREGULAR_PLURAL_KEY_AE)) return false;
         boolean result = false;
         try {
             result = IrregularPlural.valueOf(
@@ -199,7 +201,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     }
 
     public boolean isPluralIrregularBE() {
-        if (!isDataDefinedFor(IRREGULAR_PLURAL_KEY_BE)) return false;
+        if (! isInputDefinedFor(IRREGULAR_PLURAL_KEY_BE)) return false;
         boolean result = false;
         try {
             result = IrregularPlural.valueOf(
@@ -337,18 +339,18 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
 //    String additionalQuestionText = "Bitte auch die Pluralform eingeben. ";
         String additionalQuestionText = "Please also provide the plural form. ";
         List<AbstractTerm> beValues = new LinkedList<>();
-        if (isDataDefinedFor(NOUN_SINGULAR_TERM_KEY_BE))
+        if (isInputDefinedFor(NOUN_SINGULAR_TERM_KEY_BE))
             beValues.add(getUserInput(NOUN_SINGULAR_TERM_KEY_BE));
-        if (isDataDefinedFor(NOUN_PLURAL_TERM_KEY_BE))
+        if (isInputDefinedFor(NOUN_PLURAL_TERM_KEY_BE))
             beValues.add(getUserInput(NOUN_PLURAL_TERM_KEY_BE));
         List<AbstractTerm> aeValues = new LinkedList<>();
-        if (isDataDefinedFor(NOUN_SINGULAR_TERM_KEY_AE))
+        if (isInputDefinedFor(NOUN_SINGULAR_TERM_KEY_AE))
             aeValues.add(getUserInput(NOUN_SINGULAR_TERM_KEY_AE));
-        if (isDataDefinedFor(NOUN_PLURAL_TERM_KEY_AE))
+        if (isInputDefinedFor(NOUN_PLURAL_TERM_KEY_AE))
             aeValues.add(getUserInput(NOUN_PLURAL_TERM_KEY_AE));
 
         if (!beValues.isEmpty()) {
-            if (!isDataDefinedFor(NOUN_PLURAL_TERM_KEY_BE)) additionalQuestionText = "";
+            if (! isInputDefinedFor(NOUN_PLURAL_TERM_KEY_BE)) additionalQuestionText = "";
             builder.addMandatoryTerm(beValues.get(0));
             for (int i = 1; i < beValues.size(); ++i) {
                 if (isPluralIrregularBE()) {
@@ -366,7 +368,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
         // if there is only data in American English make the first piece of data mandatory
         if (beValues.isEmpty() && !aeValues.isEmpty()) {
             builder.addMandatoryTerm(aeValues.get(0));
-            if (!isPluralIrregularAE() || !isDataDefinedFor(NOUN_PLURAL_TERM_KEY_AE)) {
+            if (!isPluralIrregularAE() || ! isInputDefinedFor(NOUN_PLURAL_TERM_KEY_AE)) {
                 additionalQuestionText = "";
             }
 //      additionalQuestionText = String.format ("%sGefragt ist <i>amerikanisches</i> Englisch.", additionalQuestionText);

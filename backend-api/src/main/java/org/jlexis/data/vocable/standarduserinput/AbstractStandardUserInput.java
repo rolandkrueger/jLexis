@@ -27,10 +27,6 @@ package org.jlexis.data.vocable.standarduserinput;
 
 import org.jlexis.data.vocable.AbstractUserInput;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * @author Roland Krueger
  * @version $Id: $
@@ -102,13 +98,13 @@ public abstract class AbstractStandardUserInput extends AbstractUserInput {
         return mStandardUserInputDataHandler.isPronunciationDefined();
     }
 
-    @Override
-    protected final String[] getUserInputIdentifiers() {
-        List<String> result = new ArrayList<String>(5);
-        result.addAll(Arrays.asList(mStandardUserInputDataHandler.getUserInputIdentifiers()));
-        result.addAll(Arrays.asList(getUserInputIdentifiersImpl()));
-        return result.toArray(new String[]{});
-    }
+//    @Override
+//    protected final String[] getUserInputIdentifiers() {
+//        List<String> result = new ArrayList<String>(5);
+//        result.addAll(Arrays.asList(mStandardUserInputDataHandler.getUserInputIdentifiers()));
+//        result.addAll(Arrays.asList(getUserInputIdentifiersImpl()));
+//        return result.toArray(new String[]{});
+//    }
 
     @Override
     public final boolean isEmpty() {
@@ -117,5 +113,5 @@ public abstract class AbstractStandardUserInput extends AbstractUserInput {
 
     protected abstract boolean isEmptyImpl();
 
-    protected abstract String[] getUserInputIdentifiersImpl();
+//    protected abstract String[] getUserInputIdentifiersImpl();
 }

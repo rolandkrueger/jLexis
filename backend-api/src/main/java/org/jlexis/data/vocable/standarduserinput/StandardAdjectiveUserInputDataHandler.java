@@ -25,6 +25,7 @@
 package org.jlexis.data.vocable.standarduserinput;
 
 import org.jlexis.data.vocable.AbstractUserInput;
+import org.jlexis.data.vocable.RegisteredVocableDataKey;
 import org.jlexis.data.vocable.terms.AbstractTerm;
 import org.jlexis.roklib.TextFormatter;
 
@@ -42,19 +43,19 @@ public class StandardAdjectiveUserInputDataHandler extends AbstractStandardUserI
     private final static String IS_NOT_COMPARABLE_KEY = ".ADJECTIVE_IS_NOT_COMPARABLE";
     private final static String IS_IRREGULAR_KEY = ".ADJECTIVE_IS_IRREGULAR";
 
-    private String mPositiveKey;
-    private String mComparativeKey;
-    private String mSuperlativeKey;
-    private String mIsNotComparableKey;
-    private String mIsIrregularKey;
+    private RegisteredVocableDataKey positiveKey;
+    private RegisteredVocableDataKey comparativeKey;
+    private RegisteredVocableDataKey superlativeKey;
+    private RegisteredVocableDataKey isNotComparableKey;
+    private RegisteredVocableDataKey isIrregularKey;
 
     public StandardAdjectiveUserInputDataHandler(AbstractUserInput parent, String userInputIdentifierExtension) {
         super(parent, userInputIdentifierExtension);
-        mPositiveKey = getUniqueIdentifier(POSITIVE_KEY);
-        mComparativeKey = getUniqueIdentifier(COMPARATIVE_KEY);
-        mSuperlativeKey = getUniqueIdentifier(SUPERLATIVE_KEY);
-        mIsNotComparableKey = getUniqueIdentifier(IS_NOT_COMPARABLE_KEY);
-        mIsIrregularKey = getUniqueIdentifier(IS_IRREGULAR_KEY);
+        positiveKey = getUniqueIdentifier(POSITIVE_KEY);
+        comparativeKey = getUniqueIdentifier(COMPARATIVE_KEY);
+        superlativeKey = getUniqueIdentifier(SUPERLATIVE_KEY);
+        isNotComparableKey = getUniqueIdentifier(IS_NOT_COMPARABLE_KEY);
+        isIrregularKey = getUniqueIdentifier(IS_IRREGULAR_KEY);
     }
 
     public StandardAdjectiveUserInputDataHandler(AbstractUserInput parent) {
@@ -64,110 +65,110 @@ public class StandardAdjectiveUserInputDataHandler extends AbstractStandardUserI
     public List<AbstractTerm> getTermData() {
         AbstractUserInput parent = getParent();
         List<AbstractTerm> result = new LinkedList<>();
-        if (parent.isDataDefinedFor(mPositiveKey))
-            result.add(parent.getUserInput(mPositiveKey));
-        if (parent.isDataDefinedFor(mComparativeKey))
-            result.add(parent.getUserInput(mComparativeKey));
-        if (parent.isDataDefinedFor(mSuperlativeKey))
-            result.add(parent.getUserInput(mSuperlativeKey));
+        if (parent.isInputDefinedFor(positiveKey))
+            result.add(parent.getUserInput(positiveKey));
+        if (parent.isInputDefinedFor(comparativeKey))
+            result.add(parent.getUserInput(comparativeKey));
+        if (parent.isInputDefinedFor(superlativeKey))
+            result.add(parent.getUserInput(superlativeKey));
 
         return result;
     }
 
-    public String getPositiveAdjectiveFormKey() {
-        return mPositiveKey;
+    public RegisteredVocableDataKey getPositiveAdjectiveFormKey() {
+        return positiveKey;
     }
 
-    public String getComparativeAdjectiveFormKey() {
-        return mComparativeKey;
+    public RegisteredVocableDataKey getComparativeAdjectiveFormKey() {
+        return comparativeKey;
     }
 
-    public String getSuperlativeAdjectiveFormKey() {
-        return mSuperlativeKey;
+    public RegisteredVocableDataKey getSuperlativeAdjectiveFormKey() {
+        return superlativeKey;
     }
 
     public void initWordStemFields() {
         AbstractUserInput parent = getParent();
-        parent.setWordStem(mPositiveKey);
-        parent.addWordStemChild(mPositiveKey, mComparativeKey);
-        parent.addWordStemChild(mPositiveKey, mSuperlativeKey);
+        parent.setWordStem(positiveKey);
+        parent.addWordStemChild(positiveKey, comparativeKey);
+        parent.addWordStemChild(positiveKey, superlativeKey);
     }
 
     @Override
-    public final String[] getUserInputIdentifiers() {
-        return new String[]{mPositiveKey, mComparativeKey, mSuperlativeKey, mIsNotComparableKey, mIsIrregularKey};
+    public final RegisteredVocableDataKey[] getUserInputIdentifiers() {
+        return new RegisteredVocableDataKey[]{positiveKey, comparativeKey, superlativeKey, isNotComparableKey, isIrregularKey};
     }
 
     @Override
     public final boolean isEmpty() {
         AbstractUserInput parent = getParent();
-        return parent.getUserInput(mPositiveKey).isEmpty() &&
-                parent.getUserInput(mComparativeKey).isEmpty() &&
-                parent.getUserInput(mSuperlativeKey).isEmpty();
+        return parent.getUserInput(positiveKey).isEmpty() &&
+                parent.getUserInput(comparativeKey).isEmpty() &&
+                parent.getUserInput(superlativeKey).isEmpty();
     }
 
     public String getPositive() {
-        return getParent().getUserEnteredTerm(mPositiveKey);
+        return getParent().getUserEnteredTerm(positiveKey);
     }
 
     public void setPositive(String positive) {
-        getParent().addUserInput(mPositiveKey, positive);
+        getParent().addUserInput(positiveKey, positive);
     }
 
     public String getPositiveResolvedAndPurged() {
-        return getParent().getResolvedAndPurgedUserData(mPositiveKey);
+        return getParent().getResolvedAndPurgedUserData(positiveKey);
     }
 
     public String getComparative() {
-        return getParent().getUserEnteredTerm(mComparativeKey);
+        return getParent().getUserEnteredTerm(comparativeKey);
     }
 
     public void setComparative(String comparative) {
-        getParent().addUserInput(mComparativeKey, comparative);
+        getParent().addUserInput(comparativeKey, comparative);
     }
 
     public String getComparativeResolvedAndPurged() {
-        return getParent().getResolvedAndPurgedUserData(mComparativeKey);
+        return getParent().getResolvedAndPurgedUserData(comparativeKey);
     }
 
     public String getSuperlative() {
-        return getParent().getUserEnteredTerm(mSuperlativeKey);
+        return getParent().getUserEnteredTerm(superlativeKey);
     }
 
     public void setSuperlative(String superlative) {
-        getParent().addUserInput(mSuperlativeKey, superlative);
+        getParent().addUserInput(superlativeKey, superlative);
     }
 
     public String getSuperlativeResolvedAndPurged() {
-        return getParent().getResolvedAndPurgedUserData(mSuperlativeKey);
+        return getParent().getResolvedAndPurgedUserData(superlativeKey);
     }
 
     public boolean isNotComparable() {
-        return getParent().getUserEnteredTerm(mIsNotComparableKey).equals("1");
+        return getParent().getUserEnteredTerm(isNotComparableKey).equals("1");
     }
 
     public void setNotComparable(boolean isNotComparable) {
-        getParent().addUserInput(mIsNotComparableKey, isNotComparable ? "1" : "0");
+        getParent().addUserInput(isNotComparableKey, isNotComparable ? "1" : "0");
     }
 
     public boolean isIrregular() {
-        return getParent().getUserEnteredTerm(mIsIrregularKey).equals("1");
+        return getParent().getUserEnteredTerm(isIrregularKey).equals("1");
     }
 
     public void setIrregular(boolean isIrregular) {
-        getParent().addUserInput(mIsIrregularKey, isIrregular ? "1" : "0");
+        getParent().addUserInput(isIrregularKey, isIrregular ? "1" : "0");
     }
 
     public boolean isPositiveDataDefined() {
-        return getParent().isDataDefinedFor(mPositiveKey);
+        return getParent().isInputDefinedFor(positiveKey);
     }
 
     public boolean isComparativeDataDefined() {
-        return getParent().isDataDefinedFor(mComparativeKey);
+        return getParent().isInputDefinedFor(comparativeKey);
     }
 
     public boolean isSuperlativeDataDefined() {
-        return getParent().isDataDefinedFor(mSuperlativeKey);
+        return getParent().isInputDefinedFor(superlativeKey);
     }
 
     @Override
