@@ -46,19 +46,19 @@ public class DefaultUserInput extends AbstractStandardUserInput {
     @Override
     public String getHTMLVersion() {
         TextFormatter formatter = new TextFormatter(new HTMLTextFormatter());
-        formatter.appendBold(getUserData(TERM_KEY).getUserEnteredString());
+        formatter.appendBold(getUserInput(TERM_KEY).getUserEnteredString());
         getStandardUserInputDataHandler().getHTMLVersion(formatter, "");
         return formatter.getFormattedText().toString();
     }
 
     @Override
     public String getShortVersion() {
-        return getUserData(TERM_KEY).getUserEnteredString();
+        return getUserInput(TERM_KEY).getUserEnteredString();
     }
 
     @Override
     protected boolean isEmptyImpl() {
-        return getUserData(TERM_KEY).isEmpty();
+        return getUserInput(TERM_KEY).isEmpty();
     }
 
     @Override
@@ -68,7 +68,7 @@ public class DefaultUserInput extends AbstractStandardUserInput {
 
     @Override
     public VocableVerificationData getQuizVerificationData() {
-        VocableVerificationData result = VocableVerificationData.create().withoutAbbreviationVariants().addMandatoryTerm(getUserData(TERM_KEY)).build();
+        VocableVerificationData result = VocableVerificationData.create().withoutAbbreviationVariants().addMandatoryTerm(getUserInput(TERM_KEY)).build();
         return result;
     }
 

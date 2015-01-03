@@ -65,11 +65,11 @@ public class StandardAdjectiveUserInputDataHandler extends AbstractStandardUserI
         AbstractUserInput parent = getParent();
         List<AbstractTerm> result = new LinkedList<>();
         if (parent.isDataDefinedFor(mPositiveKey))
-            result.add(parent.getUserData(mPositiveKey));
+            result.add(parent.getUserInput(mPositiveKey));
         if (parent.isDataDefinedFor(mComparativeKey))
-            result.add(parent.getUserData(mComparativeKey));
+            result.add(parent.getUserInput(mComparativeKey));
         if (parent.isDataDefinedFor(mSuperlativeKey))
-            result.add(parent.getUserData(mSuperlativeKey));
+            result.add(parent.getUserInput(mSuperlativeKey));
 
         return result;
     }
@@ -101,9 +101,9 @@ public class StandardAdjectiveUserInputDataHandler extends AbstractStandardUserI
     @Override
     public final boolean isEmpty() {
         AbstractUserInput parent = getParent();
-        return parent.getUserData(mPositiveKey).isEmpty() &&
-                parent.getUserData(mComparativeKey).isEmpty() &&
-                parent.getUserData(mSuperlativeKey).isEmpty();
+        return parent.getUserInput(mPositiveKey).isEmpty() &&
+                parent.getUserInput(mComparativeKey).isEmpty() &&
+                parent.getUserInput(mSuperlativeKey).isEmpty();
     }
 
     public String getPositive() {

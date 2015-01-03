@@ -71,7 +71,7 @@ public interface UserInput {
 
     public abstract boolean isTypeCorrect(UserInput other);
 
-    public abstract AbstractTerm getUserData(String identifier);
+    public abstract AbstractTerm getUserInput(RegisteredVocableDataKey identifier);
 
     public abstract boolean isDataDefinedFor(RegisteredVocableDataKey identifier);
 

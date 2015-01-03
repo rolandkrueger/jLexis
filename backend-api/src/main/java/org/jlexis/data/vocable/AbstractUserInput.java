@@ -127,8 +127,8 @@ public abstract class AbstractUserInput implements UserInput {
         return inputType.equals(other.getUserInputIdentifier());
     }
 
-    public AbstractTerm getUserData(String identifier) {
-        AbstractTerm result = data.get(new RegisteredVocableDataKey(identifier));
+    public AbstractTerm getUserInput(RegisteredVocableDataKey identifier) {
+        AbstractTerm result = data.get(identifier);
         if (result == null) result = new RegularTerm();
 
         return result;
@@ -165,18 +165,18 @@ public abstract class AbstractUserInput implements UserInput {
     public abstract VocableVerificationData getQuizVerificationData();
 
     public String getPurgedUserData(String identifier) {
-        return getUserData(identifier).getCleanedString();
+        return getUserInput(identifier).getCleanedString();
     }
 
     public String getUserEnteredTerm(String identifier) {
-        return getUserData(identifier).getUserEnteredString();
+        return getUserInput(identifier).getUserEnteredString();
     }
 
     public String getResolvedUserData(String identifier) {
-        return getUserData(identifier).getStringWithWordStemResolved();
+        return getUserInput(identifier).getStringWithWordStemResolved();
     }
 
     public String getResolvedAndPurgedUserData(String identifier) {
-        return getUserData(identifier).getCleanedStringWithWordStemResolved();
+        return getUserInput(identifier).getCleanedStringWithWordStemResolved();
     }
 }

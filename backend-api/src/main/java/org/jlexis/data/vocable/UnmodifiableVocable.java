@@ -87,8 +87,8 @@ public final class UnmodifiableVocable extends Vocable {
             return data.getShortVersion();
         }
 
-        public final AbstractTerm getUserData(String identifier) {
-            return new UnmodifiableTerm(data.getUserData(identifier));
+        public final AbstractTerm getUserInput(String identifier) {
+            return new UnmodifiableTerm(data.getUserInput(identifier));
         }
 
         public final String getUserInputIdentifier() {

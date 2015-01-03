@@ -185,7 +185,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
         boolean result = false;
         try {
             result = IrregularPlural.valueOf(
-                    getUserData(IRREGULAR_PLURAL_KEY_AE).getUserEnteredString()).equals(IrregularPlural.IRREGULAR);
+                    getUserInput(IRREGULAR_PLURAL_KEY_AE).getUserEnteredString()).equals(IrregularPlural.IRREGULAR);
         } catch (IllegalArgumentException iaExc) {
             return false;
         }
@@ -203,7 +203,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
         boolean result = false;
         try {
             result = IrregularPlural.valueOf(
-                    getUserData(IRREGULAR_PLURAL_KEY_BE).getUserEnteredString()).equals(IrregularPlural.IRREGULAR);
+                    getUserInput(IRREGULAR_PLURAL_KEY_BE).getUserEnteredString()).equals(IrregularPlural.IRREGULAR);
         } catch (IllegalArgumentException iaExc) {
             return false;
         }
@@ -322,12 +322,12 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
 
     @Override
     protected boolean isEmptyImpl() {
-        return getUserData(NOUN_SINGULAR_TERM_KEY_BE).isEmpty() &&
-                getUserData(NOUN_PLURAL_TERM_KEY_BE).isEmpty() &&
-                getUserData(NOUN_SINGULAR_TERM_KEY_AE).isEmpty() &&
-                getUserData(NOUN_PLURAL_TERM_KEY_AE).isEmpty() &&
-                getUserData(IRREGULAR_PLURAL_PHONETICS_KEY_BE).isEmpty() &&
-                getUserData(IRREGULAR_PLURAL_PHONETICS_KEY_AE).isEmpty();
+        return getUserInput(NOUN_SINGULAR_TERM_KEY_BE).isEmpty() &&
+                getUserInput(NOUN_PLURAL_TERM_KEY_BE).isEmpty() &&
+                getUserInput(NOUN_SINGULAR_TERM_KEY_AE).isEmpty() &&
+                getUserInput(NOUN_PLURAL_TERM_KEY_AE).isEmpty() &&
+                getUserInput(IRREGULAR_PLURAL_PHONETICS_KEY_BE).isEmpty() &&
+                getUserInput(IRREGULAR_PLURAL_PHONETICS_KEY_AE).isEmpty();
     }
 
     @Override
@@ -338,14 +338,14 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
         String additionalQuestionText = "Please also provide the plural form. ";
         List<AbstractTerm> beValues = new LinkedList<>();
         if (isDataDefinedFor(NOUN_SINGULAR_TERM_KEY_BE))
-            beValues.add(getUserData(NOUN_SINGULAR_TERM_KEY_BE));
+            beValues.add(getUserInput(NOUN_SINGULAR_TERM_KEY_BE));
         if (isDataDefinedFor(NOUN_PLURAL_TERM_KEY_BE))
-            beValues.add(getUserData(NOUN_PLURAL_TERM_KEY_BE));
+            beValues.add(getUserInput(NOUN_PLURAL_TERM_KEY_BE));
         List<AbstractTerm> aeValues = new LinkedList<>();
         if (isDataDefinedFor(NOUN_SINGULAR_TERM_KEY_AE))
-            aeValues.add(getUserData(NOUN_SINGULAR_TERM_KEY_AE));
+            aeValues.add(getUserInput(NOUN_SINGULAR_TERM_KEY_AE));
         if (isDataDefinedFor(NOUN_PLURAL_TERM_KEY_AE))
-            aeValues.add(getUserData(NOUN_PLURAL_TERM_KEY_AE));
+            aeValues.add(getUserInput(NOUN_PLURAL_TERM_KEY_AE));
 
         if (!beValues.isEmpty()) {
             if (!isDataDefinedFor(NOUN_PLURAL_TERM_KEY_BE)) additionalQuestionText = "";

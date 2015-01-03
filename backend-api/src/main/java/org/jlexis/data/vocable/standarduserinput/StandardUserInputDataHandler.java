@@ -77,14 +77,14 @@ public class StandardUserInputDataHandler extends AbstractStandardUserInputDataH
 
     @Override
     public final boolean isEmpty() {
-        return getParent().getUserData(mCommentKey).isEmpty() &&
-                getParent().getUserData(mExampleKey).isEmpty() &&
-                getParent().getUserData(mPhoneticsKey).isEmpty() &&
-                getParent().getUserData(mPronunciationKey).isEmpty();
+        return getParent().getUserInput(mCommentKey).isEmpty() &&
+                getParent().getUserInput(mExampleKey).isEmpty() &&
+                getParent().getUserInput(mPhoneticsKey).isEmpty() &&
+                getParent().getUserInput(mPronunciationKey).isEmpty();
     }
 
     public final String getComment() {
-        return getParent().getUserData(mCommentKey).getUserEnteredString();
+        return getParent().getUserInput(mCommentKey).getUserEnteredString();
     }
 
     public final void setComment(String comment) {
@@ -92,7 +92,7 @@ public class StandardUserInputDataHandler extends AbstractStandardUserInputDataH
     }
 
     public final String getExample() {
-        return getParent().getUserData(mExampleKey).getUserEnteredString();
+        return getParent().getUserInput(mExampleKey).getUserEnteredString();
     }
 
     public final void setExample(String example) {
@@ -100,7 +100,7 @@ public class StandardUserInputDataHandler extends AbstractStandardUserInputDataH
     }
 
     public final String getPhonetics() {
-        return getParent().getUserData(mPhoneticsKey).getUserEnteredString();
+        return getParent().getUserInput(mPhoneticsKey).getUserEnteredString();
     }
 
     public final void setPhonetics(String phonetics) {
@@ -108,7 +108,7 @@ public class StandardUserInputDataHandler extends AbstractStandardUserInputDataH
     }
 
     public final String getPronunciation() {
-        return getParent().getUserData(mPronunciationKey).getUserEnteredString();
+        return getParent().getUserInput(mPronunciationKey).getUserEnteredString();
     }
 
     public final void setPronunciation(String pronunciation) {
