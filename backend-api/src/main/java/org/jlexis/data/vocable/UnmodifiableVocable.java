@@ -96,8 +96,8 @@ public final class UnmodifiableVocable extends Vocable {
             return data.isEmpty();
         }
 
-        public final boolean isTypeCorrect(UserInput other) {
-            return data.isTypeCorrect(other);
+        public final boolean correspondsTo(UserInput other) {
+            return data.correspondsTo(other);
         }
 
         public final void replace(AbstractUserInput userInput) {

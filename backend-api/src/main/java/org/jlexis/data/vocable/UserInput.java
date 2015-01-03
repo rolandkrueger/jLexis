@@ -65,7 +65,7 @@ public interface UserInput {
      */
     void addUserInput(RegisteredVocableDataKey identifier, String input);
 
-    boolean isTypeCorrect(UserInput other);
+    boolean correspondsTo(UserInput other);
 
     AbstractTerm getUserInput(RegisteredVocableDataKey identifier);
 

@@ -116,7 +116,7 @@ public abstract class AbstractUserInput implements UserInput {
         return term;
     }
 
-    public boolean isTypeCorrect(UserInput other) {
+    public boolean correspondsTo(UserInput other) {
         return userInputIdentifier.equals(other.getUserInputIdentifier());
     }
 
