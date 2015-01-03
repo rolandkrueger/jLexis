@@ -80,17 +80,6 @@ public abstract class AbstractUserInput implements UserInput {
         this.userInputIdentifier = userInputIdentifier;
     }
 
-//    protected void setDatabaseObject(DBO_AbstractUserInput databaseObj) {
-//        data.clear();
-//        Map<RegisteredVocableDataKey, RegularTerm> dboMap = databaseObj.getData();
-//        for (RegisteredVocableDataKey key : dboMap.keySet()) {
-//            AbstractTerm term = getTermForKey(key);
-//            term.setEncodedString(dboMap.get(key).getEncodedString());
-//            data.put(key, term);
-//        }
-//        userInputIdentifier = databaseObj.getInputType();
-//    }
-
     protected abstract AbstractUserInput createUserInputObject();
 
     public void addUserInput(RegisteredVocableDataKey identifier, String input) {
