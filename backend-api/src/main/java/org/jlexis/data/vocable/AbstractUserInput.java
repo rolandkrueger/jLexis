@@ -135,7 +135,7 @@ public abstract class AbstractUserInput implements UserInput {
 
     protected abstract AbstractUserInput createNewUserInputObject();
 
-    public void addUserData(String identifier, String data) {
+    public void addUserInput(String identifier, String data) {
         if (!isKeyRegistered(identifier))
             throw new IllegalStateException(String.format("Given identifier '%s' has not been provided " +
                     "by AbstractUserInput.getUserInputIdentifiers().", identifier));

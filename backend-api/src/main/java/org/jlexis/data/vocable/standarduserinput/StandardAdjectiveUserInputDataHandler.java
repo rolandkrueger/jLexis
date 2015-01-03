@@ -111,7 +111,7 @@ public class StandardAdjectiveUserInputDataHandler extends AbstractStandardUserI
     }
 
     public void setPositive(String positive) {
-        getParent().addUserData(mPositiveKey, positive);
+        getParent().addUserInput(mPositiveKey, positive);
     }
 
     public String getPositiveResolvedAndPurged() {
@@ -123,7 +123,7 @@ public class StandardAdjectiveUserInputDataHandler extends AbstractStandardUserI
     }
 
     public void setComparative(String comparative) {
-        getParent().addUserData(mComparativeKey, comparative);
+        getParent().addUserInput(mComparativeKey, comparative);
     }
 
     public String getComparativeResolvedAndPurged() {
@@ -135,7 +135,7 @@ public class StandardAdjectiveUserInputDataHandler extends AbstractStandardUserI
     }
 
     public void setSuperlative(String superlative) {
-        getParent().addUserData(mSuperlativeKey, superlative);
+        getParent().addUserInput(mSuperlativeKey, superlative);
     }
 
     public String getSuperlativeResolvedAndPurged() {
@@ -147,7 +147,7 @@ public class StandardAdjectiveUserInputDataHandler extends AbstractStandardUserI
     }
 
     public void setNotComparable(boolean isNotComparable) {
-        getParent().addUserData(mIsNotComparableKey, isNotComparable ? "1" : "0");
+        getParent().addUserInput(mIsNotComparableKey, isNotComparable ? "1" : "0");
     }
 
     public boolean isIrregular() {
@@ -155,7 +155,7 @@ public class StandardAdjectiveUserInputDataHandler extends AbstractStandardUserI
     }
 
     public void setIrregular(boolean isIrregular) {
-        getParent().addUserData(mIsIrregularKey, isIrregular ? "1" : "0");
+        getParent().addUserInput(mIsIrregularKey, isIrregular ? "1" : "0");
     }
 
     public boolean isPositiveDataDefined() {

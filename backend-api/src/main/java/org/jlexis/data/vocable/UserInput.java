@@ -67,7 +67,7 @@ public interface UserInput {
      * @throws IllegalStateException if an identifier is used that hasn't been registered with this {@link
      *                               AbstractUserInput} before.
      */
-    public abstract void addUserData(String identifier, String data);
+    public abstract void addUserInput(String identifier, String data);
 
     public abstract boolean isTypeCorrect(UserInput other);
 

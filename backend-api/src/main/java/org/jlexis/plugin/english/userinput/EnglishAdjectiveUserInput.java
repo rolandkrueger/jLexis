@@ -295,7 +295,7 @@ public class EnglishAdjectiveUserInput extends AbstractEnglishPluginUserInput {
     }
 
     public void setAdjectiveUsageBE(AdjectiveUsage usage) {
-        addUserData(ADJECTIVE_USAGE_BE, usage.toString());
+        addUserInput(ADJECTIVE_USAGE_BE, usage.toString());
     }
 
     public AdjectiveUsage getAdjectiveUsageAE() {
@@ -309,7 +309,7 @@ public class EnglishAdjectiveUserInput extends AbstractEnglishPluginUserInput {
     }
 
     public void setAdjectiveUsageAE(AdjectiveUsage usage) {
-        addUserData(ADJECTIVE_USAGE_AE, usage.toString());
+        addUserInput(ADJECTIVE_USAGE_AE, usage.toString());
     }
 
     @Override

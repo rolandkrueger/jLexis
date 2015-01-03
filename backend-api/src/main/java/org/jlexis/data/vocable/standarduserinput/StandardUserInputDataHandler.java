@@ -88,7 +88,7 @@ public class StandardUserInputDataHandler extends AbstractStandardUserInputDataH
     }
 
     public final void setComment(String comment) {
-        getParent().addUserData(mCommentKey, comment);
+        getParent().addUserInput(mCommentKey, comment);
     }
 
     public final String getExample() {
@@ -96,7 +96,7 @@ public class StandardUserInputDataHandler extends AbstractStandardUserInputDataH
     }
 
     public final void setExample(String example) {
-        getParent().addUserData(mExampleKey, example);
+        getParent().addUserInput(mExampleKey, example);
     }
 
     public final String getPhonetics() {
@@ -104,7 +104,7 @@ public class StandardUserInputDataHandler extends AbstractStandardUserInputDataH
     }
 
     public final void setPhonetics(String phonetics) {
-        getParent().addUserData(mPhoneticsKey, phonetics);
+        getParent().addUserInput(mPhoneticsKey, phonetics);
     }
 
     public final String getPronunciation() {
@@ -112,7 +112,7 @@ public class StandardUserInputDataHandler extends AbstractStandardUserInputDataH
     }
 
     public final void setPronunciation(String pronunciation) {
-        getParent().addUserData(mPronunciationKey, pronunciation);
+        getParent().addUserInput(mPronunciationKey, pronunciation);
     }
 
     public final boolean isExampleDefined() {

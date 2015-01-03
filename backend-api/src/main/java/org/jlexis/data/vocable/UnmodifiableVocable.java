@@ -66,8 +66,8 @@ public final class UnmodifiableVocable extends Vocable {
             this.data = data;
         }
 
-        public final void addUserData(String identifier, String data) {
-            this.data.addUserData(identifier, data);
+        public final void addUserInput(String identifier, String data) {
+            this.data.addUserInput(identifier, data);
         }
 
         @Deprecated

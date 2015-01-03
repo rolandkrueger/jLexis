@@ -194,7 +194,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     }
 
     public void setPluralIrregularAE(boolean irregular) {
-        addUserData(IRREGULAR_PLURAL_KEY_AE, irregular ? IrregularPlural.IRREGULAR.toString()
+        addUserInput(IRREGULAR_PLURAL_KEY_AE, irregular ? IrregularPlural.IRREGULAR.toString()
                 : IrregularPlural.REGULAR.toString());
     }
 
@@ -212,7 +212,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     }
 
     public void setPluralIrregularBE(boolean irregular) {
-        addUserData(IRREGULAR_PLURAL_KEY_BE, irregular ? IrregularPlural.IRREGULAR.toString()
+        addUserInput(IRREGULAR_PLURAL_KEY_BE, irregular ? IrregularPlural.IRREGULAR.toString()
                 : IrregularPlural.REGULAR.toString());
     }
 
@@ -221,7 +221,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     }
 
     public void setPluralPhoneticsBE(String phonetics) {
-        addUserData(IRREGULAR_PLURAL_PHONETICS_KEY_BE, phonetics);
+        addUserInput(IRREGULAR_PLURAL_PHONETICS_KEY_BE, phonetics);
     }
 
     public String getPluralPhoneticsAE() {
@@ -229,7 +229,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     }
 
     public void setPluralPhoneticsAE(String phonetics) {
-        addUserData(IRREGULAR_PLURAL_PHONETICS_KEY_AE, phonetics);
+        addUserInput(IRREGULAR_PLURAL_PHONETICS_KEY_AE, phonetics);
     }
 
     public String getSingularBE() {
@@ -237,7 +237,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     }
 
     public void setSingularBE(String noun) {
-        addUserData(NOUN_SINGULAR_TERM_KEY_BE, noun);
+        addUserInput(NOUN_SINGULAR_TERM_KEY_BE, noun);
     }
 
     public String getSingularAE() {
@@ -245,7 +245,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     }
 
     public void setSingularAE(String noun) {
-        addUserData(NOUN_SINGULAR_TERM_KEY_AE, noun);
+        addUserInput(NOUN_SINGULAR_TERM_KEY_AE, noun);
     }
 
     public String getPluralBE() {
@@ -253,7 +253,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     }
 
     public void setPluralBE(String noun) {
-        addUserData(NOUN_PLURAL_TERM_KEY_BE, noun);
+        addUserInput(NOUN_PLURAL_TERM_KEY_BE, noun);
     }
 
     public String getPluralAE() {
@@ -261,7 +261,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     }
 
     public void setPluralAE(String noun) {
-        addUserData(NOUN_PLURAL_TERM_KEY_AE, noun);
+        addUserInput(NOUN_PLURAL_TERM_KEY_AE, noun);
     }
 
     public Countability getCountabilityBE() {
@@ -275,7 +275,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     }
 
     public void setCountabilityBE(Countability countability) {
-        addUserData(COUNTABILITY_KEY_BE, countability.toString());
+        addUserInput(COUNTABILITY_KEY_BE, countability.toString());
     }
 
     public Countability getCountabilityAE() {
@@ -289,7 +289,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     }
 
     public void setCountabilityAE(Countability countability) {
-        addUserData(COUNTABILITY_KEY_AE, countability.toString());
+        addUserInput(COUNTABILITY_KEY_AE, countability.toString());
     }
 
     public SingularPluralForm getSingularPluralTypeBE() {
@@ -303,7 +303,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     }
 
     public void setSingularPluralTypeBE(SingularPluralForm singularPluralType) {
-        addUserData(SINGULAR_PLURAL_TYPE_KEY_BE, singularPluralType.toString());
+        addUserInput(SINGULAR_PLURAL_TYPE_KEY_BE, singularPluralType.toString());
     }
 
     public SingularPluralForm getSingularPluralTypeAE() {
@@ -317,7 +317,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     }
 
     public void setSingularPluralTypeAE(SingularPluralForm singularPluralType) {
-        addUserData(SINGULAR_PLURAL_TYPE_KEY_AE, singularPluralType.toString());
+        addUserInput(SINGULAR_PLURAL_TYPE_KEY_AE, singularPluralType.toString());
     }
 
     @Override
