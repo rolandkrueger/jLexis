@@ -24,20 +24,18 @@ package org.jlexis.data.vocable;
 
 import org.jlexis.data.languages.Language;
 import org.jlexis.data.vocable.terms.AbstractTerm;
+import org.jlexis.data.vocable.terms.UnmodifiableTerm;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
-
-import java.util.Objects;
 
 /**
  * @author Roland Krueger
- * @version $Id: UnmodifiableVocable.java 197 2009-12-14 07:27:08Z roland $
  */
 public final class UnmodifiableVocable extends Vocable {
     private static final long serialVersionUID = -4235951974726789314L;
 
     public UnmodifiableVocable(Vocable data) {
         super();
-        mData = data.mData;
+        this.mData = data.mData;
         setId(data.getId());
     }
 
@@ -112,65 +110,6 @@ public final class UnmodifiableVocable extends Vocable {
         @Override
         public void init() {
             data.init();
-        }
-    }
-
-    private final static class UnmodifiableTerm extends AbstractTerm {
-        private AbstractTerm data;
-
-        public UnmodifiableTerm(AbstractTerm data) {
-            this.data = Objects.requireNonNull(data);
-        }
-
-        public final String getEncodedString() {
-            return data.getEncodedString();
-        }
-
-        public final void setEncodedString(String normalizedTerm) {
-            throw new UnsupportedOperationException("This object cannot be modified.");
-        }
-
-        public final String getCleanedString() {
-            return data.getCleanedString();
-        }
-
-        public final String getStringWithWordStemResolved() {
-            return data.getStringWithWordStemResolved();
-        }
-
-        public final String getUserEnteredString() {
-            return data.getUserEnteredString();
-        }
-
-        public final void setUserEnteredString(String string) {
-            throw new UnsupportedOperationException("This object cannot be modified.");
-        }
-
-        public final String getWordStemString() {
-            return data.getWordStemString();
-        }
-
-        public final boolean isEmpty() {
-            return data.isEmpty();
-        }
-
-        public final boolean isWordStem() {
-            return data.isWordStem();
-        }
-
-        @Override
-        public boolean isInflected() {
-            return data.isInflected();
-        }
-
-        @Override
-        public AbstractTerm getWordStemTerm() {
-            return data.getWordStemTerm();
-        }
-
-        @Override
-        public final String toString() {
-            return data.toString();
         }
     }
 }
