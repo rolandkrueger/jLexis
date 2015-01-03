@@ -25,6 +25,7 @@ package org.jlexis.data.vocable;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
+import org.jlexis.data.vocable.userinput.AbstractUserInput;
 
 import java.util.Objects;
 

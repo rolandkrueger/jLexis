@@ -22,10 +22,11 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jlexis.data.vocable;
+package org.jlexis.data.vocable.userinput;
 
 
-import org.jlexis.data.vocable.standarduserinput.AbstractStandardUserInput;
+import org.jlexis.data.vocable.RegisteredVocableDataKey;
+import org.jlexis.data.vocable.userinput.standard.AbstractStandardUserInput;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
 import org.jlexis.roklib.HTMLTextFormatter;
 import org.jlexis.roklib.TextFormatter;
@@ -62,7 +63,7 @@ public class DefaultUserInput extends AbstractStandardUserInput {
     }
 
     @Override
-    protected AbstractUserInput createUserInputObject() {
+    public AbstractUserInput createUserInputObject() {
         return new DefaultUserInput();
     }
 

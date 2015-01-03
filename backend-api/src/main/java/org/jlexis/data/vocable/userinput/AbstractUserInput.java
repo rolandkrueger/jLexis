@@ -22,9 +22,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jlexis.data.vocable;
+package org.jlexis.data.vocable.userinput;
 
 import com.google.common.base.Strings;
+import org.jlexis.data.vocable.RegisteredVocableDataKey;
 import org.jlexis.data.vocable.terms.AbstractTerm;
 import org.jlexis.data.vocable.terms.EmptyTerm;
 import org.jlexis.data.vocable.terms.InflectedTerm;
@@ -55,7 +56,7 @@ public abstract class AbstractUserInput implements UserInput {
 
     /**
      * The data of this {@link AbstractUserInput}. This object assembles all the fragments that forms the language
-     * specific part of a {@link Vocable}, such as the vocabulary data of one language itself, comments, examples and
+     * specific part of a {@link org.jlexis.data.vocable.Vocable}, such as the vocabulary data of one language itself, comments, examples and
      * extra data.
      */
     private Map<RegisteredVocableDataKey, AbstractTerm> regularTerms;
@@ -79,7 +80,7 @@ public abstract class AbstractUserInput implements UserInput {
         this.userInputIdentifier = userInputIdentifier;
     }
 
-    protected abstract AbstractUserInput createUserInputObject();
+    public abstract AbstractUserInput createUserInputObject();
 
     public void addUserInput(RegisteredVocableDataKey identifier, String input) {
         if (StringUtils.isStringNullOrEmpty(input)) {

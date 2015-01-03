@@ -25,6 +25,9 @@ package org.jlexis.data.vocable;
 import org.jlexis.data.languages.Language;
 import org.jlexis.data.vocable.terms.AbstractTerm;
 import org.jlexis.data.vocable.terms.UnmodifiableTerm;
+import org.jlexis.data.vocable.userinput.AbstractUserInput;
+import org.jlexis.data.vocable.userinput.DBO_AbstractUserInput;
+import org.jlexis.data.vocable.userinput.UserInput;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
 
 /**

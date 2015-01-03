@@ -23,10 +23,10 @@
  */
 package org.jlexis.plugin.english.userinput;
 
-import org.jlexis.data.vocable.AbstractUserInput;
-import org.jlexis.data.vocable.DefaultUserInput;
+import org.jlexis.data.vocable.userinput.AbstractUserInput;
+import org.jlexis.data.vocable.userinput.DefaultUserInput;
 import org.jlexis.data.vocable.RegisteredVocableDataKey;
-import org.jlexis.data.vocable.standarduserinput.StandardUserInputDataHandler;
+import org.jlexis.data.vocable.userinput.standard.StandardUserInputDataHandler;
 
 public abstract class AbstractEnglishPluginUserInput extends AbstractUserInput {
     private StandardUserInputDataHandler mStandardInputBE;

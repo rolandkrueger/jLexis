@@ -25,6 +25,8 @@ package org.jlexis.data.vocable;
 
 
 import org.jlexis.data.languages.Language;
+import org.jlexis.data.vocable.userinput.AbstractUserInput;
+import org.jlexis.data.vocable.userinput.DBO_AbstractUserInput;
 
 import java.util.Optional;
 

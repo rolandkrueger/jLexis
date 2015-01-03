@@ -23,7 +23,7 @@
  */
 package org.jlexis.plugin.english.userinput;
 
-import org.jlexis.data.vocable.AbstractUserInput;
+import org.jlexis.data.vocable.userinput.AbstractUserInput;
 import org.jlexis.data.vocable.RegisteredVocableDataKey;
 import org.jlexis.data.vocable.terms.AbstractTerm;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
@@ -78,7 +78,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     }
 
     @Override
-    protected AbstractUserInput createUserInputObject() {
+    public AbstractUserInput createUserInputObject() {
         return new EnglishNounUserInput();
     }
 

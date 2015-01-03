@@ -25,7 +25,7 @@
 package org.jlexis.data;
 
 import org.jlexis.data.vocable.AbstractWordType;
-import org.jlexis.data.vocable.DefaultUserInput;
+import org.jlexis.data.vocable.userinput.DefaultUserInput;
 import org.jlexis.data.vocable.WordTypeEnum;
 
 public class DefaultWordType extends AbstractWordType {

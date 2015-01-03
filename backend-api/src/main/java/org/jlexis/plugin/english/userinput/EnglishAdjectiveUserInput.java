@@ -23,9 +23,9 @@
  */
 package org.jlexis.plugin.english.userinput;
 
-import org.jlexis.data.vocable.AbstractUserInput;
+import org.jlexis.data.vocable.userinput.AbstractUserInput;
 import org.jlexis.data.vocable.RegisteredVocableDataKey;
-import org.jlexis.data.vocable.standarduserinput.StandardAdjectiveUserInputDataHandler;
+import org.jlexis.data.vocable.userinput.standard.StandardAdjectiveUserInputDataHandler;
 import org.jlexis.data.vocable.terms.AbstractTerm;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
 import org.jlexis.data.vocable.verification.VocableVerificationData.DataWithMandatoryTermsBuilder;
@@ -69,7 +69,7 @@ public class EnglishAdjectiveUserInput extends AbstractEnglishPluginUserInput {
     }
 
     @Override
-    protected AbstractUserInput createUserInputObject() {
+    public AbstractUserInput createUserInputObject() {
         return new EnglishAdjectiveUserInput();
     }
 

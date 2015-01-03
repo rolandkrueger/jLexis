@@ -8,8 +8,9 @@
  * have received a copy of the GNU General Public License along with jLexis; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package org.jlexis.data.vocable;
+package org.jlexis.data.vocable.userinput;
 
+import org.jlexis.data.vocable.RegisteredVocableDataKey;
 import org.jlexis.data.vocable.terms.AbstractTerm;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
 

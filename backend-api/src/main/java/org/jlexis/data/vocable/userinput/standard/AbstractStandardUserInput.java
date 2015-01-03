@@ -22,10 +22,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jlexis.data.vocable.standarduserinput;
+package org.jlexis.data.vocable.userinput.standard;
 
 
-import org.jlexis.data.vocable.AbstractUserInput;
+import org.jlexis.data.vocable.userinput.AbstractUserInput;
 
 /**
  * @author Roland Krueger
