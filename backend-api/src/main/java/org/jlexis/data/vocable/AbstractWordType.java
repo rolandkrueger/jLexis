@@ -67,7 +67,7 @@ public abstract class AbstractWordType {
     }
 
     public void registerUserInputIdentifiers() {
-        userInputPrototype.registerUserInputIdentifiers();
+//        userInputPrototype.registerUserInputIdentifiers();
     }
 
     @Override

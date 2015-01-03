@@ -63,17 +63,17 @@ public interface UserInput {
      * {@link IllegalStateException} will be raised. </p>
      *
      * @param identifier the key for the piece of user entered data
-     * @param data       the data itself
+     * @param input       the data itself
      * @throws IllegalStateException if an identifier is used that hasn't been registered with this {@link
      *                               AbstractUserInput} before.
      */
-    public abstract void addUserInput(String identifier, String data);
+    public abstract void addUserInput(RegisteredVocableDataKey identifier, String input);
 
     public abstract boolean isTypeCorrect(UserInput other);
 
     public abstract AbstractTerm getUserData(String identifier);
 
-    public abstract boolean isDataDefinedFor(String identifier);
+    public abstract boolean isDataDefinedFor(RegisteredVocableDataKey identifier);
 
     public abstract String getUserInputIdentifier();
 

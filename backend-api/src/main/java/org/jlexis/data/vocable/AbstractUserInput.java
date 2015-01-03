@@ -30,9 +30,12 @@ import org.jlexis.data.vocable.terms.InflectedTerm;
 import org.jlexis.data.vocable.terms.RegularTerm;
 import org.jlexis.data.vocable.terms.WordStemTerm;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
+import org.jlexis.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.google.common.base.Preconditions.*;
 
 /**
  * This class generically represents a user's input for one vocable in one specific language. If, for example, the user
@@ -50,12 +53,6 @@ import java.util.Map;
  */
 public abstract class AbstractUserInput implements UserInput {
 
-    @Deprecated
-    private static boolean IS_SYNCHRONIZED_WITH_DATABASE;
-
-    @Deprecated
-    private static Map<String, RegisteredVocableDataKey> REGISTERED_KEYS;
-
     /**
      * The data of this {@link AbstractUserInput}. This object assembles all the fragments that forms the language
      * specific part of a {@link Vocable}, such as the vocabulary data of one language itself, comments, examples and
@@ -63,13 +60,8 @@ public abstract class AbstractUserInput implements UserInput {
      */
     private Map<RegisteredVocableDataKey, AbstractTerm> data;
     private String inputType;
-    private Map<String, WordStemTerm> wordStems;
-    private Map<String, InflectedTerm> inflectedTerms;
-
-    static {
-        REGISTERED_KEYS = new HashMap<>();
-        IS_SYNCHRONIZED_WITH_DATABASE = false;
-    }
+    private Map<RegisteredVocableDataKey, WordStemTerm> wordStems;
+    private Map<RegisteredVocableDataKey, InflectedTerm> inflectedTerms;
 
     private AbstractUserInput() {
         data = new HashMap<>(8);
@@ -86,40 +78,13 @@ public abstract class AbstractUserInput implements UserInput {
         this.inputType = inputType;
     }
 
-    /**
-     * Loads the IDs of the {@link RegisteredVocableDataKey}s from the database if the corresponding key is availabe. If
-     * the key isn't available in the database yet, store the key into the database.
-     */
-    @SuppressWarnings("unchecked")
-    public static void synchronizeRegisteredKeysWithDatabase() {
-//      TODO: refactor
-//    List<RegisteredVocableDataKey> registeredKeys =
-//      new ArrayList<RegisteredVocableDataKey>(REGISTERED_KEYS.values ());
-//    Session session = JLexisPersistenceManager.getInstance ().getSession ();
-//    Query qry = session.createQuery ("FROM RegisteredVocableDataKey");
-//    List<RegisteredVocableDataKey> keys = qry.list ();
-//
-//    for (RegisteredVocableDataKey key : keys)
-//    {
-//      registeredKeys.remove (key);
-//      REGISTERED_KEYS.put (key.getKey (), key);
-//    }
-//
-//    // persist all new keys not available in the database
-//    for (RegisteredVocableDataKey key : registeredKeys)
-//    {
-//      JLexisPersistenceManager.getInstance ().saveObject (key);
-//    }
-//    IS_SYNCHRONIZED_WITH_DATABASE = true;
-    }
-
     @Deprecated
     protected void setDatabaseObject(DBO_AbstractUserInput databaseObj) {
 
         data.clear();
         Map<RegisteredVocableDataKey, RegularTerm> dboMap = databaseObj.getData();
         for (RegisteredVocableDataKey key : dboMap.keySet()) {
-            AbstractTerm term = getRegisteredTermTypeForKey(key.getKey());
+            AbstractTerm term = getRegisteredTermTypeForKey(key);
             term.setEncodedString(dboMap.get(key).getEncodedString());
             data.put(key, term);
         }
@@ -135,75 +100,42 @@ public abstract class AbstractUserInput implements UserInput {
 
     protected abstract AbstractUserInput createNewUserInputObject();
 
-    public void addUserInput(String identifier, String data) {
-        if (!isKeyRegistered(identifier))
-            throw new IllegalStateException(String.format("Given identifier '%s' has not been provided " +
-                    "by AbstractUserInput.getUserInputIdentifiers().", identifier));
-        if (!IS_SYNCHRONIZED_WITH_DATABASE)
-            throw new IllegalStateException("Registered keys have not yet been synchronized with database. " +
-                    "Call " + AbstractUserInput.class.getName() + ".synchronizeRegisteredKeysWithDatabase() first.");
-        if (data == null)
-            throw new NullPointerException("User data object is null.");
+    public void addUserInput(RegisteredVocableDataKey identifier, String input) {
+        if (StringUtils.isStringNullOrEmpty(input)) {
+            return;
+        }
 
-        AbstractTerm term = getRegisteredTermTypeForKey(identifier);
-        term.setUserEnteredString(data);
-        this.data.put(REGISTERED_KEYS.get(identifier), term);
+        getRegisteredTermTypeForKey(identifier)
+                .setUserEnteredString(input);
     }
 
-    private AbstractTerm getRegisteredTermTypeForKey(String identifier) {
-        AbstractTerm term = inflectedTerms.get(identifier);
-        if (term != null) return term;
+    private AbstractTerm getRegisteredTermTypeForKey(RegisteredVocableDataKey identifier) {
+        if (inflectedTerms.containsKey(identifier)) {
+            return inflectedTerms.get(identifier);
+        }
 
-        term = wordStems.get(identifier);
-        if (term != null) return term;
+        if (wordStems.containsKey(identifier)) {
+            return wordStems.get(identifier);
+        }
 
-        term = new RegularTerm();
+        AbstractTerm term = new RegularTerm();
+        data.put(identifier, term);
         return term;
     }
-
-    @Deprecated
-    private boolean isKeyRegistered(String identifier) {
-        return REGISTERED_KEYS.containsKey(identifier);
-    }
-
-    @Deprecated
-    public void registerUserInputIdentifiers() {
-        String[] identifiers = getUserInputIdentifiers();
-        if (identifiers == null) return;
-
-        for (String identifier : identifiers) {
-            if (isKeyRegistered(identifier)) {
-                // TODO: handle this situation
-                System.out.println(String.format("WARNING: User input identifier %s is already registered.", identifier));
-//        throw new IllegalStateException (String.format ("User input identifier %s is already registered.", identifier));
-                continue;
-            }
-
-            REGISTERED_KEYS.put(identifier, new RegisteredVocableDataKey(identifier));
-        }
-    }
-
-    @Deprecated
-    protected abstract String[] getUserInputIdentifiers();
 
     public boolean isTypeCorrect(UserInput other) {
         return inputType.equals(other.getUserInputIdentifier());
     }
 
     public AbstractTerm getUserData(String identifier) {
-        if (!isKeyRegistered(identifier))
-            throw new IllegalStateException(String.format("Given identifier '%s' has not been provided " +
-                    "by AbstractUserInput.getUserInputIdentifiers().", identifier));
-
         AbstractTerm result = data.get(new RegisteredVocableDataKey(identifier));
         if (result == null) result = new RegularTerm();
 
         return result;
     }
 
-    public boolean isDataDefinedFor(String identifier) {
-        RegisteredVocableDataKey key = new RegisteredVocableDataKey(identifier);
-        return data.containsKey(key) && !data.get(key).isEmpty();
+    public boolean isDataDefinedFor(RegisteredVocableDataKey identifier) {
+        return data.containsKey(identifier) && !data.get(identifier).isEmpty();
     }
 
     public String getUserInputIdentifier() {
@@ -212,31 +144,20 @@ public abstract class AbstractUserInput implements UserInput {
 
     public void replace(AbstractUserInput userInput) {
         data.clear();
-        for (RegisteredVocableDataKey key : userInput.data.keySet()) {
-            data.put(key, userInput.data.get(key));
-        }
+        data.putAll(userInput.data);
     }
 
-    public void setWordStem(String registeredKey) {
-        if (!isKeyRegistered(registeredKey))
-            throw new IllegalArgumentException(String.format("Given argument %s has not been provided " +
-                    "by AbstractUserInput.getUserInputIdentifiers()", registeredKey));
-
-        if (wordStems.containsKey(registeredKey))
-            throw new IllegalArgumentException(String.format("The key %s has already been configured as word stem.", registeredKey));
+    public void setWordStem(RegisteredVocableDataKey registeredKey) {
+        checkArgument(! wordStems.containsKey(registeredKey), String.format("The key %s has already been" +
+                " configured as word stem.", registeredKey));
 
         wordStems.put(registeredKey, new WordStemTerm());
     }
 
-    public void addWordStemChild(String governingWordStemKey, String inflectedTermKey) {
-        if (!isKeyRegistered(governingWordStemKey))
-            throw new IllegalArgumentException("The word stem key has not been registered with AbstractUserInput.registerIdentifier()");
-        if (!isKeyRegistered(inflectedTermKey))
-            throw new IllegalArgumentException("The child key has not been registered with AbstractUserInput.registerIdentifier()");
-        if (!wordStems.containsKey(governingWordStemKey))
-            throw new IllegalArgumentException(String.format("The key %s has not yet been configured as word stem.", governingWordStemKey));
-        if (inflectedTerms.containsKey(inflectedTermKey))
-            throw new IllegalArgumentException(String.format("The key %s has already been configured as an inflected term.", inflectedTermKey));
+    public void addWordStemChild(RegisteredVocableDataKey governingWordStemKey, RegisteredVocableDataKey inflectedTermKey) {
+        checkArgument(wordStems.containsKey(governingWordStemKey), String.format("The key %s has not yet been configured as word stem.", governingWordStemKey));
+        checkArgument(! inflectedTerms.containsKey(inflectedTermKey), String.format("The key %s has already been configured as an inflected term.", inflectedTermKey));
+
         inflectedTerms.put(inflectedTermKey, new InflectedTerm(wordStems.get(governingWordStemKey)));
     }
 
