@@ -53,15 +53,10 @@ public interface UserInput {
      * an example clause or a comment. Each of these pieces of data are uniquely identified by an identifier which will
      * be used as the key into the {@link java.util.Map} data structure holding a {@link AbstractUserInput}'s data. If
      * the data is the empty string, it's addition is skipped to prevent the database from being flooded with empty
-     * values. </p> <p> Note that the used identifiers have to be registered with the {@link AbstractUserInput} prior to
-     * applying them. This is done by each subclass of {@link AbstractUserInput} by using method {@link
-     * AbstractUserInput#registerIdentifier(String)}. If this method is invoked with an unregistered identifier, an
-     * {@link IllegalStateException} will be raised. </p>
+     * values. </p>
      *
      * @param identifier the key for the piece of user entered data
      * @param input       the data itself
-     * @throws IllegalStateException if an identifier is used that hasn't been registered with this {@link
-     *                               AbstractUserInput} before.
      */
     void addUserInput(RegisteredVocableDataKey identifier, String input);
 

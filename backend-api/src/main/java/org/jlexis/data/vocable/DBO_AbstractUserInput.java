@@ -29,6 +29,7 @@ import org.jlexis.data.vocable.terms.RegularTerm;
 import java.util.HashMap;
 import java.util.Map;
 
+@Deprecated
 public class DBO_AbstractUserInput {
     private long mId;
     private Map<RegisteredVocableDataKey, RegularTerm> mData;

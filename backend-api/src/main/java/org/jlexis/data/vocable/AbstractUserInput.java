@@ -48,7 +48,6 @@ import static com.google.common.base.Preconditions.*;
  * AbstractUserInput} can freely choose which data to store in this internal data structure. They are themselves
  * responsible for correctly managing this data.
  * <p/>
- * TODO: describe data caching feature
  *
  * @author Roland Krueger
  */
