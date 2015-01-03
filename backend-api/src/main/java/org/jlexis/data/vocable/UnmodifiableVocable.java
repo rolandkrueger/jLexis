@@ -110,16 +110,6 @@ public final class UnmodifiableVocable extends Vocable {
         }
 
         @Override
-        public String getComment() {
-            return data.getComment();
-        }
-
-        @Override
-        public String getExample() {
-            return data.getExample();
-        }
-
-        @Override
         public void init() {
             data.init();
         }

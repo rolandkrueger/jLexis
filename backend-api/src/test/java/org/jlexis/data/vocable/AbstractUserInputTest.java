@@ -31,7 +31,6 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * @author Roland Krueger
- * @version $Id: $
  */
 public class AbstractUserInputTest {
     private AbstractUserInputTestObject mTestObj;
@@ -39,32 +38,6 @@ public class AbstractUserInputTest {
     @Before
     public void setUp() {
         mTestObj = new AbstractUserInputTestObject();
-    }
-
-    @Test
-    public void testGetExample() {
-        assertEquals("example", mTestObj.getExample());
-        assertEquals(1, mTestObj.getExampleCalled);
-        assertEquals("example", mTestObj.getExample());
-        assertEquals(1, mTestObj.getExampleCalled);
-
-        // Change some data. Cache gets cleared.
-        mTestObj.replace(mTestObj);
-        assertEquals("example", mTestObj.getExample());
-        assertEquals(2, mTestObj.getExampleCalled);
-    }
-
-    @Test
-    public void testGetComment() {
-        assertEquals("comment", mTestObj.getComment());
-        assertEquals(1, mTestObj.getCommentCalled);
-        assertEquals("comment", mTestObj.getComment());
-        assertEquals(1, mTestObj.getCommentCalled);
-
-        // Change some data. Cache gets cleared.
-        mTestObj.replace(mTestObj);
-        assertEquals("comment", mTestObj.getComment());
-        assertEquals(2, mTestObj.getCommentCalled);
     }
 
     @Test

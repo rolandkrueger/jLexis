@@ -98,12 +98,10 @@ public abstract class AbstractEnglishPluginUserInput extends AbstractUserInput {
         mStandardInputAE.setPronunciation(defaultAmericanEnglish.getPronunciation());
     }
 
-    @Override
     public String getComment() {
         return mStandardInputBE.getComment();
     }
 
-    @Override
     public String getExample() {
         return mStandardInputBE.getExample();
     }

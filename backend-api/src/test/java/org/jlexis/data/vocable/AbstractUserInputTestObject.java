@@ -31,8 +31,6 @@ import org.jlexis.data.vocable.verification.VocableVerificationData;
  * @author Roland Krueger
  */
 public class AbstractUserInputTestObject extends AbstractUserInput {
-    public int getCommentCalled = 0;
-    public int getExampleCalled = 0;
     public int getShortVersionCalled = 0;
     public int getHTMLVersionCalled = 0;
 
@@ -41,8 +39,6 @@ public class AbstractUserInputTestObject extends AbstractUserInput {
     }
 
     public void reset() {
-        getCommentCalled = 0;
-        getExampleCalled = 0;
         getShortVersionCalled = 0;
         getHTMLVersionCalled = 0;
     }
@@ -50,18 +46,6 @@ public class AbstractUserInputTestObject extends AbstractUserInput {
     @Override
     protected AbstractUserInput createUserInputObject() {
         return new AbstractUserInputTestObject();
-    }
-
-    @Override
-    public String getComment() {
-        getCommentCalled++;
-        return "comment";
-    }
-
-    @Override
-    public String getExample() {
-        getExampleCalled++;
-        return "example";
     }
 
     @Override
