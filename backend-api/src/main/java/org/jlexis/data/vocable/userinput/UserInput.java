@@ -61,6 +61,8 @@ public interface UserInput {
      */
     void addUserInput(RegisteredVocableDataKey identifier, String input);
 
+    UserInput createUserInputObject();
+
     boolean correspondsTo(UserInput other);
 
     AbstractTerm getUserInput(RegisteredVocableDataKey identifier);
@@ -72,4 +74,8 @@ public interface UserInput {
     void replace(AbstractUserInput userInput);
 
     VocableVerificationData getQuizVerificationData();
+
+    void setWordStem(RegisteredVocableDataKey identifier);
+
+    void addWordStemChild(RegisteredVocableDataKey governingWordStemKey, RegisteredVocableDataKey inflectedTermKey);
 }

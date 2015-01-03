@@ -29,7 +29,6 @@ import org.jlexis.data.vocable.userinput.AbstractUserInput;
 
 /**
  * @author Roland Krueger
- * @version $Id: $
  */
 public abstract class AbstractStandardUserInput extends AbstractUserInput {
     private StandardUserInputDataHandler mStandardUserInputDataHandler;

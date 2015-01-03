@@ -30,6 +30,8 @@ import org.jlexis.data.vocable.userinput.DBO_AbstractUserInput;
 import org.jlexis.data.vocable.userinput.UserInput;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * @author Roland Krueger
  */
@@ -61,12 +63,16 @@ public final class UnmodifiableVocable extends Vocable {
         private UserInput data;
 
         public UnmodifiableUserInput(UserInput data) {
-            if (data == null) throw new NullPointerException("Argument is null.");
-            this.data = data;
+            this.data = checkNotNull(data, "Argument is null.");
         }
 
         public final void addUserInput(RegisteredVocableDataKey identifier, String data) {
             this.data.addUserInput(identifier, data);
+        }
+
+        @Override
+        public UserInput createUserInputObject() {
+            return new UnmodifiableUserInput(data);
         }
 
         public final DBO_AbstractUserInput getDatabaseObject() {
@@ -108,6 +114,16 @@ public final class UnmodifiableVocable extends Vocable {
         @Override
         public VocableVerificationData getQuizVerificationData() {
             return data.getQuizVerificationData();
+        }
+
+        @Override
+        public void setWordStem(RegisteredVocableDataKey identifier) {
+            throw new UnsupportedOperationException("This object cannot be modified.");
+        }
+
+        @Override
+        public void addWordStemChild(RegisteredVocableDataKey governingWordStemKey, RegisteredVocableDataKey inflectedTermKey) {
+            throw new UnsupportedOperationException("This object cannot be modified.");
         }
 
         @Override

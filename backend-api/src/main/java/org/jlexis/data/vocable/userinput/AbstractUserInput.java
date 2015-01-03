@@ -80,7 +80,6 @@ public abstract class AbstractUserInput implements UserInput {
         this.userInputIdentifier = userInputIdentifier;
     }
 
-    public abstract AbstractUserInput createUserInputObject();
 
     public void addUserInput(RegisteredVocableDataKey identifier, String input) {
         if (StringUtils.isStringNullOrEmpty(input)) {
@@ -145,6 +144,7 @@ public abstract class AbstractUserInput implements UserInput {
         inflectedTerms.putAll(userInput.inflectedTerms);
     }
 
+    @Override
     public void setWordStem(RegisteredVocableDataKey identifier) {
         checkArgument(! wordStems.containsKey(identifier), String.format("The key %s has already been" +
                 " configured as word stem.", identifier));
@@ -152,6 +152,7 @@ public abstract class AbstractUserInput implements UserInput {
         wordStems.put(identifier, new WordStemTerm());
     }
 
+    @Override
     public void addWordStemChild(RegisteredVocableDataKey governingWordStemKey, RegisteredVocableDataKey inflectedTermKey) {
         checkArgument(wordStems.containsKey(governingWordStemKey), String.format("The key %s has not yet been configured as word stem.", governingWordStemKey));
         checkArgument(! inflectedTerms.containsKey(inflectedTermKey), String.format("The key %s has already been configured as an inflected term.", inflectedTermKey));
