@@ -18,7 +18,7 @@ import org.jlexis.data.vocable.verification.VocableVerificationData;
  */
 public interface UserInput {
 
-    public abstract void init();
+    void init();
 
     /**
      * Provides a String containing the short version vor this {@link AbstractUserInput}. This is usually the most
@@ -28,7 +28,7 @@ public interface UserInput {
      *
      * @return a short summary of this {@link AbstractUserInput}
      */
-    public abstract String getShortVersion();
+    String getShortVersion();
 
     /**
      * Provides a piece of HTML-formatted text containing the information of this {@link AbstractUserInput}. This text
@@ -36,7 +36,7 @@ public interface UserInput {
      *
      * @return a HTML-version of this {@link AbstractUserInput}'s data
      */
-    public abstract String getHTMLVersion();
+    String getHTMLVersion();
 
     /**
      * Returns <code>true</code> if there is no user data available from this {@link AbstractUserInput} or in other
@@ -46,11 +46,11 @@ public interface UserInput {
      *
      * @return <code>true</code> if the data of this object has not been set
      */
-    public abstract boolean isEmpty();
+    boolean isEmpty();
 
-    public abstract String getComment();
+    String getComment();
 
-    public abstract String getExample();
+    String getExample();
 
     /**
      * <p> Adds a piece of user entered data. This might be the translation of a word, the grammatical gender of a noun,
@@ -67,17 +67,17 @@ public interface UserInput {
      * @throws IllegalStateException if an identifier is used that hasn't been registered with this {@link
      *                               AbstractUserInput} before.
      */
-    public abstract void addUserInput(RegisteredVocableDataKey identifier, String input);
+    void addUserInput(RegisteredVocableDataKey identifier, String input);
 
-    public abstract boolean isTypeCorrect(UserInput other);
+    boolean isTypeCorrect(UserInput other);
 
-    public abstract AbstractTerm getUserInput(RegisteredVocableDataKey identifier);
+    AbstractTerm getUserInput(RegisteredVocableDataKey identifier);
 
-    public abstract boolean isInputDefinedFor(RegisteredVocableDataKey identifier);
+    boolean isInputDefinedFor(RegisteredVocableDataKey identifier);
 
-    public abstract String getUserInputIdentifier();
+    String getUserInputIdentifier();
 
-    public abstract void replace(AbstractUserInput userInput);
+    void replace(AbstractUserInput userInput);
 
-    public abstract VocableVerificationData getQuizVerificationData();
+    VocableVerificationData getQuizVerificationData();
 }

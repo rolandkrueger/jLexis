@@ -58,7 +58,7 @@ public abstract class AbstractUserInput implements UserInput {
      * extra data.
      */
     private Map<RegisteredVocableDataKey, AbstractTerm> data;
-    private String inputType;
+    private String userInputIdentifier;
     private Map<RegisteredVocableDataKey, WordStemTerm> wordStems;
     private Map<RegisteredVocableDataKey, InflectedTerm> inflectedTerms;
 
@@ -74,7 +74,7 @@ public abstract class AbstractUserInput implements UserInput {
             throw new IllegalArgumentException("empty input type string not accepted");
         }
 
-        this.inputType = inputType;
+        this.userInputIdentifier = inputType;
     }
 
     @Deprecated
@@ -88,7 +88,7 @@ public abstract class AbstractUserInput implements UserInput {
             data.put(key, term);
         }
 
-        inputType = databaseObj.getInputType();
+        userInputIdentifier = databaseObj.getInputType();
     }
 
     protected abstract AbstractUserInput createUserInputObject();
@@ -117,7 +117,7 @@ public abstract class AbstractUserInput implements UserInput {
     }
 
     public boolean isTypeCorrect(UserInput other) {
-        return inputType.equals(other.getUserInputIdentifier());
+        return userInputIdentifier.equals(other.getUserInputIdentifier());
     }
 
     public AbstractTerm getUserInput(RegisteredVocableDataKey identifier) {
@@ -131,7 +131,7 @@ public abstract class AbstractUserInput implements UserInput {
     }
 
     public String getUserInputIdentifier() {
-        return inputType;
+        return userInputIdentifier;
     }
 
     public void replace(AbstractUserInput userInput) {
