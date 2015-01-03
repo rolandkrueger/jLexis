@@ -17,7 +17,6 @@ import org.jlexis.data.vocable.verification.VocableVerificationData;
  * @author Roland Krueger
  */
 public interface UserInput {
-    public abstract DBO_AbstractUserInput getDatabaseObject();
 
     public abstract void init();
 

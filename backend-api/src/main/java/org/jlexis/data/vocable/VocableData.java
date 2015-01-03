@@ -83,33 +83,36 @@ public class VocableData {
     }
 
     public AbstractUserInput getUserInput() {
-        if (mUserInput == null && mUserInputFromDatabase == null)
-            throw new IllegalStateException("Unable to provide data: both data objects are null.");
-
-        if (mUserInput == null) {
-            // TODO: ensure that the used word type identifier is never unknown for the plugin
-            AbstractWordType wordType = mForLanguage.getLanguagePlugin().get().getWordTypeFor(mWordTypeIdentifier.get());
-            assert wordType != null;
-            mUserInput = wordType.createNewUserInputObject();
-            mUserInput.setDatabaseObject(mUserInputFromDatabase);
-        }
+//        TODO: refactor
+//        if (mUserInput == null && mUserInputFromDatabase == null)
+//            throw new IllegalStateException("Unable to provide data: both data objects are null.");
+//
+//        if (mUserInput == null) {
+//            // TODO: ensure that the used word type identifier is never unknown for the plugin
+//            AbstractWordType wordType = mForLanguage.getLanguagePlugin().get().getWordTypeFor(mWordTypeIdentifier.get());
+//            assert wordType != null;
+//            mUserInput = wordType.createNewUserInputObject();
+//            mUserInput.setDatabaseObject(mUserInputFromDatabase);
+//        }
 
         return mUserInput;
     }
 
     @SuppressWarnings("unused")
     private DBO_AbstractUserInput getDatabaseObject() {
-        if (getUserInput() == null) {
-            throw new IllegalStateException("AbstractUserInput object not available.");
-        }
-
-        DBO_AbstractUserInput dbo = getUserInput().getDatabaseObject();
-        if (mUserInputFromDatabase != null) {
-            mUserInputFromDatabase.copy(dbo);
-        } else {
-            mUserInputFromDatabase = dbo;
-        }
-        return mUserInputFromDatabase;
+//        TODO: refactor
+//        if (getUserInput() == null) {
+//            throw new IllegalStateException("AbstractUserInput object not available.");
+//        }
+//
+//        DBO_AbstractUserInput dbo = getUserInput().getDatabaseObject();
+//        if (mUserInputFromDatabase != null) {
+//            mUserInputFromDatabase.copy(dbo);
+//        } else {
+//            mUserInputFromDatabase = dbo;
+//        }
+//        return mUserInputFromDatabase;
+        return null;
     }
 
     @SuppressWarnings("unused")

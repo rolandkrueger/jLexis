@@ -57,8 +57,6 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
         super(INPUT_ID);
     }
 
-    ;
-
     @Override
     public void init() {
         setPluralIrregularBE(false);

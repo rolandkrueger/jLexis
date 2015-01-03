@@ -50,13 +50,11 @@ import java.util.Map;
  */
 public abstract class AbstractUserInput implements UserInput {
 
-    private static Map<String, RegisteredVocableDataKey> REGISTERED_KEYS;
+    @Deprecated
     private static boolean IS_SYNCHRONIZED_WITH_DATABASE;
 
-    /**
-     * Object that represents this {@link AbstractUserInput} in the database.
-     */
-    private DBO_AbstractUserInput mDatabaseObject;
+    @Deprecated
+    private static Map<String, RegisteredVocableDataKey> REGISTERED_KEYS;
 
     /**
      * The data of this {@link AbstractUserInput}. This object assembles all the fragments that forms the language
@@ -116,25 +114,7 @@ public abstract class AbstractUserInput implements UserInput {
     }
 
     @Deprecated
-    public DBO_AbstractUserInput getDatabaseObject() {
-//        if (mDatabaseObject == null)
-//            mDatabaseObject = new DBO_AbstractUserInput();
-//
-//        Map<RegisteredVocableDataKey, RegularTerm> preparedData = new HashMap<RegisteredVocableDataKey, RegularTerm>();
-//        for (RegisteredVocableDataKey key : data.keySet()) {
-//            preparedData.put(key, new RegularTerm(data.get(key).getEncodedString()));
-//        }
-//
-//        mDatabaseObject.setData(preparedData);
-//        mDatabaseObject.setInputType(inputType);
-
-        return mDatabaseObject;
-    }
-
-    @Deprecated
     protected void setDatabaseObject(DBO_AbstractUserInput databaseObj) {
-        if (databaseObj == null)
-            throw new NullPointerException("Argument is null.");
 
         data.clear();
         Map<RegisteredVocableDataKey, RegularTerm> dboMap = databaseObj.getData();
@@ -181,10 +161,12 @@ public abstract class AbstractUserInput implements UserInput {
         return term;
     }
 
+    @Deprecated
     private boolean isKeyRegistered(String identifier) {
         return REGISTERED_KEYS.containsKey(identifier);
     }
 
+    @Deprecated
     public void registerUserInputIdentifiers() {
         String[] identifiers = getUserInputIdentifiers();
         if (identifiers == null) return;
@@ -201,6 +183,7 @@ public abstract class AbstractUserInput implements UserInput {
         }
     }
 
+    @Deprecated
     protected abstract String[] getUserInputIdentifiers();
 
     public boolean isTypeCorrect(UserInput other) {
