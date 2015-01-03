@@ -164,19 +164,19 @@ public abstract class AbstractUserInput implements UserInput {
     @Override
     public abstract VocableVerificationData getQuizVerificationData();
 
-    public String getPurgedUserData(String identifier) {
+    public String getPurgedUserData(RegisteredVocableDataKey identifier) {
         return getUserInput(identifier).getCleanedString();
     }
 
-    public String getUserEnteredTerm(String identifier) {
+    public String getUserEnteredTerm(RegisteredVocableDataKey identifier) {
         return getUserInput(identifier).getUserEnteredString();
     }
 
-    public String getResolvedUserData(String identifier) {
+    public String getResolvedUserData(RegisteredVocableDataKey identifier) {
         return getUserInput(identifier).getStringWithWordStemResolved();
     }
 
-    public String getResolvedAndPurgedUserData(String identifier) {
+    public String getResolvedAndPurgedUserData(RegisteredVocableDataKey identifier) {
         return getUserInput(identifier).getCleanedStringWithWordStemResolved();
     }
 }
