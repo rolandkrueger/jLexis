@@ -82,7 +82,8 @@ public class StandardUserInputDecorator extends AbstractUserInputDecorator {
 
     @Override
     public final boolean isEmpty() {
-        return getUserInput(commentKey).isEmpty() &&
+        return getDelegate().isEmpty() &&
+                getUserInput(commentKey).isEmpty() &&
                 getUserInput(exampleKey).isEmpty() &&
                 getUserInput(phoneticsKey).isEmpty() &&
                 getUserInput(pronunciationKey).isEmpty();
@@ -108,14 +109,14 @@ public class StandardUserInputDecorator extends AbstractUserInputDecorator {
         return getUserInput(phoneticsKey).getUserEnteredString();
     }
 
-    @Deprecated
-    public String getPhoneticsString() {
-        if (!isPhoneticsDefined()) return "";
-        return "[" + getPhonetics() + "]";
-    }
-
     public final void setPhonetics(String phonetics) {
         addUserInput(phoneticsKey, phonetics);
+    }
+
+    @Deprecated
+    public String getPhoneticsString() {
+        if (! isPhoneticsDefined()) return "";
+        return "[" + getPhonetics() + "]";
     }
 
     public final String getPronunciation() {
@@ -144,7 +145,10 @@ public class StandardUserInputDecorator extends AbstractUserInputDecorator {
 
     @Override
     public boolean isAnyTextInputDefined() {
-        return isExampleDefined() || isCommentDefined() || isPhoneticsDefined();
+        return getDelegate().isAnyTextInputDefined() ||
+                isExampleDefined() ||
+                isCommentDefined() ||
+                isPhoneticsDefined();
     }
 
     @Override

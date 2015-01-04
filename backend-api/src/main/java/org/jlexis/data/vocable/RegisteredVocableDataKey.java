@@ -73,4 +73,9 @@ public class RegisteredVocableDataKey implements Comparable<RegisteredVocableDat
     public int compareTo(RegisteredVocableDataKey o) {
         return key.compareTo(o.key);
     }
+
+    @Override
+    public String toString() {
+        return key;
+    }
 }

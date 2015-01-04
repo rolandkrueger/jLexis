@@ -100,11 +100,24 @@ public abstract class AbstractUserInput implements UserInput {
 
     public void addUserInput(RegisteredVocableDataKey key, String input) {
         if (StringUtils.isStringNullOrEmpty(input)) {
+            removeTermForKey(key);
             return;
         }
 
         createNewRegularTermIfInputNotAvailable(key, getTermForKey(key))
                 .setUserEnteredString(input);
+    }
+
+    private void removeTermForKey(RegisteredVocableDataKey key) {
+        if (regularTerms.containsKey(key)) {
+            regularTerms.remove(key);
+        }
+        if (inflectedTerms.containsKey(key)) {
+            inflectedTerms.get(key).setUserEnteredString("");
+        }
+        if (wordStems.containsKey(key)) {
+            wordStems.get(key).setUserEnteredString("");
+        }
     }
 
     /**
@@ -160,6 +173,36 @@ public abstract class AbstractUserInput implements UserInput {
 
     public boolean isInputDefinedFor(RegisteredVocableDataKey key) {
         return ! getUserInput(key).isEmpty();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        boolean empty = true;
+        empty = areRegularTermsEmpty(empty);
+        empty = areInflectedTermsEmpty(empty);
+        empty = areWordstemsEmpty(empty);
+        return empty;
+    }
+
+    private boolean areRegularTermsEmpty(boolean empty) {
+        for (AbstractTerm term : regularTerms.values()) {
+            empty &= term.isEmpty();
+        }
+        return empty;
+    }
+
+    private boolean areInflectedTermsEmpty(boolean empty) {
+        for (AbstractTerm term : inflectedTerms.values()) {
+            empty &= term.isEmpty();
+        }
+        return empty;
+    }
+
+    private boolean areWordstemsEmpty(boolean empty) {
+        for (AbstractTerm term : wordStems.values()) {
+            empty &= term.isEmpty();
+        }
+        return empty;
     }
 
     public String getUserInputIdentifier() {

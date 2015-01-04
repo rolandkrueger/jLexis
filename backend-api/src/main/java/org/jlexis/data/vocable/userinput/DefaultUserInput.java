@@ -26,6 +26,7 @@ package org.jlexis.data.vocable.userinput;
 
 
 import org.jlexis.data.vocable.RegisteredVocableDataKey;
+import org.jlexis.data.vocable.terms.AbstractTerm;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
 import org.jlexis.roklib.TextFormatter;
 
@@ -55,13 +56,16 @@ public class DefaultUserInput extends AbstractUserInput {
     }
 
     @Override
-    public boolean isEmpty() {
-        return getUserInput(TERM_KEY).isEmpty();
-    }
-
-    @Override
     public boolean isAnyTextInputDefined() {
         return ! isEmpty();
+    }
+
+    public void setTerm(String term) {
+        addUserInput(TERM_KEY, term);
+    }
+
+    public AbstractTerm getTerm() {
+        return getUserInput(TERM_KEY);
     }
 
     @Override
