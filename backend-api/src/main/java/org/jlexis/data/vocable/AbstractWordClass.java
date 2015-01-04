@@ -23,26 +23,24 @@
  */
 package org.jlexis.data.vocable;
 
-import com.google.common.base.Strings;
-import org.jlexis.data.vocable.userinput.AbstractUserInput;
 import org.jlexis.data.vocable.userinput.UserInput;
+import org.jlexis.util.StringUtils;
 
 import java.util.Objects;
 
 import static com.google.common.base.Preconditions.*;
 
 public abstract class AbstractWordClass {
-    private String name;
+    private String nameI18nKey;
     private String identifier;
-    private AbstractUserInput userInputPrototype;
+    private UserInput userInputPrototype;
 
-    protected AbstractWordClass(String name, String identifier, AbstractUserInput userInputPrototype) {
-        this.name = checkNotNull(name);
+    protected AbstractWordClass(String nameI18nKey, String identifier, UserInput userInputPrototype) {
+        this.nameI18nKey = checkNotNull(nameI18nKey);
         this.userInputPrototype = checkNotNull(userInputPrototype);
 
-        checkArgument(! Strings.isNullOrEmpty(identifier), "Identifier must not be null or the empty string.");
+        checkArgument(! StringUtils.isStringNullOrEmpty(identifier), "Identifier must not be null or the empty string.");
         this.identifier = identifier;
-
     }
 
     /**
@@ -60,20 +58,12 @@ public abstract class AbstractWordClass {
         return result;
     }
 
-    public final String getUserInputIdentifier() {
-        return userInputPrototype.getUserInputIdentifier();
-    }
-
-    public final String getName() {
-        return name;
+    public final String getNameI18nKey() {
+        return nameI18nKey;
     }
 
     public final String getIdentifier() {
         return identifier;
-    }
-
-    public void registerUserInputIdentifiers() {
-//        userInputPrototype.registerUserInputIdentifiers();
     }
 
     @Override
@@ -83,8 +73,8 @@ public abstract class AbstractWordClass {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) return false;
-        if (obj == this) return true;
-        return obj instanceof AbstractWordClass && Objects.equals(identifier, ((AbstractWordClass) obj).identifier);
+        return obj != null &&
+                (obj == this
+                        || obj instanceof AbstractWordClass && Objects.equals(identifier, ((AbstractWordClass) obj).identifier));
     }
 }

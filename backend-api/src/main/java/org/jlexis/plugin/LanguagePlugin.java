@@ -80,12 +80,6 @@ public abstract class LanguagePlugin {
         wordTypes.put(wordType.getIdentifier(), wordType);
     }
 
-    public void registerUserInputIdentifiers() {
-        for (AbstractWordClass wordType : wordTypes.values()) {
-            wordType.registerUserInputIdentifiers();
-        }
-    }
-
     public Collection<AbstractWordClass> getWordTypes() {
         if (wordTypes.isEmpty()) {
             // TODO: I18N

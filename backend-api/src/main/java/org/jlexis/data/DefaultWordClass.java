@@ -35,8 +35,8 @@ import org.jlexis.data.vocable.WordClassEnum;
  * better fitting word class could be found in certain situations.
  */
 public class DefaultWordClass extends AbstractWordClass {
-    public DefaultWordClass(String mName) {
-        super(mName, "default", new DefaultUserInput());
+    public DefaultWordClass(String name) {
+        super(name, "default", new DefaultUserInput());
     }
 
     @Override
