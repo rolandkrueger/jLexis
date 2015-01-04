@@ -40,6 +40,7 @@ public class EnglishAdjectiveUserInput extends AbstractEnglishPluginUserInput {
             ".ADJECTIVE_USAGE_BE");
     private final static RegisteredVocableDataKey ADJECTIVE_USAGE_AE = new RegisteredVocableDataKey(INPUT_ID + "" +
             ".ADJECTIVE_USAGE_AE");
+    private static final long serialVersionUID = - 7091084877733059407L;
     private StandardAdjectiveUserInputDecorator adjectiveStandardInputBE;
     private StandardAdjectiveUserInputDecorator adjectiveStandardInputAE;
 

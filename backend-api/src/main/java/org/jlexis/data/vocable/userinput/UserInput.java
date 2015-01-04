@@ -15,13 +15,15 @@ import org.jlexis.data.vocable.terms.AbstractTerm;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
 import org.jlexis.roklib.TextFormatter;
 
+import java.io.Serializable;
+
 /**
  * Interface for defining data classes that store and manage user entered vocabulary data. A user input will receive the
  * vocabulary data for exactly one language in one particular vocable.
  *
  * @author Roland Krueger
  */
-public interface UserInput {
+public interface UserInput extends Serializable {
 
     /**
      * Initialize the user input object.

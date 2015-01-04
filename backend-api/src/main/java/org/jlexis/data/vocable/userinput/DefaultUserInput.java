@@ -37,6 +37,7 @@ import org.jlexis.roklib.TextFormatter;
 public class DefaultUserInput extends AbstractUserInput {
     private static final String INPUT_ID = DefaultUserInput.class.getCanonicalName();
     public static final RegisteredVocableDataKey TERM_KEY = new RegisteredVocableDataKey(INPUT_ID + ".TERM");
+    private static final long serialVersionUID = 8256665799379963264L;
 
     public DefaultUserInput() {
         super(INPUT_ID);

@@ -26,11 +26,13 @@ package org.jlexis.data.vocable;
 import org.jlexis.data.vocable.userinput.UserInput;
 import org.jlexis.util.StringUtils;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import static com.google.common.base.Preconditions.*;
 
-public abstract class AbstractWordClass {
+public abstract class AbstractWordClass implements Serializable{
+    private static final long serialVersionUID = 1400199529865095222L;
     private String nameI18nKey;
     private String identifier;
     private UserInput userInputPrototype;

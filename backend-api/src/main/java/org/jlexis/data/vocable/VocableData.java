@@ -39,7 +39,8 @@ import static com.google.common.base.Preconditions.*;
  *
  * @author Roland Krueger
  */
-public class VocableData {
+public class VocableData implements Serializable {
+    private static final long serialVersionUID = - 2500879511063950497L;
     /**
      * The language of the given user input.
      */

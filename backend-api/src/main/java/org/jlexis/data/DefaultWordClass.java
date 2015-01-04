@@ -35,6 +35,8 @@ import org.jlexis.data.vocable.WordClassEnum;
  * better fitting word class could be found in certain situations.
  */
 public class DefaultWordClass extends AbstractWordClass {
+    private static final long serialVersionUID = - 3261404278184669765L;
+
     public DefaultWordClass(String name) {
         super(name, "default", new DefaultUserInput());
     }

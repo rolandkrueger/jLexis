@@ -59,6 +59,7 @@ public final class UnmodifiableVocable extends Vocable {
     }
 
     private final class UnmodifiableUserInput implements UserInput {
+        private static final long serialVersionUID = 4671844719293807954L;
         private UserInput data;
 
         public UnmodifiableUserInput(UserInput data) {

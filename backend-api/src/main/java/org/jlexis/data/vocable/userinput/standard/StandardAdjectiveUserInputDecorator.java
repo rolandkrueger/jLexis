@@ -42,6 +42,7 @@ public class StandardAdjectiveUserInputDecorator extends AbstractUserInputDecora
     private final static String SUPERLATIVE_KEY = ".ADJECTIVE_SUPERLATIVE";
     private final static String IS_NOT_COMPARABLE_KEY = ".ADJECTIVE_IS_NOT_COMPARABLE";
     private final static String IS_IRREGULAR_KEY = ".ADJECTIVE_IS_IRREGULAR";
+    private static final long serialVersionUID = 1574270425622330291L;
 
     private RegisteredVocableDataKey positiveKey;
     private RegisteredVocableDataKey comparativeKey;

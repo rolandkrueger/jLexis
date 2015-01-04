@@ -36,6 +36,7 @@ public class StandardUserInputDecorator extends AbstractUserInputDecorator {
     private final static String EXAMPLE_KEY = ".EXAMPLE";
     private final static String PHONETICS_KEY = ".PHONETICS";
     private final static String PRONUNCIATION_KEY = ".PRONUNCIATION";
+    private static final long serialVersionUID = 4114898359912362259L;
 
     private RegisteredVocableDataKey commentKey;
     private RegisteredVocableDataKey exampleKey;
