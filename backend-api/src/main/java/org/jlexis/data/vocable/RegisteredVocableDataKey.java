@@ -24,38 +24,38 @@
 package org.jlexis.data.vocable;
 
 public class RegisteredVocableDataKey implements Comparable<RegisteredVocableDataKey> {
-    private Long mId;
-    private String mKey;
+    private Long id;
+    private String key;
 
     public RegisteredVocableDataKey() {
-        mKey = "";
+        key = "";
     }
 
     public RegisteredVocableDataKey(String key) {
-        mKey = key;
+        this.key = key;
     }
 
     @SuppressWarnings("unused")
     private Long getId() {
-        return mId;
+        return id;
     }
 
     @SuppressWarnings("unused")
     private void setId(Long id) {
-        mId = id;
+        this.id = id;
     }
 
     public String getKey() {
-        return mKey;
+        return key;
     }
 
     public void setKey(String key) {
-        mKey = key;
+        this.key = key;
     }
 
     @Override
     public int hashCode() {
-        return mKey.hashCode();
+        return key.hashCode();
     }
 
     @Override
@@ -64,13 +64,13 @@ public class RegisteredVocableDataKey implements Comparable<RegisteredVocableDat
         if (this == obj) return true;
         if (obj instanceof RegisteredVocableDataKey) {
             RegisteredVocableDataKey other = (RegisteredVocableDataKey) obj;
-            return mKey.equals(other.mKey);
+            return key.equals(other.key);
         }
-        return mKey.equals(obj);
+        return key.equals(obj);
     }
 
     @Override
     public int compareTo(RegisteredVocableDataKey o) {
-        return mKey.compareTo(o.mKey);
+        return key.compareTo(o.key);
     }
 }
