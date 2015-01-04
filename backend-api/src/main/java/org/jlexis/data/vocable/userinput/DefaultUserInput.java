@@ -42,14 +42,16 @@ public class DefaultUserInput extends AbstractUserInput {
     }
 
     @Override
-    public String getHTMLVersion(TextFormatter formatter) {
+    public void provideFullDisplayText(TextFormatter formatter) {
         formatter.appendBold(getUserInput(TERM_KEY).getUserEnteredString());
-        return formatter.getFormattedText().toString();
+        // FIXME: result for old signature
+//        return formatter.getFormattedText().toString();
     }
 
     @Override
-    public String getShortVersion() {
-        return getUserInput(TERM_KEY).getUserEnteredString();
+    public void provideShortDisplayText(TextFormatter formatter) {
+        // FIXME: result for old signature
+//        return getUserInput(TERM_KEY).getUserEnteredString();
     }
 
     @Override

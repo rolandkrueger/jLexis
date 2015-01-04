@@ -30,7 +30,6 @@ import org.jlexis.data.vocable.RegisteredVocableDataKey;
 import org.jlexis.data.vocable.terms.AbstractTerm;
 import org.jlexis.data.vocable.userinput.UserInput;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
-import org.jlexis.roklib.TextFormatter;
 
 /**
  * @author Roland Krueger
@@ -58,9 +57,7 @@ public abstract class AbstractUserInputDecorator implements UserInput {
     }
 
     public abstract boolean isAnyTextInputDefined();
-
-    public abstract void getHTMLVersion(TextFormatter formatter, String addOn);
-
+    
     @Override
     public void addUserInput(RegisteredVocableDataKey key, String input) {
         getDelegate().addUserInput(key, input);

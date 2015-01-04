@@ -76,13 +76,8 @@ public class StandardUserInputDecorator extends AbstractUserInputDecorator {
     }
 
     @Override
-    public String getShortVersion() {
-        return null;
-    }
-
-    @Override
-    public String getHTMLVersion(TextFormatter formatter) {
-        return null;
+    public void provideShortDisplayText(TextFormatter formatter) {
+        // TODO
     }
 
     @Override
@@ -153,7 +148,10 @@ public class StandardUserInputDecorator extends AbstractUserInputDecorator {
     }
 
     @Override
-    public void getHTMLVersion(TextFormatter formatter, String addOn) {
+    public void provideFullDisplayText(TextFormatter formatter) {
+        // TODO: addOn was formerly an additional parameter; used values were e.g. BrE or AmE (British/American English)
+        String addOn = null;
+
         if (addOn == null) addOn = "";
         if (isCommentDefined()) {
             formatter.append("<HR size=\"1\"/>");

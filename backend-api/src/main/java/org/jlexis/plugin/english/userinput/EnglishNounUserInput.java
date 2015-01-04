@@ -74,7 +74,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     }
 
     @Override
-    public String getHTMLVersion(TextFormatter formatter) {
+    public void provideFullDisplayText(TextFormatter formatter) {
         if (isInputDefinedFor(NOUN_SINGULAR_TERM_KEY_BE)) {
             formatter.appendBold(getUserInput(NOUN_SINGULAR_TERM_KEY_BE).getCleanedString());
             if (getStandardInputBE().isPhoneticsDefined())
@@ -135,17 +135,18 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
         }
 
         if (getStandardInputBE().isAnyTextInputDefined()) {
-            getStandardInputBE().getHTMLVersion(formatter, "(BrE)");
+            getStandardInputBE().provideFullDisplayText(formatter);//, "(BrE)");
         }
         if (getStandardInputAE().isAnyTextInputDefined()) {
-            getStandardInputAE().getHTMLVersion(formatter, "(AmE)");
+            getStandardInputAE().provideFullDisplayText(formatter);//, "(AmE)");
         }
 
-        return formatter.getFormattedText().toString();
+        // FIXME: result for old signature
+//        return formatter.getFormattedText().toString();
     }
 
     @Override
-    public String getShortVersion() {
+    public void provideShortDisplayText(TextFormatter formatter) {
         StringBuilder buf = new StringBuilder();
         buf.append(getUserInput(NOUN_SINGULAR_TERM_KEY_BE).getCleanedString());
         if (isInputDefinedFor(NOUN_PLURAL_TERM_KEY_BE) && isPluralIrregularBE()) {
@@ -165,7 +166,8 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
             buf.append(" (AmE)");
         }
 
-        return buf.toString();
+        // FIXME: result for old signature
+//        return buf.toString();
     }
 
     public boolean isPluralIrregularAE() {

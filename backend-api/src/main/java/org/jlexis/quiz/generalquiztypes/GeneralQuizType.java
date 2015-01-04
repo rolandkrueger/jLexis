@@ -147,7 +147,8 @@ public class GeneralQuizType extends AbstractQuizType {
                     sourceLanguage = forUnit.getLanguages().get(0);
                 }
                 setExpectedAnswer(vocableVerificationData);
-                setTextToTranslate(forVocable.getVariantInput(sourceLanguage).getShortVersion());
+                // FIXME: signature of provideShortDisplayText changed
+//                setTextToTranslate(forVocable.getVariantInput(sourceLanguage).provideShortDisplayText());
                 setSourceLanguage(sourceLanguage);
             }
 

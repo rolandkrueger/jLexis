@@ -102,15 +102,13 @@ public class StandardAdjectiveUserInputDecorator extends AbstractUserInputDecora
     }
 
     @Override
-    public String getShortVersion() {
+    public void provideShortDisplayText(TextFormatter formatter) {
         // TODO
-        return null;
     }
 
     @Override
-    public String getHTMLVersion(TextFormatter formatter) {
+    public void provideFullDisplayText(TextFormatter formatter) {
         // TODO
-        return null;
     }
 
     @Override

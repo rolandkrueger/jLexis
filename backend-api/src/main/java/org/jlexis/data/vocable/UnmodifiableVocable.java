@@ -80,12 +80,12 @@ public final class UnmodifiableVocable extends Vocable {
             throw new UnsupportedOperationException("Not supported.");
         }
 
-        public final String getHTMLVersion(TextFormatter formatter) {
-            return data.getHTMLVersion(formatter);
+        public final void provideFullDisplayText(TextFormatter formatter) {
+            data.provideFullDisplayText(formatter);
         }
 
-        public final String getShortVersion() {
-            return data.getShortVersion();
+        public final void provideShortDisplayText(TextFormatter formatter) {
+            data.provideShortDisplayText(formatter);
         }
 
         public final AbstractTerm getUserInput(RegisteredVocableDataKey key) {

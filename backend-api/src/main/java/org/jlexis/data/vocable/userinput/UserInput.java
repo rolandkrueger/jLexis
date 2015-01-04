@@ -36,7 +36,7 @@ public interface UserInput {
      *
      * @return a short summary of this {@link AbstractUserInput}
      */
-    String getShortVersion();
+    void provideShortDisplayText(TextFormatter formatter);
 
     /**
      * Provides a piece of HTML-formatted text containing the information of this {@link AbstractUserInput}. This text
@@ -44,7 +44,7 @@ public interface UserInput {
      *
      * @return a HTML-version of this {@link AbstractUserInput}'s data
      */
-    String getHTMLVersion(TextFormatter formatter);
+    void provideFullDisplayText(TextFormatter formatter);
 
     /**
      * Returns <code>true</code> if there is no user data available from this {@link AbstractUserInput} or in other

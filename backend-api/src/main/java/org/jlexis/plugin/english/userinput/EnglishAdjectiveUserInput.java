@@ -61,7 +61,7 @@ public class EnglishAdjectiveUserInput extends AbstractEnglishPluginUserInput {
     }
 
     @Override
-    public String getHTMLVersion(TextFormatter formatter) {
+    public void provideFullDisplayText(TextFormatter formatter) {
         formatter.appendBold(adjectiveStandardInputBE.getPositiveResolvedAndPurged());
         if (adjectiveStandardInputBE.isComparativeDataDefined())
             formatter.append(", ").appendItalic("comp. ").appendBold(adjectiveStandardInputBE.getComparativeResolvedAndPurged());
@@ -90,13 +90,14 @@ public class EnglishAdjectiveUserInput extends AbstractEnglishPluginUserInput {
         }
 
         if (getStandardInputBE().isAnyTextInputDefined()) {
-            getStandardInputBE().getHTMLVersion(formatter, "(BrE)");
+            getStandardInputBE().provideFullDisplayText(formatter);//, "(BrE)");
         }
         if (getStandardInputAE().isAnyTextInputDefined()) {
-            getStandardInputAE().getHTMLVersion(formatter, "(AmE)");
+            getStandardInputAE().provideFullDisplayText(formatter);//, "(AmE)");
         }
 
-        return formatter.getFormattedText().toString();
+        // FIXME: result for old signature
+//        return formatter.getFormattedText().toString();
     }
 
     @Override
@@ -172,7 +173,7 @@ public class EnglishAdjectiveUserInput extends AbstractEnglishPluginUserInput {
     }
 
     @Override
-    public String getShortVersion() {
+    public void provideShortDisplayText(TextFormatter formatter) {
         StringBuilder buf = new StringBuilder();
         buf.append(adjectiveStandardInputBE.getPositiveResolvedAndPurged());
         if (adjectiveStandardInputBE.isComparativeDataDefined())
@@ -190,7 +191,9 @@ public class EnglishAdjectiveUserInput extends AbstractEnglishPluginUserInput {
                 buf.append(", ").append(adjectiveStandardInputAE.getSuperlativeResolvedAndPurged());
             buf.append(" (AmE)");
         }
-        return buf.toString();
+
+        // FIXME: result for old signature
+//        return buf.toString();
     }
 
     public String getPositiveBE() {
