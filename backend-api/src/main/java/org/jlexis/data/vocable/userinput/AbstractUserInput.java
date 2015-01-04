@@ -166,6 +166,16 @@ public abstract class AbstractUserInput implements UserInput {
         return userInputIdentifier;
     }
 
+    /**
+     * Replace the data from this user input with the data from the given user input.
+     *
+     * @param userInput
+     *         user input object that has to correspond to this user input as specified by method {@link
+     *         org.jlexis.data.vocable.userinput.UserInput#correspondsTo(UserInput)}
+     * @throws java.lang.IllegalArgumentException
+     *         if the given user input does not correspond to this user input as specified by method {@link
+     *         org.jlexis.data.vocable.userinput.UserInput#correspondsTo(UserInput)}
+     */
     public void replace(AbstractUserInput userInput) {
         checkArgument(correspondsTo(userInput), "cannot replace: this user input type does not correspond to the " +
                 "given user input");

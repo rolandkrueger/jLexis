@@ -85,8 +85,6 @@ public interface UserInput {
 
     String getUserInputIdentifier();
 
-    void replace(AbstractUserInput userInput);
-
     VocableVerificationData getQuizVerificationData();
 
     void registerKeyForWordStem(RegisteredVocableDataKey key);

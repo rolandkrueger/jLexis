@@ -28,7 +28,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import org.jlexis.data.vocable.RegisteredVocableDataKey;
 import org.jlexis.data.vocable.terms.AbstractTerm;
-import org.jlexis.data.vocable.userinput.AbstractUserInput;
 import org.jlexis.data.vocable.userinput.UserInput;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
 import org.jlexis.roklib.TextFormatter;
@@ -92,11 +91,6 @@ public abstract class AbstractStandardUserInputDecorator implements UserInput {
     @Override
     public String getUserInputIdentifier() {
         return getDelegate().getUserInputIdentifier();
-    }
-
-    @Override
-    public void replace(AbstractUserInput userInput) {
-        getDelegate().replace(userInput);
     }
 
     @Override

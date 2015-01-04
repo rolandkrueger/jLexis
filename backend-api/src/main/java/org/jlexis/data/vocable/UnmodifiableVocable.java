@@ -107,10 +107,6 @@ public final class UnmodifiableVocable extends Vocable {
             return data.correspondsTo(other);
         }
 
-        public final void replace(AbstractUserInput userInput) {
-            throw new UnsupportedOperationException("This object cannot be modified.");
-        }
-
         @Override
         public VocableVerificationData getQuizVerificationData() {
             return data.getQuizVerificationData();
