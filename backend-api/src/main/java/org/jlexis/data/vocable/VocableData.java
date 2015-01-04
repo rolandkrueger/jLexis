@@ -25,10 +25,12 @@ package org.jlexis.data.vocable;
 
 
 import org.jlexis.data.languages.Language;
-import org.jlexis.data.vocable.userinput.AbstractUserInput;
 import org.jlexis.data.vocable.userinput.DBO_AbstractUserInput;
+import org.jlexis.data.vocable.userinput.UserInput;
 
 import java.util.Optional;
+
+import static com.google.common.base.Preconditions.*;
 
 /**
  * This class represents the language specific part of a {@link Vocable} object. An object of type {@link VocableData}
@@ -38,25 +40,24 @@ import java.util.Optional;
  * @author Roland Krueger
  */
 public class VocableData {
-    private AbstractWordType mWordType;
-    private AbstractUserInput mUserInput;
-    private Language mForLanguage;
-
-    private Optional<String> mWordTypeIdentifier;
-    private DBO_AbstractUserInput mUserInputFromDatabase;
-    private long mId;
-
     /**
      * The language of the given user input.
      */
+    private Language forLanguage;
     /**
      * The concrete input the user has given for this language.
      */
+    private UserInput userInput;
     /**
      * The word type that the user input represents. This defines verbs, nouns, adjectives, etc.
      */
+    private AbstractWordType wordType;
+
+    private Optional<String> wordTypeIdentifier;
+    private long id;
+
     private VocableData() {
-        mWordTypeIdentifier = Optional.empty();
+        wordTypeIdentifier = Optional.empty();
     }
 
     /**
@@ -65,44 +66,35 @@ public class VocableData {
      * @param userInput
      *         the data entered by the user
      */
-    public VocableData(Language forLanguage, AbstractWordType wordType, AbstractUserInput data) {
+    public VocableData(Language forLanguage, AbstractWordType wordType, UserInput userInput) {
         this();
-//        CheckForNull.check(forLanguage, wordType, data);
-
-        mForLanguage = forLanguage;
-        mWordType = wordType;
-        mUserInput = data;
-        setWordTypeIdentifier(mWordType.getIdentifier());
+        this.forLanguage = checkNotNull(forLanguage);
+        this.wordType = checkNotNull(wordType);
+        this.userInput = checkNotNull(userInput);
+        setWordTypeIdentifier(this.wordType.getIdentifier());
     }
 
     /**
      * @return the {@link Language} object for this {@link VocableData}
      */
     public Language getLanguage() {
-        if (mForLanguage == null)
-            throw new IllegalStateException("Language object not available.");
-
-        return mForLanguage;
+        return forLanguage;
     }
 
-    public void setLanguage(Language language) {
-        mForLanguage = language;
-    }
-
-    public AbstractUserInput getUserInput() {
+    public UserInput getUserInput() {
 //        TODO: refactor
-//        if (mUserInput == null && mUserInputFromDatabase == null)
+//        if (userInput == null && mUserInputFromDatabase == null)
 //            throw new IllegalStateException("Unable to provide data: both data objects are null.");
 //
-//        if (mUserInput == null) {
+//        if (userInput == null) {
 //            // TODO: ensure that the used word type identifier is never unknown for the plugin
-//            AbstractWordType wordType = mForLanguage.getLanguagePlugin().get().getWordTypeFor(mWordTypeIdentifier.get());
+//            AbstractWordType wordType = forLanguage.getLanguagePlugin().get().getWordTypeFor(wordTypeIdentifier.get());
 //            assert wordType != null;
-//            mUserInput = wordType.createUserInputObject();
-//            mUserInput.setDatabaseObject(mUserInputFromDatabase);
+//            userInput = wordType.createUserInputObject();
+//            userInput.setDatabaseObject(mUserInputFromDatabase);
 //        }
 
-        return mUserInput;
+        return userInput;
     }
 
     @SuppressWarnings("unused")
@@ -122,28 +114,16 @@ public class VocableData {
         return null;
     }
 
-    @SuppressWarnings("unused")
-    private void setDatabaseObject(DBO_AbstractUserInput userInputFromDatabase) {
-        mUserInputFromDatabase = userInputFromDatabase;
-    }
-
     public boolean isEmpty() {
-        return mUserInput.isEmpty();
-    }
-
-    public void replaceInput(VocableData otherData) {
-        if (!getWordType().getClass().equals(otherData.getWordType().getClass()))
-            throw new IllegalArgumentException("Replacement vocable data doesn't have the same word type.");
-
-        getUserInput().replace(otherData.getUserInput());
+        return userInput.isEmpty();
     }
 
     public AbstractWordType getWordType() {
-        if (mWordType == null) {
-            if (mWordTypeIdentifier.isPresent()) {
-                mWordType = getLanguage().getLanguagePlugin().get()
-                        .getWordTypeFor(mWordTypeIdentifier.get());
-                if (mWordType == null) {
+        if (wordType == null) {
+            if (wordTypeIdentifier.isPresent()) {
+                wordType = getLanguage().getLanguagePlugin().get()
+                        .getWordTypeFor(wordTypeIdentifier.get());
+                if (wordType == null) {
                     throw new IllegalStateException("Unable to obtain AbstractWordType object.");
                 }
             } else {
@@ -151,7 +131,7 @@ public class VocableData {
             }
         }
 
-        return mWordType;
+        return wordType;
     }
 
     public String getWordTypeIdentifier() {
@@ -162,16 +142,16 @@ public class VocableData {
         if (wordTypeIdentifier == null)
             throw new IllegalArgumentException("Argument is null.");
 
-        mWordTypeIdentifier = Optional.of(wordTypeIdentifier);
+        this.wordTypeIdentifier = Optional.of(wordTypeIdentifier);
     }
 
     @SuppressWarnings("unused")
     private long getId() {
-        return mId;
+        return id;
     }
 
     @SuppressWarnings("unused")
     private void setId(long id) {
-        mId = id;
+        this.id = id;
     }
 }

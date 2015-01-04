@@ -25,13 +25,12 @@ package org.jlexis.data.vocable;
 import org.jlexis.data.languages.Language;
 import org.jlexis.data.vocable.terms.AbstractTerm;
 import org.jlexis.data.vocable.terms.UnmodifiableTerm;
-import org.jlexis.data.vocable.userinput.AbstractUserInput;
 import org.jlexis.data.vocable.userinput.DBO_AbstractUserInput;
 import org.jlexis.data.vocable.userinput.UserInput;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
 import org.jlexis.roklib.TextFormatter;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
  * @author Roland Krueger
@@ -40,13 +39,12 @@ public final class UnmodifiableVocable extends Vocable {
     private static final long serialVersionUID = -4235951974726789314L;
 
     public UnmodifiableVocable(Vocable data) {
-        super();
-        this.mData = data.mData;
+        super(data);
         setId(data.getId());
     }
 
     @Override
-    public final void addVariant(Language forLanguage, AbstractWordType wordType, AbstractUserInput data) {
+    public final void addVariant(Language forLanguage, AbstractWordType wordType, UserInput userInput) {
         throw new UnsupportedOperationException("This object cannot be modified.");
     }
 
@@ -76,6 +74,7 @@ public final class UnmodifiableVocable extends Vocable {
             return new UnmodifiableUserInput(data);
         }
 
+        @Deprecated
         public final DBO_AbstractUserInput getDatabaseObject() {
             throw new UnsupportedOperationException("Not supported.");
         }

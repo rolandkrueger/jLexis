@@ -23,30 +23,27 @@
  */
 package org.jlexis.data.vocable;
 
-import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import org.jlexis.data.vocable.userinput.AbstractUserInput;
 import org.jlexis.data.vocable.userinput.UserInput;
 
 import java.util.Objects;
 
+import static com.google.common.base.Preconditions.*;
+
 public abstract class AbstractWordType {
     private String name;
     private String identifier;
     private AbstractUserInput userInputPrototype;
 
-    protected AbstractWordType(String name, String identifier, AbstractUserInput userInputForThisWordType) {
-        if (Strings.isNullOrEmpty(identifier)) {
-            throw new IllegalArgumentException("Identifier must not be null or the empty string.");
-        }
+    protected AbstractWordType(String name, String identifier, AbstractUserInput userInputPrototype) {
+        this.name = checkNotNull(name);
+        this.userInputPrototype = checkNotNull(userInputPrototype);
 
-        this.name = Objects.requireNonNull(name);
+        checkArgument(! Strings.isNullOrEmpty(identifier), "Identifier must not be null or the empty string.");
         this.identifier = identifier;
-        userInputPrototype = Preconditions.checkNotNull(userInputForThisWordType);
-    }
 
-//    TODO: fix me
-//    public abstract AbstractVocableInputPanel getInputPanel();
+    }
 
     /**
      * Provides the concrete word class enum value that this object represents.
@@ -88,10 +85,6 @@ public abstract class AbstractWordType {
     public boolean equals(Object obj) {
         if (obj == null) return false;
         if (obj == this) return true;
-        if (obj instanceof AbstractWordType) {
-            AbstractWordType other = (AbstractWordType) obj;
-            return identifier.equals(other.identifier);
-        }
-        return false;
+        return obj instanceof AbstractWordType && Objects.equals(identifier, ((AbstractWordType) obj).identifier);
     }
 }

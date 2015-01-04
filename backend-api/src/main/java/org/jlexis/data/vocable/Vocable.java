@@ -26,13 +26,12 @@ package org.jlexis.data.vocable;
 
 
 import org.jlexis.data.languages.Language;
-import org.jlexis.data.vocable.userinput.AbstractUserInput;
 import org.jlexis.data.vocable.userinput.UserInput;
 
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -43,13 +42,17 @@ import java.util.Map;
  * @see VocableData
  */
 public class Vocable implements Serializable {
-    private static final long serialVersionUID = -5117218170042020375L;
+    private static final long serialVersionUID = - 5117218170042020375L;
 
-    protected Map<Language, VocableData> mData;
-    private long mId;
+    private Map<Language, VocableData> data;
+    private long id;
+
+    protected Vocable(Vocable other) {
+        this.data = other.data;
+    }
 
     public Vocable() {
-        mData = new Hashtable<Language, VocableData>();
+        data = new HashMap<>();
     }
 
     /**
@@ -65,31 +68,30 @@ public class Vocable implements Serializable {
      * @param userInput
      *         the user input
      */
-    public void addVariant(Language forLanguage, AbstractWordType wordType, AbstractUserInput data) {
+    public void addVariant(Language forLanguage, AbstractWordType wordType, UserInput userInput) {
         removeDataFor(forLanguage);
-        mData.put(forLanguage, new VocableData(forLanguage, wordType, data));
+        data.put(forLanguage, new VocableData(forLanguage, wordType, userInput));
     }
 
     public UserInput getVariantInput(Language forLanguage) {
-        if (!mData.containsKey(forLanguage)) {
+        if (! data.containsKey(forLanguage)) {
             throw new IllegalArgumentException(String.format("Language %s is not defined for this Vocable object.",
                     forLanguage));
         }
 
-        AbstractUserInput result = mData.get(forLanguage).getUserInput();
-        return result;
+        return data.get(forLanguage).getUserInput();
     }
 
     public AbstractWordType getVariantWordType(Language forLanguage) {
-        if (!mData.containsKey(forLanguage))
+        if (! data.containsKey(forLanguage))
             throw new IllegalArgumentException(String.format("Language %s is not defined for this Vocable object.",
                     forLanguage.getName()));
 
-        return mData.get(forLanguage).getWordType();
+        return data.get(forLanguage).getWordType();
     }
 
     private VocableData removeDataFor(Language plugin) {
-        return mData.remove(plugin);
+        return data.remove(plugin);
     }
 
     /**
@@ -100,16 +102,17 @@ public class Vocable implements Serializable {
      *         a {@link Vocable} object the data of which is to be copied into this object
      */
     public void replace(Vocable voc) {
-        for (Language lang : mData.keySet()) {
-            VocableData otherData = voc.mData.get(lang);
-            if (otherData == null)
-                throw new IllegalArgumentException("Unable to replace vocable data. Given vocable object does not match.");
-            VocableData thisData = mData.get(lang);
-            thisData.replaceInput(otherData);
-        }
+        // TODO
+//        for (Language lang : data.keySet()) {
+//            VocableData otherData = voc.data.get(lang);
+//            if (otherData == null)
+//                throw new IllegalArgumentException("Unable to replace vocable data. Given vocable object does not match.");
+//            VocableData thisData = data.get(lang);
+//            thisData.replaceInput(otherData);
+//        }
 
-//    mData.clear ();
-//    mData.putAll (voc.mData);
+//    data.clear ();
+//    data.putAll (voc.data);
     }
 
     /**
@@ -119,14 +122,10 @@ public class Vocable implements Serializable {
      * @return <code>true</code> if this vocable doesn't contain any user-provided data
      */
     public boolean isEmpty() {
-        for (VocableData dataElement : mData.values()) {
-            if (!dataElement.isEmpty()) return false;
+        for (VocableData dataElement : data.values()) {
+            if (! dataElement.isEmpty()) return false;
         }
         return true;
-    }
-
-    protected Map<Language, VocableData> getVocableData() {
-        return mData;
     }
 
     /**
@@ -140,18 +139,18 @@ public class Vocable implements Serializable {
     private void setVocableData(Map<Language, VocableData> data) {
         // TODO: check if the following will result in problems with Hibernate, due to copying the map
         // instead of assigning it.
-        mData.putAll(data);
+        this.data.putAll(data);
     }
 
     public Collection<Language> getLanguages() {
-        return Collections.unmodifiableCollection(mData.keySet());
+        return Collections.unmodifiableCollection(data.keySet());
     }
 
     protected long getId() {
-        return mId;
+        return id;
     }
 
     protected void setId(long id) {
-        mId = id;
+        this.id = id;
     }
 }

@@ -39,12 +39,6 @@ public class DefaultWordType extends AbstractWordType {
         super(mName, "default", new DefaultUserInput());
     }
 
-    //        TODO: fix me
-//    @Override
-//    public AbstractVocableInputPanel getInputPanel() {
-//        return new DefaultVocableInputPanel();
-//    }
-
     @Override
     public WordTypeEnum getWordTypeEnum() {
         return WordTypeEnum.DEFAULT;

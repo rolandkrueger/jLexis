@@ -23,6 +23,7 @@
  */
 package org.jlexis.data.languages;
 
+import com.google.common.base.MoreObjects;
 import org.jlexis.plugin.LanguagePlugin;
 import org.jlexis.plugin.PluginIdentifier;
 
@@ -80,10 +81,6 @@ public class Language {
         return languageName;
     }
 
-    public void setLanguageName(String languageName) {
-        this.languageName = Objects.requireNonNull(languageName);
-    }
-
     @Deprecated
     public Optional<LanguagePlugin> getLanguagePlugin() {
         // TODO delete me
@@ -96,7 +93,7 @@ public class Language {
 
     @Override
     public String toString() {
-        return com.google.common.base.Objects.toStringHelper(this).add("name", languageName).toString();
+        return MoreObjects.toStringHelper(this).add("name", languageName).toString();
     }
 
     @Override
