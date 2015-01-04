@@ -23,17 +23,15 @@
  */
 package org.jlexis.plugin.english.userinput;
 
-import org.jlexis.data.vocable.userinput.AbstractUserInput;
 import org.jlexis.data.vocable.RegisteredVocableDataKey;
-import org.jlexis.data.vocable.userinput.standard.StandardAdjectiveUserInputDecorator;
 import org.jlexis.data.vocable.terms.AbstractTerm;
+import org.jlexis.data.vocable.userinput.AbstractUserInput;
+import org.jlexis.data.vocable.userinput.standard.StandardAdjectiveUserInputDecorator;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
 import org.jlexis.data.vocable.verification.VocableVerificationData.DataWithMandatoryTermsBuilder;
 import org.jlexis.roklib.HTMLTextFormatter;
 import org.jlexis.roklib.TextFormatter;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -50,16 +48,6 @@ public class EnglishAdjectiveUserInput extends AbstractEnglishPluginUserInput {
         super(INPUT_ID);
         adjectiveStandardInputBE = new StandardAdjectiveUserInputDecorator(this, "BE");
         adjectiveStandardInputAE = new StandardAdjectiveUserInputDecorator(this, "AE");
-    }
-
-    @Override
-    protected RegisteredVocableDataKey[] getUserInputIdentifiersImpl() {
-        List<RegisteredVocableDataKey> userInputIDs = new ArrayList<>(16);
-        userInputIDs.addAll(Arrays.asList(adjectiveStandardInputBE.getUserInputIdentifiers()));
-        userInputIDs.addAll(Arrays.asList(adjectiveStandardInputAE.getUserInputIdentifiers()));
-        userInputIDs.add(ADJECTIVE_USAGE_BE);
-        userInputIDs.add(ADJECTIVE_USAGE_AE);
-        return userInputIDs.toArray(new RegisteredVocableDataKey[userInputIDs.size()]);
     }
 
     @Override

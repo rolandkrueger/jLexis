@@ -59,8 +59,6 @@ public abstract class AbstractStandardUserInputDecorator implements UserInput {
 
     public abstract boolean isAnyTextInputDefined();
 
-    public abstract RegisteredVocableDataKey[] getUserInputIdentifiers();
-
     public abstract void getHTMLVersion(TextFormatter formatter, String addOn);
 
     @Override

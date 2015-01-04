@@ -71,11 +71,6 @@ public class StandardUserInputDecorator extends AbstractStandardUserInputDecorat
     }
 
     @Override
-    public final RegisteredVocableDataKey[] getUserInputIdentifiers() {
-        return new RegisteredVocableDataKey[]{commentKey, exampleKey, phoneticsKey, pronunciationKey};
-    }
-
-    @Override
     public void init() {
         getDelegate().init();
     }

@@ -97,11 +97,6 @@ public class StandardAdjectiveUserInputDecorator extends AbstractStandardUserInp
     }
 
     @Override
-    public final RegisteredVocableDataKey[] getUserInputIdentifiers() {
-        return new RegisteredVocableDataKey[]{positiveKey, comparativeKey, superlativeKey, isNotComparableKey, isIrregularKey};
-    }
-
-    @Override
     public void init() {
         getDelegate().init();
     }

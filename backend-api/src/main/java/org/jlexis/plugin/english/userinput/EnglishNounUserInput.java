@@ -70,14 +70,6 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     }
 
     @Override
-    protected RegisteredVocableDataKey[] getUserInputIdentifiersImpl() {
-        return new RegisteredVocableDataKey[]{NOUN_SINGULAR_TERM_KEY_BE, NOUN_PLURAL_TERM_KEY_BE,
-                COUNTABILITY_KEY_BE, SINGULAR_PLURAL_TYPE_KEY_BE, IRREGULAR_PLURAL_KEY_BE, IRREGULAR_PLURAL_PHONETICS_KEY_BE,
-                NOUN_SINGULAR_TERM_KEY_AE, NOUN_PLURAL_TERM_KEY_AE, COUNTABILITY_KEY_AE,
-                SINGULAR_PLURAL_TYPE_KEY_AE, IRREGULAR_PLURAL_KEY_AE, IRREGULAR_PLURAL_PHONETICS_KEY_AE};
-    }
-
-    @Override
     public AbstractUserInput createUserInputObject() {
         return new EnglishNounUserInput();
     }

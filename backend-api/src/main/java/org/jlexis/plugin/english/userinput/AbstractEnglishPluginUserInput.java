@@ -23,7 +23,6 @@
  */
 package org.jlexis.plugin.english.userinput;
 
-import org.jlexis.data.vocable.RegisteredVocableDataKey;
 import org.jlexis.data.vocable.userinput.AbstractUserInput;
 import org.jlexis.data.vocable.userinput.DefaultUserInput;
 import org.jlexis.data.vocable.userinput.UserInput;
@@ -38,8 +37,6 @@ public abstract class AbstractEnglishPluginUserInput extends AbstractUserInput {
         mStandardInputBE = new StandardUserInputDecorator(this, "BE");
         mStandardInputAE = new StandardUserInputDecorator(this, "AE");
     }
-
-    protected abstract RegisteredVocableDataKey[] getUserInputIdentifiersImpl();
 
     protected abstract boolean isEmptyImpl();
 
