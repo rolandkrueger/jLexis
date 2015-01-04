@@ -51,8 +51,8 @@ public abstract class AbstractWordClass {
     public abstract WordClassEnum getWordTypeEnum();
 
     /**
-     * Factory method for creating the user input object that corresponds to this word type.
-     * @return a new user input object that corresponds to this word type.
+     * Factory method for creating the user input object that corresponds to this word class.
+     * @return a new user input object that corresponds to this word class.
      */
     public final UserInput createNewUserInputObject() {
         UserInput result = userInputPrototype.createUserInputObject();

@@ -29,10 +29,10 @@ import org.jlexis.data.vocable.userinput.DefaultUserInput;
 import org.jlexis.data.vocable.WordClassEnum;
 
 /**
- * This is the most basic word type that can be possibly used. It does not belong to a particular word class ({@link
+ * This is the most basic word class that can be possibly used. It does not belong to a particular word class ({@link
  * org.jlexis.data.vocable.WordClassEnum#DEFAULT}) and uses a {@link org.jlexis.data.vocable.userinput
- * .DefaultUserInput} object for storing user input. This word type is typically used by default or when no other,
- * better fitting word type could be found in certain situations.
+ * .DefaultUserInput} object for storing user input. This word class is typically used by default or when no other,
+ * better fitting word class could be found in certain situations.
  */
 public class DefaultWordClass extends AbstractWordClass {
     public DefaultWordClass(String mName) {
