@@ -314,8 +314,8 @@ public class EnglishAdjectiveUserInput extends AbstractEnglishPluginUserInput {
     public void init() {
         setAdjectiveUsageBE(AdjectiveUsage.UNSPECIFIED);
         setAdjectiveUsageAE(AdjectiveUsage.UNSPECIFIED);
-        adjectiveStandardInputBE.initWordStemFields();
-        adjectiveStandardInputAE.initWordStemFields();
+        adjectiveStandardInputBE.init();
+        adjectiveStandardInputAE.init();
     }
 
     public enum AdjectiveUsage {

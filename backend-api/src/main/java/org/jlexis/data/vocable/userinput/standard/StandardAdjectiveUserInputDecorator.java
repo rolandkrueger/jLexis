@@ -90,15 +90,12 @@ public class StandardAdjectiveUserInputDecorator extends AbstractUserInputDecora
         return superlativeKey;
     }
 
-    public void initWordStemFields() {
-        registerKeyForWordStem(positiveKey);
-        registerKeyForInflectedTerm(positiveKey, comparativeKey);
-        registerKeyForInflectedTerm(positiveKey, superlativeKey);
-    }
-
     @Override
     public void init() {
         getDelegate().init();
+        registerKeyForWordStem(positiveKey);
+        registerKeyForInflectedTerm(positiveKey, comparativeKey);
+        registerKeyForInflectedTerm(positiveKey, superlativeKey);
     }
 
     @Override
@@ -117,6 +114,14 @@ public class StandardAdjectiveUserInputDecorator extends AbstractUserInputDecora
                 getUserInput(positiveKey).isEmpty() &&
                 getUserInput(comparativeKey).isEmpty() &&
                 getUserInput(superlativeKey).isEmpty();
+    }
+
+    @Override
+    public boolean isAnyTextInputDefined() {
+        return getDelegate().isAnyTextInputDefined() ||
+                isPositiveDataDefined() ||
+                isComparativeDataDefined() ||
+                isSuperlativeDataDefined();
     }
 
     public String getPositive() {
@@ -181,15 +186,5 @@ public class StandardAdjectiveUserInputDecorator extends AbstractUserInputDecora
 
     public boolean isSuperlativeDataDefined() {
         return getDelegate().isInputDefinedFor(superlativeKey);
-    }
-
-    @Override
-    public boolean isAnyTextInputDefined() {
-        return isPositiveDataDefined() || isComparativeDataDefined() || isSuperlativeDataDefined();
-    }
-
-    public void getHTMLVersion(TextFormatter formatter, String addOn) {
-        // TODO implement
-        throw new RuntimeException("not yet implemented");
     }
 }
