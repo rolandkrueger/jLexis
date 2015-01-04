@@ -26,12 +26,11 @@ package org.jlexis.data.vocable.userinput;
 
 
 import org.jlexis.data.vocable.RegisteredVocableDataKey;
-import org.jlexis.data.vocable.userinput.standard.AbstractStandardUserInput;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
 import org.jlexis.roklib.HTMLTextFormatter;
 import org.jlexis.roklib.TextFormatter;
 
-public class DefaultUserInput extends AbstractStandardUserInput {
+public class DefaultUserInput extends AbstractUserInput {
     private static final String INPUT_ID = DefaultUserInput.class.getCanonicalName();
     public static final RegisteredVocableDataKey TERM_KEY = new RegisteredVocableDataKey(INPUT_ID + ".TERM");
 
@@ -39,16 +38,12 @@ public class DefaultUserInput extends AbstractStandardUserInput {
         super(INPUT_ID);
     }
 
-//    @Override
-//    protected String[] getUserInputIdentifiersImpl() {
-//        return new String[]{TERM_KEY};
-//    }
-
     @Override
     public String getHTMLVersion() {
         TextFormatter formatter = new TextFormatter(new HTMLTextFormatter());
         formatter.appendBold(getUserInput(TERM_KEY).getUserEnteredString());
-        getStandardUserInputDataHandler().getHTMLVersion(formatter, "");
+//        FIXME
+//        getStandardUserInputDataHandler().getHTMLVersion(formatter, "");
         return formatter.getFormattedText().toString();
     }
 
@@ -58,7 +53,7 @@ public class DefaultUserInput extends AbstractStandardUserInput {
     }
 
     @Override
-    protected boolean isEmptyImpl() {
+    public boolean isEmpty() {
         return getUserInput(TERM_KEY).isEmpty();
     }
 
@@ -69,8 +64,10 @@ public class DefaultUserInput extends AbstractStandardUserInput {
 
     @Override
     public VocableVerificationData getQuizVerificationData() {
-        VocableVerificationData result = VocableVerificationData.create().withoutAbbreviationVariants().addMandatoryTerm(getUserInput(TERM_KEY)).build();
-        return result;
+        return VocableVerificationData.create()
+                .withoutAbbreviationVariants()
+                .addMandatoryTerm(getUserInput(TERM_KEY))
+                .build();
     }
 
     @Override

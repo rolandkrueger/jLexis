@@ -25,7 +25,7 @@ package org.jlexis.plugin.english.userinput;
 
 import org.jlexis.data.vocable.userinput.AbstractUserInput;
 import org.jlexis.data.vocable.RegisteredVocableDataKey;
-import org.jlexis.data.vocable.userinput.standard.StandardAdjectiveUserInputDataHandler;
+import org.jlexis.data.vocable.userinput.standard.StandardAdjectiveUserInputDecorator;
 import org.jlexis.data.vocable.terms.AbstractTerm;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
 import org.jlexis.data.vocable.verification.VocableVerificationData.DataWithMandatoryTermsBuilder;
@@ -43,13 +43,13 @@ public class EnglishAdjectiveUserInput extends AbstractEnglishPluginUserInput {
             ".ADJECTIVE_USAGE_BE");
     private final static RegisteredVocableDataKey ADJECTIVE_USAGE_AE = new RegisteredVocableDataKey(INPUT_ID + "" +
             ".ADJECTIVE_USAGE_AE");
-    private StandardAdjectiveUserInputDataHandler adjectiveStandardInputBE;
-    private StandardAdjectiveUserInputDataHandler adjectiveStandardInputAE;
+    private StandardAdjectiveUserInputDecorator adjectiveStandardInputBE;
+    private StandardAdjectiveUserInputDecorator adjectiveStandardInputAE;
 
     public EnglishAdjectiveUserInput() {
         super(INPUT_ID);
-        adjectiveStandardInputBE = new StandardAdjectiveUserInputDataHandler(this, "BE");
-        adjectiveStandardInputAE = new StandardAdjectiveUserInputDataHandler(this, "AE");
+        adjectiveStandardInputBE = new StandardAdjectiveUserInputDecorator(this, "BE");
+        adjectiveStandardInputAE = new StandardAdjectiveUserInputDecorator(this, "AE");
     }
 
     @Override

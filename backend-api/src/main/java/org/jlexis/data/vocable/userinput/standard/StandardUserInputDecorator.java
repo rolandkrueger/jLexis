@@ -24,15 +24,14 @@
  */
 package org.jlexis.data.vocable.userinput.standard;
 
-import org.jlexis.data.vocable.userinput.AbstractUserInput;
 import org.jlexis.data.vocable.RegisteredVocableDataKey;
+import org.jlexis.data.vocable.userinput.UserInput;
 import org.jlexis.roklib.TextFormatter;
 
 /**
  * @author Roland Krueger
- * @version $Id: $
  */
-public class StandardUserInputDataHandler extends AbstractStandardUserInputDataHandler {
+public class StandardUserInputDecorator extends AbstractStandardUserInputDecorator {
     private final static String COMMENT_KEY = ".COMMENT";
     private final static String EXAMPLE_KEY = ".EXAMPLE";
     private final static String PHONETICS_KEY = ".PHONETICS";
@@ -43,16 +42,16 @@ public class StandardUserInputDataHandler extends AbstractStandardUserInputDataH
     private RegisteredVocableDataKey phoneticsKey;
     private RegisteredVocableDataKey pronunciationKey;
 
-    public StandardUserInputDataHandler(AbstractUserInput parent, String userInputIdentifierExtension) {
-        super(parent, userInputIdentifierExtension);
+    public StandardUserInputDecorator(UserInput delegate, String userInputIdentifierExtension) {
+        super(delegate, userInputIdentifierExtension);
         commentKey = getUniqueIdentifier(COMMENT_KEY);
         exampleKey = getUniqueIdentifier(EXAMPLE_KEY);
         phoneticsKey = getUniqueIdentifier(PHONETICS_KEY);
         pronunciationKey = getUniqueIdentifier(PRONUNCIATION_KEY);
     }
 
-    public StandardUserInputDataHandler(AbstractUserInput parent) {
-        this(parent, null);
+    public StandardUserInputDecorator(UserInput delegate) {
+        this(delegate, null);
     }
 
     public RegisteredVocableDataKey getCommentFieldKey() {
@@ -77,59 +76,80 @@ public class StandardUserInputDataHandler extends AbstractStandardUserInputDataH
     }
 
     @Override
+    public void init() {
+        getDelegate().init();
+    }
+
+    @Override
+    public String getShortVersion() {
+        return null;
+    }
+
+    @Override
+    public String getHTMLVersion() {
+        return null;
+    }
+
+    @Override
     public final boolean isEmpty() {
-        return getParent().getUserInput(commentKey).isEmpty() &&
-                getParent().getUserInput(exampleKey).isEmpty() &&
-                getParent().getUserInput(phoneticsKey).isEmpty() &&
-                getParent().getUserInput(pronunciationKey).isEmpty();
+        return getUserInput(commentKey).isEmpty() &&
+                getUserInput(exampleKey).isEmpty() &&
+                getUserInput(phoneticsKey).isEmpty() &&
+                getUserInput(pronunciationKey).isEmpty();
     }
 
     public final String getComment() {
-        return getParent().getUserInput(commentKey).getUserEnteredString();
+        return getUserInput(commentKey).getUserEnteredString();
     }
 
     public final void setComment(String comment) {
-        getParent().addUserInput(commentKey, comment);
+        addUserInput(commentKey, comment);
     }
 
     public final String getExample() {
-        return getParent().getUserInput(exampleKey).getUserEnteredString();
+        return getUserInput(exampleKey).getUserEnteredString();
     }
 
     public final void setExample(String example) {
-        getParent().addUserInput(exampleKey, example);
+        addUserInput(exampleKey, example);
     }
 
     public final String getPhonetics() {
-        return getParent().getUserInput(phoneticsKey).getUserEnteredString();
+        return getUserInput(phoneticsKey).getUserEnteredString();
+    }
+
+    @Deprecated
+    public String getPhoneticsString() {
+        if (!isPhoneticsDefined()) return "";
+        return "[" + getPhonetics() + "]";
     }
 
     public final void setPhonetics(String phonetics) {
-        getParent().addUserInput(phoneticsKey, phonetics);
+        addUserInput(phoneticsKey, phonetics);
     }
 
     public final String getPronunciation() {
-        return getParent().getUserInput(pronunciationKey).getUserEnteredString();
+        return getUserInput(pronunciationKey).getUserEnteredString();
     }
 
     public final void setPronunciation(String pronunciation) {
-        getParent().addUserInput(pronunciationKey, pronunciation);
+        addUserInput(pronunciationKey, pronunciation);
     }
 
     public final boolean isExampleDefined() {
-        return getParent().isInputDefinedFor(exampleKey);
+        return isInputDefinedFor(exampleKey);
     }
 
     public final boolean isCommentDefined() {
-        return getParent().isInputDefinedFor(commentKey);
+        return isInputDefinedFor(commentKey);
     }
 
     public final boolean isPhoneticsDefined() {
-        return getParent().isInputDefinedFor(phoneticsKey);
+        return isInputDefinedFor(phoneticsKey);
     }
 
     public final boolean isPronunciationDefined() {
-        return getParent().isInputDefinedFor(pronunciationKey);
+        return isInputDefinedFor(pronunciationKey);
     }
 
     @Override
