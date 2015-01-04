@@ -31,12 +31,12 @@ import java.util.Objects;
 
 import static com.google.common.base.Preconditions.*;
 
-public abstract class AbstractWordType {
+public abstract class AbstractWordClass {
     private String name;
     private String identifier;
     private AbstractUserInput userInputPrototype;
 
-    protected AbstractWordType(String name, String identifier, AbstractUserInput userInputPrototype) {
+    protected AbstractWordClass(String name, String identifier, AbstractUserInput userInputPrototype) {
         this.name = checkNotNull(name);
         this.userInputPrototype = checkNotNull(userInputPrototype);
 
@@ -48,7 +48,7 @@ public abstract class AbstractWordType {
     /**
      * Provides the concrete word class enum value that this object represents.
      */
-    public abstract WordTypeEnum getWordTypeEnum();
+    public abstract WordClassEnum getWordTypeEnum();
 
     /**
      * Factory method for creating the user input object that corresponds to this word type.
@@ -85,6 +85,6 @@ public abstract class AbstractWordType {
     public boolean equals(Object obj) {
         if (obj == null) return false;
         if (obj == this) return true;
-        return obj instanceof AbstractWordType && Objects.equals(identifier, ((AbstractWordType) obj).identifier);
+        return obj instanceof AbstractWordClass && Objects.equals(identifier, ((AbstractWordClass) obj).identifier);
     }
 }

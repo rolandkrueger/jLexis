@@ -23,7 +23,7 @@
 package org.jlexis.data.vocable.verification;
 
 
-import org.jlexis.data.vocable.AbstractWordType;
+import org.jlexis.data.vocable.AbstractWordClass;
 import org.jlexis.plugin.LanguagePlugin;
 import org.jlexis.plugin.PluginIdentifier;
 import org.jlexis.quiz.data.AbstractQuizType;
@@ -52,12 +52,12 @@ public class LanguagePluginTestImplementation extends LanguagePlugin {
     }
 
     @Override
-    protected AbstractWordType getCorrespondingWordTypeForImpl(AbstractWordType wordType) {
+    protected AbstractWordClass getCorrespondingWordTypeForImpl(AbstractWordClass wordType) {
         return null;
     }
 
     @Override
-    public AbstractWordType getDefaultWordType() {
+    public AbstractWordClass getDefaultWordType() {
         return null;
     }
 

@@ -44,7 +44,7 @@ public final class UnmodifiableVocable extends Vocable {
     }
 
     @Override
-    public final void addVariant(Language forLanguage, AbstractWordType wordType, UserInput userInput) {
+    public final void addVariant(Language forLanguage, AbstractWordClass wordType, UserInput userInput) {
         throw new UnsupportedOperationException("This object cannot be modified.");
     }
 

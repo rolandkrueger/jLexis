@@ -23,7 +23,7 @@
  */
 package org.jlexis.data.vocable;
 
-public enum WordTypeEnum {
+public enum WordClassEnum {
     ADJECTIVE,
     ADPOSITION,
     ADVERB,

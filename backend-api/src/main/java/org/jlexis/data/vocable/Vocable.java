@@ -68,7 +68,7 @@ public class Vocable implements Serializable {
      * @param userInput
      *         the user input
      */
-    public void addVariant(Language forLanguage, AbstractWordType wordType, UserInput userInput) {
+    public void addVariant(Language forLanguage, AbstractWordClass wordType, UserInput userInput) {
         removeDataFor(forLanguage);
         data.put(forLanguage, new VocableData(forLanguage, wordType, userInput));
     }
@@ -82,7 +82,7 @@ public class Vocable implements Serializable {
         return data.get(forLanguage).getUserInput();
     }
 
-    public AbstractWordType getVariantWordType(Language forLanguage) {
+    public AbstractWordClass getVariantWordType(Language forLanguage) {
         if (! data.containsKey(forLanguage))
             throw new IllegalArgumentException(String.format("Language %s is not defined for this Vocable object.",
                     forLanguage.getName()));

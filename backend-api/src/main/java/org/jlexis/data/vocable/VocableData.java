@@ -51,7 +51,7 @@ public class VocableData {
     /**
      * The word type that the user input represents. This defines verbs, nouns, adjectives, etc.
      */
-    private AbstractWordType wordType;
+    private AbstractWordClass wordType;
 
     private Optional<String> wordTypeIdentifier;
     private long id;
@@ -66,7 +66,7 @@ public class VocableData {
      * @param userInput
      *         the data entered by the user
      */
-    public VocableData(Language forLanguage, AbstractWordType wordType, UserInput userInput) {
+    public VocableData(Language forLanguage, AbstractWordClass wordType, UserInput userInput) {
         this();
         this.forLanguage = checkNotNull(forLanguage);
         this.wordType = checkNotNull(wordType);
@@ -118,7 +118,7 @@ public class VocableData {
         return userInput.isEmpty();
     }
 
-    public AbstractWordType getWordType() {
+    public AbstractWordClass getWordType() {
         if (wordType == null) {
             if (wordTypeIdentifier.isPresent()) {
                 wordType = getLanguage().getLanguagePlugin().get()
