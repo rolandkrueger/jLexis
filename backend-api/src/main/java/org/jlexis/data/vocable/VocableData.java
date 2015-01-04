@@ -32,8 +32,8 @@ import java.util.Optional;
 
 /**
  * This class represents the language specific part of a {@link Vocable} object. An object of type {@link VocableData}
- * is bound to exactly one {@link org.jlexis.plugin.LanguagePlugin}. It contains all data for one language (represented
- * by the {@link Language}) in one {@link Vocable}.
+ * is bound to exactly one {@link org.jlexis.data.languages.Language}. It contains all data for one language
+ * (represented by the {@link Language} object) in one {@link Vocable}.
  *
  * @author Roland Krueger
  */
@@ -47,7 +47,13 @@ public class VocableData {
     private long mId;
 
     /**
-     * Private default constructor for Hibernate support.
+     * The language of the given user input.
+     */
+    /**
+     * The concrete input the user has given for this language.
+     */
+    /**
+     * The word type that the user input represents. This defines verbs, nouns, adjectives, etc.
      */
     private VocableData() {
         mWordTypeIdentifier = Optional.empty();
@@ -56,7 +62,8 @@ public class VocableData {
     /**
      * Constructs a {@link VocableData} object from user entered data.
      *
-     * @param data the data entered by the user
+     * @param userInput
+     *         the data entered by the user
      */
     public VocableData(Language forLanguage, AbstractWordType wordType, AbstractUserInput data) {
         this();
@@ -69,9 +76,7 @@ public class VocableData {
     }
 
     /**
-     * Provides the {@link Language} object for this {@link VocableData}.
-     *
-     * @return the {@link Language} for this {@link VocableData}
+     * @return the {@link Language} object for this {@link VocableData}
      */
     public Language getLanguage() {
         if (mForLanguage == null)

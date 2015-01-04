@@ -58,9 +58,12 @@ public class Vocable implements Serializable {
      * vocable. The second argument defines the word type (such as noun, verb, etc.) of the current vocable. The third
      * argument is the data itself.
      *
-     * @param forLanguage the {@link Language
-     * @param wordType    the current word type (verb, noun, etc.)
-     * @param data        the user input
+     * @param forLanguage
+     *         the {@link Language
+     * @param wordType
+     *         the current word type (verb, noun, etc.)
+     * @param userInput
+     *         the user input
      */
     public void addVariant(Language forLanguage, AbstractWordType wordType, AbstractUserInput data) {
         removeDataFor(forLanguage);
@@ -93,7 +96,8 @@ public class Vocable implements Serializable {
      * Removes all data previously added to this {@link Vocable} and replaces it with the data of the provided {@link
      * Vocable} object.
      *
-     * @param voc a {@link Vocable} object the data of which is to be copied into this object
+     * @param voc
+     *         a {@link Vocable} object the data of which is to be copied into this object
      */
     public void replace(Vocable voc) {
         for (Language lang : mData.keySet()) {
@@ -129,7 +133,8 @@ public class Vocable implements Serializable {
      * Setter method for the vocable data. This method is used by Hibernate when loading a {@link Vocable} object from
      * the database.
      *
-     * @param data the vocable data
+     * @param data
+     *         the vocable data
      */
     @SuppressWarnings("unused")
     private void setVocableData(Map<Language, VocableData> data) {

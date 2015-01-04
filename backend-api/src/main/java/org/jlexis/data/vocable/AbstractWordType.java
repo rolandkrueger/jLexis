@@ -48,8 +48,15 @@ public abstract class AbstractWordType {
 //    TODO: fix me
 //    public abstract AbstractVocableInputPanel getInputPanel();
 
+    /**
+     * Provides the concrete word class enum value that this object represents.
+     */
     public abstract WordTypeEnum getWordTypeEnum();
 
+    /**
+     * Factory method for creating the user input object that corresponds to this word type.
+     * @return a new user input object that corresponds to this word type.
+     */
     public final UserInput createNewUserInputObject() {
         UserInput result = userInputPrototype.createUserInputObject();
         result.init();
