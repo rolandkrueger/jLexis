@@ -91,9 +91,9 @@ public class StandardAdjectiveUserInputDecorator extends AbstractStandardUserInp
     }
 
     public void initWordStemFields() {
-        setWordStem(positiveKey);
-        addWordStemChild(positiveKey, comparativeKey);
-        addWordStemChild(positiveKey, superlativeKey);
+        registerKeyForWordStem(positiveKey);
+        registerKeyForInflectedTerm(positiveKey, comparativeKey);
+        registerKeyForInflectedTerm(positiveKey, superlativeKey);
     }
 
     @Override

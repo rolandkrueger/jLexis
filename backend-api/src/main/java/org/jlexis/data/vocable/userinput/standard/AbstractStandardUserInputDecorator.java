@@ -105,12 +105,12 @@ public abstract class AbstractStandardUserInputDecorator implements UserInput {
     }
 
     @Override
-    public void setWordStem(RegisteredVocableDataKey key) {
-        getDelegate().setWordStem(key);
+    public void registerKeyForWordStem(RegisteredVocableDataKey key) {
+        getDelegate().registerKeyForWordStem(key);
     }
 
     @Override
-    public void addWordStemChild(RegisteredVocableDataKey governingWordStemKey, RegisteredVocableDataKey inflectedTermKey) {
-        getDelegate().addWordStemChild(governingWordStemKey, inflectedTermKey);
+    public void registerKeyForInflectedTerm(RegisteredVocableDataKey governingWordStemKey, RegisteredVocableDataKey inflectedTermKey) {
+        getDelegate().registerKeyForInflectedTerm(governingWordStemKey, inflectedTermKey);
     }
 }

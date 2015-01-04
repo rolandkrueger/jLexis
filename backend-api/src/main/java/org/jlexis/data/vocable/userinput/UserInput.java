@@ -89,7 +89,7 @@ public interface UserInput {
 
     VocableVerificationData getQuizVerificationData();
 
-    void setWordStem(RegisteredVocableDataKey key);
+    void registerKeyForWordStem(RegisteredVocableDataKey key);
 
-    void addWordStemChild(RegisteredVocableDataKey governingWordStemKey, RegisteredVocableDataKey inflectedTermKey);
+    void registerKeyForInflectedTerm(RegisteredVocableDataKey governingWordStemKey, RegisteredVocableDataKey inflectedTermKey);
 }

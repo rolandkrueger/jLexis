@@ -53,8 +53,8 @@ import static com.google.common.base.Preconditions.*;
  * <p/>
  * As defined by the interface {@link org.jlexis.data.vocable.userinput.UserInput}, it is possible to store inflected
  * terms and their corresponding word stems in this user input implementation. The keys used for word stems and
- * inflected terms first have to be registered with {@link #setWordStem(org.jlexis.data.vocable.RegisteredVocableDataKey)}
- * and {@link #addWordStemChild(org.jlexis.data.vocable.RegisteredVocableDataKey, org.jlexis.data.vocable.RegisteredVocableDataKey)},
+ * inflected terms first have to be registered with {@link #registerKeyForWordStem(org.jlexis.data.vocable.RegisteredVocableDataKey)}
+ * and {@link #registerKeyForInflectedTerm(org.jlexis.data.vocable.RegisteredVocableDataKey, org.jlexis.data.vocable.RegisteredVocableDataKey)},
  * respectively. Only after registering these keys, data can be safely added for their corresponding terms with {@link
  * #addUserInput(org.jlexis.data.vocable.RegisteredVocableDataKey, String)}.
  *
@@ -179,7 +179,7 @@ public abstract class AbstractUserInput implements UserInput {
     }
 
     @Override
-    public void setWordStem(RegisteredVocableDataKey key) {
+    public void registerKeyForWordStem(RegisteredVocableDataKey key) {
         checkArgument(! wordStems.containsKey(key), String.format("The key %s has already been" +
                 " configured as word stem.", key));
 
@@ -187,7 +187,7 @@ public abstract class AbstractUserInput implements UserInput {
     }
 
     @Override
-    public void addWordStemChild(RegisteredVocableDataKey governingWordStemKey, RegisteredVocableDataKey inflectedTermKey) {
+    public void registerKeyForInflectedTerm(RegisteredVocableDataKey governingWordStemKey, RegisteredVocableDataKey inflectedTermKey) {
         checkArgument(wordStems.containsKey(governingWordStemKey), String.format("The key %s has not yet been configured as word stem.", governingWordStemKey));
         checkArgument(! inflectedTerms.containsKey(inflectedTermKey), String.format("The key %s has already been configured as an inflected term.", inflectedTermKey));
 

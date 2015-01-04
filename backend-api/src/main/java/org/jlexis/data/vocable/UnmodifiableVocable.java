@@ -117,12 +117,12 @@ public final class UnmodifiableVocable extends Vocable {
         }
 
         @Override
-        public void setWordStem(RegisteredVocableDataKey key) {
+        public void registerKeyForWordStem(RegisteredVocableDataKey key) {
             throw new UnsupportedOperationException("This object cannot be modified.");
         }
 
         @Override
-        public void addWordStemChild(RegisteredVocableDataKey governingWordStemKey, RegisteredVocableDataKey inflectedTermKey) {
+        public void registerKeyForInflectedTerm(RegisteredVocableDataKey governingWordStemKey, RegisteredVocableDataKey inflectedTermKey) {
             throw new UnsupportedOperationException("This object cannot be modified.");
         }
 
