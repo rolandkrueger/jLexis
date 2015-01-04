@@ -60,8 +60,6 @@ public interface UserInput {
      */
     boolean isEmpty();
 
-    boolean isAnyTextInputDefined();
-
     /**
      * Returns <code>true</code> if at least one textual value has been defined. User input objects may store values
      * other than textual input, e.g. boolean values or enumeration values. If only such non-textual values are stored
