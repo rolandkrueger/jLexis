@@ -146,6 +146,11 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     }
 
     @Override
+    public boolean isAnyTextInputDefined() {
+        return getStandardInputBE().isAnyTextInputDefined() || getStandardInputAE().isAnyTextInputDefined();
+    }
+
+    @Override
     public void provideShortDisplayText(TextFormatter formatter) {
         StringBuilder buf = new StringBuilder();
         buf.append(getUserInput(NOUN_SINGULAR_TERM_KEY_BE).getCleanedString());

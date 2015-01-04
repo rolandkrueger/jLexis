@@ -101,6 +101,12 @@ public class EnglishAdjectiveUserInput extends AbstractEnglishPluginUserInput {
     }
 
     @Override
+    public boolean isAnyTextInputDefined() {
+        return getStandardInputBE().isAnyTextInputDefined() || getStandardInputAE().isAnyTextInputDefined() ||
+                adjectiveStandardInputBE.isAnyTextInputDefined() || adjectiveStandardInputAE.isAnyTextInputDefined();
+    }
+
+    @Override
     public VocableVerificationData getQuizVerificationData() {
         final DataWithMandatoryTermsBuilder builder = VocableVerificationData.create().withoutAbbreviationVariants();
         // TODO: i18n

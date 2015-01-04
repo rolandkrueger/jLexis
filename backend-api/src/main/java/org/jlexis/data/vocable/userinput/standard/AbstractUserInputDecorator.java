@@ -55,8 +55,6 @@ public abstract class AbstractUserInputDecorator implements UserInput {
     protected final UserInput getDelegate() {
         return delegate;
     }
-
-    public abstract boolean isAnyTextInputDefined();
     
     @Override
     public void addUserInput(RegisteredVocableDataKey key, String input) {

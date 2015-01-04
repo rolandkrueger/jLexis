@@ -60,6 +60,11 @@ public class DefaultUserInput extends AbstractUserInput {
     }
 
     @Override
+    public boolean isAnyTextInputDefined() {
+        return ! isEmpty();
+    }
+
+    @Override
     public AbstractUserInput createUserInputObject() {
         return new DefaultUserInput();
     }

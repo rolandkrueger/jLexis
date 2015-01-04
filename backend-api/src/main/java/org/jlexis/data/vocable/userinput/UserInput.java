@@ -56,6 +56,8 @@ public interface UserInput {
      */
     boolean isEmpty();
 
+    boolean isAnyTextInputDefined();
+
     /**
      * <p> Adds a piece of user entered data. This might be the translation of a word, the grammatical gender of a noun,
      * an example clause or a comment. Each of these pieces of data are uniquely identified by a key which will be used
