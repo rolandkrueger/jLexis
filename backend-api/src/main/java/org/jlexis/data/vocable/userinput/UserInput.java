@@ -13,6 +13,7 @@ package org.jlexis.data.vocable.userinput;
 import org.jlexis.data.vocable.RegisteredVocableDataKey;
 import org.jlexis.data.vocable.terms.AbstractTerm;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
+import org.jlexis.roklib.TextFormatter;
 
 /**
  * Interface for defining data classes that store and manage user entered vocabulary data. A user input will receive the
@@ -43,7 +44,7 @@ public interface UserInput {
      *
      * @return a HTML-version of this {@link AbstractUserInput}'s data
      */
-    String getHTMLVersion();
+    String getHTMLVersion(TextFormatter formatter);
 
     /**
      * Returns <code>true</code> if there is no user data available from this {@link AbstractUserInput} or in other

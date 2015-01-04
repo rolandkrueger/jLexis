@@ -29,7 +29,6 @@ import org.jlexis.data.vocable.userinput.AbstractUserInput;
 import org.jlexis.data.vocable.userinput.standard.StandardAdjectiveUserInputDecorator;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
 import org.jlexis.data.vocable.verification.VocableVerificationData.DataWithMandatoryTermsBuilder;
-import org.jlexis.roklib.HTMLTextFormatter;
 import org.jlexis.roklib.TextFormatter;
 
 import java.util.LinkedList;
@@ -62,8 +61,7 @@ public class EnglishAdjectiveUserInput extends AbstractEnglishPluginUserInput {
     }
 
     @Override
-    public String getHTMLVersion() {
-        TextFormatter formatter = new TextFormatter(new HTMLTextFormatter());
+    public String getHTMLVersion(TextFormatter formatter) {
         formatter.appendBold(adjectiveStandardInputBE.getPositiveResolvedAndPurged());
         if (adjectiveStandardInputBE.isComparativeDataDefined())
             formatter.append(", ").appendItalic("comp. ").appendBold(adjectiveStandardInputBE.getComparativeResolvedAndPurged());

@@ -23,12 +23,11 @@
  */
 package org.jlexis.plugin.english.userinput;
 
-import org.jlexis.data.vocable.userinput.AbstractUserInput;
 import org.jlexis.data.vocable.RegisteredVocableDataKey;
 import org.jlexis.data.vocable.terms.AbstractTerm;
+import org.jlexis.data.vocable.userinput.AbstractUserInput;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
 import org.jlexis.data.vocable.verification.VocableVerificationData.DataWithMandatoryTermsBuilder;
-import org.jlexis.roklib.HTMLTextFormatter;
 import org.jlexis.roklib.TextFormatter;
 
 import java.util.LinkedList;
@@ -75,8 +74,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     }
 
     @Override
-    public String getHTMLVersion() {
-        TextFormatter formatter = new TextFormatter(new HTMLTextFormatter());
+    public String getHTMLVersion(TextFormatter formatter) {
         if (isInputDefinedFor(NOUN_SINGULAR_TERM_KEY_BE)) {
             formatter.appendBold(getUserInput(NOUN_SINGULAR_TERM_KEY_BE).getCleanedString());
             if (getStandardInputBE().isPhoneticsDefined())

@@ -27,7 +27,6 @@ package org.jlexis.data.vocable.userinput;
 
 import org.jlexis.data.vocable.RegisteredVocableDataKey;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
-import org.jlexis.roklib.HTMLTextFormatter;
 import org.jlexis.roklib.TextFormatter;
 
 /**
@@ -43,8 +42,7 @@ public class DefaultUserInput extends AbstractUserInput {
     }
 
     @Override
-    public String getHTMLVersion() {
-        TextFormatter formatter = new TextFormatter(new HTMLTextFormatter());
+    public String getHTMLVersion(TextFormatter formatter) {
         formatter.appendBold(getUserInput(TERM_KEY).getUserEnteredString());
         return formatter.getFormattedText().toString();
     }

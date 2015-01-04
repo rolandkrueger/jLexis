@@ -29,6 +29,7 @@ import org.jlexis.data.vocable.userinput.AbstractUserInput;
 import org.jlexis.data.vocable.userinput.DBO_AbstractUserInput;
 import org.jlexis.data.vocable.userinput.UserInput;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
+import org.jlexis.roklib.TextFormatter;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -79,8 +80,8 @@ public final class UnmodifiableVocable extends Vocable {
             throw new UnsupportedOperationException("Not supported.");
         }
 
-        public final String getHTMLVersion() {
-            return data.getHTMLVersion();
+        public final String getHTMLVersion(TextFormatter formatter) {
+            return data.getHTMLVersion(formatter);
         }
 
         public final String getShortVersion() {

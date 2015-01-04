@@ -81,7 +81,7 @@ public class StandardUserInputDecorator extends AbstractUserInputDecorator {
     }
 
     @Override
-    public String getHTMLVersion() {
+    public String getHTMLVersion(TextFormatter formatter) {
         return null;
     }
 
