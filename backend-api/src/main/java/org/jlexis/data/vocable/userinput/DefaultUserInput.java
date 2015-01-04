@@ -22,54 +22,63 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jlexis.data.vocable;
+package org.jlexis.data.vocable.userinput;
 
 
-import org.jlexis.data.vocable.standarduserinput.AbstractStandardUserInput;
+import org.jlexis.data.vocable.RegisteredVocableDataKey;
+import org.jlexis.data.vocable.terms.AbstractTerm;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
-import org.jlexis.roklib.HTMLTextFormatter;
 import org.jlexis.roklib.TextFormatter;
 
-public class DefaultUserInput extends AbstractStandardUserInput {
+/**
+ * User input class that manages a single, simple non-inflected term. This is typically used for entering the
+ * translation of a vocable into the user's native language.
+ */
+public class DefaultUserInput extends AbstractUserInput {
     private static final String INPUT_ID = DefaultUserInput.class.getCanonicalName();
-    public static final String TERM_KEY = INPUT_ID + ".TERM";
+    public static final RegisteredVocableDataKey TERM_KEY = new RegisteredVocableDataKey(INPUT_ID + ".TERM");
 
     public DefaultUserInput() {
         super(INPUT_ID);
     }
 
     @Override
-    protected String[] getUserInputIdentifiersImpl() {
-        return new String[]{TERM_KEY};
+    public void provideFullDisplayText(TextFormatter formatter) {
+        formatter.appendBold(getUserInput(TERM_KEY).getUserEnteredString());
+        // FIXME: result for old signature
+//        return formatter.getFormattedText().toString();
     }
 
     @Override
-    public String getHTMLVersion() {
-        TextFormatter formatter = new TextFormatter(new HTMLTextFormatter());
-        formatter.appendBold(getUserData(TERM_KEY).getUserEnteredString());
-        getStandardUserInputDataHandler().getHTMLVersion(formatter, "");
-        return formatter.getFormattedText().toString();
+    public void provideShortDisplayText(TextFormatter formatter) {
+        // FIXME: result for old signature
+//        return getUserInput(TERM_KEY).getUserEnteredString();
     }
 
     @Override
-    public String getShortVersion() {
-        return getUserData(TERM_KEY).getUserEnteredString();
+    public boolean isAnyTextInputDefined() {
+        return ! isEmpty();
+    }
+
+    public void setTerm(String term) {
+        addUserInput(TERM_KEY, term);
+    }
+
+    public AbstractTerm getTerm() {
+        return getUserInput(TERM_KEY);
     }
 
     @Override
-    protected boolean isEmptyImpl() {
-        return getUserData(TERM_KEY).isEmpty();
-    }
-
-    @Override
-    protected AbstractUserInput createNewUserInputObject() {
+    public AbstractUserInput createUserInputObject() {
         return new DefaultUserInput();
     }
 
     @Override
     public VocableVerificationData getQuizVerificationData() {
-        VocableVerificationData result = VocableVerificationData.create().withoutAbbreviationVariants().addMandatoryTerm(getUserData(TERM_KEY)).build();
-        return result;
+        return VocableVerificationData.create()
+                .withoutAbbreviationVariants()
+                .addMandatoryTerm(getUserInput(TERM_KEY))
+                .build();
     }
 
     @Override

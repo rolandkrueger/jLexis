@@ -23,77 +23,66 @@
  */
 package org.jlexis.plugin.english.userinput;
 
-import org.jlexis.data.vocable.AbstractUserInput;
-import org.jlexis.data.vocable.standarduserinput.StandardAdjectiveUserInputDataHandler;
+import org.jlexis.data.vocable.RegisteredVocableDataKey;
 import org.jlexis.data.vocable.terms.AbstractTerm;
+import org.jlexis.data.vocable.userinput.AbstractUserInput;
+import org.jlexis.data.vocable.userinput.standard.StandardAdjectiveUserInputDecorator;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
 import org.jlexis.data.vocable.verification.VocableVerificationData.DataWithMandatoryTermsBuilder;
-import org.jlexis.roklib.HTMLTextFormatter;
 import org.jlexis.roklib.TextFormatter;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 public class EnglishAdjectiveUserInput extends AbstractEnglishPluginUserInput {
     private final static String INPUT_ID = EnglishAdjectiveUserInput.class.getCanonicalName();
-    private final static String ADJECTIVE_USAGE_BE = INPUT_ID + ".ADJECTIVE_USAGE_BE";
-    private final static String ADJECTIVE_USAGE_AE = INPUT_ID + ".ADJECTIVE_USAGE_AE";
-    private StandardAdjectiveUserInputDataHandler mAdjectiveStandardInputBE;
-    private StandardAdjectiveUserInputDataHandler mAdjectiveStandardInputAE;
+    private final static RegisteredVocableDataKey ADJECTIVE_USAGE_BE = new RegisteredVocableDataKey(INPUT_ID + "" +
+            ".ADJECTIVE_USAGE_BE");
+    private final static RegisteredVocableDataKey ADJECTIVE_USAGE_AE = new RegisteredVocableDataKey(INPUT_ID + "" +
+            ".ADJECTIVE_USAGE_AE");
+    private StandardAdjectiveUserInputDecorator adjectiveStandardInputBE;
+    private StandardAdjectiveUserInputDecorator adjectiveStandardInputAE;
 
     public EnglishAdjectiveUserInput() {
         super(INPUT_ID);
-        mAdjectiveStandardInputBE = new StandardAdjectiveUserInputDataHandler(this, "BE");
-        mAdjectiveStandardInputAE = new StandardAdjectiveUserInputDataHandler(this, "AE");
-    }
-
-    @Override
-    protected String[] getUserInputIdentifiersImpl() {
-        List<String> userInputIDs = new ArrayList<>(16);
-        userInputIDs.addAll(Arrays.asList(mAdjectiveStandardInputBE.getUserInputIdentifiers()));
-        userInputIDs.addAll(Arrays.asList(mAdjectiveStandardInputAE.getUserInputIdentifiers()));
-        userInputIDs.add(ADJECTIVE_USAGE_BE);
-        userInputIDs.add(ADJECTIVE_USAGE_AE);
-        return userInputIDs.toArray(new String[userInputIDs.size()]);
+        adjectiveStandardInputBE = new StandardAdjectiveUserInputDecorator(this, "BE");
+        adjectiveStandardInputAE = new StandardAdjectiveUserInputDecorator(this, "AE");
     }
 
     @Override
     protected boolean isEmptyImpl() {
-        return mAdjectiveStandardInputBE.isEmpty() &&
-                mAdjectiveStandardInputAE.isEmpty();
+        return adjectiveStandardInputBE.isEmpty() &&
+                adjectiveStandardInputAE.isEmpty();
     }
 
     @Override
-    protected AbstractUserInput createNewUserInputObject() {
+    public AbstractUserInput createUserInputObject() {
         return new EnglishAdjectiveUserInput();
     }
 
     @Override
-    public String getHTMLVersion() {
-        TextFormatter formatter = new TextFormatter(new HTMLTextFormatter());
-        formatter.appendBold(mAdjectiveStandardInputBE.getPositiveResolvedAndPurged());
-        if (mAdjectiveStandardInputBE.isComparativeDataDefined())
-            formatter.append(", ").appendItalic("comp. ").appendBold(mAdjectiveStandardInputBE.getComparativeResolvedAndPurged());
-        if (mAdjectiveStandardInputBE.isSuperlativeDataDefined())
-            formatter.append(", ").appendItalic("superl. ").appendBold(mAdjectiveStandardInputBE.getSuperlativeResolvedAndPurged());
+    public void provideFullDisplayText(TextFormatter formatter) {
+        formatter.appendBold(adjectiveStandardInputBE.getPositiveResolvedAndPurged());
+        if (adjectiveStandardInputBE.isComparativeDataDefined())
+            formatter.append(", ").appendItalic("comp. ").appendBold(adjectiveStandardInputBE.getComparativeResolvedAndPurged());
+        if (adjectiveStandardInputBE.isSuperlativeDataDefined())
+            formatter.append(", ").appendItalic("superl. ").appendBold(adjectiveStandardInputBE.getSuperlativeResolvedAndPurged());
         if (getStandardInputBE().isPhoneticsDefined())
             formatter.append(" [").append(getStandardInputBE().getPhonetics()).append("]");
-        if (mAdjectiveStandardInputBE.isAnyTextInputDefined()) formatter.appendItalic(" adj.");
+        if (adjectiveStandardInputBE.isAnyTextInputDefined()) formatter.appendItalic(" adj.");
         if (getAdjectiveUsageBE() != AdjectiveUsage.UNSPECIFIED)
             formatter.append(" [").appendItalic(getAdjectiveUsageBE().getDisplayString()).append("] ");
-        if (mAdjectiveStandardInputAE.isAnyTextInputDefined()) {
-            if (mAdjectiveStandardInputBE.isAnyTextInputDefined())
+        if (adjectiveStandardInputAE.isAnyTextInputDefined()) {
+            if (adjectiveStandardInputBE.isAnyTextInputDefined())
                 formatter.appendItalic(" (BrE)").append(" / ");
-            formatter.appendBold(mAdjectiveStandardInputAE.getPositiveResolvedAndPurged());
-            if (mAdjectiveStandardInputAE.isComparativeDataDefined())
-                formatter.append(", ").appendItalic("comp. ").appendBold(mAdjectiveStandardInputAE.getComparativeResolvedAndPurged());
-            if (mAdjectiveStandardInputAE.isSuperlativeDataDefined())
-                formatter.append(", ").appendItalic("superl. ").appendBold(mAdjectiveStandardInputAE.getSuperlative());
+            formatter.appendBold(adjectiveStandardInputAE.getPositiveResolvedAndPurged());
+            if (adjectiveStandardInputAE.isComparativeDataDefined())
+                formatter.append(", ").appendItalic("comp. ").appendBold(adjectiveStandardInputAE.getComparativeResolvedAndPurged());
+            if (adjectiveStandardInputAE.isSuperlativeDataDefined())
+                formatter.append(", ").appendItalic("superl. ").appendBold(adjectiveStandardInputAE.getSuperlative());
             if (getStandardInputAE().isPhoneticsDefined())
                 formatter.append(" [").append(getStandardInputAE().getPhonetics()).append("]");
-            if (!mAdjectiveStandardInputBE.isAnyTextInputDefined())
+            if (! adjectiveStandardInputBE.isAnyTextInputDefined())
                 formatter.appendItalic(" adj.");
             if (getAdjectiveUsageAE() != AdjectiveUsage.UNSPECIFIED)
                 formatter.append(" [").appendItalic(getAdjectiveUsageAE().getDisplayString()).append("] ");
@@ -101,13 +90,20 @@ public class EnglishAdjectiveUserInput extends AbstractEnglishPluginUserInput {
         }
 
         if (getStandardInputBE().isAnyTextInputDefined()) {
-            getStandardInputBE().getHTMLVersion(formatter, "(BrE)");
+            getStandardInputBE().provideFullDisplayText(formatter);//, "(BrE)");
         }
         if (getStandardInputAE().isAnyTextInputDefined()) {
-            getStandardInputAE().getHTMLVersion(formatter, "(AmE)");
+            getStandardInputAE().provideFullDisplayText(formatter);//, "(AmE)");
         }
 
-        return formatter.getFormattedText().toString();
+        // FIXME: result for old signature
+//        return formatter.getFormattedText().toString();
+    }
+
+    @Override
+    public boolean isAnyTextInputDefined() {
+        return getStandardInputBE().isAnyTextInputDefined() || getStandardInputAE().isAnyTextInputDefined() ||
+                adjectiveStandardInputBE.isAnyTextInputDefined() || adjectiveStandardInputAE.isAnyTextInputDefined();
     }
 
     @Override
@@ -116,21 +112,21 @@ public class EnglishAdjectiveUserInput extends AbstractEnglishPluginUserInput {
         // TODO: i18n
         String additionalQuestionText = "Bitte auch %s%s eingeben. ";
         List<AbstractTerm> beValues = new LinkedList<>();
-        beValues.addAll(mAdjectiveStandardInputBE.getTermData());
+        beValues.addAll(adjectiveStandardInputBE.getTermData());
         List<AbstractTerm> aeValues = new LinkedList<>();
-        aeValues.addAll(mAdjectiveStandardInputAE.getTermData());
+        aeValues.addAll(adjectiveStandardInputAE.getTermData());
 
         if (!beValues.isEmpty()) {
             builder.addMandatoryTerm(beValues.get(0));
             if (isIrregularBE()) {
-                if (mAdjectiveStandardInputBE.isComparativeDataDefined() &&
-                        mAdjectiveStandardInputBE.isSuperlativeDataDefined()) {
+                if (adjectiveStandardInputBE.isComparativeDataDefined() &&
+                        adjectiveStandardInputBE.isSuperlativeDataDefined()) {
                     // TODO: i18n
                     additionalQuestionText = String.format(additionalQuestionText, "Komparativ", " und Superlativ");
-                } else if (mAdjectiveStandardInputBE.isComparativeDataDefined()) {
+                } else if (adjectiveStandardInputBE.isComparativeDataDefined()) {
                     // TODO: i18n
                     additionalQuestionText = String.format(additionalQuestionText, "den Komparativ", "");
-                } else if (mAdjectiveStandardInputBE.isSuperlativeDataDefined()) {
+                } else if (adjectiveStandardInputBE.isSuperlativeDataDefined()) {
                     // TODO: i18n
                     additionalQuestionText = String.format(additionalQuestionText, "den Superlativ", "");
                 } else additionalQuestionText = "";
@@ -150,14 +146,14 @@ public class EnglishAdjectiveUserInput extends AbstractEnglishPluginUserInput {
         if (beValues.isEmpty() && !aeValues.isEmpty()) {
             builder.addMandatoryTerm(aeValues.get(0));
             if (isIrregularAE()) {
-                if (mAdjectiveStandardInputAE.isComparativeDataDefined() &&
-                        mAdjectiveStandardInputAE.isSuperlativeDataDefined()) {
+                if (adjectiveStandardInputAE.isComparativeDataDefined() &&
+                        adjectiveStandardInputAE.isSuperlativeDataDefined()) {
                     // TODO: i18n
                     additionalQuestionText = String.format(additionalQuestionText, "Komparativ", " und Superlativ");
-                } else if (mAdjectiveStandardInputAE.isComparativeDataDefined()) {
+                } else if (adjectiveStandardInputAE.isComparativeDataDefined()) {
                     // TODO: i18n
                     additionalQuestionText = String.format(additionalQuestionText, "den Komparativ", "");
-                } else if (mAdjectiveStandardInputAE.isSuperlativeDataDefined()) {
+                } else if (adjectiveStandardInputAE.isSuperlativeDataDefined()) {
                     // TODO: i18n
                     additionalQuestionText = String.format(additionalQuestionText, "den Superlativ", "");
                 }
@@ -183,111 +179,113 @@ public class EnglishAdjectiveUserInput extends AbstractEnglishPluginUserInput {
     }
 
     @Override
-    public String getShortVersion() {
+    public void provideShortDisplayText(TextFormatter formatter) {
         StringBuilder buf = new StringBuilder();
-        buf.append(mAdjectiveStandardInputBE.getPositiveResolvedAndPurged());
-        if (mAdjectiveStandardInputBE.isComparativeDataDefined())
-            buf.append(", ").append(mAdjectiveStandardInputBE.getComparativeResolvedAndPurged());
-        if (mAdjectiveStandardInputBE.isSuperlativeDataDefined())
-            buf.append(", ").append(mAdjectiveStandardInputBE.getSuperlativeResolvedAndPurged());
-        if (mAdjectiveStandardInputAE.isAnyTextInputDefined()) {
-            if (mAdjectiveStandardInputBE.isAnyTextInputDefined())
+        buf.append(adjectiveStandardInputBE.getPositiveResolvedAndPurged());
+        if (adjectiveStandardInputBE.isComparativeDataDefined())
+            buf.append(", ").append(adjectiveStandardInputBE.getComparativeResolvedAndPurged());
+        if (adjectiveStandardInputBE.isSuperlativeDataDefined())
+            buf.append(", ").append(adjectiveStandardInputBE.getSuperlativeResolvedAndPurged());
+        if (adjectiveStandardInputAE.isAnyTextInputDefined()) {
+            if (adjectiveStandardInputBE.isAnyTextInputDefined())
                 buf.append(" (BrE) / ");
-            if (mAdjectiveStandardInputAE.isPositiveDataDefined())
-                buf.append(mAdjectiveStandardInputAE.getPositiveResolvedAndPurged());
-            if (mAdjectiveStandardInputAE.isComparativeDataDefined())
-                buf.append(", ").append(mAdjectiveStandardInputAE.getComparativeResolvedAndPurged());
-            if (mAdjectiveStandardInputAE.isSuperlativeDataDefined())
-                buf.append(", ").append(mAdjectiveStandardInputAE.getSuperlativeResolvedAndPurged());
+            if (adjectiveStandardInputAE.isPositiveDataDefined())
+                buf.append(adjectiveStandardInputAE.getPositiveResolvedAndPurged());
+            if (adjectiveStandardInputAE.isComparativeDataDefined())
+                buf.append(", ").append(adjectiveStandardInputAE.getComparativeResolvedAndPurged());
+            if (adjectiveStandardInputAE.isSuperlativeDataDefined())
+                buf.append(", ").append(adjectiveStandardInputAE.getSuperlativeResolvedAndPurged());
             buf.append(" (AmE)");
         }
-        return buf.toString();
+
+        // FIXME: result for old signature
+//        return buf.toString();
     }
 
     public String getPositiveBE() {
-        return mAdjectiveStandardInputBE.getPositive();
+        return adjectiveStandardInputBE.getPositive();
     }
 
     public void setPositiveBE(String positive) {
-        mAdjectiveStandardInputBE.setPositive(positive);
+        adjectiveStandardInputBE.setPositive(positive);
     }
 
     public String getPositiveAE() {
-        return mAdjectiveStandardInputAE.getPositive();
+        return adjectiveStandardInputAE.getPositive();
     }
 
     public void setPositiveAE(String positive) {
-        mAdjectiveStandardInputAE.setPositive(positive);
+        adjectiveStandardInputAE.setPositive(positive);
     }
 
     public String getComparativeBE() {
-        return mAdjectiveStandardInputBE.getComparative();
+        return adjectiveStandardInputBE.getComparative();
     }
 
     public void setComparativeBE(String comparative) {
-        mAdjectiveStandardInputBE.setComparative(comparative);
+        adjectiveStandardInputBE.setComparative(comparative);
     }
 
     public String getComparativeAE() {
-        return mAdjectiveStandardInputAE.getComparative();
+        return adjectiveStandardInputAE.getComparative();
     }
 
     public void setComparativeAE(String comparative) {
-        mAdjectiveStandardInputAE.setComparative(comparative);
+        adjectiveStandardInputAE.setComparative(comparative);
     }
 
     public String getSuperlativeBE() {
-        return mAdjectiveStandardInputBE.getSuperlative();
+        return adjectiveStandardInputBE.getSuperlative();
     }
 
     public void setSuperlativeBE(String superlative) {
-        mAdjectiveStandardInputBE.setSuperlative(superlative);
+        adjectiveStandardInputBE.setSuperlative(superlative);
     }
 
     public String getSuperlativeAE() {
-        return mAdjectiveStandardInputAE.getSuperlative();
+        return adjectiveStandardInputAE.getSuperlative();
     }
 
     public void setSuperlativeAE(String superlative) {
-        mAdjectiveStandardInputAE.setSuperlative(superlative);
+        adjectiveStandardInputAE.setSuperlative(superlative);
     }
 
     public boolean isIrregularBE() {
-        return mAdjectiveStandardInputBE.isIrregular();
+        return adjectiveStandardInputBE.isIrregular();
     }
 
     public void setIrregularBE(boolean irregular) {
-        mAdjectiveStandardInputBE.setIrregular(irregular);
+        adjectiveStandardInputBE.setIrregular(irregular);
     }
 
     public boolean isIrregularAE() {
-        return mAdjectiveStandardInputAE.isIrregular();
+        return adjectiveStandardInputAE.isIrregular();
     }
 
     public void setIrregularAE(boolean irregular) {
-        mAdjectiveStandardInputAE.setIrregular(irregular);
+        adjectiveStandardInputAE.setIrregular(irregular);
     }
 
     public boolean isNotComparableBE() {
-        return mAdjectiveStandardInputBE.isNotComparable();
+        return adjectiveStandardInputBE.isNotComparable();
     }
 
     public void setNotComparableBE(boolean notComparable) {
-        mAdjectiveStandardInputBE.setNotComparable(notComparable);
+        adjectiveStandardInputBE.setNotComparable(notComparable);
     }
 
     public boolean isNotComparableAE() {
-        return mAdjectiveStandardInputAE.isNotComparable();
+        return adjectiveStandardInputAE.isNotComparable();
     }
 
     public void setNotComparableAE(boolean notComparable) {
-        mAdjectiveStandardInputAE.setNotComparable(notComparable);
+        adjectiveStandardInputAE.setNotComparable(notComparable);
     }
 
     public AdjectiveUsage getAdjectiveUsageBE() {
         AdjectiveUsage result;
         try {
-            result = AdjectiveUsage.valueOf(getUserEnteredTerm(ADJECTIVE_USAGE_BE));
+            result = AdjectiveUsage.valueOf(getUserInput(ADJECTIVE_USAGE_BE).getUserEnteredString());
         } catch (IllegalArgumentException nfExc) {
             return AdjectiveUsage.UNSPECIFIED;
         }
@@ -295,13 +293,13 @@ public class EnglishAdjectiveUserInput extends AbstractEnglishPluginUserInput {
     }
 
     public void setAdjectiveUsageBE(AdjectiveUsage usage) {
-        addUserData(ADJECTIVE_USAGE_BE, usage.toString());
+        addUserInput(ADJECTIVE_USAGE_BE, usage.toString());
     }
 
     public AdjectiveUsage getAdjectiveUsageAE() {
         AdjectiveUsage result;
         try {
-            result = AdjectiveUsage.valueOf(getUserEnteredTerm(ADJECTIVE_USAGE_AE));
+            result = AdjectiveUsage.valueOf(getUserInput(ADJECTIVE_USAGE_AE).getUserEnteredString());
         } catch (IllegalArgumentException nfExc) {
             return AdjectiveUsage.UNSPECIFIED;
         }
@@ -309,15 +307,15 @@ public class EnglishAdjectiveUserInput extends AbstractEnglishPluginUserInput {
     }
 
     public void setAdjectiveUsageAE(AdjectiveUsage usage) {
-        addUserData(ADJECTIVE_USAGE_AE, usage.toString());
+        addUserInput(ADJECTIVE_USAGE_AE, usage.toString());
     }
 
     @Override
     public void init() {
         setAdjectiveUsageBE(AdjectiveUsage.UNSPECIFIED);
         setAdjectiveUsageAE(AdjectiveUsage.UNSPECIFIED);
-        mAdjectiveStandardInputBE.initWordStemFields();
-        mAdjectiveStandardInputAE.initWordStemFields();
+        adjectiveStandardInputBE.init();
+        adjectiveStandardInputAE.init();
     }
 
     public enum AdjectiveUsage {

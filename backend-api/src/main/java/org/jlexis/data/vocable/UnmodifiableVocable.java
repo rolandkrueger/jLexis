@@ -24,22 +24,24 @@ package org.jlexis.data.vocable;
 
 import org.jlexis.data.languages.Language;
 import org.jlexis.data.vocable.terms.AbstractTerm;
+import org.jlexis.data.vocable.terms.UnmodifiableTerm;
+import org.jlexis.data.vocable.userinput.AbstractUserInput;
+import org.jlexis.data.vocable.userinput.DBO_AbstractUserInput;
+import org.jlexis.data.vocable.userinput.UserInput;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import org.jlexis.roklib.TextFormatter;
 
-import java.util.Objects;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * @author Roland Krueger
- * @version $Id: UnmodifiableVocable.java 197 2009-12-14 07:27:08Z roland $
  */
 public final class UnmodifiableVocable extends Vocable {
     private static final long serialVersionUID = -4235951974726789314L;
 
     public UnmodifiableVocable(Vocable data) {
         super();
-        mData = data.mData;
+        this.mData = data.mData;
         setId(data.getId());
     }
 
@@ -62,53 +64,53 @@ public final class UnmodifiableVocable extends Vocable {
         private UserInput data;
 
         public UnmodifiableUserInput(UserInput data) {
-            if (data == null) throw new NullPointerException("Argument is null.");
-            this.data = data;
+            this.data = checkNotNull(data, "Argument is null.");
         }
 
-        public final void addUserData(String identifier, String data) {
-            this.data.addUserData(identifier, data);
+        public final void addUserInput(RegisteredVocableDataKey key, String data) {
+            this.data.addUserInput(key, data);
         }
 
-        @Deprecated
-        public final void appendXMLData(Document document, Element root) {
-            throw new UnsupportedOperationException("Deprecated method.");
+        @Override
+        public UserInput createUserInputObject() {
+            return new UnmodifiableUserInput(data);
         }
 
         public final DBO_AbstractUserInput getDatabaseObject() {
             throw new UnsupportedOperationException("Not supported.");
         }
 
-        public final String getHTMLVersion() {
-            return data.getHTMLVersion();
+        public final void provideFullDisplayText(TextFormatter formatter) {
+            data.provideFullDisplayText(formatter);
         }
 
-        public final String getShortVersion() {
-            return data.getShortVersion();
+        public final void provideShortDisplayText(TextFormatter formatter) {
+            data.provideShortDisplayText(formatter);
         }
 
-        public final AbstractTerm getUserData(String identifier) {
-            return new UnmodifiableTerm(data.getUserData(identifier));
+        public final AbstractTerm getUserInput(RegisteredVocableDataKey key) {
+            return new UnmodifiableTerm(data.getUserInput(key));
         }
 
         public final String getUserInputIdentifier() {
             return data.getUserInputIdentifier();
         }
 
-        public final boolean isDataDefinedFor(String identifier) {
-            return data.isDataDefinedFor(identifier);
+        public final boolean isInputDefinedFor(RegisteredVocableDataKey key) {
+            return data.isInputDefinedFor(key);
         }
 
         public final boolean isEmpty() {
             return data.isEmpty();
         }
 
-        public final boolean isTypeCorrect(UserInput other) {
-            return data.isTypeCorrect(other);
+        @Override
+        public boolean isAnyTextInputDefined() {
+            return data.isAnyTextInputDefined();
         }
 
-        public final void replace(AbstractUserInput userInput) {
-            throw new UnsupportedOperationException("This object cannot be modified.");
+        public final boolean correspondsTo(UserInput other) {
+            return data.correspondsTo(other);
         }
 
         @Override
@@ -117,77 +119,18 @@ public final class UnmodifiableVocable extends Vocable {
         }
 
         @Override
-        public String getComment() {
-            return data.getComment();
+        public void registerKeyForWordStem(RegisteredVocableDataKey key) {
+            throw new UnsupportedOperationException("This object cannot be modified.");
         }
 
         @Override
-        public String getExample() {
-            return data.getExample();
+        public void registerKeyForInflectedTerm(RegisteredVocableDataKey governingWordStemKey, RegisteredVocableDataKey inflectedTermKey) {
+            throw new UnsupportedOperationException("This object cannot be modified.");
         }
 
         @Override
         public void init() {
             data.init();
-        }
-    }
-
-    private final static class UnmodifiableTerm extends AbstractTerm {
-        private AbstractTerm data;
-
-        public UnmodifiableTerm(AbstractTerm data) {
-            this.data = Objects.requireNonNull(data);
-        }
-
-        public final String getEncodedString() {
-            return data.getEncodedString();
-        }
-
-        public final void setEncodedString(String normalizedTerm) {
-            throw new UnsupportedOperationException("This object cannot be modified.");
-        }
-
-        public final String getCleanedString() {
-            return data.getCleanedString();
-        }
-
-        public final String getStringWithWordStemResolved() {
-            return data.getStringWithWordStemResolved();
-        }
-
-        public final String getUserEnteredString() {
-            return data.getUserEnteredString();
-        }
-
-        public final void setUserEnteredString(String string) {
-            throw new UnsupportedOperationException("This object cannot be modified.");
-        }
-
-        public final String getWordStemString() {
-            return data.getWordStemString();
-        }
-
-        public final boolean isEmpty() {
-            return data.isEmpty();
-        }
-
-        public final boolean isWordStem() {
-            return data.isWordStem();
-        }
-
-        @Override
-        public boolean isInflected() {
-            return data.isInflected();
-        }
-
-        @Override
-        public AbstractTerm getWordStemTerm() {
-            return data.getWordStemTerm();
-        }
-
-        @Override
-        public final String toString() {
-            return data.toString();
         }
     }
 }

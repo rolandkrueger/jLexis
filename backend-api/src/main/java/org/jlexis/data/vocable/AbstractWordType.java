@@ -25,6 +25,8 @@ package org.jlexis.data.vocable;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
+import org.jlexis.data.vocable.userinput.AbstractUserInput;
+import org.jlexis.data.vocable.userinput.UserInput;
 
 import java.util.Objects;
 
@@ -48,8 +50,8 @@ public abstract class AbstractWordType {
 
     public abstract WordTypeEnum getWordTypeEnum();
 
-    public final AbstractUserInput createNewUserInputObject() {
-        AbstractUserInput result = userInputPrototype.createNewUserInputObject();
+    public final UserInput createNewUserInputObject() {
+        UserInput result = userInputPrototype.createUserInputObject();
         result.init();
         return result;
     }
@@ -67,7 +69,7 @@ public abstract class AbstractWordType {
     }
 
     public void registerUserInputIdentifiers() {
-        userInputPrototype.registerUserInputIdentifiers();
+//        userInputPrototype.registerUserInputIdentifiers();
     }
 
     @Override
