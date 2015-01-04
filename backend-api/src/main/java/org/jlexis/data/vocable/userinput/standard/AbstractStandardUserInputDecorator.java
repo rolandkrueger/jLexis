@@ -65,8 +65,8 @@ public abstract class AbstractStandardUserInputDecorator implements UserInput {
     public abstract void getHTMLVersion(TextFormatter formatter, String addOn);
 
     @Override
-    public void addUserInput(RegisteredVocableDataKey identifier, String input) {
-        getDelegate().addUserInput(identifier, input);
+    public void addUserInput(RegisteredVocableDataKey key, String input) {
+        getDelegate().addUserInput(key, input);
     }
 
     @Override
@@ -80,13 +80,13 @@ public abstract class AbstractStandardUserInputDecorator implements UserInput {
     }
 
     @Override
-    public AbstractTerm getUserInput(RegisteredVocableDataKey identifier) {
-        return getDelegate().getUserInput(identifier);
+    public AbstractTerm getUserInput(RegisteredVocableDataKey key) {
+        return getDelegate().getUserInput(key);
     }
 
     @Override
-    public boolean isInputDefinedFor(RegisteredVocableDataKey identifier) {
-        return getDelegate().isInputDefinedFor(identifier);
+    public boolean isInputDefinedFor(RegisteredVocableDataKey key) {
+        return getDelegate().isInputDefinedFor(key);
     }
 
     @Override
@@ -105,8 +105,8 @@ public abstract class AbstractStandardUserInputDecorator implements UserInput {
     }
 
     @Override
-    public void setWordStem(RegisteredVocableDataKey identifier) {
-        getDelegate().setWordStem(identifier);
+    public void setWordStem(RegisteredVocableDataKey key) {
+        getDelegate().setWordStem(key);
     }
 
     @Override

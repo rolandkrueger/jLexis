@@ -30,6 +30,10 @@ import org.jlexis.data.vocable.verification.VocableVerificationData;
 import org.jlexis.roklib.HTMLTextFormatter;
 import org.jlexis.roklib.TextFormatter;
 
+/**
+ * User input class that manages a single, simple term. This is typically used for entering the translation of a
+ * vocable into the user's native language.
+ */
 public class DefaultUserInput extends AbstractUserInput {
     private static final String INPUT_ID = DefaultUserInput.class.getCanonicalName();
     public static final RegisteredVocableDataKey TERM_KEY = new RegisteredVocableDataKey(INPUT_ID + ".TERM");
@@ -42,8 +46,6 @@ public class DefaultUserInput extends AbstractUserInput {
     public String getHTMLVersion() {
         TextFormatter formatter = new TextFormatter(new HTMLTextFormatter());
         formatter.appendBold(getUserInput(TERM_KEY).getUserEnteredString());
-//        FIXME
-//        getStandardUserInputDataHandler().getHTMLVersion(formatter, "");
         return formatter.getFormattedText().toString();
     }
 

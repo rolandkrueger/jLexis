@@ -14,11 +14,17 @@ import org.jlexis.data.vocable.RegisteredVocableDataKey;
 import org.jlexis.data.vocable.terms.AbstractTerm;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
 
-/*
+/**
+ * Interface for defining data classes that store and manage user entered vocabulary data. A user input will receive the
+ * vocabulary data for exactly one language in one particular vocable.
+ *
  * @author Roland Krueger
  */
 public interface UserInput {
 
+    /**
+     * Initialize the user input object.
+     */
     void init();
 
     /**
@@ -51,23 +57,31 @@ public interface UserInput {
 
     /**
      * <p> Adds a piece of user entered data. This might be the translation of a word, the grammatical gender of a noun,
-     * an example clause or a comment. Each of these pieces of data are uniquely identified by an identifier which will
-     * be used as the key into the {@link java.util.Map} data structure holding a {@link AbstractUserInput}'s data. If
-     * the data is the empty string, it's addition is skipped to prevent the database from being flooded with empty
-     * values. </p>
+     * an example clause or a comment. Each of these pieces of data are uniquely identified by a key which will be used
+     * as the key into the {@link java.util.Map} data structure holding a {@link AbstractUserInput}'s data. If the data
+     * is the empty string, it's addition is skipped to prevent the database from being flooded with empty values. </p>
      *
-     * @param identifier the key for the piece of user entered data
-     * @param input       the data itself
+     * @param key
+     *         the key for the piece of user entered data
+     * @param input
+     *         the data itself
      */
-    void addUserInput(RegisteredVocableDataKey identifier, String input);
+    void addUserInput(RegisteredVocableDataKey key, String input);
 
+    /**
+     * Factory method that creates a new instance of the class that implements interface {@link
+     * org.jlexis.data.vocable.userinput.UserInput}.
+     *
+     * @return a new user input object of the type of the class that implements interface {@link
+     * org.jlexis.data.vocable.userinput.UserInput}.
+     */
     UserInput createUserInputObject();
 
     boolean correspondsTo(UserInput other);
 
-    AbstractTerm getUserInput(RegisteredVocableDataKey identifier);
+    AbstractTerm getUserInput(RegisteredVocableDataKey key);
 
-    boolean isInputDefinedFor(RegisteredVocableDataKey identifier);
+    boolean isInputDefinedFor(RegisteredVocableDataKey key);
 
     String getUserInputIdentifier();
 
@@ -75,7 +89,7 @@ public interface UserInput {
 
     VocableVerificationData getQuizVerificationData();
 
-    void setWordStem(RegisteredVocableDataKey identifier);
+    void setWordStem(RegisteredVocableDataKey key);
 
     void addWordStemChild(RegisteredVocableDataKey governingWordStemKey, RegisteredVocableDataKey inflectedTermKey);
 }

@@ -66,8 +66,8 @@ public final class UnmodifiableVocable extends Vocable {
             this.data = checkNotNull(data, "Argument is null.");
         }
 
-        public final void addUserInput(RegisteredVocableDataKey identifier, String data) {
-            this.data.addUserInput(identifier, data);
+        public final void addUserInput(RegisteredVocableDataKey key, String data) {
+            this.data.addUserInput(key, data);
         }
 
         @Override
@@ -87,16 +87,16 @@ public final class UnmodifiableVocable extends Vocable {
             return data.getShortVersion();
         }
 
-        public final AbstractTerm getUserInput(RegisteredVocableDataKey identifier) {
-            return new UnmodifiableTerm(data.getUserInput(identifier));
+        public final AbstractTerm getUserInput(RegisteredVocableDataKey key) {
+            return new UnmodifiableTerm(data.getUserInput(key));
         }
 
         public final String getUserInputIdentifier() {
             return data.getUserInputIdentifier();
         }
 
-        public final boolean isInputDefinedFor(RegisteredVocableDataKey identifier) {
-            return data.isInputDefinedFor(identifier);
+        public final boolean isInputDefinedFor(RegisteredVocableDataKey key) {
+            return data.isInputDefinedFor(key);
         }
 
         public final boolean isEmpty() {
@@ -117,7 +117,7 @@ public final class UnmodifiableVocable extends Vocable {
         }
 
         @Override
-        public void setWordStem(RegisteredVocableDataKey identifier) {
+        public void setWordStem(RegisteredVocableDataKey key) {
             throw new UnsupportedOperationException("This object cannot be modified.");
         }
 
