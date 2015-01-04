@@ -35,11 +35,11 @@ import org.jlexis.roklib.TextFormatter;
 /**
  * @author Roland Krueger
  */
-public abstract class AbstractStandardUserInputDecorator implements UserInput {
+public abstract class AbstractUserInputDecorator implements UserInput {
     private UserInput delegate;
     private String userInputIdentifierExtension;
 
-    protected AbstractStandardUserInputDecorator(UserInput delegate, String userInputIdentifierExtension) {
+    protected AbstractUserInputDecorator(UserInput delegate, String userInputIdentifierExtension) {
         this.delegate = Preconditions.checkNotNull(delegate);
         this.userInputIdentifierExtension = Strings.nullToEmpty(userInputIdentifierExtension);
     }
@@ -49,11 +49,11 @@ public abstract class AbstractStandardUserInputDecorator implements UserInput {
                 userInputIdentifierExtension, discriminator));
     }
 
-    protected String getUserInputIdentifierExtension() {
+    protected final String getUserInputIdentifierExtension() {
         return userInputIdentifierExtension;
     }
 
-    protected UserInput getDelegate() {
+    protected final UserInput getDelegate() {
         return delegate;
     }
 

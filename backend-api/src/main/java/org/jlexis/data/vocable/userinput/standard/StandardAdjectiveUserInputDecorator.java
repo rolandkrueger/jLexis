@@ -36,7 +36,7 @@ import java.util.List;
 /**
  * @author Roland Krueger
  */
-public class StandardAdjectiveUserInputDecorator extends AbstractStandardUserInputDecorator {
+public class StandardAdjectiveUserInputDecorator extends AbstractUserInputDecorator {
     private final static String POSITIVE_KEY = ".ADJECTIVE_POSITIVE";
     private final static String COMPARATIVE_KEY = ".ADJECTIVE_COMPARATIVE";
     private final static String SUPERLATIVE_KEY = ".ADJECTIVE_SUPERLATIVE";

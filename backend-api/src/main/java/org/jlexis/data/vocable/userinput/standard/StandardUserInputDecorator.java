@@ -31,7 +31,7 @@ import org.jlexis.roklib.TextFormatter;
 /**
  * @author Roland Krueger
  */
-public class StandardUserInputDecorator extends AbstractStandardUserInputDecorator {
+public class StandardUserInputDecorator extends AbstractUserInputDecorator {
     private final static String COMMENT_KEY = ".COMMENT";
     private final static String EXAMPLE_KEY = ".EXAMPLE";
     private final static String PHONETICS_KEY = ".PHONETICS";
