@@ -35,6 +35,16 @@ public abstract class AbstractWordClass {
     private String identifier;
     private UserInput userInputPrototype;
 
+    /**
+     * Create a new word class object.
+     *
+     * @param nameI18nKey
+     *         key for translating the name of this word class
+     * @param identifier
+     *         technical ID to be used as primary key in the database
+     * @param userInputPrototype
+     *         a user input object used to spawn new instances of the concrete user input class on demand
+     */
     protected AbstractWordClass(String nameI18nKey, String identifier, UserInput userInputPrototype) {
         this.nameI18nKey = checkNotNull(nameI18nKey);
         this.userInputPrototype = checkNotNull(userInputPrototype);
@@ -50,6 +60,7 @@ public abstract class AbstractWordClass {
 
     /**
      * Factory method for creating the user input object that corresponds to this word class.
+     *
      * @return a new user input object that corresponds to this word class.
      */
     public final UserInput createNewUserInputObject() {
@@ -58,10 +69,19 @@ public abstract class AbstractWordClass {
         return result;
     }
 
+    /**
+     * Provides the i18n key for the translation of this word class's name. This will later be resolved to a text shown
+     * to the user on the UI (e.g. "Adjective" or "Noun").
+     */
     public final String getNameI18nKey() {
         return nameI18nKey;
     }
 
+    /**
+     * Provides the identifier for this word class. This is a technical key which is used to find the correct class for
+     * a {@link org.jlexis.data.vocable.AbstractWordClass} for data loaded from the database. This could be for example
+     * "EnglishAdjective" or "EnglishNoun".
+     */
     public final String getIdentifier() {
         return identifier;
     }
