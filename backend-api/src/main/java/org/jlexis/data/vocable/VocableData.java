@@ -25,10 +25,9 @@ package org.jlexis.data.vocable;
 
 
 import org.jlexis.data.languages.Language;
-import org.jlexis.data.vocable.userinput.DBO_AbstractUserInput;
 import org.jlexis.data.vocable.userinput.UserInput;
 
-import java.util.Optional;
+import java.io.Serializable;
 
 import static com.google.common.base.Preconditions.*;
 
@@ -50,29 +49,29 @@ public class VocableData implements Serializable {
      */
     private UserInput userInput;
     /**
-     * The word type that the user input represents. This defines verbs, nouns, adjectives, etc.
+     * The word class that the user input represents. This defines verbs, nouns, adjectives, etc.
      */
-    private AbstractWordClass wordType;
+    private AbstractWordClass wordClass;
 
-    private Optional<String> wordTypeIdentifier;
     private long id;
 
-    private VocableData() {
-        wordTypeIdentifier = Optional.empty();
+    /**
+     * Creates a new and empty VocableData object.
+     */
+    public VocableData(Language forLanguage, AbstractWordClass wordClass) {
+        this(forLanguage, wordClass, checkNotNull(wordClass).createNewUserInputObject());
     }
 
     /**
-     * Constructs a {@link VocableData} object from user entered data.
+     * Constructs a VocableData object from user entered data.
      *
      * @param userInput
      *         the data entered by the user
      */
-    public VocableData(Language forLanguage, AbstractWordClass wordType, UserInput userInput) {
-        this();
+    public VocableData(Language forLanguage, AbstractWordClass wordClass, UserInput userInput) {
         this.forLanguage = checkNotNull(forLanguage);
-        this.wordType = checkNotNull(wordType);
+        this.wordClass = checkNotNull(wordClass);
         this.userInput = checkNotNull(userInput);
-        setWordTypeIdentifier(this.wordType.getIdentifier());
     }
 
     /**
@@ -83,67 +82,18 @@ public class VocableData implements Serializable {
     }
 
     public UserInput getUserInput() {
-//        TODO: refactor
-//        if (userInput == null && mUserInputFromDatabase == null)
-//            throw new IllegalStateException("Unable to provide data: both data objects are null.");
-//
-//        if (userInput == null) {
-//            // TODO: ensure that the used word type identifier is never unknown for the plugin
-//            AbstractWordType wordType = forLanguage.getLanguagePlugin().get().getWordTypeFor(wordTypeIdentifier.get());
-//            assert wordType != null;
-//            userInput = wordType.createUserInputObject();
-//            userInput.setDatabaseObject(mUserInputFromDatabase);
-//        }
-
         return userInput;
     }
 
-    @SuppressWarnings("unused")
-    private DBO_AbstractUserInput getDatabaseObject() {
-//        TODO: refactor
-//        if (getUserInput() == null) {
-//            throw new IllegalStateException("AbstractUserInput object not available.");
-//        }
-//
-//        DBO_AbstractUserInput dbo = getUserInput().getDatabaseObject();
-//        if (mUserInputFromDatabase != null) {
-//            mUserInputFromDatabase.copy(dbo);
-//        } else {
-//            mUserInputFromDatabase = dbo;
-//        }
-//        return mUserInputFromDatabase;
-        return null;
+    public AbstractWordClass getWordClass() {
+        return wordClass;
     }
 
+    /**
+     * A VocableData object is considered empty if its user input object is empty.
+     */
     public boolean isEmpty() {
         return userInput.isEmpty();
-    }
-
-    public AbstractWordClass getWordType() {
-        if (wordType == null) {
-            if (wordTypeIdentifier.isPresent()) {
-                wordType = getLanguage().getLanguagePlugin().get()
-                        .getWordTypeFor(wordTypeIdentifier.get());
-                if (wordType == null) {
-                    throw new IllegalStateException("Unable to obtain AbstractWordType object.");
-                }
-            } else {
-                throw new IllegalStateException("AbstractWordType object not available.");
-            }
-        }
-
-        return wordType;
-    }
-
-    public String getWordTypeIdentifier() {
-        return getWordType().getIdentifier();
-    }
-
-    public void setWordTypeIdentifier(String wordTypeIdentifier) {
-        if (wordTypeIdentifier == null)
-            throw new IllegalArgumentException("Argument is null.");
-
-        this.wordTypeIdentifier = Optional.of(wordTypeIdentifier);
     }
 
     @SuppressWarnings("unused")

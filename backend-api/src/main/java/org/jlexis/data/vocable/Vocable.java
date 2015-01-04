@@ -35,7 +35,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Data object representing exactly one vocable. This class is simply a container holding a list of {@link VocableData}
+ * Data object representing exactly one vocable. This class is simply a container holding a map of {@link VocableData}
  * objects. Each {@link VocableData} represents the language specific part of the vocable.
  *
  * @author Roland Krueger
@@ -52,7 +52,7 @@ public class Vocable implements Serializable {
     }
 
     public Vocable() {
-        data = new HashMap<>();
+        data = new HashMap<>(2);
     }
 
     /**
@@ -63,14 +63,14 @@ public class Vocable implements Serializable {
      *
      * @param forLanguage
      *         the {@link Language
-     * @param wordType
+     * @param wordClass
      *         the current word type (verb, noun, etc.)
      * @param userInput
      *         the user input
      */
-    public void addVariant(Language forLanguage, AbstractWordClass wordType, UserInput userInput) {
+    public void addVariant(Language forLanguage, AbstractWordClass wordClass, UserInput userInput) {
         removeDataFor(forLanguage);
-        data.put(forLanguage, new VocableData(forLanguage, wordType, userInput));
+        data.put(forLanguage, new VocableData(forLanguage, wordClass, userInput));
     }
 
     public UserInput getVariantInput(Language forLanguage) {
@@ -82,37 +82,16 @@ public class Vocable implements Serializable {
         return data.get(forLanguage).getUserInput();
     }
 
-    public AbstractWordClass getVariantWordType(Language forLanguage) {
+    public AbstractWordClass getVariantWordClass(Language forLanguage) {
         if (! data.containsKey(forLanguage))
             throw new IllegalArgumentException(String.format("Language %s is not defined for this Vocable object.",
                     forLanguage.getName()));
 
-        return data.get(forLanguage).getWordType();
+        return data.get(forLanguage).getWordClass();
     }
 
-    private VocableData removeDataFor(Language plugin) {
-        return data.remove(plugin);
-    }
-
-    /**
-     * Removes all data previously added to this {@link Vocable} and replaces it with the data of the provided {@link
-     * Vocable} object.
-     *
-     * @param voc
-     *         a {@link Vocable} object the data of which is to be copied into this object
-     */
-    public void replace(Vocable voc) {
-        // TODO
-//        for (Language lang : data.keySet()) {
-//            VocableData otherData = voc.data.get(lang);
-//            if (otherData == null)
-//                throw new IllegalArgumentException("Unable to replace vocable data. Given vocable object does not match.");
-//            VocableData thisData = data.get(lang);
-//            thisData.replaceInput(otherData);
-//        }
-
-//    data.clear ();
-//    data.putAll (voc.data);
+    private VocableData removeDataFor(Language language) {
+        return data.remove(language);
     }
 
     /**
@@ -123,25 +102,16 @@ public class Vocable implements Serializable {
      */
     public boolean isEmpty() {
         for (VocableData dataElement : data.values()) {
-            if (! dataElement.isEmpty()) return false;
+            if (! dataElement.isEmpty()) {
+                return false;
+            }
         }
         return true;
     }
 
     /**
-     * Setter method for the vocable data. This method is used by Hibernate when loading a {@link Vocable} object from
-     * the database.
-     *
-     * @param data
-     *         the vocable data
+     * Returns a list of all languages that are used for this vocable object.
      */
-    @SuppressWarnings("unused")
-    private void setVocableData(Map<Language, VocableData> data) {
-        // TODO: check if the following will result in problems with Hibernate, due to copying the map
-        // instead of assigning it.
-        this.data.putAll(data);
-    }
-
     public Collection<Language> getLanguages() {
         return Collections.unmodifiableCollection(data.keySet());
     }

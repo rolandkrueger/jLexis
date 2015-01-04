@@ -25,7 +25,6 @@ package org.jlexis.data.vocable;
 import org.jlexis.data.languages.Language;
 import org.jlexis.data.vocable.terms.AbstractTerm;
 import org.jlexis.data.vocable.terms.UnmodifiableTerm;
-import org.jlexis.data.vocable.userinput.DBO_AbstractUserInput;
 import org.jlexis.data.vocable.userinput.UserInput;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
 import org.jlexis.roklib.TextFormatter;
@@ -38,13 +37,13 @@ import static com.google.common.base.Preconditions.*;
 public final class UnmodifiableVocable extends Vocable {
     private static final long serialVersionUID = -4235951974726789314L;
 
-    public UnmodifiableVocable(Vocable data) {
-        super(data);
-        setId(data.getId());
+    public UnmodifiableVocable(Vocable delegate) {
+        super(delegate);
+        setId(delegate.getId());
     }
 
     @Override
-    public final void addVariant(Language forLanguage, AbstractWordClass wordType, UserInput userInput) {
+    public final void addVariant(Language forLanguage, AbstractWordClass wordClass, UserInput userInput) {
         throw new UnsupportedOperationException("This object cannot be modified.");
     }
 
@@ -53,69 +52,59 @@ public final class UnmodifiableVocable extends Vocable {
         return new UnmodifiableUserInput(super.getVariantInput(forLanguage));
     }
 
-    @Override
-    public final void replace(Vocable voc) {
-        throw new UnsupportedOperationException("This object cannot be modified.");
-    }
-
     private final class UnmodifiableUserInput implements UserInput {
         private static final long serialVersionUID = 4671844719293807954L;
-        private UserInput data;
+        private UserInput delegate;
 
-        public UnmodifiableUserInput(UserInput data) {
-            this.data = checkNotNull(data, "Argument is null.");
+        public UnmodifiableUserInput(UserInput delegate) {
+            this.delegate = checkNotNull(delegate, "Argument is null.");
         }
 
         public final void addUserInput(RegisteredVocableDataKey key, String data) {
-            this.data.addUserInput(key, data);
+            this.delegate.addUserInput(key, data);
         }
 
         @Override
         public UserInput createUserInputObject() {
-            return new UnmodifiableUserInput(data);
-        }
-
-        @Deprecated
-        public final DBO_AbstractUserInput getDatabaseObject() {
-            throw new UnsupportedOperationException("Not supported.");
+            return new UnmodifiableUserInput(delegate);
         }
 
         public final void provideFullDisplayText(TextFormatter formatter) {
-            data.provideFullDisplayText(formatter);
+            delegate.provideFullDisplayText(formatter);
         }
 
         public final void provideShortDisplayText(TextFormatter formatter) {
-            data.provideShortDisplayText(formatter);
+            delegate.provideShortDisplayText(formatter);
         }
 
         public final AbstractTerm getUserInput(RegisteredVocableDataKey key) {
-            return new UnmodifiableTerm(data.getUserInput(key));
+            return new UnmodifiableTerm(delegate.getUserInput(key));
         }
 
         public final String getUserInputIdentifier() {
-            return data.getUserInputIdentifier();
+            return delegate.getUserInputIdentifier();
         }
 
         public final boolean isInputDefinedFor(RegisteredVocableDataKey key) {
-            return data.isInputDefinedFor(key);
+            return delegate.isInputDefinedFor(key);
         }
 
         public final boolean isEmpty() {
-            return data.isEmpty();
+            return delegate.isEmpty();
         }
 
         @Override
         public boolean isAnyTextInputDefined() {
-            return data.isAnyTextInputDefined();
+            return delegate.isAnyTextInputDefined();
         }
 
         public final boolean correspondsTo(UserInput other) {
-            return data.correspondsTo(other);
+            return delegate.correspondsTo(other);
         }
 
         @Override
         public VocableVerificationData getQuizVerificationData() {
-            return data.getQuizVerificationData();
+            return delegate.getQuizVerificationData();
         }
 
         @Override
@@ -130,7 +119,7 @@ public final class UnmodifiableVocable extends Vocable {
 
         @Override
         public void init() {
-            data.init();
+            delegate.init();
         }
     }
 }
