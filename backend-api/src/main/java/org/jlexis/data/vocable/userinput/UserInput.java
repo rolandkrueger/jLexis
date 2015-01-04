@@ -29,28 +29,32 @@ public interface UserInput {
     void init();
 
     /**
-     * Provides a String containing the short version vor this {@link AbstractUserInput}. This is usually the most
-     * important information held by this object. Less important information like example clauses or comments will
-     * usually not be contained in this short version. The information returned by this method will be used in places,
-     * where a space-saving display of a vocable is needed, such as in vocabulary overview tables.
+     * Provides a String containing the short version for this {@link UserInput}. This is usually the most important
+     * information held by this object. Less important information like example clauses or comments will usually not be
+     * contained in this short version. The information returned by this method will be used in places, where a
+     * space-saving display of a vocable is needed, such as in vocabulary overview tables.
      *
-     * @return a short summary of this {@link AbstractUserInput}
+     * @param formatter
+     *         a formatter to add the short display text of this {@link UserInput}
      */
     void provideShortDisplayText(TextFormatter formatter);
 
     /**
-     * Provides a piece of HTML-formatted text containing the information of this {@link AbstractUserInput}. This text
-     * will then be used to render the data of this object as an HTML document.
+     * Provides a piece of HTML-formatted text containing the information of this {@link UserInput}. This text will then
+     * be used to render the data of this object as an HTML document.
      *
-     * @return a HTML-version of this {@link AbstractUserInput}'s data
+     * @return a HTML-version of this {@link UserInput}'s data
      */
     void provideFullDisplayText(TextFormatter formatter);
 
     /**
-     * Returns <code>true</code> if there is no user data available from this {@link AbstractUserInput} or in other
-     * words if this object can be considered empty. An empty user input will not be saved into the list of entered
-     * vocables. It is possible that a {@link AbstractUserInput} can be considered empty if there are in fact some data
-     * fields that have been provided. This decision is left to subclasses descending from {@link AbstractUserInput}.
+     * Returns <code>true</code> if there is no user data available from this {@link UserInput} or in other words if
+     * this object can be considered empty. An empty user input will not be saved into the list of entered vocables. It
+     * is possible that a {@link UserInput} can be considered empty if there are in fact some data fields that have been
+     * provided. For example, a user input with only some default values set can be considered empty. This decision is
+     * left to subclasses descending from {@link UserInput}.
+     * <p/>
+     * This method can be used to determine, whether this user input object needs to be persisted.
      *
      * @return <code>true</code> if the data of this object has not been set
      */
@@ -59,10 +63,22 @@ public interface UserInput {
     boolean isAnyTextInputDefined();
 
     /**
+     * Returns <code>true</code> if at least one textual value has been defined. User input objects may store values
+     * other than textual input, e.g. boolean values or enumeration values. If only such non-textual values are stored
+     * in this user input object, this method returns <code>false</code>.
+     * <p/>
+     * This method by be used to determine, whether the data of this user input object needs to be displayed to the
+     * user.
+     *
+     * @return <code>true</code> if at least one textual value has been defined.
+     */
+    boolean isAnyTextInputDefined();
+
+    /**
      * <p> Adds a piece of user entered data. This might be the translation of a word, the grammatical gender of a noun,
      * an example clause or a comment. Each of these pieces of data are uniquely identified by a key which will be used
-     * as the key into the {@link java.util.Map} data structure holding a {@link AbstractUserInput}'s data. If the data
-     * is the empty string, it's addition is skipped to prevent the database from being flooded with empty values. </p>
+     * as the key into the {@link java.util.Map} data structure holding a {@link UserInput}'s data. If the data is the
+     * empty string, it's addition is skipped to prevent the database from being flooded with empty values. </p>
      *
      * @param key
      *         the key for the piece of user entered data
