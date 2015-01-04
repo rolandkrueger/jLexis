@@ -99,7 +99,7 @@ public abstract class AbstractUserInput implements UserInput {
     }
 
     public void addUserInput(RegisteredVocableDataKey key, String input) {
-        if (StringUtils.isStringNullOrEmpty(input)) {
+        if (StringUtils.isNullOrEmptyWithTrim(input)) {
             removeTermForKey(key);
             return;
         }

@@ -35,7 +35,7 @@ public final class StringUtils {
         return value;
     }
 
-    public static boolean isStringNullOrEmpty(String value) {
+    public static boolean isNullOrEmptyWithTrim(String value) {
         return Strings.nullToEmpty(value).trim().isEmpty();
     }
 }

@@ -39,7 +39,7 @@ public abstract class AbstractWordClass {
         this.nameI18nKey = checkNotNull(nameI18nKey);
         this.userInputPrototype = checkNotNull(userInputPrototype);
 
-        checkArgument(! StringUtils.isStringNullOrEmpty(identifier), "Identifier must not be null or the empty string.");
+        checkArgument(! StringUtils.isNullOrEmptyWithTrim(identifier), "Identifier must not be null or the empty string.");
         this.identifier = identifier;
     }
 
