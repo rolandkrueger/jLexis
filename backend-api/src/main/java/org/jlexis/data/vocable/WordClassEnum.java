@@ -23,7 +23,10 @@
  */
 package org.jlexis.data.vocable;
 
-public enum WordTypeEnum {
+/**
+ * List of supported word classes.
+ */
+public enum WordClassEnum {
     ADJECTIVE,
     ADPOSITION,
     ADVERB,
@@ -43,6 +46,9 @@ public enum WordTypeEnum {
     PREVERB,
     PRONOUN,
     VERB,
+    /**
+     * Default value; to be used of no other word class is applicable.
+     */
     DEFAULT,
     EXTRA
 }

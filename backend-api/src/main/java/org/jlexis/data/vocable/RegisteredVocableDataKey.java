@@ -23,7 +23,10 @@
  */
 package org.jlexis.data.vocable;
 
-public class RegisteredVocableDataKey implements Comparable<RegisteredVocableDataKey> {
+import java.io.Serializable;
+
+public class RegisteredVocableDataKey implements Comparable<RegisteredVocableDataKey>, Serializable {
+    private static final long serialVersionUID = - 304490336139659560L;
     private Long id;
     private String key;
 

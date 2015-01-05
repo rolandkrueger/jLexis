@@ -24,8 +24,8 @@
  */
 package org.jlexis.plugin.english;
 
-import org.jlexis.data.vocable.AbstractWordType;
-import org.jlexis.data.vocable.WordTypeEnum;
+import org.jlexis.data.vocable.AbstractWordClass;
+import org.jlexis.data.vocable.WordClassEnum;
 import org.jlexis.plugin.LanguagePlugin;
 import org.jlexis.plugin.PluginIdentifier;
 import org.jlexis.quiz.data.AbstractQuizType;
@@ -44,10 +44,10 @@ public class EnglishLanguagePlugin extends LanguagePlugin {
 
     private String mFlagGreatBritainIdentifier;
     private String mFlagUSAIdentifier;
-    private AbstractWordType defaultWordType;
-    private AbstractWordType noun;
-    private AbstractWordType adjective;
-    private AbstractWordType verb;
+    private AbstractWordClass defaultWordType;
+    private AbstractWordClass noun;
+    private AbstractWordClass adjective;
+    private AbstractWordClass verb;
 
     static {
         ABBREVIATION_ALTERNATIVES = new ArrayList<>();
@@ -109,15 +109,15 @@ public class EnglishLanguagePlugin extends LanguagePlugin {
     }
 
     @Override
-    protected AbstractWordType getCorrespondingWordTypeForImpl(AbstractWordType wordType) {
-        if (wordType.getWordTypeEnum() == WordTypeEnum.NOUN) return noun;
-        if (wordType.getWordTypeEnum() == WordTypeEnum.ADJECTIVE) return adjective;
-        if (wordType.getWordTypeEnum() == WordTypeEnum.VERB) return verb;
+    protected AbstractWordClass getCorrespondingWordTypeForImpl(AbstractWordClass wordType) {
+        if (wordType.getWordTypeEnum() == WordClassEnum.NOUN) return noun;
+        if (wordType.getWordTypeEnum() == WordClassEnum.ADJECTIVE) return adjective;
+        if (wordType.getWordTypeEnum() == WordClassEnum.VERB) return verb;
         return defaultWordType;
     }
 
     @Override
-    public AbstractWordType getDefaultWordType() {
+    public AbstractWordClass getDefaultWordType() {
         return defaultWordType;
     }
 

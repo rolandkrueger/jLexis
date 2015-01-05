@@ -29,6 +29,7 @@ import org.jlexis.data.vocable.userinput.UserInput;
 import org.jlexis.data.vocable.userinput.standard.StandardUserInputDecorator;
 
 public abstract class AbstractEnglishPluginUserInput extends AbstractUserInput {
+    private static final long serialVersionUID = 548147957600211389L;
     private StandardUserInputDecorator mStandardInputBE;
     private StandardUserInputDecorator mStandardInputAE;
 

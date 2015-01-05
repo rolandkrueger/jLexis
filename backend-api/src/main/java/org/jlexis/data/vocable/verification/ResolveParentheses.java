@@ -30,7 +30,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static java.util.Collections.emptySet;
-import static org.jlexis.util.StringUtils.isStringNullOrEmpty;
+import static org.jlexis.util.StringUtils.isNullOrEmptyWithTrim;
 
 /**
  * Utility class for resolving parenthesized content contained in a String. Resolving parenthesized content in this
@@ -77,7 +77,7 @@ public final class ResolveParentheses {
      * of parentheses, a singleton set is returned containing only the input String itself.
      */
     public static Set<String> resolveParentheses(String value) {
-        if (isStringNullOrEmpty(value)) {
+        if (isNullOrEmptyWithTrim(value)) {
             return emptySet();
         }
 
@@ -113,7 +113,7 @@ public final class ResolveParentheses {
     }
 
     private Set<String> resolve(String value, Set<String> set) {
-        if (isStringNullOrEmpty(value)) {
+        if (isNullOrEmptyWithTrim(value)) {
             return emptySet();
         }
 

@@ -25,15 +25,15 @@
 package org.jlexis.plugin;
 
 import com.google.common.base.MoreObjects;
-import org.jlexis.data.DefaultWordType;
-import org.jlexis.data.vocable.AbstractWordType;
+import org.jlexis.data.DefaultWordClass;
+import org.jlexis.data.vocable.AbstractWordClass;
 import org.jlexis.quiz.data.AbstractQuizType;
 
 import java.util.*;
 
 public abstract class LanguagePlugin {
     protected Locale locale;
-    private Map<String, AbstractWordType> wordTypes;
+    private Map<String, AbstractWordClass> wordTypes;
     private String name;
     private String description;
     private PluginIdentifier identifier;
@@ -50,9 +50,9 @@ public abstract class LanguagePlugin {
 
     public abstract String getIconId();
 
-    protected abstract AbstractWordType getCorrespondingWordTypeForImpl(AbstractWordType wordType);
+    protected abstract AbstractWordClass getCorrespondingWordTypeForImpl(AbstractWordClass wordType);
 
-    public abstract AbstractWordType getDefaultWordType();
+    public abstract AbstractWordClass getDefaultWordType();
 
     public abstract List<AbstractQuizType> getQuizTypes();
 
@@ -72,29 +72,23 @@ public abstract class LanguagePlugin {
         this.locale = locale;
     }
 
-    protected void registerWordType(AbstractWordType wordType) {
-        AbstractWordType testIfAlreadyRegistered = wordTypes.get(wordType.getIdentifier());
+    protected void registerWordType(AbstractWordClass wordType) {
+        AbstractWordClass testIfAlreadyRegistered = wordTypes.get(wordType.getIdentifier());
         if (testIfAlreadyRegistered != null)
             throw new IllegalArgumentException("This word type has already been registered.");
 
         wordTypes.put(wordType.getIdentifier(), wordType);
     }
 
-    public void registerUserInputIdentifiers() {
-        for (AbstractWordType wordType : wordTypes.values()) {
-            wordType.registerUserInputIdentifiers();
-        }
-    }
-
-    public Collection<AbstractWordType> getWordTypes() {
+    public Collection<AbstractWordClass> getWordTypes() {
         if (wordTypes.isEmpty()) {
             // TODO: I18N
-            return Collections.singleton(new DefaultWordType("allg. Wort"));
+            return Collections.singleton(new DefaultWordClass("allg. Wort"));
         }
         return wordTypes.values();
     }
 
-    public AbstractWordType getWordTypeFor(String identifier) {
+    public AbstractWordClass getWordTypeFor(String identifier) {
         return wordTypes.get(identifier);
     }
 
@@ -114,8 +108,8 @@ public abstract class LanguagePlugin {
         this.name = name;
     }
 
-    public AbstractWordType getCorrespondingWordTypeFor(AbstractWordType wordType) {
-        AbstractWordType result = getCorrespondingWordTypeForImpl(wordType);
+    public AbstractWordClass getCorrespondingWordTypeFor(AbstractWordClass wordType) {
+        AbstractWordClass result = getCorrespondingWordTypeForImpl(wordType);
         if (result == null) {
             return getDefaultWordType();
         }

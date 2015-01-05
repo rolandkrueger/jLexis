@@ -23,9 +23,11 @@
  */
 package org.jlexis.data.languages;
 
+import com.google.common.base.MoreObjects;
 import org.jlexis.plugin.LanguagePlugin;
 import org.jlexis.plugin.PluginIdentifier;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -45,7 +47,8 @@ import java.util.Optional;
  *
  * @author Roland Krueger
  */
-public class Language {
+public class Language implements Serializable {
+    private static final long serialVersionUID = 1830640630482504255L;
     /**
      * The name of the language. Is usually defined by the {@link LanguagePlugin}, except for default plugins. When a
      * default language plugin is chosen for a language the user has to provide the name of the language.
@@ -80,10 +83,6 @@ public class Language {
         return languageName;
     }
 
-    public void setLanguageName(String languageName) {
-        this.languageName = Objects.requireNonNull(languageName);
-    }
-
     @Deprecated
     public Optional<LanguagePlugin> getLanguagePlugin() {
         // TODO delete me
@@ -96,7 +95,7 @@ public class Language {
 
     @Override
     public String toString() {
-        return com.google.common.base.Objects.toStringHelper(this).add("name", languageName).toString();
+        return MoreObjects.toStringHelper(this).add("name", languageName).toString();
     }
 
     @Override

@@ -64,6 +64,7 @@ import static com.google.common.base.Preconditions.*;
  */
 public abstract class AbstractUserInput implements UserInput {
 
+    private static final long serialVersionUID = 370910544889776135L;
     /**
      * The data of this {@link AbstractUserInput}. This object assembles all the fragments that forms the language
      * specific part of a {@link org.jlexis.data.vocable.Vocable}, such as the vocabulary data of one language itself,
@@ -99,7 +100,7 @@ public abstract class AbstractUserInput implements UserInput {
     }
 
     public void addUserInput(RegisteredVocableDataKey key, String input) {
-        if (StringUtils.isStringNullOrEmpty(input)) {
+        if (StringUtils.isNullOrEmptyWithTrim(input)) {
             removeTermForKey(key);
             return;
         }

@@ -24,23 +24,25 @@
  */
 package org.jlexis.data;
 
-import org.jlexis.data.vocable.AbstractWordType;
+import org.jlexis.data.vocable.AbstractWordClass;
 import org.jlexis.data.vocable.userinput.DefaultUserInput;
-import org.jlexis.data.vocable.WordTypeEnum;
+import org.jlexis.data.vocable.WordClassEnum;
 
-public class DefaultWordType extends AbstractWordType {
-    public DefaultWordType(String mName) {
-        super(mName, "default", new DefaultUserInput());
+/**
+ * This is the most basic word class that can be possibly used. It does not belong to a particular word class ({@link
+ * org.jlexis.data.vocable.WordClassEnum#DEFAULT}) and uses a {@link org.jlexis.data.vocable.userinput
+ * .DefaultUserInput} object for storing user input. This word class is typically used by default or when no other,
+ * better fitting word class could be found in certain situations.
+ */
+public class DefaultWordClass extends AbstractWordClass {
+    private static final long serialVersionUID = - 3261404278184669765L;
+
+    public DefaultWordClass(String name) {
+        super(name, "default", new DefaultUserInput());
     }
 
-    //        TODO: fix me
-//    @Override
-//    public AbstractVocableInputPanel getInputPanel() {
-//        return new DefaultVocableInputPanel();
-//    }
-
     @Override
-    public WordTypeEnum getWordTypeEnum() {
-        return WordTypeEnum.DEFAULT;
+    public WordClassEnum getWordTypeEnum() {
+        return WordClassEnum.DEFAULT;
     }
 }

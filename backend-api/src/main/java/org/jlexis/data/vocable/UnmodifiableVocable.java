@@ -25,28 +25,28 @@ package org.jlexis.data.vocable;
 import org.jlexis.data.languages.Language;
 import org.jlexis.data.vocable.terms.AbstractTerm;
 import org.jlexis.data.vocable.terms.UnmodifiableTerm;
-import org.jlexis.data.vocable.userinput.AbstractUserInput;
-import org.jlexis.data.vocable.userinput.DBO_AbstractUserInput;
 import org.jlexis.data.vocable.userinput.UserInput;
 import org.jlexis.data.vocable.verification.VocableVerificationData;
 import org.jlexis.roklib.TextFormatter;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 /**
+ * A vocable object that cannot be modified. Any method that tries to change the data of this object throws an {@link
+ * java.lang.UnsupportedOperationException}.
+ *
  * @author Roland Krueger
  */
 public final class UnmodifiableVocable extends Vocable {
     private static final long serialVersionUID = -4235951974726789314L;
 
-    public UnmodifiableVocable(Vocable data) {
-        super();
-        this.mData = data.mData;
-        setId(data.getId());
+    public UnmodifiableVocable(Vocable delegate) {
+        super(delegate);
+        setId(delegate.getId());
     }
 
     @Override
-    public final void addVariant(Language forLanguage, AbstractWordType wordType, AbstractUserInput data) {
+    public final void addVariant(Language forLanguage, AbstractWordClass wordClass, UserInput userInput) {
         throw new UnsupportedOperationException("This object cannot be modified.");
     }
 
@@ -55,67 +55,59 @@ public final class UnmodifiableVocable extends Vocable {
         return new UnmodifiableUserInput(super.getVariantInput(forLanguage));
     }
 
-    @Override
-    public final void replace(Vocable voc) {
-        throw new UnsupportedOperationException("This object cannot be modified.");
-    }
-
     private final class UnmodifiableUserInput implements UserInput {
-        private UserInput data;
+        private static final long serialVersionUID = 4671844719293807954L;
+        private UserInput delegate;
 
-        public UnmodifiableUserInput(UserInput data) {
-            this.data = checkNotNull(data, "Argument is null.");
+        public UnmodifiableUserInput(UserInput delegate) {
+            this.delegate = checkNotNull(delegate, "Argument is null.");
         }
 
         public final void addUserInput(RegisteredVocableDataKey key, String data) {
-            this.data.addUserInput(key, data);
+            this.delegate.addUserInput(key, data);
         }
 
         @Override
         public UserInput createUserInputObject() {
-            return new UnmodifiableUserInput(data);
-        }
-
-        public final DBO_AbstractUserInput getDatabaseObject() {
-            throw new UnsupportedOperationException("Not supported.");
+            return new UnmodifiableUserInput(delegate);
         }
 
         public final void provideFullDisplayText(TextFormatter formatter) {
-            data.provideFullDisplayText(formatter);
+            delegate.provideFullDisplayText(formatter);
         }
 
         public final void provideShortDisplayText(TextFormatter formatter) {
-            data.provideShortDisplayText(formatter);
+            delegate.provideShortDisplayText(formatter);
         }
 
         public final AbstractTerm getUserInput(RegisteredVocableDataKey key) {
-            return new UnmodifiableTerm(data.getUserInput(key));
+            return new UnmodifiableTerm(delegate.getUserInput(key));
         }
 
         public final String getUserInputIdentifier() {
-            return data.getUserInputIdentifier();
+            return delegate.getUserInputIdentifier();
         }
 
         public final boolean isInputDefinedFor(RegisteredVocableDataKey key) {
-            return data.isInputDefinedFor(key);
+            return delegate.isInputDefinedFor(key);
         }
 
         public final boolean isEmpty() {
-            return data.isEmpty();
+            return delegate.isEmpty();
         }
 
         @Override
         public boolean isAnyTextInputDefined() {
-            return data.isAnyTextInputDefined();
+            return delegate.isAnyTextInputDefined();
         }
 
         public final boolean correspondsTo(UserInput other) {
-            return data.correspondsTo(other);
+            return delegate.correspondsTo(other);
         }
 
         @Override
         public VocableVerificationData getQuizVerificationData() {
-            return data.getQuizVerificationData();
+            return delegate.getQuizVerificationData();
         }
 
         @Override
@@ -130,7 +122,7 @@ public final class UnmodifiableVocable extends Vocable {
 
         @Override
         public void init() {
-            data.init();
+            delegate.init();
         }
     }
 }

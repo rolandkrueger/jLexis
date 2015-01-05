@@ -53,6 +53,7 @@ public class EnglishNounUserInput extends AbstractEnglishPluginUserInput {
     public static final RegisteredVocableDataKey SINGULAR_PLURAL_TYPE_KEY_AE = new RegisteredVocableDataKey(INPUT_ID + ".SINGULAR_PLURAL_TYPE_KEY_AE");
     public static final RegisteredVocableDataKey IRREGULAR_PLURAL_KEY_AE = new RegisteredVocableDataKey(INPUT_ID + ".IRREGULAR_PLURAL_AE");
     public static final RegisteredVocableDataKey IRREGULAR_PLURAL_PHONETICS_KEY_AE = new RegisteredVocableDataKey(INPUT_ID + ".IRREGULAR_PLURAL_PHONETICS_AE");
+    private static final long serialVersionUID = 8628420272032184748L;
 
     public EnglishNounUserInput() {
         super(INPUT_ID);

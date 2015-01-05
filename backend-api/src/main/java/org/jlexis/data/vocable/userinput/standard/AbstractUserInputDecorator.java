@@ -35,6 +35,7 @@ import org.jlexis.data.vocable.verification.VocableVerificationData;
  * @author Roland Krueger
  */
 public abstract class AbstractUserInputDecorator implements UserInput {
+    private static final long serialVersionUID = 9072070435444977758L;
     private UserInput delegate;
     private String userInputIdentifierExtension;
 

@@ -26,30 +26,38 @@ package org.jlexis.data.vocable;
 
 
 import org.jlexis.data.languages.Language;
-import org.jlexis.data.vocable.userinput.AbstractUserInput;
 import org.jlexis.data.vocable.userinput.UserInput;
 
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 
+import static com.google.common.base.Preconditions.*;
+
 /**
- * Data object representing exactly one vocable. This class is simply a container holding a list of {@link VocableData}
+ * Data object representing exactly one vocable. This class is simply a container holding a map of {@link VocableData}
  * objects. Each {@link VocableData} represents the language specific part of the vocable.
  *
  * @author Roland Krueger
  * @see VocableData
  */
 public class Vocable implements Serializable {
-    private static final long serialVersionUID = -5117218170042020375L;
+    private static final long serialVersionUID = - 5117218170042020375L;
 
-    protected Map<Language, VocableData> mData;
-    private long mId;
+    private Map<Language, VocableData> data;
+    private long id;
+
+    /**
+     * Copy constructor. Used by {@link org.jlexis.data.vocable.UnmodifiableVocable}.
+     */
+    protected Vocable(Vocable other) {
+        this.data = other.data;
+    }
 
     public Vocable() {
-        mData = new Hashtable<Language, VocableData>();
+        data = new HashMap<>(2);
     }
 
     /**
@@ -58,95 +66,89 @@ public class Vocable implements Serializable {
      * vocable. The second argument defines the word type (such as noun, verb, etc.) of the current vocable. The third
      * argument is the data itself.
      *
-     * @param forLanguage the {@link Language
-     * @param wordType    the current word type (verb, noun, etc.)
-     * @param data        the user input
+     * @param forLanguage
+     *         the {@link Language
+     * @param wordClass
+     *         the current word type (verb, noun, etc.)
+     * @param userInput
+     *         the user input
      */
-    public void addVariant(Language forLanguage, AbstractWordType wordType, AbstractUserInput data) {
+    public void addVariant(Language forLanguage, AbstractWordClass wordClass, UserInput userInput) {
         removeDataFor(forLanguage);
-        mData.put(forLanguage, new VocableData(forLanguage, wordType, data));
+        data.put(forLanguage, new VocableData(forLanguage, wordClass, userInput));
     }
 
     public UserInput getVariantInput(Language forLanguage) {
-        if (!mData.containsKey(forLanguage)) {
-            throw new IllegalArgumentException(String.format("Language %s is not defined for this Vocable object.",
-                    forLanguage));
-        }
+        checkArgument(data.containsKey(forLanguage), String.format("Language %s is not defined for this Vocable object.",
+                forLanguage));
 
-        AbstractUserInput result = mData.get(forLanguage).getUserInput();
-        return result;
+        return data.get(forLanguage).getUserInput();
     }
 
-    public AbstractWordType getVariantWordType(Language forLanguage) {
-        if (!mData.containsKey(forLanguage))
-            throw new IllegalArgumentException(String.format("Language %s is not defined for this Vocable object.",
-                    forLanguage.getName()));
+    public AbstractWordClass getVariantWordClass(Language forLanguage) {
+        checkArgument(data.containsKey(forLanguage), String.format("Language %s is not defined for this Vocable object.",
+                forLanguage.getName()));
 
-        return mData.get(forLanguage).getWordType();
+        return data.get(forLanguage).getWordClass();
     }
 
-    private VocableData removeDataFor(Language plugin) {
-        return mData.remove(plugin);
-    }
-
-    /**
-     * Removes all data previously added to this {@link Vocable} and replaces it with the data of the provided {@link
-     * Vocable} object.
-     *
-     * @param voc a {@link Vocable} object the data of which is to be copied into this object
-     */
-    public void replace(Vocable voc) {
-        for (Language lang : mData.keySet()) {
-            VocableData otherData = voc.mData.get(lang);
-            if (otherData == null)
-                throw new IllegalArgumentException("Unable to replace vocable data. Given vocable object does not match.");
-            VocableData thisData = mData.get(lang);
-            thisData.replaceInput(otherData);
-        }
-
-//    mData.clear ();
-//    mData.putAll (voc.mData);
+    private VocableData removeDataFor(Language language) {
+        return data.remove(language);
     }
 
     /**
      * Determines whether the user data contained in this {@link Vocable} object is empty, i. e. whether no data
-     * whatsoever is held by the {@link VocableData} elements.
+     * whatsoever is held by the {@link VocableData} elements. This method uses a pure technical definition of
+     * "empty", i.e. a vocable is empty if all of its {@link org.jlexis.data.vocable.VocableData} elements are empty.
+     * These are empty in turn if their user input is empty. A user input is empty if all of its term data is empty
+     * (i.e. the term data elements are either not present or contain an empty string).
      *
      * @return <code>true</code> if this vocable doesn't contain any user-provided data
+     * @see #isAnyTextInputDefined()
      */
     public boolean isEmpty() {
-        for (VocableData dataElement : mData.values()) {
-            if (!dataElement.isEmpty()) return false;
+        for (VocableData dataElement : data.values()) {
+            if (! dataElement.isEmpty()) {
+                return false;
+            }
         }
         return true;
     }
 
-    protected Map<Language, VocableData> getVocableData() {
-        return mData;
+    public boolean isVariantDefined(Language forLanguage) {
+        return data.containsKey(forLanguage);
     }
 
     /**
-     * Setter method for the vocable data. This method is used by Hibernate when loading a {@link Vocable} object from
-     * the database.
+     * Determines if there is any textual input defined in this vocable that has been provided by the user. This
+     * information is needed in addition to {@link #isEmpty()} to determine whether or not a vocable object can be
+     * seen as not defined as per the user. There may still be data contained in the vocable data, e.g. default
+     * values or non-textual input such as boolean values (encoded as strings) or enumeration values. If a vocable is
+     * determined as not defined by this method, it could be safely removed without losing any user-provided data.
      *
-     * @param data the vocable data
+     * @see org.jlexis.data.vocable.userinput.UserInput#isAnyTextInputDefined()
      */
-    @SuppressWarnings("unused")
-    private void setVocableData(Map<Language, VocableData> data) {
-        // TODO: check if the following will result in problems with Hibernate, due to copying the map
-        // instead of assigning it.
-        mData.putAll(data);
+    public boolean isAnyTextInputDefined() {
+        for (VocableData dataElement : data.values()) {
+            if (! dataElement.getUserInput().isAnyTextInputDefined()) {
+                return false;
+            }
+        }
+        return true;
     }
 
+    /**
+     * Returns a list of all languages that are used for this vocable object.
+     */
     public Collection<Language> getLanguages() {
-        return Collections.unmodifiableCollection(mData.keySet());
+        return Collections.unmodifiableCollection(data.keySet());
     }
 
     protected long getId() {
-        return mId;
+        return id;
     }
 
     protected void setId(long id) {
-        mId = id;
+        this.id = id;
     }
 }

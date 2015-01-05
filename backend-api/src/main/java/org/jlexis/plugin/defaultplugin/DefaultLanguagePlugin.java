@@ -24,7 +24,7 @@
  */
 package org.jlexis.plugin.defaultplugin;
 
-import org.jlexis.data.vocable.AbstractWordType;
+import org.jlexis.data.vocable.AbstractWordClass;
 import org.jlexis.plugin.LanguagePlugin;
 import org.jlexis.plugin.PluginIdentifier;
 import org.jlexis.quiz.data.AbstractQuizType;
@@ -40,7 +40,7 @@ public class DefaultLanguagePlugin extends LanguagePlugin {
     }
 
     @Override
-    public AbstractWordType getDefaultWordType() {
+    public AbstractWordClass getDefaultWordType() {
         assert getWordTypes().size() > 0;
         // return the word type that is added to the set of registered word types by default when no
         // other word types have explicitly been registered
@@ -60,7 +60,7 @@ public class DefaultLanguagePlugin extends LanguagePlugin {
     }
 
     @Override
-    protected AbstractWordType getCorrespondingWordTypeForImpl(AbstractWordType wordType) {
+    protected AbstractWordClass getCorrespondingWordTypeForImpl(AbstractWordClass wordType) {
         return getDefaultWordType();
     }
 
