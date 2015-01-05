@@ -96,13 +96,35 @@ public class Vocable implements Serializable {
 
     /**
      * Determines whether the user data contained in this {@link Vocable} object is empty, i. e. whether no data
-     * whatsoever is held by the {@link VocableData} elements.
+     * whatsoever is held by the {@link VocableData} elements. This method uses a pure technical definition of
+     * "empty", i.e. a vocable is empty if all of its {@link org.jlexis.data.vocable.VocableData} elements are empty.
+     * These are empty in turn if their user input is empty. A user input is empty if all of its term data is empty
+     * (i.e. the term data elements are either not present or contain an empty string).
      *
      * @return <code>true</code> if this vocable doesn't contain any user-provided data
+     * @see #isAnyTextInputDefined()
      */
     public boolean isEmpty() {
         for (VocableData dataElement : data.values()) {
             if (! dataElement.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Determines if there is any textual input defined in this vocable that has been provided by the user. This
+     * information is needed in addition to {@link #isEmpty()} to determine whether or not a vocable object can be
+     * seen as not defined as per the user. There may still be data contained in the vocable data, e.g. default
+     * values or non-textual input such as boolean values (encoded as strings) or enumeration values. If a vocable is
+     * determined as not defined by this method, it could be safely removed without losing any user-provided data.
+     *
+     * @see org.jlexis.data.vocable.userinput.UserInput#isAnyTextInputDefined()
+     */
+    public boolean isAnyTextInputDefined() {
+        for (VocableData dataElement : data.values()) {
+            if (! dataElement.getUserInput().isAnyTextInputDefined()) {
                 return false;
             }
         }
