@@ -32,6 +32,9 @@ import org.jlexis.roklib.TextFormatter;
 import static com.google.common.base.Preconditions.*;
 
 /**
+ * A vocable object that cannot be modified. Any method that tries to change the data of this object throws an {@link
+ * java.lang.UnsupportedOperationException}.
+ *
  * @author Roland Krueger
  */
 public final class UnmodifiableVocable extends Vocable {

@@ -34,6 +34,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.google.common.base.Preconditions.*;
+
 /**
  * Data object representing exactly one vocable. This class is simply a container holding a map of {@link VocableData}
  * objects. Each {@link VocableData} represents the language specific part of the vocable.
@@ -47,6 +49,9 @@ public class Vocable implements Serializable {
     private Map<Language, VocableData> data;
     private long id;
 
+    /**
+     * Copy constructor. Used by {@link org.jlexis.data.vocable.UnmodifiableVocable}.
+     */
     protected Vocable(Vocable other) {
         this.data = other.data;
     }
@@ -74,18 +79,15 @@ public class Vocable implements Serializable {
     }
 
     public UserInput getVariantInput(Language forLanguage) {
-        if (! data.containsKey(forLanguage)) {
-            throw new IllegalArgumentException(String.format("Language %s is not defined for this Vocable object.",
-                    forLanguage));
-        }
+        checkArgument(data.containsKey(forLanguage), String.format("Language %s is not defined for this Vocable object.",
+                forLanguage));
 
         return data.get(forLanguage).getUserInput();
     }
 
     public AbstractWordClass getVariantWordClass(Language forLanguage) {
-        if (! data.containsKey(forLanguage))
-            throw new IllegalArgumentException(String.format("Language %s is not defined for this Vocable object.",
-                    forLanguage.getName()));
+        checkArgument(data.containsKey(forLanguage), String.format("Language %s is not defined for this Vocable object.",
+                forLanguage.getName()));
 
         return data.get(forLanguage).getWordClass();
     }
@@ -111,6 +113,10 @@ public class Vocable implements Serializable {
             }
         }
         return true;
+    }
+
+    public boolean isVariantDefined(Language forLanguage) {
+        return data.containsKey(forLanguage);
     }
 
     /**
