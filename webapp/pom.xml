@@ -5,7 +5,6 @@
 
     <groupId>org.jlexis.ui</groupId>
     <artifactId>jlexis-webapp</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>jLexis Web Front End</name>
@@ -22,6 +21,11 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.jlexis.backend</groupId>
+            <artifactId>backend-api</artifactId>
+            <version>0.1</version>
+        </dependency>
 
         <dependency>
             <groupId>info.rolandkrueger.user.api</groupId>
